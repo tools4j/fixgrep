@@ -1,0 +1,16 @@
+package org.tools4j.model.state.market
+
+import org.tools4j.model.OrdStatus
+
+/**
+ * User: ben
+ * Date: 17/7/17
+ * Time: 6:07 PM
+ */
+class PendingCancelReplace(context: StateContext) : AbstractOpenState(context) {
+    override val ordStatus: OrdStatus
+        get() = OrdStatus.PendingReplace
+
+    override val pending: Boolean
+        get() = true
+}
