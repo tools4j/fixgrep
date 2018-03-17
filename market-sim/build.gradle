@@ -12,6 +12,7 @@ buildscript {
 group 'org.tools4j'
 version '1.0-SNAPSHOT'
 
+apply plugin: 'groovy'
 apply plugin: 'java'
 apply plugin: 'kotlin'
 
@@ -22,6 +23,7 @@ repositories {
 }
 
 dependencies {
+    compile project(':shared')
     compile "org.codehaus.groovy:groovy-all:2.4.1"
     compile "com.google.guava:guava-collections:r03"
     compile "ch.qos.logback:logback-classic:1.1.7"

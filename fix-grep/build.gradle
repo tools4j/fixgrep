@@ -12,6 +12,7 @@ buildscript {
 group 'org.tools4j'
 version '1.0-SNAPSHOT'
 
+apply plugin: 'groovy'
 apply plugin: 'java'
 apply plugin: 'kotlin'
 
@@ -22,6 +23,8 @@ repositories {
 }
 
 dependencies {
+    compile project(':shared')
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     compile "org.codehaus.groovy:groovy-all:2.4.1"
     compile "com.google.guava:guava-collections:r03"
     compile "ch.qos.logback:logback-classic:1.1.7"
@@ -38,8 +41,6 @@ dependencies {
 
     testRuntime "org.objenesis:objenesis:2.1"    // allows mocking of classes without default constructor (together with CGLIB)
     testRuntime "cglib:cglib-nodep:3.1"          // allows mocking of classes (in addition to interfaces)
-
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 }
 
 compileKotlin {
