@@ -6,62 +6,45 @@ package org.tools4j.fix
  * Time: 6:43 AM
  */
 class FixSpec(
-        private val fieldsAndEnumValues: Map<String, String>,
-        private val headerFields: Set<String>,
-        private val trailerFields: Set<String>,
-        private val messageTypes: Map<String, String>) {
+        val fieldsAndEnumValues: Map<String, String>,
+        val headerFields: Set<String>,
+        val trailerFields: Set<String>,
+        val messageTypeCodesToNames: Map<String, String>) {
 
-    fun getField(tagInt: Number, rawValue: String): Field {
-        val tag = getTag("" + tagInt)
-        val value = getValue(tag, rawValue)
-        return Field(tag, value)
-    }
-
-    fun getField(tagStr: String, valueStr: String): Field {
-        val tag = getTag(tagStr)
+    fun getField(tagInt: Int, valueStr: String): Field {
+        val tag = getTag(tagInt)
         val value = getValue(tag, valueStr)
         return Field(tag, value)
     }
 
-    fun getMsgType(messageTypeEnum: String): String? {
-        return messageTypes[messageTypeEnum];
+    fun getMsgTypeNameGivenCode(msgTypeCode: String): String? {
+        return messageTypeCodesToNames[msgTypeCode];
     }
 
-    private fun getTag(tagStr: String): Tag {
-        val tagDescription = this.fieldsAndEnumValues[tagStr]
-        val tagNumber: Int?
-        try {
-            tagNumber = Integer.valueOf(tagStr)
-        } catch (e: NumberFormatException) {
-            throw IllegalArgumentException("Cannot translate tag $tagStr to a number.  All tags must be numeric.")
-        }
-
+    private fun getTag(tag: Int): Tag {
+        val tagDescription: String? = fieldsAndEnumValues[""+tag]
         return if (tagDescription != null) {
-            SpecTag(tagNumber, tagDescription)
+            SpecTag(tag, tagDescription)
         } else {
-            UnknownTag(tagNumber)
+            UnknownTag(tag)
         }
     }
 
     private fun getValue(tag: Tag, rawValue: String): Value {
-        val tagEnumKey = tag.tag.toString() + "" + rawValue
-        val tagEnumValue = this.fieldsAndEnumValues[tagEnumKey]
-        return if (tagEnumValue != null) {
-            EnumValue(rawValue, tagEnumValue)
+        val tagDescription = this.fieldsAndEnumValues["" + tag.tag + "." + rawValue]
+        return if (tagDescription != null) {
+            EnumValue(rawValue, tagDescription)
         } else {
             NonEnumValue(rawValue)
         }
     }
-
 
     override fun toString(): String {
         return "FixspecProperties{" + "\n" +
                 "    fieldsAndEnumValues=" + fieldsAndEnumValues + "\n" +
                 "    headerFields=" + headerFields + "\n" +
                 "    trailerFields=" + trailerFields + "\n" +
-                "    messageTypes=" + messageTypes + "\n" +
+                "    messageTypes=" + messageTypeCodesToNames + "\n" +
                 '}'.toString()
     }
-
-
 }

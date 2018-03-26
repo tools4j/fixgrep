@@ -20,6 +20,6 @@ class AnsiTest extends Specification {
 
     def 'test ansi colors'(){
         expect:
-        println "${ANSI_RED}To be or not to be${ANSI_RESET}"
+        println "${AnsiColor.Red.ansiCode}To be or not to be${AnsiColor.Reset.ansiCode}"
     }
 }

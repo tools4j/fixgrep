@@ -11,9 +11,9 @@ import org.tools4j.model.fix.messages.FixMessage
 class RegistryFixDecoder(private val decoderRegistry: DecoderRegistry, private val fixSpec: FixSpec) : FixDecoder {
     override fun decode(messageStr: String, delimiter: Char): FixMessage {
         val fields = FieldsFromDelimitedString(messageStr, delimiter).fields
-        val msgTypeEnum = fields.getField(FixFieldTypes.MsgType)!!.value.rawValue
-        val msgDescription = fixSpec.getMsgType(msgTypeEnum)
-        val messageFactory = decoderRegistry.get(msgTypeEnum) ?: throw IllegalArgumentException("Cannot find decoder for MsgType")
+        val msgTypeCode  = fields.getField(FixFieldTypes.MsgType)!!.value.rawValue
+        val msgDescription = fixSpec.getMsgTypeNameGivenCode(msgTypeCode)
+        val messageFactory = decoderRegistry.get(msgTypeCode) ?: throw IllegalArgumentException("Cannot find decoder for MsgType")
         return messageFactory.createMessage(fields)
     }
 }

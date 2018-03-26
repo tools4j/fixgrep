@@ -1,12 +1,11 @@
 package org.tools4j.model.fix.messages
 
 import org.tools4j.fix.ExecType
-import org.tools4j.fix.Field
 import org.tools4j.fix.Fields
 import org.tools4j.fix.FieldsFromDelimitedString
 import org.tools4j.fix.FieldsSource
 import org.tools4j.fix.FixFieldTypes
-import org.tools4j.fix.FixMessageTypes
+import org.tools4j.fix.FixMessageType
 import org.tools4j.fix.FixSpec
 import org.tools4j.fix.Id
 import org.tools4j.fix.OrdStatus
@@ -131,7 +130,7 @@ class ExecutionReport(
         }
 
         companion object {
-            private val MSG_TYPE = FixMessageTypes.ExecutionReport
+            private val MSG_TYPE = FixMessageType.ExecutionReport.code
         }
     }
 

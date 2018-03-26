@@ -12,9 +12,21 @@ interface Fields: MutableList<Field>{
     fun getField(tag: Int): Field?
     fun exists(tag: Tag): Boolean
     fun exists(tag: Int): Boolean
-    fun remove(tag: Int)
     fun sortBy(desiredOrder: List<Int>): Fields
     fun toIntToStringMap(): Map<Int, String>
     fun toDelimitedString(delimiter: Char = '|'): String
     fun toOutsideAnnotatedString(delimiter: Char = '|'): String
+    val pipeDelimitedString: String
+    val msgTypeCode: String
+    val msgTypeAndExecTypeKey: String
+
+    companion object {
+        fun getMsgTypeAndExecTypeKey(msgType: String, execType: String?): String{
+            return if(execType != null) (msgType + "." + execType) else msgType
+        }
+
+        fun getMsgTypeAndExecTypeKey(msgType: FixMessageType, execType: ExecType?): String{
+            return if(execType != null) (msgType.code + "." + execType.code) else msgType.code
+        }
+    }
 }

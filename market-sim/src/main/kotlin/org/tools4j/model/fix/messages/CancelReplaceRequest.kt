@@ -4,7 +4,7 @@ import org.tools4j.fix.ExecType
 import org.tools4j.fix.Fields
 import org.tools4j.fix.FieldsFromDelimitedString
 import org.tools4j.fix.FixFieldTypes
-import org.tools4j.fix.FixMessageTypes
+import org.tools4j.fix.FixMessageType
 import org.tools4j.fix.FixSpec
 import org.tools4j.fix.Id
 import org.tools4j.fix.OrdStatus
@@ -35,7 +35,7 @@ class CancelReplaceRequest(
 
     override val fields: Fields by lazy {
         FieldsBuilder()
-            .with(FixFieldTypes.MsgType, FixMessageTypes.OrderCancelReplaceRequest)
+            .with(FixFieldTypes.MsgType, FixMessageType.OrderCancelReplaceRequest.code)
             .with(FixFieldTypes.SenderCompID, senderCompId)
             .with(FixFieldTypes.TargetCompID, targetCompId)
             .with(FixFieldTypes.OrigClOrdID, origClOrderId)
@@ -81,7 +81,7 @@ class CancelReplaceRequest(
         }
 
         companion object {
-            private val MSG_TYPE = FixMessageTypes.OrderCancelReplaceRequest
+            private val MSG_TYPE = FixMessageType.OrderCancelReplaceRequest.code
         }
     }
 

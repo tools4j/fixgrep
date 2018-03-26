@@ -5,7 +5,7 @@ package org.tools4j.fix
  * Date: 20/6/17
  * Time: 5:43 PM
  */
-class FieldsImpl(val fields: MutableList<Field>) : ArrayList<Field>(fields), Fields {
+class FieldsImpl(val fields: List<Field>) : ArrayList<Field>(fields), Fields {
     override fun countOfField(tag: Tag): Int {
         return countOfField(tag.tag)
     }
@@ -31,17 +31,17 @@ class FieldsImpl(val fields: MutableList<Field>) : ArrayList<Field>(fields), Fie
         return countOfField(tag) > 0
     }
 
-    override fun remove(tag: Int) {
-        fields.removeIf { it.tag.tag == tag }
+    override fun toString(): String {
+        return stringValue
     }
 
-    override fun toString(): String {
+    private val stringValue: String by lazy {
         val sb = StringBuilder()
         for (field in fields) {
             sb.append(field.withOutsideAnnotations)
             sb.append("|")
         }
-        return sb.toString()
+        sb.toString()
     }
 
     override fun sortBy(desiredOrder: List<Int>): Fields {
@@ -76,7 +76,19 @@ class FieldsImpl(val fields: MutableList<Field>) : ArrayList<Field>(fields), Fie
         return fields.joinToString(""+delimiter)
     }
 
+    override val pipeDelimitedString: String by lazy {
+        toDelimitedString()
+    }
+
     override fun toOutsideAnnotatedString(delimiter: Char): String {
         return OutsideAnnotatedSingleLineFormat(this, delimiter).toString()
+    }
+
+    override val msgTypeCode: String by lazy {
+        getField(35)!!.stringValue()
+    }
+
+    override val msgTypeAndExecTypeKey: String by lazy {
+        Fields.getMsgTypeAndExecTypeKey(getField(35)!!.stringValue(), getField(150)?.stringValue())
     }
 }

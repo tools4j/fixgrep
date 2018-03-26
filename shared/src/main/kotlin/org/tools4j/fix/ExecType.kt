@@ -38,5 +38,9 @@ enum class ExecType(val code: String) {
         fun forCode(code: String): ExecType {
             return codeToExecTypeMap[code]!!
         }
+
+        fun codeExists(code: String): Boolean {
+            return codeToExecTypeMap.containsKey(code)
+        }
     }
 }

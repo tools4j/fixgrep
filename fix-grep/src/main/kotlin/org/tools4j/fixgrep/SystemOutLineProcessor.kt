@@ -7,8 +7,8 @@ import java.util.function.Consumer
  * Date: 14/03/2018
  * Time: 6:25 AM
  */
-class SystemOutLineProcessor: Consumer<String> {
-    override fun accept(str: String) {
-        println(str)
+class SystemOutLineProcessor: MessageStringProcessor {
+    override fun accept(messageString: MessageString) {
+        println(messageString.messageText)
     }
 }

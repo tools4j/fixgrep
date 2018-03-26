@@ -8,5 +8,15 @@ import java.util.function.Consumer
  * Date: 13/03/2018
  * Time: 5:27 PM
  */
-typealias FieldsProcessor = Consumer<Fields>
-typealias StringProcessor = Consumer<String>
+interface FieldsProcessor: Consumer<Fields>
+interface MessageStringProcessor: Consumer<MessageString>{
+    class AssertLastReceivedProcessor: MessageStringProcessor {
+        var lastReceived: MessageString? = null
+
+        override fun accept(t: MessageString) {
+            println(t)
+            lastReceived = t
+        }
+    }
+}
+

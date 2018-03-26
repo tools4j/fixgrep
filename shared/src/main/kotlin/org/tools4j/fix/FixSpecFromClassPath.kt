@@ -1,6 +1,7 @@
 package org.tools4j.fix
 
 import org.tools4j.properties.PropertiesFile
+import java.util.stream.Collectors
 
 /**
  * User: ben

@@ -5,7 +5,7 @@ import org.tools4j.fix.ExecType
 import org.tools4j.fix.Fields
 import org.tools4j.fix.FieldsFromDelimitedString
 import org.tools4j.fix.FixFieldTypes
-import org.tools4j.fix.FixMessageTypes
+import org.tools4j.fix.FixMessageType
 import org.tools4j.fix.FixSpec
 import org.tools4j.fix.Id
 import org.tools4j.fix.OrdStatus
@@ -88,7 +88,7 @@ class NewOrderSingle(
         }
 
         companion object {
-            private val MSG_TYPE = FixMessageTypes.NewOrderSingle
+            private val MSG_TYPE = FixMessageType.NewOrderSingle.code
         }
     }
 

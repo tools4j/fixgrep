@@ -14,7 +14,7 @@ class SimpleLabelTest extends Specification {
         final Label label = new SimpleLabel(new LabellingCriteria.AlwaysTrueCriteria(), "^", "Fill")
 
         when:
-        final String output = label.labelAndReturnNewLine(new FieldsSource.FixtureNos().fields, "blahblahblah")
+        final String output = label.labelAndReturnNewLine(new SingleLineMessageString(new FieldsSource.FixtureNos().fields, "blahblahblah"))
 
         then:
         assert output == 'Fillblahblahblah'

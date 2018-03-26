@@ -16,7 +16,7 @@ class TagsMatchCriteriaTest extends Specification {
         final TagsMatchCriteria criteria = new TagsMatchCriteria(new FieldsFromDelimitedString(criteriaStr, (char) '|').fields.toIntToStringMap())
 
         then:
-        assert criteria.shouldLabel(fields, fields.toDelimitedString((char) '|')) == shouldMatch
+        assert criteria.shouldLabel(new SingleLineMessageString(fields, fields.toDelimitedString((char) '|'))) == shouldMatch
 
         where:
         fieldsStr                   |   criteriaStr                 | shouldMatch
