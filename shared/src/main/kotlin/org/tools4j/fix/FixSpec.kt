@@ -39,6 +39,16 @@ class FixSpec(
         }
     }
 
+    fun msgTypeAndExecTypeName(fields: Fields): String {
+        if(fields.msgTypeCode != "8"){
+            return messageTypeCodesToNames.get(fields.msgTypeCode)!!
+        } else if(fields.getField(150) != null){
+            return "Exec." + ExecType.forCode(fields.getField(150)!!.value.rawValue).name
+        } else {
+            return "ExecutionReport"
+        }
+    }
+
     override fun toString(): String {
         return "FixspecProperties{" + "\n" +
                 "    fieldsAndEnumValues=" + fieldsAndEnumValues + "\n" +

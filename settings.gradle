@@ -1,5 +1,5 @@
 rootProject.name = 'market-simulator'
-include 'fix-grep'
+include 'fixgrep-core'
 include 'shared'
 include 'market-sim'
 
