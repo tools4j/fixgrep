@@ -1,0 +1,9 @@
+#!/bin/bash
+
+if [[ $(java -version 2>&1 | egrep '(1.8|1.9|1.10)') ]]; then
+    echo 'ok'
+else
+    echo "Could not find appropriate java version installed.  Please ensure that java >= 1.8 is installed and on your path.  Results of java version check $(java -version)"
+fi
+
+java -cp "lib/*" org.tools4j.fixgrep.FixGrep "$@" <&0

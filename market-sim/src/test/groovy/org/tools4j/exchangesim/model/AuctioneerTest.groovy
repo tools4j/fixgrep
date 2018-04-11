@@ -11,6 +11,7 @@ import org.tools4j.fix.Price
 import org.tools4j.fix.Side
 import org.tools4j.model.*
 import org.tools4j.model.fix.messages.LoggingMessageHandler
+import org.tools4j.model.fix.messages.NewOrderSingle
 import spock.lang.Specification
 
 /**
@@ -177,19 +178,21 @@ class AuctioneerTest extends Specification {
         final Id clOrdId = clOrdIdGenerator.get()
         final Id orderId = ordIdGenerator.get()
 
-        new MarketOrder(
-                "senderCompId",
-                "targetCompId",
-                clOrdId,
-                orderId,
-                symbol,
-                qty,
-                price,
-                dateTimeService.now(),
-                dateTimeService.now(),
-                side,
-                dateTimeService,
-                new Fix50SP2FixSpecFromClassPath(),
-                new LoggingMessageHandler());
+        return new MarketOrder(
+            new NewOrderSingle(
+                    "senderCompId",
+                    "targetCompId",
+                    clOrdId,
+                    clOrdId,
+                    symbol,
+                    dateTimeService.now(),
+                    qty,
+                    price,
+                    side,
+                    new Fix50SP2FixSpecFromClassPath().load()
+            ),
+            orderId,
+            dateTimeService,
+            new LoggingMessageHandler());
     }
 }

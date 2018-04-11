@@ -12,14 +12,14 @@ import spock.lang.Specification
 class FixGrepTest extends Specification {
     def 'run fixgrep'(){
         given:
-        Config testSpecificConfig = ConfigFactory.parseMap(['fixgrep.log.line.regex': '^(\\d{4}-[01]\\d-[0-3]\\d[T\\s][0-2]\\d:[0-5]\\d:[0-5]\\d[\\.,]\\d+)?.*?RawFix:(\\d+=.*$)'])
+        Config testSpecificConfig = ConfigFactory.parseMap(['line.regex': '^(\\d{4}-[01]\\d-[0-3]\\d[T\\s][0-2]\\d:[0-5]\\d:[0-5]\\d[\\.,]\\d+)?.*?RawFix:(\\d+=.*$)'])
         Config testConfig = testSpecificConfig.withFallback(ConfigFactory.load())
 
         when:
         final ByteArrayOutputStream outputStream = new ByteArrayOutputStream()
         new FixGrep(this.class.getResourceAsStream('/test.log'), outputStream, testConfig).go()
         final String actualOutput = outputStream.toString()
-        final fileContainingExpectedOutput = new File("src/test/resources/test-expected-output.log")
+        final fileContainingExpectedOutput = new File("fixgrep-core/src/test/resources/test-expected-output.log")
         final String expectedOutput = fileContainingExpectedOutput.text
         println actualOutput.toString()
 

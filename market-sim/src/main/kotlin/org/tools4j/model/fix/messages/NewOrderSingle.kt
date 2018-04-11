@@ -33,6 +33,20 @@ class NewOrderSingle(
         val orderType: OrderType,
         fixSpec: FixSpec) : OrderRequestMessage, FixMessage(fixSpec) {
 
+
+    constructor(
+            senderCompId: String,
+            targetCompId: String,
+            clOrdId: Id,
+            origClOrderId: Id,
+            instrument: String,
+            transactTime: Long,
+            orderQty: Long,
+            price: Price,
+            side: Side,
+            fixSpec: FixSpec
+    ) : this(senderCompId, targetCompId, clOrdId, origClOrderId, instrument, transactTime, orderQty, price, side, price.orderType, fixSpec)
+
     override val orderId: Id?
         get() = null
 

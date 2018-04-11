@@ -1,6 +1,5 @@
 package org.tools4j.extensions
 
-import com.sun.tools.internal.jxc.ap.Const
 import java.util.regex.Pattern
 
 /**

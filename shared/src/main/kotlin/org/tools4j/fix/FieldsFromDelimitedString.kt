@@ -9,13 +9,19 @@ import java.util.ArrayList
  */
 class FieldsFromDelimitedString(private val str: String, private val delimiter: Char = Ascii1Char().toChar()) : FieldsSource {
 
+    constructor(str: String, delimiter: String) : this(str, delimiter.toCharArray()[0]) {
+        if(delimiter.length > 1){
+            throw IllegalArgumentException("Delimiter must be just one character long [$delimiter]")
+        }
+    }
+
     override val fields: Fields by lazy {
         val fields = ArrayList<Field>()
         val fieldStrings = SplitableByCharString(str, delimiter).split().iterator()
         while (fieldStrings.hasNext()) {
             val fieldStr = fieldStrings.next()
             val tagAndValue = SplitableByCharString(fieldStr, '=').splitAtFirst().values()
-            val field = Field(tagAndValue!![0], tagAndValue[1])
+            val field = FieldImpl(tagAndValue!![0], tagAndValue[1])
             fields.add(field)
         }
         FieldsImpl(fields)

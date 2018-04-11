@@ -7,6 +7,8 @@ package org.tools4j.fix
  */
 class MarketPrice private constructor() : Price {
 
+    override val orderType = OrderType.MARKET
+
     override val orNull: Double?
         get() = null
 

@@ -113,13 +113,13 @@ class OrderBook @JvmOverloads constructor(
         asks.removeTerminal()
     }
 
-    fun match() {
+    fun match(): MatchResults {
         try {
             val bids = getBids()
             var asks = getAsks()
 
             if (!bids.hasNext() || !asks.hasNext()) {
-                return
+                return MatchResults.EMPTY
             }
 
             logger.debug { "===========================================" }
@@ -132,7 +132,7 @@ class OrderBook @JvmOverloads constructor(
             while (bids.hasNext()) {
                 logger.debug { "Book showing remaining quantities:\n" + toString() }
                 if(!asks.hasNext()){
-                    return
+                    return MatchResults(matches)
                 }
                 val bid = bids.next()
                 logger.debug { "===========================================" }
@@ -186,6 +186,7 @@ class OrderBook @JvmOverloads constructor(
                     }
                 }
             }
+            return MatchResults(matches)
         } finally {
             logger.debug{"Book after matching:\n" + toString()}
         }

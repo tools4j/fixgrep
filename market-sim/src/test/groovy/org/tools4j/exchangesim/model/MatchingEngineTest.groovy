@@ -8,11 +8,13 @@ import org.tools4j.fix.Fix50SP2FixSpecFromClassPath
 import org.tools4j.fix.Id
 import org.tools4j.fix.LimitPrice
 import org.tools4j.fix.MarketPrice
+import org.tools4j.fix.OrderType
 import org.tools4j.fix.Price
 import org.tools4j.fix.Side
 import org.tools4j.fix.SimpleId
 import org.tools4j.model.*
 import org.tools4j.model.fix.messages.LoggingMessageHandler
+import org.tools4j.model.fix.messages.NewOrderSingle
 import spock.lang.Specification
 
 import static org.tools4j.groovytables.GroovyTables.withTable
@@ -264,20 +266,20 @@ class MatchingEngineTest extends Specification {
 
     private VersionedOrder createOrder(Id clOrdId, Id orderId, final Price price, final long qty, final String symbol, final Side side) {
         return new MarketOrder(
-                "senderCompId",
-                "targetCompId",
-                clOrdId,
+                new NewOrderSingle(
+                    "senderCompId",
+                    "targetCompId",
+                    clOrdId,
+                    clOrdId,
+                    symbol,
+                    dateTimeService.now(),
+                    qty,
+                    price,
+                    side,
+                    new Fix50SP2FixSpecFromClassPath().load()
+                ),
                 orderId,
-                symbol,
-                qty,
-                price,
-                dateTimeService.now(),
-                dateTimeService.now(),
-                side,
                 dateTimeService,
-                new Fix50SP2FixSpecFromClassPath().load(),
                 new LoggingMessageHandler());
     }
-
-
 }

@@ -1,6 +1,7 @@
 package org.tools4j.model
 
 import org.tools4j.fix.Field
+import org.tools4j.fix.FieldImpl
 import org.tools4j.fix.Fields
 import org.tools4j.fix.FieldsImpl
 import org.tools4j.fix.FieldsSource
@@ -27,7 +28,7 @@ class FieldsBuilder : FieldsSource {
 
     fun with(tag: Int, value: Double?): FieldsBuilder {
         if (value != null) {
-            fieldsList.add(Field(tag, ""+value))
+            fieldsList.add(FieldImpl(tag, ""+value))
             return this
         } else {
             return this
@@ -36,7 +37,7 @@ class FieldsBuilder : FieldsSource {
 
     fun with(tag: Int, value: Long?): FieldsBuilder {
         if (value != null) {
-            fieldsList.add(Field(tag, ""+value))
+            fieldsList.add(FieldImpl(tag, ""+value))
             return this
         } else {
             return this
@@ -45,7 +46,7 @@ class FieldsBuilder : FieldsSource {
 
     fun with(tag: Int, value: Boolean?): FieldsBuilder {
         if (value != null) {
-            fieldsList.add(Field(tag, ""+value))
+            fieldsList.add(FieldImpl(tag, ""+value))
             return this
         } else {
             return this
@@ -54,7 +55,7 @@ class FieldsBuilder : FieldsSource {
 
     fun with(tag: Int, value: Int?): FieldsBuilder {
         if (value != null) {
-            fieldsList.add(Field(tag, ""+value))
+            fieldsList.add(FieldImpl(tag, ""+value))
             return this
         } else {
             return this
@@ -63,7 +64,7 @@ class FieldsBuilder : FieldsSource {
 
     fun with(tag: Int, value: String?): FieldsBuilder {
         if (value != null) {
-            fieldsList.add(Field(tag, value))
+            fieldsList.add(FieldImpl(tag, value))
             return this
         } else {
             return this

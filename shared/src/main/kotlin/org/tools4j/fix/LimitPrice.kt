@@ -6,6 +6,7 @@ package org.tools4j.fix
  * Time: 5:43 AM
  */
 class LimitPrice(private val price: Double) : BaseLimitPrice() {
+    override val orderType = OrderType.LIMIT
 
     override fun get(): Double {
         return price

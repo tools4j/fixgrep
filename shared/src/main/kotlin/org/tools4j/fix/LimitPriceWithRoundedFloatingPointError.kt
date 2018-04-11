@@ -7,6 +7,8 @@ package org.tools4j.fix
  */
 class LimitPriceWithRoundedFloatingPointError(private val unRoundedPrice: Price) : Price {
 
+    override val orderType = OrderType.LIMIT
+
     override val orNull: Double?
         get() = roundedPrice.get()
 

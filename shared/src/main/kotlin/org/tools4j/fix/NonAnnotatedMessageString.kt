@@ -17,7 +17,7 @@ class NonAnnotatedMessageString(private val line: String, private val delimiterR
             val fieldAsSplitString: SplitString = SplitableByRegexString(fieldStr, "=").split()
             val tag: String = fieldAsSplitString[0]
             val value = fieldAsSplitString.allElementsOnwards(1, delimiterRegex)
-            fields.add(Field(tag, value!!))
+            fields.add(FieldImpl(tag, value!!))
         }
         FieldsImpl(fields)
     }

@@ -43,7 +43,7 @@ class FieldsFromAnnotatedMessageString(
         val fieldTypeStr = splitString.values()!![0]
         val fieldType = parseFieldTag(fieldTypeStr)
         val fieldValue = parseFieldValue(splitString.allElementsOnwards(1, "="))
-        return Field(fieldType, fieldValue)
+        return FieldImpl(fieldType, fieldValue)
     }
 
     fun parseFieldValue(_fieldValueStr: String?): Value {

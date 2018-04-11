@@ -9,6 +9,7 @@ import org.tools4j.fix.Price
 import org.tools4j.fix.Side
 import org.tools4j.model.*
 import org.tools4j.model.fix.messages.LoggingMessageHandler
+import org.tools4j.model.fix.messages.NewOrderSingle
 import spock.lang.Specification
 
 /**
@@ -130,18 +131,20 @@ class OrderImplBookTest extends Specification{
         final Id orderId = ordIdGenerator.get()
 
         return new MarketOrder(
-                "senderCompId",
-                "targetCompId",
-                clOrdId,
+                new NewOrderSingle(
+                        "senderCompId",
+                        "targetCompId",
+                        clOrdId,
+                        clOrdId,
+                        symbol,
+                        dateTimeService.now(),
+                        qty,
+                        price,
+                        side,
+                        new Fix50SP2FixSpecFromClassPath().load()
+                ),
                 orderId,
-                symbol,
-                qty,
-                price,
-                dateTimeService.now(),
-                dateTimeService.now(),
-                side,
                 dateTimeService,
-                new Fix50SP2FixSpecFromClassPath().load(),
                 new LoggingMessageHandler());
     }
 }

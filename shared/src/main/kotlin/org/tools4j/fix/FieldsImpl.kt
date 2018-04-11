@@ -6,6 +6,9 @@ package org.tools4j.fix
  * Time: 5:43 PM
  */
 class FieldsImpl(val fields: List<Field>) : ArrayList<Field>(fields), Fields {
+    constructor(str: String, delimiter: Char) : this(FieldsFromDelimitedString(str, delimiter).fields)
+    constructor(str: String, delimiter: String) : this(FieldsFromDelimitedString(str, delimiter).fields)
+
     override fun countOfField(tag: Tag): Int {
         return countOfField(tag.tag)
     }
@@ -36,12 +39,8 @@ class FieldsImpl(val fields: List<Field>) : ArrayList<Field>(fields), Fields {
     }
 
     private val stringValue: String by lazy {
-        val sb = StringBuilder()
-        for (field in fields) {
-            sb.append(field.withOutsideAnnotations)
-            sb.append("|")
-        }
-        sb.toString()
+        val prettyFields = Fields.AnnotationSpec.OUTSIDE_ANNOTATED.annotateFields(this)
+        prettyFields.toPrettyString()
     }
 
     override fun sortBy(desiredOrder: List<Int>): Fields {
@@ -80,8 +79,13 @@ class FieldsImpl(val fields: List<Field>) : ArrayList<Field>(fields), Fields {
         toDelimitedString()
     }
 
-    override fun toOutsideAnnotatedString(delimiter: Char): String {
-        return OutsideAnnotatedSingleLineFormat(this, delimiter).toString()
+    override fun toPrettyString(delimiter: Char): String {
+        val sb = StringBuilder()
+        for (i in 0 until fields.size) {
+            if (sb.length > 0) sb.append(delimiter)
+            sb.append(fields[i].toPrettyString())
+        }
+        return sb.toString()
     }
 
     override val msgTypeCode: String by lazy {

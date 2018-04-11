@@ -3,6 +3,9 @@ package org.tools4j.fixgrep
 import org.tools4j.fix.ExecType
 import org.tools4j.fix.Fields
 import org.tools4j.fix.FixMessageType
+import org.tools4j.fixgrep.texteffect.Ansi
+import org.tools4j.fixgrep.texteffect.Ansi16ForegroundColor
+import org.tools4j.fixgrep.texteffect.TextEffect
 
 /**
  * User: ben
@@ -10,8 +13,8 @@ import org.tools4j.fix.FixMessageType
  * Time: 6:30 AM
  */
 class MessageColors {
-    val colorsByMsgCodeAndExecType: Map<String, AnsiColor> by lazy {
-        val map = HashMap<String, AnsiColor>()
+    val colorsByMsgCodeAndExecType: Map<String, TextEffect> by lazy {
+        val map = HashMap<String, TextEffect>()
         for(msgType in FixMessageType.values()){
             if(msgType == FixMessageType.ExecutionReport){
                 for(execType in ExecType.values()){
@@ -24,14 +27,14 @@ class MessageColors {
         map
     }
 
-    fun getColor(fields: Fields): AnsiColor{
-        return colorsByMsgCodeAndExecType[fields.msgTypeAndExecTypeKey] ?: AnsiColor.Reset
+    fun getColor(fields: Fields): TextEffect {
+        return colorsByMsgCodeAndExecType[fields.msgTypeAndExecTypeKey] ?: Ansi.Reset
     }
 
-    fun getColor(msgType: FixMessageType): AnsiColor{
+    fun getColor(msgType: FixMessageType): Ansi16ForegroundColor {
         return when (msgType) {
             FixMessageType.NewOrderSingle
-            -> AnsiColor.BrightBlue
+            -> Ansi16ForegroundColor.BrightBlue
 
             FixMessageType.Heartbeat,
             FixMessageType.TestRequest,
@@ -148,36 +151,36 @@ class MessageColors {
             FixMessageType.StreamAssignmentReportACK,
             FixMessageType.PartyDetailsListRequest,
             FixMessageType.PartyDetailsListReport
-            -> AnsiColor.Purple
-            else -> AnsiColor.Purple
+            -> Ansi16ForegroundColor.Purple
+            else -> Ansi16ForegroundColor.Purple
         }    
     }
 
-    private fun getColor(execType: ExecType): AnsiColor {
+    private fun getColor(execType: ExecType): TextEffect {
         return when(execType){
             ExecType.New,
             ExecType.PartialFill,
             ExecType.Fill,
             ExecType.Replaced
-                    ->AnsiColor.Blue
+                    -> Ansi16ForegroundColor.Blue
 
             ExecType.DoneForDay
-                    ->AnsiColor.Green
+                    -> Ansi16ForegroundColor.Green
 
             ExecType.Canceled,
             ExecType.Stopped,
             ExecType.Rejected,
             ExecType.Suspended
-                    ->AnsiColor.Red
+                    -> Ansi16ForegroundColor.Red
 
             ExecType.PendingCancel,
             ExecType.PendingNew,
             ExecType.PendingReplace
-                    -> AnsiColor.Yellow
+                    -> Ansi16ForegroundColor.Yellow
 
             ExecType.TradeCancel,
             ExecType.Expired
-                    -> AnsiColor.Reset
+                    -> Ansi.Reset
 
             ExecType.Calculated,
             ExecType.Trade,
@@ -186,8 +189,8 @@ class MessageColors {
             ExecType.TradeInAClearingHold,
             ExecType.TradeHasBeenReleasedToClearing,
             ExecType.TriggeredOrActivatedBySystem
-                    -> AnsiColor.Reset
-            else -> AnsiColor.Reset
+                    -> Ansi.Reset
+            else -> Ansi.Reset
         }
     }
 }

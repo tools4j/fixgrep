@@ -10,7 +10,7 @@ class NonAnnotatedSingleLineFormat @JvmOverloads constructor(private val fieldsS
         val sb = StringBuilder()
         for (i in 0 until fieldsSource.fields.size) {
             if (sb.length > 0) sb.append(delimiter)
-            sb.append(fieldsSource.fields[i].withNoAnnotations)
+            sb.append(fieldsSource.fields[i])
         }
         sb.toString()
     }

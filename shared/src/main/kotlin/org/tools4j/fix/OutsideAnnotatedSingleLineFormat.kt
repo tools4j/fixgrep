@@ -12,7 +12,7 @@ class OutsideAnnotatedSingleLineFormat @JvmOverloads constructor(private val fie
         val sb = StringBuilder()
         for (field in fields) {
             if (sb.length > 0) sb.append(delimiter)
-            sb.append(field.withOutsideAnnotations)
+            sb.append(AnnotatedField(field, Fields.AnnotationSpec.OUTSIDE_ANNOTATED).toPrettyString())
         }
         sb.toString()
     }

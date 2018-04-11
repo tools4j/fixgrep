@@ -1,5 +1,7 @@
 package org.tools4j.fixgrep
 
+import org.tools4j.fixgrep.texteffect.Ansi
+import org.tools4j.fixgrep.texteffect.Ansi16ForegroundColor
 import spock.lang.Specification
 
 /**
@@ -20,6 +22,6 @@ class AnsiTest extends Specification {
 
     def 'test ansi colors'(){
         expect:
-        println "${AnsiColor.Red.ansiCode}To be or not to be${AnsiColor.Reset.ansiCode}"
+        println "${Ansi16ForegroundColor.Red.ansiCode}To be or not to be${Ansi.Reset.ansiCode}"
     }
 }

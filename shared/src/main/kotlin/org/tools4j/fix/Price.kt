@@ -9,6 +9,7 @@ import java.util.*
  */
 interface Price {
     val orNull: Double?
+    val orderType: OrderType
     fun hasPrice(): Boolean
     fun get(): Double
     fun mid(other: Price): Price
