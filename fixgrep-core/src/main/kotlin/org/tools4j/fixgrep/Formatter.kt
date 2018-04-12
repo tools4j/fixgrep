@@ -1,14 +1,14 @@
 package org.tools4j.fixgrep
 
 import org.tools4j.extensions.constantToCapitalCase
+import org.tools4j.fix.AnnotationSpec
 import org.tools4j.fix.Fields
-import org.tools4j.fix.FieldsAnnotator
+import org.tools4j.fix.FieldsNameAndEnumEnricher
 import org.tools4j.fix.FieldsFromDelimitedString
 import org.tools4j.fix.Fix50SP2FixSpecFromClassPath
 import org.tools4j.fix.FixFieldTypes
 import org.tools4j.fix.FixSpec
 import org.tools4j.fixgrep.texteffect.Ansi
-import org.tools4j.fixgrep.texteffect.Ansi16ForegroundColor
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
@@ -20,14 +20,12 @@ import java.util.regex.Pattern
 class Formatter(
     val logLineRegex: String = "^.*?(\\d+=.*?$)",
     val logLineRegexGroupContainingMessage: Int = 1,
-    val format: String = "\${senderToTargetCompIdDirection} \${msgColor}[\${msgTypeName}]\${colorReset} \${msgFixOutsideAnnotated}",
+    val format: String = "\${senderToTargetCompIdDirection} \${msgColor}[\${msgTypeName}]\${colorReset} \${msgFix}",
     val fixSpec: FixSpec = Fix50SP2FixSpecFromClassPath().load(),
     val msgColors: MessageColors = MessageColors(),
     val inputFixDelimiter: Char = '|',
-    val outputFixDelimiter: Char = '|'){
-    /*
-    TODO marketToClientIdDirection
-     */
+    val outputFixDelimiter: Char = '|',
+    val annotationSpec: AnnotationSpec = AnnotationSpec.OUTSIDE_ANNOTATED){
 
     val logLineRegexPattern: Pattern by lazy {
         Pattern.compile(logLineRegex)
@@ -91,13 +89,10 @@ class Formatter(
             formattedLine = formattedLine.replace("\${senderToTargetCompIdDirection}", direction)
         }
 
-        if (formattedLine.contains("\${msgFix")) {
-            if (formattedLine.contains("\${msgFixOutsideAnnotated}")) {
-                val annotatedFields: Fields = FieldsAnnotator(fixSpec, fields).fields
-                formattedLine = formattedLine.replace("\${msgFixOutsideAnnotated}", annotatedFields.toPrettyString(outputFixDelimiter))
-            } else if (formattedLine.contains("\${msgFix}")) {
-                formattedLine = formattedLine.replace("\${msgFix}", fields.toDelimitedString(outputFixDelimiter))
-            }
+        if (formattedLine.contains("\${msgFix}")) {
+            var annotatedFields = FieldsNameAndEnumEnricher(fixSpec, fields).fields
+            annotatedFields = annotationSpec.annotateFields(annotatedFields)
+            formattedLine = formattedLine.replace("\${msgFix}", annotatedFields.toPrettyString(outputFixDelimiter))
         }
 
         for (i in 1..matcher.groupCount()) {

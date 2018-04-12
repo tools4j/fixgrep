@@ -7,7 +7,7 @@ import java.util.ArrayList
  * Date: 11/7/17
  * Time: 5:19 PM
  */
-class FieldsAnnotator(private val fixSpec: FixSpec, private val inputFields: Fields) : FieldsSource {
+class FieldsNameAndEnumEnricher(private val fixSpec: FixSpec, private val inputFields: Fields) : FieldsSource {
     override val fields: Fields by lazy {
         val returnFields = ArrayList<Field>()
         for (field in this.inputFields) {

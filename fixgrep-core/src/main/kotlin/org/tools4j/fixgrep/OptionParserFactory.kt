@@ -17,7 +17,6 @@ class OptionParserFactory{
         val parser = object: OptionParser() {
             init {
                 allowsUnrecognizedOptions()
-                acceptsAll(asList("c", "color", "colour"))
                 acceptsAll(asList("n", "no-color", "no-colour"))
                 acceptsAll(asList("h", "highlight", "highlights")).withRequiredArg().ofType(String::class.java).withValuesSeparatedBy(",") // 35:Blue,8:Yellow:Line,51=1:Purple:Tag,Side=Buy:Green (apply highlights based on criteria)
                 acceptsAll(asList("g", "group-by-order")).withOptionalArg().ofType(String::class.java) // <xyz> (group messages by origClOrdId)

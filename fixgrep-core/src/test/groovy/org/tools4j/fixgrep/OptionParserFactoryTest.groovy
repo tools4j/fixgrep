@@ -11,7 +11,6 @@ import spock.lang.Unroll
  * Time: 9:05 AM
  *
  *
- acceptsAll(asList("c", "color", "colour"))
  acceptsAll(asList("n", "no-color", "no-colour"))
  acceptsAll(asList("h", "highlight")).withRequiredArg().ofType(String.javaClass).withValuesSeparatedBy(",") // 35:Blue,8:Yellow:Line,51=1:Purple:Tag,Side=Buy:Green (apply highlights based on criteria)
  acceptsAll(asList("g", "group-by-order")).withOptionalArg().ofType(String.javaClass) // <xyz> (group messages by origClOrdId)
@@ -34,12 +33,11 @@ class OptionParserFactoryTest extends Specification {
         final OptionParser optionParser = new OptionParserFactory().optionParser
 
         when:
-        final OptionSet options = optionParser.parse("-cv")
+        final OptionSet options = optionParser.parse("-nv")
 
         then:
-        assert options.has("c")
-        assert options.has("color")
-        assert options.has("colour")
+        assert options.has("n")
+        assert options.has("no-color")
         assert options.has("v")
         assert options.has("vertical-format")
     }
@@ -49,10 +47,10 @@ class OptionParserFactoryTest extends Specification {
         final OptionParser optionParser = new OptionParserFactory().optionParser
 
         when:
-        final OptionSet options = optionParser.parse("-c", "asdf")
+        final OptionSet options = optionParser.parse("-n", "asdf")
 
         then:
-        assert options.has("c")
+        assert options.has("n")
         assert options.nonOptionArguments().size() == 1
         assert options.nonOptionArguments().get(0) == 'asdf'
     }

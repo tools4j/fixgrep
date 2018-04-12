@@ -39,7 +39,7 @@ class FieldsImpl(val fields: List<Field>) : ArrayList<Field>(fields), Fields {
     }
 
     private val stringValue: String by lazy {
-        val prettyFields = Fields.AnnotationSpec.OUTSIDE_ANNOTATED.annotateFields(this)
+        val prettyFields = AnnotationSpec.OUTSIDE_ANNOTATED.annotateFields(this)
         prettyFields.toPrettyString()
     }
 
