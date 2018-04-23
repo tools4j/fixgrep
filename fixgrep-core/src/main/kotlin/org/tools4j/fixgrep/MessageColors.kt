@@ -161,7 +161,8 @@ class MessageColors {
             ExecType.New,
             ExecType.PartialFill,
             ExecType.Fill,
-            ExecType.Replaced
+            ExecType.Replaced,
+            ExecType.Trade
                     -> Ansi16ForegroundColor.Blue
 
             ExecType.DoneForDay
@@ -183,7 +184,6 @@ class MessageColors {
                     -> Ansi.Reset
 
             ExecType.Calculated,
-            ExecType.Trade,
             ExecType.TradeCorrect,
             ExecType.OrderStatus,
             ExecType.TradeInAClearingHold,

@@ -9,6 +9,12 @@ import org.tools4j.fix.Fields
  */
 interface Highlight {
     fun apply(fields: Fields): Fields;
+
+    object NO_HIGHLIGHT: Highlight{
+        override fun apply(fields: Fields): Fields {
+            return fields
+        }
+    }
 }
 
 

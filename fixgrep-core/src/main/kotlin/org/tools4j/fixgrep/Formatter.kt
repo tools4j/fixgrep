@@ -1,13 +1,11 @@
 package org.tools4j.fixgrep
 
 import org.tools4j.extensions.constantToCapitalCase
-import org.tools4j.fix.AnnotationSpec
+import org.tools4j.fix.AnnotatedFields
 import org.tools4j.fix.Fields
-import org.tools4j.fix.FieldsNameAndEnumEnricher
 import org.tools4j.fix.FieldsFromDelimitedString
-import org.tools4j.fix.Fix50SP2FixSpecFromClassPath
+import org.tools4j.fix.FieldsNameAndEnumEnricher
 import org.tools4j.fix.FixFieldTypes
-import org.tools4j.fix.FixSpec
 import org.tools4j.fixgrep.texteffect.Ansi
 import java.util.regex.Matcher
 import java.util.regex.Pattern
@@ -17,68 +15,90 @@ import java.util.regex.Pattern
  * Date: 22/03/2018
  * Time: 6:49 AM
  */
-class Formatter(
-    val logLineRegex: String = "^.*?(\\d+=.*?$)",
-    val logLineRegexGroupContainingMessage: Int = 1,
-    val format: String = "\${senderToTargetCompIdDirection} \${msgColor}[\${msgTypeName}]\${colorReset} \${msgFix}",
-    val fixSpec: FixSpec = Fix50SP2FixSpecFromClassPath().load(),
-    val msgColors: MessageColors = MessageColors(),
-    val inputFixDelimiter: Char = '|',
-    val outputFixDelimiter: Char = '|',
-    val annotationSpec: AnnotationSpec = AnnotationSpec.OUTSIDE_ANNOTATED){
-
+class Formatter(val spec: FormatSpec){
     val logLineRegexPattern: Pattern by lazy {
-        Pattern.compile(logLineRegex)
+        Pattern.compile(spec.lineRegex)
     }
 
-    fun matches(line: String): Matcher{
+    fun shouldParse(line: String): Matcher{
         return logLineRegexPattern.matcher(line)
     }
 
-    fun format(line: String): String {
-        val matcher = matches(line)
+    fun format(line: String): String? {
+        val matcher = shouldParse(line)
         if(!matcher.find()){
             return "ERROR: could not match regex with line: ${line}"
         }
         return format(matcher)
     }
 
-    fun format(matcher: Matcher): String {
-        val fixString = matcher.group(logLineRegexGroupContainingMessage)
-        val fields: Fields = FieldsFromDelimitedString(fixString, inputFixDelimiter).fields
+    fun format(matcher: Matcher): String? {
+        val fixString = matcher.group(spec.lineRegexGroupForFix)
+        val fields: Fields = FieldsFromDelimitedString(fixString, spec.inputDelimiter).fields
 
-        var formattedLine = format
-        if (formattedLine.contains("\${msgTypeName}")) {
-            val msgTypeName = fixSpec.msgTypeAndExecTypeName(fields)
-            formattedLine = formattedLine.replace("\${msgTypeName}", msgTypeName!!)
+        if(!shouldPrint(fields)){
+            return null
+        }
+        return format(fields, matcher)
+    }
+
+    private fun shouldPrint(fields: Fields): Boolean {
+        if(!spec.includeOnlyMessagesOfType.isEmpty()
+            && !spec.includeOnlyMessagesOfType.contains(fields.msgTypeCode)){
+            return false
+        } else if(!spec.excludeMessagesOfType.isEmpty()
+                && spec.excludeMessagesOfType.contains(fields.msgTypeCode)) {
+            return false
+        } else {
+            return true
+        }
+    }
+
+    fun format(inputFields: Fields, matcher: Matcher): String? {
+        var formattedString = spec.lineFormat
+        if (formattedString.contains("\${msgTypeName}")) {
+            val msgTypeName = spec.fixSpec.msgTypeAndExecTypeName(inputFields)
+            formattedString = formattedString.replace("\${msgTypeName}", msgTypeName)
         }
 
-        if (formattedLine.contains("\${msgColor}")) {
-            val msgColor = msgColors.getColor(fields)
-            formattedLine = formattedLine.replace("\${msgColor}", msgColor.ansiCode)
+        if (formattedString.contains("\${msgColor}")) {
+            val replaceWith: String
+            if(!spec.suppressColors) {
+                val msgColor = spec.msgColors.getColor(inputFields)
+                replaceWith = msgColor.ansiCode
+            } else {
+                replaceWith = ""
+            }
+            formattedString = formattedString.replace("\${msgColor}", replaceWith)
         }
 
-        if (formattedLine.contains("\${colorReset}")) {
-            formattedLine = formattedLine.replace("\${colorReset}", Ansi.Reset.ansiCode)
+        if (formattedString.contains("\${colorReset}")) {
+            val replaceWith: String
+            if(!spec.suppressColors) {
+                replaceWith = Ansi.Reset.ansiCode
+            } else {
+                replaceWith = ""
+            }
+            formattedString = formattedString.replace("\${colorReset}", replaceWith)
         }
 
-        if (formattedLine.contains("\${msgTypeName}")) {
-            val msgTypeCode = fields.msgTypeCode
+        if (formattedString.contains("\${msgTypeName}")) {
+            val msgTypeCode = inputFields.msgTypeCode
             val msgTypeName: String
             if (msgTypeCode == "8") {
-                val execTypeCode = fields.getField(150)!!.value.rawValue
-                val execTypeString = fixSpec.fieldsAndEnumValues.get("150." + execTypeCode)
+                val execTypeCode = inputFields.getField(150)!!.value.rawValue
+                val execTypeString = spec.fixSpec.fieldsAndEnumValues.get("150." + execTypeCode)
                 val execTypeStringAsCapitalCase = execTypeString!!.constantToCapitalCase()
                 msgTypeName = "Exec." + execTypeStringAsCapitalCase
             } else {
-                msgTypeName = fixSpec.getMsgTypeNameGivenCode(msgTypeCode)!!
+                msgTypeName = spec.fixSpec.getMsgTypeNameGivenCode(msgTypeCode)!!
             }
-            formattedLine = formattedLine.replace("\${msgTypeName}", msgTypeName)
+            formattedString = formattedString.replace("\${msgTypeName}", msgTypeName)
         }
 
-        if (formattedLine.contains("\${senderToTargetCompIdDirection}")) {
-            val senderCompId: String? = fields.getField(FixFieldTypes.SenderCompID)?.stringValue()
-            val targetCompId: String? = fields.getField(FixFieldTypes.TargetCompID)?.stringValue()
+        if (formattedString.contains("\${senderToTargetCompIdDirection}")) {
+            val senderCompId: String? = inputFields.getField(FixFieldTypes.SenderCompID)?.stringValue()
+            val targetCompId: String? = inputFields.getField(FixFieldTypes.TargetCompID)?.stringValue()
 
             val direction: String
             if (senderCompId != null && targetCompId != null) {
@@ -86,23 +106,27 @@ class Formatter(
             } else {
                 direction = ""
             }
-            formattedLine = formattedLine.replace("\${senderToTargetCompIdDirection}", direction)
+            formattedString = formattedString.replace("\${senderToTargetCompIdDirection}", direction)
         }
 
-        if (formattedLine.contains("\${msgFix}")) {
-            var annotatedFields = FieldsNameAndEnumEnricher(fixSpec, fields).fields
-            annotatedFields = annotationSpec.annotateFields(annotatedFields)
-            formattedLine = formattedLine.replace("\${msgFix}", annotatedFields.toPrettyString(outputFixDelimiter))
+        if (formattedString.contains("\${msgFix}")) {
+            var fields = FieldsNameAndEnumEnricher(spec.fixSpec, inputFields).fields
+            fields = AnnotatedFields(fields, spec.tagAnnotationSpec).fields
+            fields = fields.sortBy(spec.sortByTags)
+            fields = fields.exclude(spec.excludeTags)
+            fields = fields.includeOnly(spec.onlyIncludeTags)
+            if(!spec.suppressColors) fields = spec.highlight.apply(fields)
+            formattedString = formattedString.replace("\${msgFix}", fields.toPrettyString(spec.outputDelimiter))
         }
 
         for (i in 1..matcher.groupCount()) {
-            if (formattedLine.contains("\$${i}")) {
+            if (formattedString.contains("\$${i}")) {
                 val groupValue = matcher.group(i)
                 if (groupValue != null) {
-                    formattedLine = formattedLine.replace("\$${i}", groupValue)
+                    formattedString = formattedString.replace("\$${i}", groupValue)
                 }
             }
         }
-        return formattedLine
+        return if(formattedString.isEmpty()) null else formattedString
     }
 }

@@ -1,5 +1,7 @@
 package org.tools4j.fix
 
+import java.util.stream.Collectors
+
 /**
  * User: ben
  * Date: 20/6/17
@@ -43,7 +45,32 @@ class FieldsImpl(val fields: List<Field>) : ArrayList<Field>(fields), Fields {
         prettyFields.toPrettyString()
     }
 
+    override fun exclude(excludeTags: List<Int>): Fields {
+        if(excludeTags.isEmpty()){
+            return this
+        }
+        val outputFields = FieldsImpl(ArrayList(fields))
+        excludeTags.forEach {
+            val field: Field? = outputFields.getField(it)
+            if(field != null){
+                outputFields.remove(field)
+            }
+        }
+        return FieldsImpl(outputFields)
+    }
+
+    override fun includeOnly(onlyIncludeTags: List<Int>): Fields {
+        if(onlyIncludeTags.isEmpty()){
+            return this
+        }
+        val newFields = fields.stream().filter { onlyIncludeTags.contains(it.tag.tag) }.collect(Collectors.toList())
+        return FieldsImpl(newFields)
+    }
+
     override fun sortBy(desiredOrder: List<Int>): Fields {
+        if(desiredOrder.isEmpty()){
+            return this
+        }
         val existingFields = ArrayList(fields)
         val outputFields = ArrayList<Field>()
         for(tag in desiredOrder){

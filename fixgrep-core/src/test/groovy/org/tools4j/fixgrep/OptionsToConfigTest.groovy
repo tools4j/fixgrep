@@ -14,7 +14,7 @@ class OptionsToConfigTest extends Specification {
     def "GetProperties"() {
         given:
         final OptionParser optionParser = new OptionParserFactory().optionParser
-        final OptionSet options = optionParser.parse("-cv", "--highlights", "35:Blue,8:Yellow:Line,51=1:Purple:Tag,Side=Buy:Green")
+        final OptionSet options = optionParser.parse("-n", "--highlights", "35:Blue,8:Yellow:Line,51=1:Purple:Tag,Side=Buy:Green", "-z", "88")
         final OptionsToConfig optionsToProperties = new OptionsToConfig(options);
 
         when:
@@ -22,8 +22,8 @@ class OptionsToConfigTest extends Specification {
         println config
 
         then:
-        assert config.getBoolean("colour")
-        assert config.getBoolean("vertical.format")
+        assert config.getBoolean("suppress.colors")
         assert config.getStringList("highlights") == ["35:Blue", "8:Yellow:Line", "51=1:Purple:Tag" ,"Side=Buy:Green"]
+        assert config.getStringList("exclude.messages.of.type") == ["88"]
     }
 }

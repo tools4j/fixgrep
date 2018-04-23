@@ -17,12 +17,15 @@ class FieldsFromDelimitedString(private val str: String, private val delimiter: 
 
     override val fields: Fields by lazy {
         val fields = ArrayList<Field>()
-        val fieldStrings = SplitableByCharString(str, delimiter).split().iterator()
-        while (fieldStrings.hasNext()) {
-            val fieldStr = fieldStrings.next()
-            val tagAndValue = SplitableByCharString(fieldStr, '=').splitAtFirst().values()
-            val field = FieldImpl(tagAndValue!![0], tagAndValue[1])
-            fields.add(field)
+        val split = str.split(delimiter)
+        if(split.size > 0 && !(split.size == 1 && split[0].isEmpty())) {
+            val fieldStrings = split.iterator()
+            while (fieldStrings.hasNext()) {
+                val fieldStr = fieldStrings.next()
+                val tagAndValue = SplitableByCharString(fieldStr, '=').splitAtFirst().values()
+                val field = FieldImpl(tagAndValue!![0], tagAndValue[1])
+                fields.add(field)
+            }
         }
         FieldsImpl(fields)
     }

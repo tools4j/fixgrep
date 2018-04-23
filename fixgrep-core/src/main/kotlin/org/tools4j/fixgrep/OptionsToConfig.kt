@@ -2,7 +2,9 @@ package org.tools4j.fixgrep
 
 import com.typesafe.config.Config
 import com.typesafe.config.ConfigFactory
+import joptsimple.ArgumentAcceptingOptionSpec
 import joptsimple.OptionSet
+import joptsimple.OptionSpec
 import java.util.stream.Collectors
 
 /**
@@ -19,14 +21,12 @@ class OptionsToConfig(val optionSet: OptionSet) {
             val cleanedName = option.replace('-', '.')
             if(optionSet.has(option)){
                 val values = optionSet.valuesOf(option)
-                if(values.isEmpty()){
+                if(values.isEmpty()) {
                     configMap.put(cleanedName, true)
-
-                } else if(values.size == 1){
-                    configMap.put(cleanedName, values.get(0)!!)
-
-                } else {
+                } else if(isOptionDefinedAsList(optionSet, option)){
                     configMap.put(cleanedName, values)
+                } else {
+                    configMap.put(cleanedName, values.get(0)!!)
                 }
             }
         }
@@ -35,5 +35,24 @@ class OptionsToConfig(val optionSet: OptionSet) {
 
     private fun longest(options: List<String>): String {
         return options.stream().sorted { o1, o2 -> Integer.compare(o2.length, o1.length)}.findFirst().get()
+    }
+
+    private fun getSpec(optionSet: OptionSet, option: String): OptionSpec<*>{
+        return optionSet.specs().filter { it.options().contains(option) }.first()
+    }
+
+    private fun isOptionDefinedAsList(optionSet: OptionSet, option: String): Boolean{
+        return isOptionDefinedAsList(getSpec(optionSet, option))
+    }
+
+    private fun isOptionDefinedAsList(spec: OptionSpec<*>): Boolean{
+        if (ArgumentAcceptingOptionSpec::class.java.isAssignableFrom(spec::class.java)) {
+            val valueSeparatorField = ArgumentAcceptingOptionSpec::class.java.getDeclaredField("valueSeparator")
+            valueSeparatorField.isAccessible = true
+            val valueSeparator: String? = valueSeparatorField.get(spec) as String?
+            return (valueSeparator != null && !valueSeparator.equals("\u0000"))
+        } else {
+            return false
+        }
     }
 }

@@ -13,7 +13,7 @@ class DefaultHighlightTextEffectsTest extends Specification {
         expect:
         DefaultHighlightTextEffects effects = DefaultHighlightTextEffects.DEFAULT
 
-        "Fg9,Fg10,Fg11,Fg12,Fg13,Fg14,Fg9,Fg10,Fg11,Fg12,Fg13,Fg14,Fg9,Fg10,Fg11,Fg12,Fg13,Fg14".split(',').toList().forEach {
+        "FgBrightRed,FgBrightGreen,FgBrightYellow,FgBrightBlue,FgBrightMagenta,FgBrightCyan,FgBrightRed,FgBrightGreen,FgBrightYellow,FgBrightBlue,FgBrightMagenta,FgBrightCyan,FgBrightRed,FgBrightGreen,FgBrightYellow,FgBrightBlue,FgBrightMagenta,FgBrightCyan".split(',').toList().forEach {
             assert effects.next() == new TextEffectParser().parse(it)
         }
     }

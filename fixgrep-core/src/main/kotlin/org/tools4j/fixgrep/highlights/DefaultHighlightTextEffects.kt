@@ -15,7 +15,7 @@ class DefaultHighlightTextEffects(val effects: List<TextEffect>){
     }
 
     companion object {
-        val DEFAULT = DefaultHighlightTextEffects("Fg9,Fg10,Fg11,Fg12,Fg13,Fg14")
+        val DEFAULT = DefaultHighlightTextEffects("FgBrightRed,FgBrightGreen,FgBrightYellow,FgBrightBlue,FgBrightMagenta,FgBrightCyan")
     }
 }
 

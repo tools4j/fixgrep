@@ -17,9 +17,9 @@ class OptionParserFactory{
         val parser = object: OptionParser() {
             init {
                 allowsUnrecognizedOptions()
-                acceptsAll(asList("n", "no-color", "no-colour"))
+                acceptsAll(asList("n", "no-color", "suppress-colors"))
                 acceptsAll(asList("h", "highlight", "highlights")).withRequiredArg().ofType(String::class.java).withValuesSeparatedBy(",") // 35:Blue,8:Yellow:Line,51=1:Purple:Tag,Side=Buy:Green (apply highlights based on criteria)
-                acceptsAll(asList("g", "group-by-order")).withOptionalArg().ofType(String::class.java) // <xyz> (group messages by origClOrdId)
+                //acceptsAll(asList("g", "group-by-order")).withOptionalArg().ofType(String::class.java) // <xyz> (group messages by origClOrdId)
                 acceptsAll(asList("d", "input-delimiter", "input-delim")).withRequiredArg().ofType(String::class.java) //="\u0001"
                 acceptsAll(asList("o", "output-delimiter", "output-delim")).withRequiredArg().ofType(String::class.java) //="|"
                 acceptsAll(asList("l", "line-format")).withRequiredArg().ofType(String::class.java) // "$1 ${senderToTargetCompIdDirection} ${msgColor}[${msgTypeName}]${colorReset} ${msgFixOutsideAnnotated}"
@@ -28,8 +28,10 @@ class OptionParserFactory{
                 acceptsAll(asList("s", "sort-by-tags")).withRequiredArg().ofType(Integer::class.java).withValuesSeparatedBy(",")
                 acceptsAll(asList("i", "only-include-tags")).withRequiredArg().ofType(Integer::class.java).withValuesSeparatedBy(",")
                 acceptsAll(asList("e", "exclude-tags")).withRequiredArg().ofType(Integer::class.java).withValuesSeparatedBy(",")
+                acceptsAll(asList("m", "include-only-messages-of-type")).withRequiredArg().ofType(String::class.java).withValuesSeparatedBy(",")
+                acceptsAll(asList("z", "exclude-messages-of-type")).withRequiredArg().ofType(String::class.java).withValuesSeparatedBy(",")
                 acceptsAll(asList("a", "tag-annotations")).withRequiredArg().ofType(String::class.java).withValuesConvertedBy(regex("(none|outsideAnnotated|insideAnnotated|ba|ab|aa|bb|b_|a_|_a|_b|__)"))
-                acceptsAll(asList("v", "vertical-format"))
+                //acceptsAll(asList("v", "vertical-format"))
                 acceptsAll(asList("?", "help"))
             }
         }

@@ -16,6 +16,8 @@ interface Fields: MutableList<Field>{
     fun toIntToStringMap(): Map<Int, String>
     fun toDelimitedString(delimiter: Char = '|'): String
     fun toPrettyString(delimiter: Char = '|'): String
+    fun exclude(excludeTags: List<Int>): Fields
+    fun includeOnly(onlyIncludeTags: List<Int>): Fields
     val pipeDelimitedString: String
     val msgTypeCode: String
     val msgTypeAndExecTypeKey: String

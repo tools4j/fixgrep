@@ -43,7 +43,7 @@ class HighlightParserTest extends Specification {
         '35=blah:Blue:Field' | "${FgBlue}35=blah${reset}|150=A|55=AUD/USD"
         '35=blah&&150=A:Blue:Red:Field' | "${FgBlue}${BgRed}35=blah${reset}|${FgBlue}${BgRed}150=A${reset}|55=AUD/USD"
         '35=blah&&150=A:Blue:Red:Line' | "${FgBlue}${BgRed}35=blah${reset}|${FgBlue}${BgRed}150=A${reset}|${FgBlue}${BgRed}55=AUD/USD${reset}"
-        '150:Bg4,150=A:Fg2:Line,35=blah&&55=AUD:Blue:Red:Field' | "${FgBlue}${BgRed}${Fg2}35=blah${reset}|${Fg2}${Bg4}150=A${reset}|${FgBlue}${BgRed}${Fg2}55=AUD/USD${reset}"
-        '150:Bg4,150=A:Fg2:Line,35=blah&&55=AUD&&150:Blue:Red:Field' | "${FgBlue}${BgRed}${Fg2}35=blah${reset}|${FgBlue}${BgRed}${Fg2}${Bg4}150=A${reset}|${FgBlue}${BgRed}${Fg2}55=AUD/USD${reset}"
+        '150:Bg4,150=A:Fg2:Line,35=blah&&55=AUD:Blue:Red:Field' | "${Fg2}${FgBlue}${BgRed}35=blah${reset}|${Bg4}${Fg2}150=A${reset}|${Fg2}${FgBlue}${BgRed}55=AUD/USD${reset}"
+        '150:Bg4,150=A:Fg2:Line,35=blah&&55=AUD&&150:Blue:Red:Field' | "${Fg2}${FgBlue}${BgRed}35=blah${reset}|${Bg4}${Fg2}${FgBlue}${BgRed}150=A${reset}|${Fg2}${FgBlue}${BgRed}55=AUD/USD${reset}"
     }
 }

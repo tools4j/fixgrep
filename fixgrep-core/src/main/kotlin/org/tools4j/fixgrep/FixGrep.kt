@@ -1,10 +1,10 @@
 package org.tools4j.fixgrep
 
 import com.typesafe.config.Config
-import com.typesafe.config.ConfigFactory
 import java.io.InputStream
 import java.io.OutputStream
 import java.io.PrintStream
+
 
 /**
  * User: ben
@@ -12,13 +12,12 @@ import java.io.PrintStream
  * Time: 7:00 AM
  */
 class FixGrep(val inputStream: InputStream, val outputStream: OutputStream, val config: Config) {
+
+    constructor(inputStream: InputStream, outputStream: OutputStream, args: Array<String>)
+            : this(inputStream, outputStream, ConfigBuilder(args).config)
+
     val formatter: Formatter by lazy {
-        Formatter(
-            logLineRegex = config.getString("line.regex"),
-            logLineRegexGroupContainingMessage = config.getString("line.regexgroup").toInt(),
-            format = config.getString("format"),
-            inputFixDelimiter = config.getString("input.delimiter").toCharArray()[0],
-            outputFixDelimiter = config.getString("output.delimiter").toCharArray()[0])
+        Formatter(FormatSpec(config = config))
     }
 
     val printStream: PrintStream by lazy {
@@ -28,19 +27,29 @@ class FixGrep(val inputStream: InputStream, val outputStream: OutputStream, val 
     companion object {
         @JvmStatic
         fun main(args: Array<String>) {
-            val fixGrep = FixGrep(System.`in`, System.out, ConfigFactory.load())
+            val fixGrep = FixGrep(System.`in`, System.out, args)
             fixGrep.go()
         }
     }
 
     private fun go() {
-        inputStream.bufferedReader().useLines { lines -> lines.forEach { handleLine(it) } }
+        val reader = inputStream.bufferedReader()
+        while(true){
+            val line = reader.readLine()
+            if(line == null) break
+            else handleLine(line)
+        }
+        outputStream.flush()
+        outputStream.close()
     }
 
     private fun handleLine(line: String) {
-        val matcher = formatter.matches(line)
+        val matcher = formatter.shouldParse(line)
         if (matcher.find()) {
-            printStream.println(formatter.format(matcher))
+            val formattedLine = formatter.format(matcher)
+            if(formattedLine != null){
+                printStream.println(formattedLine)
+            }
         }
     }
 }

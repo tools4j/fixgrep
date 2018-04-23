@@ -16,21 +16,23 @@ class HighlightParser(_defaultHighlightTextEffects: DefaultHighlightTextEffects)
         defaultHighlightTextEffects = DefaultHighlightTextEffects(_defaultHighlightTextEffects)
     }
 
-    //35:123:456:Line,35=8:123:456:Line,35=8&&150=2:123:456:Line
-    fun parse(expression: String): Highlight{
+    fun parse(expression: String): Highlight {
         val expressions = expression.split(',')
+        return parse(expressions)
+    }
+
+    fun parse(expressions: List<String>): Highlight{
         val highlights = ArrayList<Highlight>()
-        expressions.forEach {
+        expressions.reversed().forEach {
             highlights.add(parseExpression(it))
         }
         return Highlights(highlights)
     }
 
     private fun parseExpression(expression: String): Highlight {
-        //35:Blue:Red:Line
-        //35:123:456:Line
-        //35=8:123:456:Line
-        //35=8&&150=2:123:456:Line
+        if(expression.isEmpty()){
+            return Highlight.NO_HIGHLIGHT
+        }
 
         val parts = expression.split(":")
         val mutableParts: MutableList<String> = ArrayList(parts)
@@ -40,7 +42,7 @@ class HighlightParser(_defaultHighlightTextEffects: DefaultHighlightTextEffects)
         val criteria = HighlightCriteriaParser().parse(criteriaStr)
 
         //2. If the 'scope' is specified, it _must_ be the last item in the.  Check, and extract if there
-        val scope = if(HighlightScope.contains(mutableParts.last())){
+        val scope = if(!mutableParts.isEmpty() && HighlightScope.containsIgnoringCase(mutableParts.last())){
                 HighlightScope.valueOf(mutableParts.removeAt(mutableParts.lastIndex))
             } else {
                 //Otherwise default value

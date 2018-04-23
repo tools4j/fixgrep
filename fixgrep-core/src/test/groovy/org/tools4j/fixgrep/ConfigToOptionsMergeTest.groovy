@@ -15,13 +15,13 @@ class ConfigToOptionsMergeTest extends Specification {
     def "test 1"() {
         given:
         final Config propertiesConfig = ConfigFactory.parseString("""
-        colour=false
+        suppress.colors=true
         vertical.format=false
         highlights=["150:Cyan","asdf"]
         sort.by.tags=[1,2,3,4,5]""")
 
         final OptionParser optionParser = new OptionParserFactory().optionParser
-        final OptionSet options = optionParser.parse("-cv",
+        final OptionSet options = optionParser.parse("-n",
                 "--highlights", "35:Blue,8:Yellow:Line,51=1:Purple:Tag,Side=Buy:Green",
                 "--sort-by-tags", "5,4,3,2,1")
         final OptionsToConfig optionsToProperties = new OptionsToConfig(options);
@@ -32,8 +32,7 @@ class ConfigToOptionsMergeTest extends Specification {
         println config
 
         then:
-        assert config.getBoolean("colour")
-        assert config.getBoolean("vertical.format")
+        assert config.getBoolean("suppress.colors")
         assert config.getStringList("highlights") == ["35:Blue", "8:Yellow:Line", "51=1:Purple:Tag" ,"Side=Buy:Green"]
         assert config.getIntList("sort.by.tags") == [5,4,3,2,1]
     }
@@ -42,13 +41,13 @@ class ConfigToOptionsMergeTest extends Specification {
         given:
         final Map<String, ?> configMap = new HashMap<>()
         final Config propertiesConfig = ConfigFactory.parseString("""
-        colour=false
+        suppress.colors=false
         vertical.format=false
         highlights=["150:Cyan","asdf"]
         sort.by.tags=[1,2,3,4,5]""")
 
         final OptionParser optionParser = new OptionParserFactory().optionParser
-        final OptionSet options = optionParser.parse("-c")
+        final OptionSet options = optionParser.parse("-n")
         final OptionsToConfig optionsToProperties = new OptionsToConfig(options);
 
         when:
@@ -57,7 +56,7 @@ class ConfigToOptionsMergeTest extends Specification {
         println config
 
         then:
-        assert config.getBoolean("colour")
+        assert config.getBoolean("suppress.colors")
         assert !config.getBoolean("vertical.format")
         assert config.getStringList("highlights") == ["150:Cyan", "asdf"]
         assert config.getIntList("sort.by.tags") == [1,2,3,4,5]

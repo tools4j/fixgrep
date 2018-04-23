@@ -10,22 +10,6 @@ import spock.lang.Unroll
  * Date: 3/04/2018
  * Time: 9:05 AM
  *
- *
- acceptsAll(asList("n", "no-color", "no-colour"))
- acceptsAll(asList("h", "highlight")).withRequiredArg().ofType(String.javaClass).withValuesSeparatedBy(",") // 35:Blue,8:Yellow:Line,51=1:Purple:Tag,Side=Buy:Green (apply highlights based on criteria)
- acceptsAll(asList("g", "group-by-order")).withOptionalArg().ofType(String.javaClass) // <xyz> (group messages by origClOrdId)
- acceptsAll(asList("d", "input-delimiter", "input-delim")).withRequiredArg().ofType(Char.javaClass) //="\u0001"
- acceptsAll(asList("o", "output-delimiter", "output-delim")).withRequiredArg().ofType(Char.javaClass) //="|"
- acceptsAll(asList("l", "line-format")).withRequiredArg().ofType(String.javaClass) // "$1 ${senderToTargetCompIdDirection} ${msgColor}[${msgTypeName}]${colorReset} ${msgFixOutsideAnnotated}"
- acceptsAll(asList("r", "line-regex")).withRequiredArg().ofType(String.javaClass) //="^(\\d{4}-[01]\\d-[0-3]\\d[T\\s][0-2]\\d:[0-5]\\d:[0-5]\\d[\\.,]\\d+)?.*?(\\d+=.*$)"
- acceptsAll(asList("i", "line-regexgroup-for-fix")).withRequiredArg().ofType(Int.javaClass) //="2"
- acceptsAll(asList("s", "sort-by-tags")).withRequiredArg().ofType(Int.javaClass).withValuesSeparatedBy(",")
- acceptsAll(asList("i", "only-include-tags")).withRequiredArg().ofType(Int.javaClass).withValuesSeparatedBy(",")
- acceptsAll(asList("e", "exclude-tags")).withRequiredArg().ofType(Int.javaClass).withValuesSeparatedBy(",")
- acceptsAll(asList("f", "tag-format")).withRequiredArg().ofType(String.javaClass).withValuesConvertedBy(regex("(raw|outsideAnnotated|insideAnnotated|ba|ab|aa|bb|b_|a_|_a|_b|__)"))
- acceptsAll(asList("v", "vertical-format"))
- acceptsAll(asList("?", "help"));
- *
  */
 class OptionParserFactoryTest extends Specification {
     def "SetupOptionParser grouped options"() {
@@ -33,13 +17,12 @@ class OptionParserFactoryTest extends Specification {
         final OptionParser optionParser = new OptionParserFactory().optionParser
 
         when:
-        final OptionSet options = optionParser.parse("-nv")
+        final OptionSet options = optionParser.parse("-n")
 
         then:
         assert options.has("n")
         assert options.has("no-color")
-        assert options.has("v")
-        assert options.has("vertical-format")
+        assert options.has("suppress-colors")
     }
 
     def "SetupOptionParser non-option argument"() {

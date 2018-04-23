@@ -13,5 +13,14 @@ enum class  HighlightScope {
             }
             return false;
         }
+
+        fun containsIgnoringCase(str: String): Boolean{
+            HighlightScope.values().forEach {
+                if(it.name.toLowerCase() == str.toLowerCase()){
+                    return true
+                }
+            }
+            return false;
+        }
     }
 }
