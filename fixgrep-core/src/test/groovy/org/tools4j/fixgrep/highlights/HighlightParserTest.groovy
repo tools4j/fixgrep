@@ -6,6 +6,7 @@ import org.tools4j.fixgrep.texteffect.Ansi
 import org.tools4j.fixgrep.texteffect.Ansi16BackgroundColor
 import org.tools4j.fixgrep.texteffect.Ansi16ForegroundColor
 import org.tools4j.fixgrep.texteffect.Ansi256Color
+import org.tools4j.fixgrep.texteffect.MiscTextEffect
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -19,6 +20,7 @@ class HighlightParserTest extends Specification {
     private final static String BgRed = Ansi16BackgroundColor.Red.ansiCode
     private final static String Fg2 = Ansi256Color.parse("Fg2").ansiCode
     private final static String Bg4 = Ansi256Color.parse("Bg4").ansiCode
+    private final static String Bold = MiscTextEffect.Bold.ansiCode
     private final static String reset = Ansi.Reset.ansiCode
 
     @Unroll
@@ -40,10 +42,12 @@ class HighlightParserTest extends Specification {
         expression | expectedOutput
         '35:Blue:Field' | "${FgBlue}35=blah${reset}|150=A|55=AUD/USD"
         '35=foo:Blue:Field' | "35=blah|150=A|55=AUD/USD"
+        '35:Bold:Field' | "${Bold}35=blah${reset}|150=A|55=AUD/USD"
         '35=blah:Blue:Field' | "${FgBlue}35=blah${reset}|150=A|55=AUD/USD"
         '35=blah&&150=A:Blue:Red:Field' | "${FgBlue}${BgRed}35=blah${reset}|${FgBlue}${BgRed}150=A${reset}|55=AUD/USD"
         '35=blah&&150=A:Blue:Red:Line' | "${FgBlue}${BgRed}35=blah${reset}|${FgBlue}${BgRed}150=A${reset}|${FgBlue}${BgRed}55=AUD/USD${reset}"
-        '150:Bg4,150=A:Fg2:Line,35=blah&&55=AUD:Blue:Red:Field' | "${Fg2}${FgBlue}${BgRed}35=blah${reset}|${Bg4}${Fg2}150=A${reset}|${Fg2}${FgBlue}${BgRed}55=AUD/USD${reset}"
-        '150:Bg4,150=A:Fg2:Line,35=blah&&55=AUD&&150:Blue:Red:Field' | "${Fg2}${FgBlue}${BgRed}35=blah${reset}|${Bg4}${Fg2}${FgBlue}${BgRed}150=A${reset}|${Fg2}${FgBlue}${BgRed}55=AUD/USD${reset}"
+        '35=blah&&150=A:Bold:Red:Line' | "${Bold}${BgRed}35=blah${reset}|${Bold}${BgRed}150=A${reset}|${Bold}${BgRed}55=AUD/USD${reset}"
+        '150:Bg4,150=A:Fg2:Line,35=blah&&55~AUD:Blue:Red:Field' | "${Fg2}${FgBlue}${BgRed}35=blah${reset}|${Bg4}${Fg2}150=A${reset}|${Fg2}${FgBlue}${BgRed}55=AUD/USD${reset}"
+        '150:Bg4,150=A:Fg2:Line,35=blah&&55~AUD&&150:Blue:Red:Field' | "${Fg2}${FgBlue}${BgRed}35=blah${reset}|${Bg4}${Fg2}${FgBlue}${BgRed}150=A${reset}|${Fg2}${FgBlue}${BgRed}55=AUD/USD${reset}"
     }
 }

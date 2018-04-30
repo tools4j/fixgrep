@@ -59,7 +59,7 @@ class FieldsFromAnnotatedMessageString(
         if (matcher.matches()) {
             val parsedDesc = matcher.group(1)
             val parsedEnum = matcher.group(2)
-            return EnumValue(parsedEnum, parsedDesc)
+            return AnnotatedValue(parsedEnum, parsedDesc)
         }
 
         //Check whether is in the format [desc]enum, e.g.: "[REJECT]D"
@@ -67,7 +67,7 @@ class FieldsFromAnnotatedMessageString(
         if (matcher.matches()) {
             val parsedEnum = matcher.group(1)
             val parsedDesc = matcher.group(2)
-            return EnumValue(parsedEnum, parsedDesc)
+            return AnnotatedValue(parsedEnum, parsedDesc)
         }
 
         //Otherwise, just return the value
@@ -79,14 +79,14 @@ class FieldsFromAnnotatedMessageString(
         if (matcher.matches()) {
             val tagText = matcher.group(1)
             val tagNumber = matcher.group(2)
-            return SpecTag(tagNumber, tagText)
+            return AnnotatedTag(tagNumber, tagText)
         }
 
         matcher = TAG_PATTERN_WITH_NUMBER_THEN_TEXT.matcher(fieldTagStr)
         if (matcher.matches()) {
             val tagNumber = matcher.group(1)
             val tagText = matcher.group(2)
-            return SpecTag(tagNumber, tagText)
+            return AnnotatedTag(tagNumber, tagText)
         }
 
         matcher = TAG_PATTERN_WITH_JUST_NUMBER.matcher(fieldTagStr)

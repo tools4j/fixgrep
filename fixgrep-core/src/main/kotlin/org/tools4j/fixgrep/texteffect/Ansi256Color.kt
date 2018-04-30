@@ -16,6 +16,10 @@ class Ansi256Color(val color: Int, val backgroundForeground: AnsiForegroundBackg
         "\u001b[" + backgroundForegroundCode + ";5;" + color + "m"
     }
 
+    override val prettyName: String by lazy {
+        ansiCode + backgroundForeground.abbreviation + color + Ansi.Reset.ansiCode
+    }
+
     companion object {
         @JvmStatic
         fun contains(str: String): Boolean{

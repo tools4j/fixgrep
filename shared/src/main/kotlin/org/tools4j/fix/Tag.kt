@@ -7,6 +7,4 @@ package org.tools4j.fix
  */
 interface Tag {
     val tag: Int
-    val tagWithAnnotatedPrefix: String
-    val tagWithAnnotatedPostfix: String
 }

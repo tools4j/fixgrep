@@ -7,12 +7,6 @@ package org.tools4j.fix
  */
 class RawValue(override val rawValue: String) : Value {
 
-    override val valueWithAnnotatedPrefix: String
-        get() = throw UnsupportedOperationException("RawValue only. No specification data has been stored with this value of " + rawValue)
-
-    override val valueWithAnnotatedPostfix: String
-        get() = throw UnsupportedOperationException("RawValue only. No specification data has been stored with this value of " + rawValue)
-
     override fun intValue(): Int {
         throw UnsupportedOperationException()
     }
@@ -58,7 +52,7 @@ class RawValue(override val rawValue: String) : Value {
     }
 
     override fun toString(): String {
-        return valueWithAnnotatedPostfix
+        return rawValue
     }
 
     override fun equals(other: Any?): Boolean {

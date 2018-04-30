@@ -5,7 +5,11 @@ package org.tools4j.fixgrep.texteffect
  * Date: 9/04/2018
  * Time: 9:40 AM
  */
-class TextEffectImpl(override val ansiCode: String) : TextEffect {
+open class TextEffectImpl(override val ansiCode: String) : TextEffect {
+    override val prettyName: String by lazy {
+        ansiCode + "\\" + ansiCode + Ansi.Reset.ansiCode
+    }
+
     companion object {
         @JvmStatic
         fun contains(str: String): Boolean{

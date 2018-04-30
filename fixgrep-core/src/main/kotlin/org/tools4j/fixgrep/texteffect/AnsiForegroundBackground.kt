@@ -7,9 +7,9 @@ import org.tools4j.fixgrep.highlights.HighlightScope
  * Date: 5/04/2018
  * Time: 6:49 AM
  */
-enum class AnsiForegroundBackground {
-    FOREGROUND,
-    BACKGROUND;
+enum class AnsiForegroundBackground(val abbreviation: String) {
+    FOREGROUND("Fg"),
+    BACKGROUND("Bg");
 
     companion object {
         @JvmStatic

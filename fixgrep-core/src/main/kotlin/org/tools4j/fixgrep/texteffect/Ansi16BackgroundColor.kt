@@ -22,6 +22,9 @@ enum class Ansi16BackgroundColor(override val ansiCode: String): TextEffect {
     BrightCyan("\u001b[46;1m"),
     BrightWhite("\u001b[47;1m");
 
+    override val prettyName: String by lazy {
+        ansiCode + name + Ansi.Reset.ansiCode
+    }
 
     companion object {
         @JvmStatic
@@ -46,6 +49,16 @@ enum class Ansi16BackgroundColor(override val ansiCode: String): TextEffect {
             } else {
                 return Ansi16BackgroundColor.valueOf(str)
             }
+        }
+
+        @JvmStatic
+        fun exampleString(): String {
+            val sb = StringBuilder()
+            Ansi16BackgroundColor.values().forEach {
+                if(sb.length > 0) sb.append(", ")
+                sb.append(it.ansiCode).append("Bg").append(it.name).append(Ansi.Reset.ansiCode)
+            }
+            return sb.toString()
         }
     }
 }

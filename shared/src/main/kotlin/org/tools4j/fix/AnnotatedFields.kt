@@ -8,7 +8,7 @@ import java.util.stream.Collectors
  * Time: 6:12 PM
  */
 class AnnotatedFields(sourceFields: Fields, spec: AnnotationSpec): FieldsSource {
-    constructor(sourceFields: Fields, spec: String): this(sourceFields, AnnotationSpec.parse(spec))
+    constructor(sourceFields: Fields, spec: String, boldTagAndValue: Boolean): this(sourceFields, AnnotationSpec(AnnotationPositions.parse(spec), boldTagAndValue))
 
     override val fields: Fields by lazy {
         FieldsImpl(sourceFields.stream().map { AnnotatedField(it, spec) }.collect(Collectors.toList()))

@@ -12,8 +12,8 @@ class AnnotatedFieldsTest extends Specification {
     @Unroll
     def "test #spec"(final String spec, final String expectedAnnotatedOutput) {
         given:
-        final Field field1 = new FieldImpl(new SpecTag(35, "MsgType"), new EnumValue("8", "ExecReport"))
-        final Field field2 = new FieldImpl(new SpecTag(150, "ExecType"), new EnumValue("B", "Blah"))
+        final Field field1 = new FieldImpl(new AnnotatedTag(35, "MsgType"), new AnnotatedValue("8", "ExecReport"))
+        final Field field2 = new FieldImpl(new AnnotatedTag(150, "ExecType"), new AnnotatedValue("B", "Blah"))
         final Fields fields = new FieldsImpl(Arrays.asList(field1, field2))
 
         when:

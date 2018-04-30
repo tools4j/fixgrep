@@ -12,7 +12,7 @@ class AnnotationSpecTest extends Specification {
     @Unroll
     def "test #spec"(final String spec, final String expectedAnnotatedOutput) {
         given:
-        final Field field = new FieldImpl(new SpecTag(35, "MsgType"), new EnumValue("8", "ExecReport"))
+        final Field field = new FieldImpl(new AnnotatedTag(35, "MsgType"), new AnnotatedValue("8", "ExecReport"))
 
         when:
         final AnnotatedField annotatedField = new AnnotatedField(field, AnnotationSpec.parse(spec))

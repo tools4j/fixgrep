@@ -20,9 +20,12 @@ class HighlightCriteriaParser {
     }
 
     private fun parseCriteria(singleCriteriaExpression: String): HighlightCriteria {
-        if(singleCriteriaExpression.contains('=')){
+        if(singleCriteriaExpression.contains('=')) {
             val leftAndRightOfEquals = singleCriteriaExpression.split('=')
-            return HighlightCriteriaTagValueMatches(leftAndRightOfEquals[0].toInt(), leftAndRightOfEquals[1])
+            return HighlightCriteriaTagValueContains(leftAndRightOfEquals[0].toInt(), leftAndRightOfEquals[1])
+        } else if(singleCriteriaExpression.contains('~')){
+                val leftAndRightOfEquals = singleCriteriaExpression.split('~')
+                return HighlightCriteriaTagValueMatches(leftAndRightOfEquals[0].toInt(), leftAndRightOfEquals[1])
         } else {
             return HighlightCriteriaTagIsPresent(singleCriteriaExpression.toInt())
         }

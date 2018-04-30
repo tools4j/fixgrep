@@ -18,6 +18,8 @@ class TextEffectParser{
         } else {
             if (TextEffectImpl.contains(expression)) {
                 return TextEffectImpl(expression)
+            } else if (MiscTextEffect.contains(expression)) {
+                return MiscTextEffect.parse(expression)
             } else if (Ansi16Color.contains(expression)) {
                 return Ansi16Color.parse(expression)
             } else if (Ansi256Color.contains(expression)) {

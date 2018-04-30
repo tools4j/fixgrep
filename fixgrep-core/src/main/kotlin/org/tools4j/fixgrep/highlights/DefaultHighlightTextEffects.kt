@@ -14,8 +14,22 @@ class DefaultHighlightTextEffects(val effects: List<TextEffect>){
         return effects.get(++lastUsed % effects.size)
     }
 
+    fun reset(){
+        lastUsed = -1
+    }
+
     companion object {
         val DEFAULT = DefaultHighlightTextEffects("FgBrightRed,FgBrightGreen,FgBrightYellow,FgBrightBlue,FgBrightMagenta,FgBrightCyan")
+
+        fun toPrettyList():String{
+            DEFAULT.reset()
+            val sb = StringBuilder()
+            DEFAULT.effects.forEach {
+                if(sb.length > 0) sb.append(", ")
+                sb.append(it.prettyName)
+            }
+            return sb.toString()
+        }
     }
 }
 

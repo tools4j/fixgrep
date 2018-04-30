@@ -1,6 +1,7 @@
 package org.tools4j.fixgrep
 
 import com.typesafe.config.Config
+import org.tools4j.fix.AnnotationPositions
 import org.tools4j.fix.AnnotationSpec
 import org.tools4j.fix.Ascii1Char
 import org.tools4j.fix.Fix50SP2FixSpecFromClassPath
@@ -17,6 +18,7 @@ import java.util.regex.Pattern
  */
 class FormatSpec(
     val suppressColors: Boolean = false,
+    val suppressBoldTagsAndValues: Boolean = false,
     val highlight: Highlight = Highlight.NO_HIGHLIGHT,
     val groupBy: GroupBy = GroupBy.NONE,
     val inputDelimiter: String = Ascii1Char().toString(),
@@ -27,15 +29,16 @@ class FormatSpec(
     val sortByTags: List<Int> = Collections.emptyList(),
     val onlyIncludeTags: List<Int> = Collections.emptyList(),
     val excludeTags: List<Int> = Collections.emptyList(),
-    val tagAnnotationSpec: AnnotationSpec = AnnotationSpec.OUTSIDE_ANNOTATED,
     val verticalFormat: Boolean = false,
     val includeOnlyMessagesOfType: List<String> = Collections.emptyList(),
     val excludeMessagesOfType: List<String> = Collections.emptyList(),
+    val tagAnnotations: String,
     val fixSpec: FixSpec = Fix50SP2FixSpecFromClassPath().load(),
     val msgColors: MessageColors = MessageColors()) {
 
     constructor(): this(
         false,
+            false,
         Highlight.NO_HIGHLIGHT,
         GroupBy.NONE,
         Ascii1Char().toString(),
@@ -46,10 +49,10 @@ class FormatSpec(
         Collections.emptyList(),
         Collections.emptyList(),
         Collections.emptyList(),
-        AnnotationSpec.OUTSIDE_ANNOTATED,
         false,
         Collections.emptyList(),
         Collections.emptyList(),
+        "outsideAnnotated",
         Fix50SP2FixSpecFromClassPath().load(),
         MessageColors())
 
@@ -60,6 +63,7 @@ class FormatSpec(
             msgColors: MessageColors = MessageColors()) : this(
 
             suppressColors = config.getBoolean("suppress.colors"),
+            suppressBoldTagsAndValues = config.getBoolean("suppress.bold.tags.and.values"),
             highlight = HighlightParser().parse(config.getStringList("highlights")),
             //groupBy = GroupByOrder(string = config.getString("group.by.order")),
             inputDelimiter = config.getString("input.delimiter"),
@@ -70,14 +74,16 @@ class FormatSpec(
             sortByTags = config.getIntList("sort.by.tags"),
             onlyIncludeTags = config.getIntList("only.include.tags"),
             excludeTags = config.getIntList("exclude.tags"),
-            tagAnnotationSpec = AnnotationSpec.parse(config.getString("tag.annotations")),
+            tagAnnotations = config.getString("tag.annotations"),
             verticalFormat = config.getBoolean("vertical.format"),
             includeOnlyMessagesOfType = config.getStringList("include.only.messages.of.type"),
             excludeMessagesOfType = config.getStringList("exclude.messages.of.type"),
             fixSpec = fixSpec,
             msgColors = msgColors)
 
-    val lineRegexPattern: Pattern by lazy {
-        Pattern.compile(lineRegex)
+    val tagAnnotationSpec: AnnotationSpec by lazy {
+        val annotationPositions = AnnotationPositions.parse(tagAnnotations)
+        val tagAndValuesBold = !(annotationPositions.neitherTagNorValueAnnotated || suppressBoldTagsAndValues)
+        AnnotationSpec(annotationPositions, tagAndValuesBold)
     }
 }

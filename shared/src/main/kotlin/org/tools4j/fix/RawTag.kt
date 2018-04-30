@@ -8,12 +8,6 @@ package org.tools4j.fix
 class RawTag : Tag {
     override val tag: Int
 
-    override val tagWithAnnotatedPrefix: String
-        get() = throw UnsupportedOperationException("RawTag only. No specification data has been stored with this tag of " + tag)
-
-    override val tagWithAnnotatedPostfix: String
-        get() = throw UnsupportedOperationException("RawTag only. No specification data has been stored with this tag of " + tag)
-
     constructor(tag: Int) {
         this.tag = tag
     }

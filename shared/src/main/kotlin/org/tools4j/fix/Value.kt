@@ -7,8 +7,6 @@ package org.tools4j.fix
  */
 interface Value {
     val rawValue: String
-    val valueWithAnnotatedPrefix: String
-    val valueWithAnnotatedPostfix: String
     fun intValue(): Int
     fun doubleValue(): Double
     fun longValue(): Long

@@ -10,14 +10,14 @@ import spock.lang.Unroll
  * Date: 5/04/2018
  * Time: 6:25 PM
  */
-class HighlightCriteriaTagValueMatchesTest extends Specification {
+class HighlightCriteriaTagValueEqualsTest extends Specification {
     @Unroll
     def "matches #tag #matchExpr #fix #expectedToMatch"(final int tag, final String matchExpr, final String fix, final boolean expectToMatch) {
         given:
         Fields fields = new FieldsImpl(fix, '|')
 
         when:
-        def match = new HighlightCriteriaTagValueMatches(tag, matchExpr).matches(fields)
+        def match = new HighlightCriteriaTagValueEquals(tag, matchExpr).matches(fields)
 
         then:
         assert match.matches == expectToMatch
@@ -28,10 +28,8 @@ class HighlightCriteriaTagValueMatchesTest extends Specification {
         where:
         tag | matchExpr | fix                   | expectToMatch
         35  | 'blah'    | '35=blah|150=A'       | true
-        35  | 'la'      | '35=blah|150=A'       | true
-        35  | 'b\\w+'   | '35=blah|150=A'       | true
-        35  | 'z\\w+'   | '35=blah|150=A'       | false
-        35  | 'l'       | '35=blah|150=A'       | true
+        35  | 'la'      | '35=blah|150=A'       | false
+        35  | 'l'       | '35=blah|150=A'       | false
         35  | ''        | '35=blah|150=A'       | false
         35  | ''        | '35=|150=A'           | true
         66  | 'asdf'    | '35=|150=A'           | false

@@ -29,17 +29,17 @@ class FieldsFromAnnotatedMessageStringTest extends Specification {
 
         then:
         assert expression.size() == 11;
-        assert expression.get(0) == new FieldImpl(new SpecTag(35, "MsgType"), new EnumValue("V", "MARKETDATAREQUEST"))
-        assert expression.get(1) == new FieldImpl(new SpecTag(262, "MDReqID"), new NonEnumValue("AASDJKG790"))
-        assert expression.get(2) == new FieldImpl(new SpecTag(263, "SubscriptionRequestType"), new EnumValue("0", "SNAPSHOT"))
-        assert expression.get(3) == new FieldImpl(new SpecTag(264, "MarketDepth"), new NonEnumValue("20"))
-        assert expression.get(4) == new FieldImpl(new SpecTag(267, "NoMDEntryTypes"), new NonEnumValue("2"))
-        assert expression.get(5) == new FieldImpl(new SpecTag(269, "MDEntryType"), new EnumValue("0", "BID"))
-        assert expression.get(6) == new FieldImpl(new SpecTag(269, "MDEntryType"), new EnumValue("1", "OFFER"))
-        assert expression.get(7) == new FieldImpl(new SpecTag(146, "NoRelatedSym"), new NonEnumValue("3"))
-        assert expression.get(8) == new FieldImpl(new SpecTag(55, "Symbol"), new NonEnumValue("GBP/USD"))
-        assert expression.get(9) == new FieldImpl(new SpecTag(55, "Symbol"), new NonEnumValue("AUD/USD"))
-        assert expression.get(10) == new FieldImpl(new SpecTag(55, "Symbol"), new NonEnumValue("USD/JPY"))
+        assert expression.get(0) == new FieldImpl(new AnnotatedTag(35, "MsgType"), new AnnotatedValue("V", "MARKETDATAREQUEST"))
+        assert expression.get(1) == new FieldImpl(new AnnotatedTag(262, "MDReqID"), new NonEnumValue("AASDJKG790"))
+        assert expression.get(2) == new FieldImpl(new AnnotatedTag(263, "SubscriptionRequestType"), new AnnotatedValue("0", "SNAPSHOT"))
+        assert expression.get(3) == new FieldImpl(new AnnotatedTag(264, "MarketDepth"), new NonEnumValue("20"))
+        assert expression.get(4) == new FieldImpl(new AnnotatedTag(267, "NoMDEntryTypes"), new NonEnumValue("2"))
+        assert expression.get(5) == new FieldImpl(new AnnotatedTag(269, "MDEntryType"), new AnnotatedValue("0", "BID"))
+        assert expression.get(6) == new FieldImpl(new AnnotatedTag(269, "MDEntryType"), new AnnotatedValue("1", "OFFER"))
+        assert expression.get(7) == new FieldImpl(new AnnotatedTag(146, "NoRelatedSym"), new NonEnumValue("3"))
+        assert expression.get(8) == new FieldImpl(new AnnotatedTag(55, "Symbol"), new NonEnumValue("GBP/USD"))
+        assert expression.get(9) == new FieldImpl(new AnnotatedTag(55, "Symbol"), new NonEnumValue("AUD/USD"))
+        assert expression.get(10) == new FieldImpl(new AnnotatedTag(55, "Symbol"), new NonEnumValue("USD/JPY"))
     }
 }
 

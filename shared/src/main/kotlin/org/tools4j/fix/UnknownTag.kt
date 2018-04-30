@@ -6,13 +6,6 @@ package org.tools4j.fix
  * Time: 5:37 PM
  */
 class UnknownTag(override val tag: Int) : Tag {
-
-    override val tagWithAnnotatedPrefix: String
-        get() = "" + tag
-
-    override val tagWithAnnotatedPostfix: String
-        get() = "" + tag
-
     override fun toString(): String {
         return "" + tag
     }

@@ -6,13 +6,31 @@ package org.tools4j.fix
  * Date: 14/06/2017
  * Time: 5:39 PM
  */
-class EnumValue (override val rawValue: String, private val enumDescription: String) : Value {
+class AnnotatedValue (override val rawValue: String, val annotation: String) : Value {
 
-    override val valueWithAnnotatedPrefix: String
-        get() = "[$enumDescription]$rawValue"
+    fun toAnnotatedString(position: AnnotatedField.AnnotationPosition, boldValue: Boolean): String{
+        val sb = StringBuilder()
+        if(position == AnnotatedField.AnnotationPosition.NONE){
+            appendValue(sb, boldValue)
+        } else if(position == AnnotatedField.AnnotationPosition.BEFORE){
+            appendAnnotation(sb)
+            appendValue(sb, boldValue)
+        } else {
+            appendValue(sb, boldValue)
+            appendAnnotation(sb)
+        }
+        return sb.toString()
+    }
 
-    override val valueWithAnnotatedPostfix: String
-        get() = "$rawValue[$enumDescription]"
+    private fun appendAnnotation(sb: StringBuilder) {
+        sb.append("[").append(annotation).append("]")
+    }
+
+    private fun appendValue(sb: StringBuilder, boldTag: Boolean) {
+        if (boldTag) sb.append(AnnotatedField.Bold)
+        sb.append(rawValue)
+        if (boldTag) sb.append(AnnotatedField.Normal)
+    }
 
     override fun intValue(): Int {
         throw UnsupportedOperationException()
@@ -59,12 +77,12 @@ class EnumValue (override val rawValue: String, private val enumDescription: Str
     }
 
     override fun toString(): String {
-        return valueWithAnnotatedPostfix
+        return rawValue
     }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (other !is EnumValue) return false
+        if (other !is AnnotatedValue) return false
 
         if (rawValue != other.rawValue) return false
 

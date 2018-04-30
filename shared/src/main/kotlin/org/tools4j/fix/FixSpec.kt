@@ -28,7 +28,7 @@ class FixSpec(
     private fun getTag(tag: Int): Tag {
         val tagDescription: String? = fieldsAndEnumValues[""+tag]
         return if (tagDescription != null) {
-            SpecTag(tag, tagDescription)
+            AnnotatedTag(tag, tagDescription)
         } else {
             UnknownTag(tag)
         }
@@ -37,7 +37,7 @@ class FixSpec(
     private fun getValue(tag: Tag, rawValue: String): Value {
         val tagDescription = this.fieldsAndEnumValues["" + tag.tag + "." + rawValue]
         return if (tagDescription != null) {
-            EnumValue(rawValue, tagDescription)
+            AnnotatedValue(rawValue, tagDescription)
         } else {
             NonEnumValue(rawValue)
         }

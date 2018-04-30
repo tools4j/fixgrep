@@ -9,13 +9,6 @@ import org.tools4j.utils.FormatUtils
  */
 class NonEnumValue(override val rawValue: String): Value {
 
-    override val valueWithAnnotatedPrefix: String
-        get() = rawValue
-
-    override val valueWithAnnotatedPostfix: String
-        get() = rawValue
-
-
     override fun toString(): String {
         return rawValue
     }
