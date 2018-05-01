@@ -20,10 +20,10 @@ class HighlightCriteriaParserTest extends Specification {
         where:
         expression                   | expectedCriteria
         '35'                         | tagPresent(35)
-        '35=ABC'                     | tagEquals(35, 'ABC')
-        '35=ABC&&150'                | and(tagEquals(35, 'ABC'), tagPresent(150))
-        '35=ABC&&150=1234'           | and(tagEquals(35, 'ABC'), tagEquals(150, '1234'))
-        '35=ABC&&150=1234&&44~blah'  | and(tagEquals(35, 'ABC'), tagEquals(150, '1234'), tagMatches(44, 'blah'))
+        '35=ABC'                     | tagValueContains(35, 'ABC')
+        '35=ABC&&150'                | and(tagValueContains(35, 'ABC'), tagPresent(150))
+        '35=ABC&&150=1234'           | and(tagValueContains(35, 'ABC'), tagValueContains(150, '1234'))
+        '35=ABC&&150=1234&&44~blah'  | and(tagValueContains(35, 'ABC'), tagValueContains(150, '1234'), tagMatches(44, 'blah'))
         ''                           | new HighlightCriteriaAlwaysTrue()
     }
 
@@ -33,6 +33,10 @@ class HighlightCriteriaParserTest extends Specification {
 
     HighlightCriteria tagEquals(int tag, String matches){
         return new HighlightCriteriaTagValueEquals(tag, matches)
+    }
+
+    HighlightCriteria tagValueContains(int tag, String matches){
+        return new HighlightCriteriaTagValueContains(tag, matches)
     }
 
     HighlightCriteria tagMatches(int tag, String matches){

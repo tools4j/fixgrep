@@ -30,7 +30,6 @@ class FixGrepOnFileTest extends Specification {
         final BufferedReader actual = actualFile.newReader()
         final BufferedReader expected = expectedFile.newReader()
 
-        int i = 1
         while(true){
             final String actualLine = actual.readLine()
             final String expectedLine = expected.readLine()
@@ -42,7 +41,7 @@ class FixGrepOnFileTest extends Specification {
             }
             if(actualLine == null || expectedLine == null) return true
             else {
-                assert actualLine == expectedLine//: "Asserting line number: " + (i++)
+                assert actualLine == expectedLine
             }
         }
     }

@@ -39,7 +39,7 @@ class HighlightCriteriaTagValueContains(val tag: Int, val match: String): Highli
     }
 
     override fun toString(): String {
-        return "HighlightCriteriaTagValueEquals(tag=$tag, match='$match')"
+        return "HighlightCriteriaTagValueContains(tag=$tag, match='$match')"
     }
 
 

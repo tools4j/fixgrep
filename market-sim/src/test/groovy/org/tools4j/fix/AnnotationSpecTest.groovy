@@ -15,7 +15,7 @@ class AnnotationSpecTest extends Specification {
         final Field field = new FieldImpl(new AnnotatedTag(35, "MsgType"), new AnnotatedValue("8", "ExecReport"))
 
         when:
-        final AnnotatedField annotatedField = new AnnotatedField(field, AnnotationSpec.parse(spec))
+        final AnnotatedField annotatedField = new AnnotatedField(field, new AnnotationSpec(AnnotationPositions.parse(spec), false))
 
         then:
         assert annotatedField.toPrettyString() == expectedAnnotatedOutput

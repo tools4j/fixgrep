@@ -16,10 +16,6 @@ import org.tools4j.fixgrep.texteffect.Ansi256Color
 
 class OptionsHelp: HelpFormatter {
     override fun format(options: MutableMap<String, out OptionDescriptor>): String {
-        validateThatOnlyOneLongestOptionExistsPerOptionDescriptor(options)
-        validateThatHelpItemsExistForEveryConfiguredCommandLineOption(options, helpByOptions)
-        validateThatCommandLineOptionsExistForEveryHelpItem(options, helpByOptions)
-
         helpByOptions.values.stream().distinct().forEach {
             println(it.toString())
             println("\n")
@@ -30,61 +26,6 @@ class OptionsHelp: HelpFormatter {
             buffer.append(sectionFor(each))
         }
         return buffer.toString()
-    }
-
-    private fun validateThatOnlyOneLongestOptionExistsPerOptionDescriptor(options: MutableMap<String, out OptionDescriptor>) {
-        val parametersWithTwoLongestOptions = LinkedHashSet<String>()
-        val validated = LinkedHashSet<String>()
-        for(key in options.keys){
-            val associatedKeys = ArrayList(options[key]!!.options())
-            if(validated.contains(key) || validated.containsAll(associatedKeys)) continue
-            associatedKeys.sortWith(Comparator(){ s1: String, s2: String -> -1*Integer.compare(s1.length, s2.length)})
-            if(associatedKeys.size >=2 && associatedKeys.get(0).length == associatedKeys.get(1).length){
-                parametersWithTwoLongestOptions.add("Found parameter with two (or more) longest options of equal length.  There must be only one option of the greatest length per OptionDescription.  [")
-            }
-        }
-        if(!optionsWithoutHelp.isEmpty()){
-            throw IllegalStateException("Illegal state. The following options do not have associated OptionHelp elements defined: " + optionsWithoutHelp)
-        }
-
-    }
-
-    private fun validateThatHelpItemsExistForEveryConfiguredCommandLineOption(commandLineOptions: MutableMap<String, out OptionDescriptor>, helpItems: MutableMap<String, OptionHelp>) {
-        val optionsWithoutHelp = LinkedHashSet<String>()
-        val validated = LinkedHashSet<String>()
-        for(key in commandLineOptions.keys){
-            if(validated.contains(key)) continue
-            for(associatedKey in commandLineOptions[key]!!.options()){
-                if(validated.contains(associatedKey)) continue
-                validated.add(key)
-                val helpForOption = helpItems[key]
-                if(helpForOption == null && associatedKey != "[arguments]"){
-                    optionsWithoutHelp.add("[$associatedKey:(associated with $key)]")
-                }
-            }
-        }
-        if(!optionsWithoutHelp.isEmpty()){
-            throw IllegalStateException("Illegal state. The following options do not have associated OptionHelp elements defined: " + optionsWithoutHelp)
-        }
-    }
-
-    private fun validateThatCommandLineOptionsExistForEveryHelpItem(commandLineOptions: MutableMap<String, out OptionDescriptor>, helpItems: MutableMap<String, OptionHelp>) {
-        val helpWithoutCommandLineOption = LinkedHashSet<String>()
-        val validated = LinkedHashSet<String>()
-        for(key in helpByOptions.keys){
-            if(validated.contains(key)) continue
-            for(associatedKey in helpByOptions[key]!!.options){
-                if(validated.contains(associatedKey)) continue
-                validated.add(key)
-                val helpForOption = commandLineOptions[key]
-                if(helpForOption == null && associatedKey != "[arguments]"){
-                    helpWithoutCommandLineOption.add("[$associatedKey:(associated with $key)]")
-                }
-            }
-        }
-        if(!helpWithoutCommandLineOption.isEmpty()){
-            throw IllegalStateException("Illegal state. The following help items do not have associated command line options defined: " + helpWithoutCommandLineOption)
-        }
     }
 
     private fun sectionFor(option: OptionDescriptor): String {

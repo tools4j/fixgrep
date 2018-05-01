@@ -17,7 +17,7 @@ class AnnotatedFieldsTest extends Specification {
         final Fields fields = new FieldsImpl(Arrays.asList(field1, field2))
 
         when:
-        final AnnotatedFields annotatedFields = new AnnotatedFields(fields, spec)
+        final AnnotatedFields annotatedFields = new AnnotatedFields(fields, new AnnotationSpec(AnnotationPositions.parse(spec), false))
 
         then:
         assert annotatedFields.fields.toPrettyString() == expectedAnnotatedOutput
@@ -30,5 +30,7 @@ class AnnotatedFieldsTest extends Specification {
         'insideAnnotated'  | '35[MsgType]=[ExecReport]8|150[ExecType]=[Blah]B'
         'a_'               | '35[MsgType]=8|150[ExecType]=B'
         '_a'               | '35=8[ExecReport]|150=B[Blah]'
+        'aa'               | '35[MsgType]=8[ExecReport]|150[ExecType]=B[Blah]'
+        'bb'               | '[MsgType]35=[ExecReport]8|[ExecType]150=[Blah]B'
     }
 }

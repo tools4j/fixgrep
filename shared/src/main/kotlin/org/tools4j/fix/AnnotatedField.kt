@@ -15,7 +15,7 @@ class AnnotatedField(val field: Field, val spec: AnnotationSpec): Field by field
             if (spec.boldTagAndValue) sb.append(AnnotatedField.Bold)
             sb.append(tag.tag)
             if (spec.boldTagAndValue) sb.append(AnnotatedField.Normal)
-        } else if(spec.annotationPositions.tagAnnotationPosition == AnnotatedField.AnnotationPosition.BEFORE){
+        } else {
             sb.append((field.tag as AnnotatedTag).toAnnotatedString(spec.annotationPositions.tagAnnotationPosition, spec.boldTagAndValue))
         }
 
