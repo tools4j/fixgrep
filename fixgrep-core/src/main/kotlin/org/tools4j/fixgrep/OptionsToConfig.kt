@@ -4,6 +4,7 @@ import joptsimple.ArgumentAcceptingOptionSpec
 import joptsimple.OptionSet
 import joptsimple.OptionSpec
 import org.tools4j.properties.Config
+import org.tools4j.properties.ConfigImpl
 import java.util.stream.Collectors
 
 /**
@@ -29,7 +30,7 @@ class OptionsToConfig(val optionSet: OptionSet) {
                 }
             }
         }
-        Config(configMap)
+        ConfigImpl(configMap)
     }
 
     private fun longest(options: List<String>): String {

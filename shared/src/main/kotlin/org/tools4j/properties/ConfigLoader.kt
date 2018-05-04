@@ -82,7 +82,7 @@ class ConfigLoader {
                     val fis = java.io.FileInputStream(file)
                     config.load(fis)
                     fis.close()
-                    Config(config)
+                    ConfigImpl(config)
                 }
             } catch (e: Exception) {
                 throw RuntimeException(e)
@@ -100,7 +100,7 @@ class ConfigLoader {
                 } else {
                     config.load(inputStream)
                     inputStream.close()
-                    Config(config)
+                    ConfigImpl(config)
                 }
             } catch (e: Exception) {
                 throw RuntimeException(e)
@@ -115,7 +115,7 @@ class ConfigLoader {
             try {
                 val properties = Properties()
                 properties.load(StringReader(str))
-                Config(properties)
+                ConfigImpl(properties)
             } catch (e: Exception) {
                 throw RuntimeException(e)
             }

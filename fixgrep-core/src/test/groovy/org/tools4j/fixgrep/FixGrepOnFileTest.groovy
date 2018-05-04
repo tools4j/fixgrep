@@ -1,6 +1,7 @@
 package org.tools4j.fixgrep
 
 import org.tools4j.properties.Config
+import org.tools4j.properties.ConfigImpl
 import spock.lang.Specification
 
 /**
@@ -11,7 +12,7 @@ import spock.lang.Specification
 class FixGrepOnFileTest extends Specification {
     def 'run fixgrep file test'(){
         given:
-        Config testSpecificConfig = new Config(['line.regex': '^(\\d{4}-[01]\\d-[0-3]\\d[T\\s][0-2]\\d:[0-5]\\d:[0-5]\\d[\\.,]\\d+)?.*?RawFix:(\\d+=.*$)'])
+        Config testSpecificConfig = new ConfigImpl(['line.regex': '^(\\d{4}-[01]\\d-[0-3]\\d[T\\s][0-2]\\d:[0-5]\\d:[0-5]\\d[\\.,]\\d+)?.*?RawFix:(\\d+=.*$)'])
         Config testConfig = TestConfigBuilder.load().overrideWith(testSpecificConfig)
 
         when:

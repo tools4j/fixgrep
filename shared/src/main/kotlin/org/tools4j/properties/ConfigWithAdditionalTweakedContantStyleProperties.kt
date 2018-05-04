@@ -23,7 +23,7 @@ class ConfigWithAdditionalTweakedContantStyleProperties(private val source: Conf
             convertedProperties[toPropertiesStyle(it)] = properties[it]!!
         }
         properties.putAll(convertedProperties)
-        Config(properties)
+        ConfigImpl(properties)
     }
 
     private fun toPropertiesStyle(key: String): String {

@@ -2,6 +2,7 @@ package org.tools4j.fixgrep
 
 import org.tools4j.properties.ConfigLoader
 import org.tools4j.properties.Config
+import org.tools4j.properties.ConfigImpl
 
 /**
  * User: ben
@@ -19,7 +20,7 @@ class ConfigBuilder(val args: Array<String>, val overrides: Config?){
         val homeDirConfig = ConfigLoader.fromHomeDir(".fixgrep/application.properties")
         val workingDirConfig = ConfigLoader.fromHomeDir("application.properties")
 
-        var finalConfig = Config()
+        var finalConfig: Config = ConfigImpl()
         finalConfig = finalConfig.overrideWith(classpathConfig)
         if(homeDirConfig != null) {
             finalConfig = finalConfig.overrideWith(homeDirConfig)

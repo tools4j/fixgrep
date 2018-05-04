@@ -30,7 +30,7 @@ class ConfigTest extends Specification {
         properties.put('black.car.engine.registration', 'bcer');
         properties.put('escaped.variable', '\\${hi.there}');
         properties.put('escaped.escaped.variable', '\\\\${hi.there}');
-        repo = new Config(properties);
+        repo = new ConfigImpl(properties);
     }
 
     def "Get escaped variable"(){

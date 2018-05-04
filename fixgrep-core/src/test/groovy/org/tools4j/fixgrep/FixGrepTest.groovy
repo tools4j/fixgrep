@@ -2,6 +2,7 @@ package org.tools4j.fixgrep
 
 import org.tools4j.fix.Ascii1Char
 import org.tools4j.properties.Config
+import org.tools4j.properties.ConfigImpl
 import org.tools4j.util.CircularBufferedReaderWriter
 import org.tools4j.utils.ArgsAsString
 import spock.lang.Shared
@@ -25,7 +26,7 @@ class FixGrepTest extends Specification {
     }
 
     def setup(){
-        testOverrides = new Config(['line.format': '${msgFix}'])
+        testOverrides = new ConfigImpl(['line.format': '${msgFix}'])
     }
 
     @Unroll
