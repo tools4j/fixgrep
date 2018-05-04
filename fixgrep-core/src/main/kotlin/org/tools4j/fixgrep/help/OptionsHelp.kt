@@ -142,25 +142,39 @@ ${ExampleTable(fix)
     }
 
     private fun addOptionHelp(helpByOptions: MutableMap<String, OptionHelp>, optionHelp: OptionHelp) {
-        for(option in optionHelp.options){
+        for(option in optionHelp.optionVariations.values){
             helpByOptions.put(option, optionHelp)
         }
     }
 
-    class OptionHelp(val options: List<String>, val tagline: String, val description: String?){
+    class OptionHelp(val optionVariations: OptionVariations, val tagline: String, val description: String?){
+        constructor(options: List<String>, tagline: String, description: String?): this(OptionVariations(options), tagline, description)
+
         override fun toString(): String {
             val sb = StringBuilder()
-            options.forEach {
-                if(sb.length > 0) sb.append(", ")
-                sb.append(bold)
-                sb.append(if(it.length == 1) "-" else "--")
-                sb.append(it)
-                sb.append(reset)
-            }
+            sb.append(bold)
+            sb.append(optionVariations.toString())
+            sb.append(reset)
             sb.append("\n")
             sb.append(tagline).append("\n")
             if(description != null) sb.append(description)
             return sb.toString()
+        }
+    }
+
+    class OptionVariations(val values: List<String>): List<String> by values{
+        override fun toString(): String {
+            val sb = StringBuilder()
+            values.forEach {
+                if(sb.length > 0) sb.append(", ")
+                sb.append(if(it.length == 1) "-" else "--")
+                sb.append(it)
+            }
+            return sb.toString()
+        }
+
+        val longest: String by lazy {
+            values.sortedBy { it.length }.last()
         }
     }
 

@@ -1,7 +1,7 @@
 package org.tools4j.fixgrep
 
-import com.typesafe.config.Config
-import com.typesafe.config.ConfigFactory
+import org.tools4j.properties.ConfigLoader
+import org.tools4j.properties.Config
 
 /**
  * User: ben
@@ -15,11 +15,20 @@ class ConfigBuilder(val args: Array<String>, val overrides: Config?){
 
     val config: Config by lazy {
         val optionsConfig = OptionsToConfig(OptionParserFactory().optionParser.parse(*args)).config
-        val standardConfig = ConfigFactory.load()
-        if(overrides != null){
-            optionsConfig.withFallback(overrides).withFallback(standardConfig)
-        } else {
-            optionsConfig.withFallback(standardConfig)
+        val classpathConfig = ConfigLoader.fromClasspath("application.properties")!!
+        val homeDirConfig = ConfigLoader.fromHomeDir(".fixgrep/application.properties")
+        val workingDirConfig = ConfigLoader.fromHomeDir("application.properties")
+
+        var finalConfig = Config()
+        finalConfig = finalConfig.overrideWith(classpathConfig)
+        if(homeDirConfig != null) {
+            finalConfig = finalConfig.overrideWith(homeDirConfig)
+        } else if(workingDirConfig != null){
+            finalConfig = finalConfig.overrideWith(workingDirConfig)
         }
+
+        finalConfig = finalConfig.overrideWith(overrides)
+        finalConfig = finalConfig.overrideWith(optionsConfig)
+        finalConfig
     }
 }

@@ -1,9 +1,9 @@
 package org.tools4j.fixgrep
 
-import com.typesafe.config.Config
-import com.typesafe.config.ConfigFactory
 import joptsimple.OptionParser
 import joptsimple.OptionSet
+import org.tools4j.properties.Config
+import org.tools4j.properties.ConfigLoader
 import spock.lang.Specification
 
 /**
@@ -14,10 +14,10 @@ import spock.lang.Specification
 class ConfigToOptionsMergeTest extends Specification {
     def "test 1"() {
         given:
-        final Config propertiesConfig = ConfigFactory.parseString("""
+        final Config propertiesConfig = ConfigLoader.fromString("""
         suppress.colors=true
         vertical.format=false
-        highlights=["150:Cyan","asdf"]
+        highlights=150:Cyan,asdf
         sort.by.tags=[1,2,3,4,5]""")
 
         final OptionParser optionParser = new OptionParserFactory().optionParser
@@ -28,22 +28,22 @@ class ConfigToOptionsMergeTest extends Specification {
 
         when:
         final Config optionsConfig = optionsToProperties.getConfig();
-        final Config config = optionsConfig.withFallback(propertiesConfig)
+        final Config config = propertiesConfig.overrideWith(optionsConfig)
         println config
 
         then:
-        assert config.getBoolean("suppress.colors")
-        assert config.getStringList("highlights") == ["35:Blue", "8:Yellow:Line", "51=1:Purple:Tag" ,"Side=Buy:Green"]
-        assert config.getIntList("sort.by.tags") == [5,4,3,2,1]
+        assert config.getAsBoolean("suppress.colors")
+        assert config.getAsStringList("highlights") == ["35:Blue", "8:Yellow:Line", "51=1:Purple:Tag" ,"Side=Buy:Green"]
+        assert config.getAsIntList("sort.by.tags") == [5,4,3,2,1]
     }
 
     def "test 2"() {
         given:
         final Map<String, ?> configMap = new HashMap<>()
-        final Config propertiesConfig = ConfigFactory.parseString("""
+        final Config propertiesConfig = ConfigLoader.fromString("""
         suppress.colors=false
         vertical.format=false
-        highlights=["150:Cyan","asdf"]
+        highlights=[150:Cyan,asdf]
         sort.by.tags=[1,2,3,4,5]""")
 
         final OptionParser optionParser = new OptionParserFactory().optionParser
@@ -52,13 +52,13 @@ class ConfigToOptionsMergeTest extends Specification {
 
         when:
         final Config optionsConfig = optionsToProperties.getConfig();
-        final Config config = optionsConfig.withFallback(propertiesConfig)
+        final Config config = propertiesConfig.overrideWith(optionsConfig)
         println config
 
         then:
-        assert config.getBoolean("suppress.colors")
-        assert !config.getBoolean("vertical.format")
-        assert config.getStringList("highlights") == ["150:Cyan", "asdf"]
-        assert config.getIntList("sort.by.tags") == [1,2,3,4,5]
+        assert config.getAsBoolean("suppress.colors")
+        assert !config.getAsBoolean("vertical.format")
+        assert config.getAsStringList("highlights") == ["150:Cyan", "asdf"]
+        assert config.getAsIntList("sort.by.tags") == [1,2,3,4,5]
     }
 }

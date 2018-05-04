@@ -1,10 +1,9 @@
 package org.tools4j.fixgrep
 
-import com.typesafe.config.Config
-import com.typesafe.config.ConfigFactory
 import joptsimple.ArgumentAcceptingOptionSpec
 import joptsimple.OptionSet
 import joptsimple.OptionSpec
+import org.tools4j.properties.Config
 import java.util.stream.Collectors
 
 /**
@@ -14,7 +13,7 @@ import java.util.stream.Collectors
  */
 class OptionsToConfig(val optionSet: OptionSet) {
     val config: Config by lazy {
-        val configMap: MutableMap<String, in Any> = LinkedHashMap()
+        val configMap: MutableMap<String, String> = LinkedHashMap()
         val options = optionSet.asMap().keys.stream().map { longest(it.options()) }.collect(Collectors.toList())
 
         for(option in options){
@@ -22,15 +21,15 @@ class OptionsToConfig(val optionSet: OptionSet) {
             if(optionSet.has(option)){
                 val values = optionSet.valuesOf(option)
                 if(values.isEmpty()) {
-                    configMap.put(cleanedName, true)
+                    configMap.put(cleanedName, "true")
                 } else if(isOptionDefinedAsList(optionSet, option)){
-                    configMap.put(cleanedName, values)
+                    configMap.put(cleanedName, values.toString())
                 } else {
-                    configMap.put(cleanedName, values.get(0)!!)
+                    configMap.put(cleanedName, values.get(0).toString())
                 }
             }
         }
-        ConfigFactory.parseMap(configMap)
+        Config(configMap)
     }
 
     private fun longest(options: List<String>): String {

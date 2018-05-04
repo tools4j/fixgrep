@@ -1,8 +1,8 @@
 package org.tools4j.fixgrep
 
-import com.typesafe.config.Config
 import joptsimple.OptionParser
 import joptsimple.OptionSet
+import org.tools4j.properties.Config
 import spock.lang.Specification
 
 /**
@@ -22,8 +22,8 @@ class OptionsToConfigTest extends Specification {
         println config
 
         then:
-        assert config.getBoolean("suppress.colors")
-        assert config.getStringList("highlights") == ["35:Blue", "8:Yellow:Line", "51=1:Purple:Tag" ,"Side=Buy:Green"]
-        assert config.getStringList("exclude.messages.of.type") == ["88"]
+        assert config.getAsBoolean("suppress.colors")
+        assert config.getAsStringList("highlights") == ["35:Blue", "8:Yellow:Line", "51=1:Purple:Tag" ,"Side=Buy:Green"]
+        assert config.getAsStringList("exclude.messages.of.type") == ["88"]
     }
 }

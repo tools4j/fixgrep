@@ -1,6 +1,5 @@
 package org.tools4j.fixgrep
 
-import com.typesafe.config.Config
 import org.tools4j.fix.AnnotationPositions
 import org.tools4j.fix.AnnotationSpec
 import org.tools4j.fix.Ascii1Char
@@ -8,8 +7,8 @@ import org.tools4j.fix.Fix50SP2FixSpecFromClassPath
 import org.tools4j.fix.FixSpec
 import org.tools4j.fixgrep.highlights.Highlight
 import org.tools4j.fixgrep.highlights.HighlightParser
+import org.tools4j.properties.Config
 import java.util.*
-import java.util.regex.Pattern
 
 /**
  * User: ben
@@ -62,22 +61,22 @@ class FormatSpec(
             fixSpec: FixSpec = Fix50SP2FixSpecFromClassPath().load(),
             msgColors: MessageColors = MessageColors()) : this(
 
-            suppressColors = config.getBoolean("suppress.colors"),
-            suppressBoldTagsAndValues = config.getBoolean("suppress.bold.tags.and.values"),
-            highlight = HighlightParser().parse(config.getStringList("highlights")),
+            suppressColors = config.getAsBoolean("suppress.colors"),
+            suppressBoldTagsAndValues = config.getAsBoolean("suppress.bold.tags.and.values"),
+            highlight = HighlightParser().parse(config.getAsStringList("highlights")),
             //groupBy = GroupByOrder(string = config.getString("group.by.order")),
-            inputDelimiter = config.getString("input.delimiter"),
-            outputDelimiter = config.getString("output.delimiter"),
-            lineFormat = config.getString("line.format"),
-            lineRegex = config.getString("line.regex"),
-            lineRegexGroupForFix = config.getInt("line.regexgroup.for.fix"),
-            sortByTags = config.getIntList("sort.by.tags"),
-            onlyIncludeTags = config.getIntList("only.include.tags"),
-            excludeTags = config.getIntList("exclude.tags"),
-            tagAnnotations = config.getString("tag.annotations"),
-            verticalFormat = config.getBoolean("vertical.format"),
-            includeOnlyMessagesOfType = config.getStringList("include.only.messages.of.type"),
-            excludeMessagesOfType = config.getStringList("exclude.messages.of.type"),
+            inputDelimiter = config.getAsString("input.delimiter"),
+            outputDelimiter = config.getAsString("output.delimiter"),
+            lineFormat = config.getAsString("line.format"),
+            lineRegex = config.getAsString("line.regex"),
+            lineRegexGroupForFix = config.getAsInt("line.regexgroup.for.fix"),
+            sortByTags = config.getAsIntList("sort.by.tags"),
+            onlyIncludeTags = config.getAsIntList("only.include.tags"),
+            excludeTags = config.getAsIntList("exclude.tags"),
+            tagAnnotations = config.getAsString("tag.annotations"),
+            verticalFormat = config.getAsBoolean("vertical.format"),
+            includeOnlyMessagesOfType = config.getAsStringList("include.only.messages.of.type"),
+            excludeMessagesOfType = config.getAsStringList("exclude.messages.of.type"),
             fixSpec = fixSpec,
             msgColors = msgColors)
 

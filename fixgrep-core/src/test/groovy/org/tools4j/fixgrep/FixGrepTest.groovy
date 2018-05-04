@@ -1,11 +1,8 @@
 package org.tools4j.fixgrep
 
-import com.typesafe.config.Config
-import com.typesafe.config.ConfigFactory
 import org.tools4j.fix.Ascii1Char
+import org.tools4j.properties.Config
 import org.tools4j.util.CircularBufferedReaderWriter
-import org.tools4j.util.CircularLineWriter
-import org.tools4j.util.CircularReaderWriter
 import org.tools4j.utils.ArgsAsString
 import spock.lang.Shared
 import spock.lang.Specification
@@ -18,7 +15,7 @@ import spock.lang.Unroll
  */
 class FixGrepTest extends Specification {
     @Shared private final static char a = new Ascii1Char().toChar()
-    @Shared private Config overrides
+    @Shared private Config testOverrides
     private static File actualOutputForFeedbackIntoTest = new File("test-output.txt")
     static {
         if(actualOutputForFeedbackIntoTest.exists()){
@@ -28,7 +25,7 @@ class FixGrepTest extends Specification {
     }
 
     def setup(){
-        overrides = ConfigFactory.parseMap(['line.format': '${msgFix}'])
+        testOverrides = new Config(['line.format': '${msgFix}'])
     }
 
     @Unroll
@@ -158,7 +155,7 @@ class FixGrepTest extends Specification {
 
         final CircularBufferedReaderWriter input = new CircularBufferedReaderWriter();
         final CircularBufferedReaderWriter output = new CircularBufferedReaderWriter();
-        final Config testConfig = new ConfigBuilder(argsList, this.overrides).config
+        final Config testConfig = new ConfigBuilder(argsList, this.testOverrides).config
 
         input.writer.write(fix)
         input.writer.flush()

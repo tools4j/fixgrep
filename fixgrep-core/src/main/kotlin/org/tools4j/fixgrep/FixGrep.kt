@@ -1,6 +1,6 @@
 package org.tools4j.fixgrep
 
-import com.typesafe.config.Config
+import org.tools4j.properties.Config
 import java.io.InputStream
 import java.io.OutputStream
 import java.io.PrintStream

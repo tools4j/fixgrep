@@ -68,7 +68,7 @@ class OptionsAndHelpConsistencyTest extends Specification {
         def validated = new LinkedHashSet<String>()
         for(String key: helpItems.keySet()){
             if(validated.contains(key)) continue
-            for(String associatedKey: helpItems.get(key).options){
+            for(String associatedKey: helpItems.get(key).getOptionVariations()){
                 if(validated.contains(associatedKey)) continue
                 validated.add(associatedKey)
                 final OptionSpec<?> optionSpec = commandLineOptions[associatedKey]
