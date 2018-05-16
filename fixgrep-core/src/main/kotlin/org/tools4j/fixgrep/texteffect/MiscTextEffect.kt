@@ -5,7 +5,7 @@ package org.tools4j.fixgrep.texteffect
  * Date: 25/04/2018
  * Time: 6:21 AM
  */
-class MiscTextEffect(ansiCode: String, val name: String): TextEffectImpl(ansiCode) {
+class MiscTextEffect(ansiCode: String, override val name: String): TextEffectImpl(ansiCode) {
     override val prettyName: String by lazy {
         ansiCode + name + Ansi.Reset.ansiCode
     }

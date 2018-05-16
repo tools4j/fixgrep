@@ -30,6 +30,16 @@ class DefaultHighlightTextEffects(val effects: List<TextEffect>){
             }
             return sb.toString()
         }
+
+        fun toXmlList():String{
+            DEFAULT.reset()
+            val sb = StringBuilder()
+            DEFAULT.effects.forEach {
+                if(sb.length > 0) sb.append(", ")
+                sb.append("<color name=\"").append(it.name).append("\">").append(it.name).append("</color>")
+            }
+            return sb.toString()
+        }
     }
 }
 

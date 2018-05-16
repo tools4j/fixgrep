@@ -15,32 +15,8 @@ class FixSpec(
 
     companion object: KLogging()
 
-    fun getField(tagInt: Int, valueStr: String): Field {
-        val tag = getTag(tagInt)
-        val value = getValue(tag, valueStr)
-        return FieldImpl(tag, value)
-    }
-
     fun getMsgTypeNameGivenCode(msgTypeCode: String): String? {
         return messageTypeCodesToNames[msgTypeCode];
-    }
-
-    private fun getTag(tag: Int): Tag {
-        val tagDescription: String? = fieldsAndEnumValues[""+tag]
-        return if (tagDescription != null) {
-            AnnotatedTag(tag, tagDescription)
-        } else {
-            UnknownTag(tag)
-        }
-    }
-
-    private fun getValue(tag: Tag, rawValue: String): Value {
-        val tagDescription = this.fieldsAndEnumValues["" + tag.tag + "." + rawValue]
-        return if (tagDescription != null) {
-            AnnotatedValue(rawValue, tagDescription)
-        } else {
-            NonEnumValue(rawValue)
-        }
     }
 
     fun msgTypeAndExecTypeName(fields: Fields): String {

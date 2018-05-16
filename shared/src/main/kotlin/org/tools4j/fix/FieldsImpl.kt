@@ -37,12 +37,7 @@ class FieldsImpl(val fields: List<Field>) : ArrayList<Field>(fields), Fields {
     }
 
     override fun toString(): String {
-        return stringValue
-    }
-
-    private val stringValue: String by lazy {
-        val prettyFields = AnnotationSpec(AnnotationPositions.OUTSIDE_ANNOTATED, true).annotateFields(this)
-        prettyFields.toPrettyString()
+        return fields.joinToString("|")
     }
 
     override fun exclude(excludeTags: List<Int>): Fields {
@@ -50,11 +45,8 @@ class FieldsImpl(val fields: List<Field>) : ArrayList<Field>(fields), Fields {
             return this
         }
         val outputFields = FieldsImpl(ArrayList(fields))
-        excludeTags.forEach {
-            val field: Field? = outputFields.getField(it)
-            if(field != null){
-                outputFields.remove(field)
-            }
+        excludeTags.forEach { exclude ->
+            outputFields.removeIf {it.tag.tag == exclude}
         }
         return FieldsImpl(outputFields)
     }
@@ -94,7 +86,14 @@ class FieldsImpl(val fields: List<Field>) : ArrayList<Field>(fields), Fields {
         return FieldsImpl(outputFields)
     }
 
+    override fun hasRepeatingTags(): Boolean {
+        return HashSet(fields.map { it.tag.tag }).size < fields.size
+    }
+
     override fun toIntToStringMap(): Map<Int, String> {
+        if(hasRepeatingTags()){
+            throw UnsupportedOperationException("Repeating tags have been detected in these fields, therefore it is not possible to return an intToStringMap")
+        }
         return fields.map { it.tag.tag to it.value.toString() }.toMap()
     }
 
@@ -106,12 +105,21 @@ class FieldsImpl(val fields: List<Field>) : ArrayList<Field>(fields), Fields {
         toDelimitedString()
     }
 
-    override fun toPrettyString(delimiter: Char): String {
+    override fun toConsoleText(delimiter: String): String {
         val sb = StringBuilder()
         for (i in 0 until fields.size) {
             if (sb.length > 0) sb.append(delimiter)
-            sb.append(fields[i].toPrettyString())
+            sb.append(fields[i].toConsoleText())
         }
+        return sb.toString()
+    }
+
+    override fun toHtml(): String {
+        val sb = StringBuilder("<div class='fields'>")
+        for (i in 0 until fields.size) {
+            sb.append(fields[i].toHtml())
+        }
+        sb.append("</div>")
         return sb.toString()
     }
 

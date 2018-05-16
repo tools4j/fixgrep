@@ -28,7 +28,7 @@ class HighlightActionTest extends Specification {
         when:
         final List<Field> matchingFields = matchingTags.stream().map{fields.getField(it)}.collect(Collectors.toList())
         final Fields outputFields = new HighlightAction(scope, Ansi16ForegroundColor.Blue).apply(fields, matchingFields)
-        final String output = outputFields.toPrettyString('|')
+        final String output = outputFields.toConsoleText('|')
         println output
 
         then:

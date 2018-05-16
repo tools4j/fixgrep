@@ -141,7 +141,7 @@ class OrderImplBookTest extends Specification{
                         qty,
                         price,
                         side,
-                        new Fix50SP2FixSpecFromClassPath().load()
+                        new Fix50SP2FixSpecFromClassPath().spec
                 ),
                 orderId,
                 dateTimeService,

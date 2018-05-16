@@ -27,7 +27,7 @@ interface Config {
     fun getAsDouble(key: String, default: Double): Double
     fun getAsLong(key: String, default: Long): Long
     fun getAsInt(key: String, default: Int): Int
-    fun getAsInt(key: String, default: Boolean): Boolean
+    fun getAsBoolean(key: String, default: Boolean): Boolean
     fun getAsString(key: String, default: String): String
     fun getAsDoubleList(key: String): List<Double>
     fun getAsLongList(key: String): List<Long>

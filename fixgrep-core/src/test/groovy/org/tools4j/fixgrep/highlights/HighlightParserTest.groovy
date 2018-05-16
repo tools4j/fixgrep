@@ -32,7 +32,7 @@ class HighlightParserTest extends Specification {
         when:
         final Highlight highlight = new HighlightParser().parse(expression)
         final Fields highlightedFields = highlight.apply(fields)
-        final String highlightedMessage = highlightedFields.toPrettyString('|')
+        final String highlightedMessage = highlightedFields.toConsoleText('|')
         println "Expected output: $expectedOutput"
         println "Actual output: $highlightedMessage"
         then:

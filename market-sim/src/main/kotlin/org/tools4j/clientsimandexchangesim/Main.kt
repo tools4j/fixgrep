@@ -5,7 +5,6 @@ import org.tools4j.exhangesim.ExchangeFactory
 import org.tools4j.fix.Fix50SP2FixSpecFromClassPath
 import org.tools4j.model.RandomLongGivenAverage
 import org.tools4j.strategy.EvaluationTriggerImpl
-import java.io.File
 
 /**
  * User: ben
@@ -15,7 +14,7 @@ import java.io.File
 object Main {
     @JvmStatic
     fun main(args: Array<String>) {
-        val fixSpec = Fix50SP2FixSpecFromClassPath().load();
+        val fixSpec = Fix50SP2FixSpecFromClassPath().spec;
         val evaluationTrigger = EvaluationTriggerImpl()
 
         //ClientSim

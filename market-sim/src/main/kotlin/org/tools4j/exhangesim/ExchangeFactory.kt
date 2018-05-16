@@ -8,7 +8,6 @@ import org.tools4j.fix.session.HardwiredFixSession
 import org.tools4j.messaging.PubSubMsgDispatcher
 import org.tools4j.model.MarketOrder
 import org.tools4j.model.Order
-import org.tools4j.model.VersionedOrder
 import org.tools4j.model.fix.messages.CancelReplaceRequest
 import org.tools4j.model.fix.messages.CancelRequest
 import org.tools4j.model.fix.messages.DecoderRegistry
@@ -18,7 +17,6 @@ import org.tools4j.strategy.Strategy
 import org.tools4j.strategy.StrategyFactory
 import org.tools4j.oms.MarketOms
 import org.tools4j.strategy.EvaluationTrigger
-import java.io.Writer
 
 
 /**
@@ -45,7 +43,7 @@ class ExchangeFactory(
         decoderRegistry.register(CancelReplaceRequest.Decoder(fixSpec))
         decoderRegistry.register(CancelRequest.Decoder(fixSpec))
 
-        val fixSpec = Fix50SP2FixSpecFromClassPath().load();
+        val fixSpec = Fix50SP2FixSpecFromClassPath().spec;
         exchange = Exchange()
 
         val oms = MarketOms(compId = "ACME_EXCHANGE", messageHandler = pubSubMsgDispatcher, evaluationTrigger = evaluationTrigger)

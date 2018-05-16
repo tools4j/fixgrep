@@ -6,5 +6,5 @@ package org.tools4j.fix
  * Time: 6:45 AM
  */
 interface FixSpecPaths {
-    fun load(): FixSpec
+    val spec: FixSpec
 }

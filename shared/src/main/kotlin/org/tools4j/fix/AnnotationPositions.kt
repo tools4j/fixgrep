@@ -1,9 +1,9 @@
 package org.tools4j.fix
 
-import org.tools4j.fix.AnnotatedField.AnnotationPosition.*
 import java.util.stream.Collectors
+import org.tools4j.fix.AnnotationPosition.*
 
-class AnnotationPositions(val tagAnnotationPosition: AnnotatedField.AnnotationPosition, val valueAnnotationPosition: AnnotatedField.AnnotationPosition){
+class AnnotationPositions(val tagAnnotationPosition: AnnotationPosition, val valueAnnotationPosition: AnnotationPosition){
     val neitherTagNorValueAnnotated: Boolean by lazy {
         tagAnnotationPosition == NONE && valueAnnotationPosition == NONE
     }
@@ -31,6 +31,7 @@ class AnnotationPositions(val tagAnnotationPosition: AnnotatedField.AnnotationPo
     companion object {
         val specs: MutableMap<String, AnnotationPositions> = HashMap()
         val OUTSIDE_ANNOTATED = AnnotationPositions(BEFORE, AFTER)
+        val LEFT_ANNOTATED = AnnotationPositions(BEFORE, BEFORE)
         val NO_ANNOTATION = AnnotationPositions(NONE, NONE)
 
         init{

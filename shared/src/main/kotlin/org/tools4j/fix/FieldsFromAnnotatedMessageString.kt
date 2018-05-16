@@ -71,7 +71,7 @@ class FieldsFromAnnotatedMessageString(
         }
 
         //Otherwise, just return the value
-        return NonEnumValue(fieldValueStr)
+        return RawValue(fieldValueStr)
     }
 
     fun parseFieldTag(fieldTagStr: String): Tag {
@@ -92,7 +92,7 @@ class FieldsFromAnnotatedMessageString(
         matcher = TAG_PATTERN_WITH_JUST_NUMBER.matcher(fieldTagStr)
         if (matcher.matches()) {
             val tagNumber = matcher.group(1)
-            return UnknownTag(tagNumber)
+            return RawTag(tagNumber)
         }
 
         throw IllegalArgumentException("Cannot parse field type:" + fieldTagStr)

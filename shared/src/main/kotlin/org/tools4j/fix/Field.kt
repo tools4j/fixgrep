@@ -9,7 +9,6 @@ interface Field {
     val tag: Tag
     val value: Value
     override fun toString(): String
-    fun toPrettyString(): String
     fun intValue(): Int
     fun stringValue(): String
     fun doubleValue(): Double
@@ -22,8 +21,8 @@ interface Field {
     fun idValue(): Id
     fun execTypeValue(): ExecType
     fun ordStatusValue(): OrdStatus
-
+    fun toConsoleText(): String
+    fun toHtml(): String
     override fun equals(other: Any?): Boolean
-
     override fun hashCode(): Int
 }

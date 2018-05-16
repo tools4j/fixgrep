@@ -20,6 +20,10 @@ class Ansi256Color(val color: Int, val backgroundForeground: AnsiForegroundBackg
         ansiCode + backgroundForeground.abbreviation + color + Ansi.Reset.ansiCode
     }
 
+    override val name: String by lazy {
+        backgroundForeground.abbreviation + color
+    }
+
     companion object {
         @JvmStatic
         fun contains(str: String): Boolean{

@@ -16,24 +16,24 @@ import java.util.*
  * Time: 6:49 AM
  */
 class FormatSpec(
-    val suppressColors: Boolean = false,
-    val suppressBoldTagsAndValues: Boolean = false,
-    val highlight: Highlight = Highlight.NO_HIGHLIGHT,
-    val groupBy: GroupBy = GroupBy.NONE,
-    val inputDelimiter: String = Ascii1Char().toString(),
-    val outputDelimiter: String = "|",
-    val lineFormat: String = "\${senderToTargetCompIdDirection} \${msgColor}[\${msgTypeName}]\${colorReset} \${msgFix}",
-    val lineRegex: String = "^.*?(\\d+=.*?$)",
-    val lineRegexGroupForFix: Int = 1,
-    val sortByTags: List<Int> = Collections.emptyList(),
-    val onlyIncludeTags: List<Int> = Collections.emptyList(),
-    val excludeTags: List<Int> = Collections.emptyList(),
-    val verticalFormat: Boolean = false,
-    val includeOnlyMessagesOfType: List<String> = Collections.emptyList(),
-    val excludeMessagesOfType: List<String> = Collections.emptyList(),
-    val tagAnnotations: String,
-    val fixSpec: FixSpec = Fix50SP2FixSpecFromClassPath().load(),
-    val msgColors: MessageColors = MessageColors()) {
+        val suppressColors: Boolean = false,
+        val suppressBoldTagsAndValues: Boolean = false,
+        val highlight: Highlight = Highlight.NO_HIGHLIGHT,
+        val groupBy: GroupBy = GroupBy.NONE,
+        val inputDelimiter: String = Ascii1Char().toString(),
+        val outputDelimiter: String = "|",
+        val lineFormat: String = "\${senderToTargetCompIdDirection} \${msgColor}[\${msgTypeName}]\${colorReset} \${msgFix}",
+        val lineRegex: String = "^.*?(\\d+=.*?$)",
+        val lineRegexGroupForFix: Int = 1,
+        val sortByTags: List<Int> = Collections.emptyList(),
+        val onlyIncludeTags: List<Int> = Collections.emptyList(),
+        val excludeTags: List<Int> = Collections.emptyList(),
+        val verticalFormat: Boolean = false,
+        val includeOnlyMessagesOfType: List<String> = Collections.emptyList(),
+        val excludeMessagesOfType: List<String> = Collections.emptyList(),
+        val tagAnnotations: String,
+        val fixSpec: FixSpec = Fix50SP2FixSpecFromClassPath().spec,
+        val msgColors: MessageColors = MessageColors()) {
 
     constructor(): this(
         false,
@@ -52,13 +52,13 @@ class FormatSpec(
         Collections.emptyList(),
         Collections.emptyList(),
         "outsideAnnotated",
-        Fix50SP2FixSpecFromClassPath().load(),
+        Fix50SP2FixSpecFromClassPath().spec,
         MessageColors())
 
     @JvmOverloads
     constructor(
             config: Config,
-            fixSpec: FixSpec = Fix50SP2FixSpecFromClassPath().load(),
+            fixSpec: FixSpec = Fix50SP2FixSpecFromClassPath().spec,
             msgColors: MessageColors = MessageColors()) : this(
 
             suppressColors = config.getAsBoolean("suppress.colors"),

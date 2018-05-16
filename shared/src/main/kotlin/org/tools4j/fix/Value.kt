@@ -18,6 +18,8 @@ interface Value {
     fun idValue(): Id
     fun execTypeValue(): ExecType
     fun ordStatusValue(): OrdStatus
+    fun toHtml(): String
+    fun toConsoleText(): String
     fun isEmpty(): Boolean {
         return toString().isEmpty()
     }

@@ -7,4 +7,6 @@ package org.tools4j.fix
  */
 interface Tag {
     val tag: Int
+    fun toHtml(): String
+    fun toConsoleText(): String
 }

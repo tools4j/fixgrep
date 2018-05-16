@@ -16,6 +16,15 @@ class CompositeTextEffect(val textEffects: List<TextEffect>): TextEffect {
         sb.toString()
     }
 
+    override val name: String by lazy {
+        val sb = StringBuilder()
+        for (textEffect in textEffects) {
+            if(sb.length > 0) sb.append(",")
+            sb.append(textEffect.name)
+        }
+        sb.toString()
+    }
+
     override val ansiCode: String by lazy {
         textEffects.stream().map{it.ansiCode}.collect(Collectors.toList()).joinToString("")
     }

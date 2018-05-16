@@ -18,18 +18,12 @@ class ConfigBuilder(val args: Array<String>, val overrides: Config?){
         val optionsConfig = OptionsToConfig(OptionParserFactory().optionParser.parse(*args)).config
         val classpathConfig = ConfigLoader.fromClasspath("application.properties")!!
         val homeDirConfig = ConfigLoader.fromHomeDir(".fixgrep/application.properties")
-        val workingDirConfig = ConfigLoader.fromHomeDir("application.properties")
 
-        var finalConfig: Config = ConfigImpl()
-        finalConfig = finalConfig.overrideWith(classpathConfig)
-        if(homeDirConfig != null) {
-            finalConfig = finalConfig.overrideWith(homeDirConfig)
-        } else if(workingDirConfig != null){
-            finalConfig = finalConfig.overrideWith(workingDirConfig)
-        }
-
-        finalConfig = finalConfig.overrideWith(overrides)
-        finalConfig = finalConfig.overrideWith(optionsConfig)
-        finalConfig
+        val config: Config = ConfigImpl()
+        config
+                .overrideWith(classpathConfig)
+                .overrideWith(homeDirConfig)
+                .overrideWith(overrides)
+                .overrideWith(optionsConfig)
     }
 }

@@ -1,7 +1,6 @@
 package org.tools4j.fix.session
 
 import org.tools4j.fix.RegistryFixDecoder
-import org.tools4j.fix.OutsideAnnotatedSingleLineFormat
 import org.tools4j.fix.session.FixSession.Companion.DELIMITER
 import org.tools4j.model.fix.messages.FixMessage
 import org.tools4j.model.fix.messages.Message
@@ -20,7 +19,7 @@ abstract class AbstractFixSession(
 
     override fun receive(messageStr: String) {
         val message = fixDecoder.decode(messageStr, DELIMITER)
-        println("Received [" + targetCompId + "-> " + compId + "]: " + OutsideAnnotatedSingleLineFormat(message))
+        println("Received [" + targetCompId + "-> " + compId + "]: " + message.toConsoleText())
         messageHandler.handle(message)
     }
 

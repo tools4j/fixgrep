@@ -6,8 +6,13 @@ package org.tools4j.fixgrep.texteffect
  * Time: 9:40 AM
  */
 open class TextEffectImpl(override val ansiCode: String) : TextEffect {
+
     override val prettyName: String by lazy {
         ansiCode + "\\" + ansiCode + Ansi.Reset.ansiCode
+    }
+
+    override val name: String by lazy {
+        ansiCode
     }
 
     companion object {

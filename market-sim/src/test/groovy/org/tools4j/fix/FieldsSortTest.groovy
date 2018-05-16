@@ -12,7 +12,7 @@ import java.util.stream.Collectors
  */
 class FieldsSortTest extends Specification {
     @Shared
-    private FixSpec fixSpec = new Fix50SP2FixSpecFromClassPath().load();
+    private FixSpec fixSpec = new Fix50SP2FixSpecFromClassPath().spec;
 
     def "Compare"(String fields, List<Integer> requestedOrder, List<Integer> expectedOutputOrder) {
         given:

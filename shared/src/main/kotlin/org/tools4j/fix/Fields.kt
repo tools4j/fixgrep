@@ -15,25 +15,22 @@ interface Fields: MutableList<Field>{
     fun sortBy(desiredOrder: List<Int>): Fields
     fun toIntToStringMap(): Map<Int, String>
     fun toDelimitedString(delimiter: Char = '|'): String
-    fun toPrettyString(delimiter: Char = '|'): String
     fun exclude(excludeTags: List<Int>): Fields
     fun includeOnly(onlyIncludeTags: List<Int>): Fields
     val pipeDelimitedString: String
     val msgTypeCode: String
     val msgTypeAndExecTypeKey: String
+    fun toHtml(): String
+    fun toConsoleText(delimiter: String): String;
+    fun hasRepeatingTags(): Boolean
 
     fun toDelimitedString(delimiter: String): String {
         if(delimiter.length != 1) throw IllegalArgumentException("Delimiter must be one character long: [$delimiter]")
         return toDelimitedString(delimiter.toCharArray()[0])
     }
 
-    fun toPrettyString(): String {
-        return toPrettyString("|")
-    }
-
-    fun toPrettyString(delimiter: String): String {
-        if(delimiter.length != 1) throw IllegalArgumentException("Delimiter must be one character long: [$delimiter]")
-        return toPrettyString(delimiter.toCharArray()[0])
+    fun toConsoleText(): String {
+        return toConsoleText("|")
     }
 
     companion object {

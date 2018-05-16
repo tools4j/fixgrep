@@ -6,4 +6,4 @@ else
     echo "Could not find appropriate java version installed.  Please ensure that java >= 1.8 is installed and on your path.  Results of java version check $(java -version)"
 fi
 
-java -cp "lib/*" org.tools4j.fixgrep.FixGrep "$@" <&0
+java -XX:+UseSerialGC -cp "lib/*" org.tools4j.fixgrep.FixGrep "$@" <&0

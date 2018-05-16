@@ -2,46 +2,29 @@ package org.tools4j.fix
 
 /**
  * User: ben
- * Date: 4/04/2018
- * Time: 5:58 PM
+ * Date: 15/05/2018
+ * Time: 5:34 AM
  */
-class AnnotatedField(val field: Field, val spec: AnnotationSpec): Field by field {
-    override fun toPrettyString(): String {
+class AnnotatedField(tag: Tag, value: Value, val annotationSpec: AnnotationSpec): FieldImpl(tag, value) {
+    override fun toConsoleText(): String {
         val sb = StringBuilder()
-
-        if(spec.annotationPositions.neitherTagNorValueAnnotated){
-            sb.append(tag.tag)
-        } else if(!(field.tag is AnnotatedTag)){
-            if (spec.boldTagAndValue) sb.append(AnnotatedField.Bold)
-            sb.append(tag.tag)
-            if (spec.boldTagAndValue) sb.append(AnnotatedField.Normal)
-        } else {
-            sb.append((field.tag as AnnotatedTag).toAnnotatedString(spec.annotationPositions.tagAnnotationPosition, spec.boldTagAndValue))
-        }
-
+        sb.append(tag.toConsoleText())
+        if(annotationSpec.boldTagAndValue) sb.append(Ansi.Bold)
         sb.append("=")
-
-        if(spec.annotationPositions.neitherTagNorValueAnnotated){
-            sb.append(value.rawValue)
-        } else if(!(field.value is AnnotatedValue)){
-            if (spec.boldTagAndValue) sb.append(AnnotatedField.Bold)
-            sb.append(value.rawValue)
-            if (spec.boldTagAndValue) sb.append(AnnotatedField.Normal)
-        } else {
-            sb.append((field.value as AnnotatedValue).toAnnotatedString(spec.annotationPositions.valueAnnotationPosition, spec.boldTagAndValue))
-        }
-
+        if(annotationSpec.boldTagAndValue) sb.append(Ansi.Normal)
+        sb.append(value.toConsoleText())
         return sb.toString()
     }
 
-    companion object {
-        val Bold = "\u001B[1m"
-        val Normal = "\u001B[22m"
-    }
-
-    enum class AnnotationPosition{
-        BEFORE,
-        AFTER,
-        NONE;
+    override fun toHtml(): String {
+        val sb = StringBuilder()
+        sb.append("<span class='field annotatedField'>")
+        sb.append(tag.toHtml())
+        sb.append("<span class='equals");
+        if(annotationSpec.boldTagAndValue) sb.append(" bold")
+        sb.append("'>=</span>")
+        sb.append(value.toHtml())
+        sb.append("</span>")
+        return sb.toString()
     }
 }

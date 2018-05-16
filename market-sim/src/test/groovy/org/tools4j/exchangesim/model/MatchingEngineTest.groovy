@@ -8,7 +8,6 @@ import org.tools4j.fix.Fix50SP2FixSpecFromClassPath
 import org.tools4j.fix.Id
 import org.tools4j.fix.LimitPrice
 import org.tools4j.fix.MarketPrice
-import org.tools4j.fix.OrderType
 import org.tools4j.fix.Price
 import org.tools4j.fix.Side
 import org.tools4j.fix.SimpleId
@@ -276,7 +275,7 @@ class MatchingEngineTest extends Specification {
                     qty,
                     price,
                     side,
-                    new Fix50SP2FixSpecFromClassPath().load()
+                    new Fix50SP2FixSpecFromClassPath().spec
                 ),
                 orderId,
                 dateTimeService,

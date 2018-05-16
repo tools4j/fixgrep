@@ -9,7 +9,7 @@ import org.tools4j.model.fix.messages.FixMessage
  * Time: 6:23 AM
  */
 class RegistryFixDecoder(private val decoderRegistry: DecoderRegistry, private val fixSpec: FixSpec) : FixDecoder {
-    override fun decode(messageStr: String, delimiter: Char): FixMessage {
+    override fun decode(messageStr: String, delimiter: String): FixMessage {
         val fields = FieldsFromDelimitedString(messageStr, delimiter).fields
         val msgTypeCode  = fields.getField(FixFieldTypes.MsgType)!!.value.rawValue
         val msgDescription = fixSpec.getMsgTypeNameGivenCode(msgTypeCode)

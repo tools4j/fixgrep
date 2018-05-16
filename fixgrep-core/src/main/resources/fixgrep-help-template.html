@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Fixgrep</title>
+    <link href="fixgrep.css" rel="stylesheet">
+</head>
+<body>
+<h1>Fixgrep</h1>
+<h2>Introduction</h2>
+<p>fixgrep is a command-line utility which allows the user to search and format FIX protocol messages into a more human readable format.</p>
+<p>Features include:
+<ul>
+    <li>Annotated fix tags and values.  e.g. [MsgType]35=8[EXECUTIONREPORT]|[OrderID]37=O5|[Symbol]55=AUD/USD|[Side]54=2[SELL]</li>
+    <li>Customization of input/output delimiters.</li>
+    <li>Highlighting of tags and lines matching specified criteria.</li>
+    <li>'Hiding' of 'uninteresting' tags.</li>
+    <li>Coloring of message by type.</li>
+    <li>Customized regex for extraction of FIX message from your logs.</li>
+    <li>Sort by tags to bring more important tags to the front of the message.</li>
+    <li>Exclusion of 'uninteresting' messages from the outputted FIX</li>
+</ul>
+<h2>Formatting</h2>
+<div class="example noMan">
+    <p>Fixgrep can format fix to be more readable.  e.g. from this:</p>
+    <div class="console-style">
+8=FIX.4.29=17835=D49=CLIENT_SIM56=ACME_EXCHANGE11=C11155=AUD/USD54=260=20180312-17:37:54.09738=168172040=244=99.9842<br/>
+8=FIX.4.29=17835=849=ACME_EXCHANGE56=CLIENT_SIM37=O10011=C11141=C11155=AUD/USD54=260=20180312-17:37:54.09717=O100_1150=039=A151=168172014=044=99.9842<br/>
+8=FIX.4.29=17835=849=ACME_EXCHANGE56=CLIENT_SIM37=O5811=C6341=C6355=AUD/USD54=160=20180312-17:37:54.10217=O58_3150=239=2151=014=179853032=149415044=99.9901=Executed<br/>
+8=FIX.4.29=17835=849=ACME_EXCHANGE56=CLIENT_SIM37=O10011=C11141=C11155=AUD/USD54=260=20180312-17:37:54.10817=O100_4150=239=2151=014=168172032=14270044=99.9863=Executed<br/>
+    </div>
+    <p>into this:</p>
+    <div class="console-style">
+        <div class="fixMsg">
+            <span class="msgTypeName Fg123">[NewOrderSingle]</span>
+            <span class="annotation tagAnnotation">[ClOrdID]</span><span class="tag">11</span><span class="equals">=</span><span class="value">C111</span>
+            <span class="divider">|</span><span class="annotation tagAnnotation">[Symbol]</span><span class="tag">55</span><span class="equals">=</span><span class="value">AUD/USD</span>
+            <span class="divider">|</span><span class="annotation tagAnnotation">[Side]</span><span class="tag">54</span><span class="equals">=</span><span class="value">2</span><span class="valueAnnotation annotation">[SELL]</span>
+            <span class="divider">|</span><span class="annotation tagAnnotation">[OrderQty]</span><span class="tag">38</span><span class="equals">=</span><span class="value">1681720</span>
+            <span class="divider">|</span><span class="annotation tagAnnotation">[Price]</span><span class="tag">44</span><span class="equals">=</span><span class="value">99.9842</span>
+        </div>
+        <div class="fixMsg">
+            <span class="msgTypeName Exec_New">[Exec.New]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            <span class="annotation tagAnnotation">[OrderID]</span><span class="tag">37</span><span class="equals">=</span><span class="value">O100</span>
+            <span class="divider">|</span><span class="annotation tagAnnotation">[ClOrdID]</span><span class="tag">11</span><span class="equals">=</span><span class="value">C111</span>
+            <span class="divider">|</span><span class="annotation tagAnnotation">[LeavesQty]</span><span class="tag">151</span><span class="equals">=</span><span class="value">1681720</span>
+            <span class="divider">|</span><span class="annotation tagAnnotation">[Price]</span><span class="tag">44</span><span class="equals">=</span><span class="value">99.9842</span>
+        </div>
+        <div class="fixMsg">
+            <span class="msgTypeName Exec_Fill">[Exec.Fill]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            <span class="annotation tagAnnotation">[OrderID]</span><span class="tag">37</span><span class="equals">=</span><span class="value">O100</span>
+            <span class="divider">|</span><span class="annotation tagAnnotation">[ClOrdID]</span><span class="tag">11</span><span class="equals">=</span><span class="value">C111</span>
+            <span class="divider">|</span><span class="annotation tagAnnotation">[LeavesQty]</span><span class="tag">151</span><span class="equals">=</span><span class="value">100000</span>
+            <span class="divider">|</span><span class="annotation tagAnnotation">[Price]</span><span class="tag">44</span><span class="equals">=</span><span class="value">99.9901</span>
+        </div>
+        <div>
+            <span class="msgTypeName Exec_Fill">[Exec.Fill]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            <span class="annotation tagAnnotation">[OrderID]</span><span class="tag">37</span><span class="equals">=</span><span class="value">O100</span>
+            <span class="divider">|</span><span class="annotation tagAnnotation">[ClOrdID]</span><span class="tag">11</span><span class="equals">=</span><span class="value">C111</span>
+            <span class="divider">|</span><span class="annotation tagAnnotation">[LeavesQty]</span><span class="tag">151</span><span class="equals">=</span><span class="value">0</span>
+            <span class="divider">|</span><span class="annotation tagAnnotation">[Price]</span><span class="tag">44</span><span class="equals">=</span><span class="value">99.9863</span>
+        </div>
+    </div>
+</div>
+<h2>Is fixgrep on Github?</h2>
+<p>Yes, here: TODO</p>
+<h2>How can I get it?</h2>
+<p>Download the latest version from here: TODO.</p>
+<h2>Is it free?</h2>
+<p>Yes, totally free for commercial and non-commercial use. It is licenced under the MIT licence TODO link, which is one of the most 'liberal' licenses, allowing you to (mostly) use the application and code as you see fit.</p>
+<h2>Can I request features/bugfixes?</h2>
+<p>Yes, please do!  I am especially keen to hear about any bugs that you encounter.  New feature requests will be prioritized.  Github allows 'voting' on feature requests, so please add your votes and this will help with the prioritization.</p>
+<h2>A note on performance</h2>
+<p>Fixgrep runs in java, wrapped in a bash shell.</p>
+<p>Fixgrep has not been written to be highly performant utility.  Unlike it's namesake, grep, fixgrep should not be used to format/search across very large log files.  Althought it does have some searching/filtering ability, it's main focus at the moment is on the features listed above, i.e. formatting, highlighting etc.  If you wish to format FIX contained within large files, i.e. over 100MB, you should filter the data first using more conventional methods, such as standard grep, and then pipe into fixgrep.</p>
+<p>Fixgrep is single-threaded, and GC has been configured to use a single thread.  This has been done to limit the impact on the host machine.  If you notice fixgrep using many cores during operation with a detrimental effect, please let me know by logging an issue at Github TODO.</p>
+${content}
+</body>
+</html>

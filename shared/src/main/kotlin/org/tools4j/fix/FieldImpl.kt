@@ -6,8 +6,8 @@ package org.tools4j.fix
  * Date: 14/06/2017
  * Time: 5:27 PM
  */
-class FieldImpl(override val tag: Tag, override val value: Value) : Field {
-    constructor(tag: Int, value: String) : this(UnknownTag(tag), NonEnumValue(value)) {}
+open class FieldImpl(override val tag: Tag, override val value: Value) : Field {
+    constructor(tag: Int, value: String) : this(RawTag(tag), RawValue(value)) {}
 
     constructor(tag: String, value: String) : this(Integer.valueOf(tag), value) {}
 
@@ -15,8 +15,12 @@ class FieldImpl(override val tag: Tag, override val value: Value) : Field {
         return tag.toString() + "=" + value
     }
 
-    override fun toPrettyString(): String{
-        return toString()
+    override fun toConsoleText(): String {
+        return tag.toConsoleText() + "=" + value.toConsoleText()
+    }
+
+    override fun toHtml(): String{
+        return "<span class='field'>" + tag.toHtml() + "<span class='equals'>=</span>" + value.toHtml() + "</span>"
     }
 
     override fun intValue(): Int {

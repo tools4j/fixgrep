@@ -16,6 +16,6 @@ interface FixSession{
     fun receive(messageStr: String)
 
     companion object {
-        val DELIMITER = '\u0001'
+        val DELIMITER = "\u0001"
     }
 }

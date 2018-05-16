@@ -4,7 +4,7 @@ import org.tools4j.extensions.constantToCapitalCase
 import org.tools4j.fix.AnnotatedFields
 import org.tools4j.fix.Fields
 import org.tools4j.fix.FieldsFromDelimitedString
-import org.tools4j.fix.FieldsNameAndEnumEnricher
+import org.tools4j.fix.FieldsAnnotator
 import org.tools4j.fix.FixFieldTypes
 import org.tools4j.fixgrep.texteffect.Ansi
 import java.util.regex.Matcher
@@ -110,13 +110,12 @@ class Formatter(val spec: FormatSpec){
         }
 
         if (formattedString.contains("\${msgFix}")) {
-            var fields = FieldsNameAndEnumEnricher(spec.fixSpec, inputFields).fields
-            fields = AnnotatedFields(fields, spec.tagAnnotationSpec).fields
+            var fields = FieldsAnnotator(inputFields, spec.fixSpec, spec.tagAnnotationSpec).fields
             fields = fields.sortBy(spec.sortByTags)
             fields = fields.exclude(spec.excludeTags)
             fields = fields.includeOnly(spec.onlyIncludeTags)
             if(!spec.suppressColors) fields = spec.highlight.apply(fields)
-            formattedString = formattedString.replace("\${msgFix}", fields.toPrettyString(spec.outputDelimiter))
+            formattedString = formattedString.replace("\${msgFix}", fields.toConsoleText(spec.outputDelimiter))
         }
 
         for (i in 1..matcher.groupCount()) {

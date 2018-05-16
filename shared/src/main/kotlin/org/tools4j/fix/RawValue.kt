@@ -5,7 +5,18 @@ package org.tools4j.fix
  * Date: 14/06/2017
  * Time: 5:39 PM
  */
-class RawValue(override val rawValue: String) : Value {
+open class RawValue(override val rawValue: String) : Value {
+    override fun toHtml(): String {
+        return "<span class='value rawValue'>$rawValue</span>"
+    }
+
+    override fun toConsoleText(): String {
+        return rawValue
+    }
+
+    override fun toString(): String {
+        return rawValue
+    }
 
     override fun intValue(): Int {
         throw UnsupportedOperationException()
@@ -49,10 +60,6 @@ class RawValue(override val rawValue: String) : Value {
 
     override fun ordStatusValue(): OrdStatus {
         throw UnsupportedOperationException()
-    }
-
-    override fun toString(): String {
-        return rawValue
     }
 
     override fun equals(other: Any?): Boolean {

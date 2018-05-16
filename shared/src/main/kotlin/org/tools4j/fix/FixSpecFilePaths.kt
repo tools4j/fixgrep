@@ -7,24 +7,25 @@ import org.tools4j.properties.PropertiesFile
  * Date: 20/6/17
  * Time: 5:29 PM
  */
-class FixSpecFilePaths(fieldsAndEnumValuesProperties: String, headerFieldsPropertiesPath: String, trailerFieldsPropertiesPath: String, messageTypesPropertiesPath: String) : FixSpecPaths {
-    private val fieldsAndEnumValuesProperties: PropertiesFile
-    private val headerFieldsPropertiesPath: PropertiesFile
-    private val trailerFieldsPropertiesPath: PropertiesFile
-    private val messageTypesPropertiesPath: PropertiesFile
-
-    init {
-        this.fieldsAndEnumValuesProperties = PropertiesFile(FilepathResource(fieldsAndEnumValuesProperties))
-        this.headerFieldsPropertiesPath = PropertiesFile(FilepathResource(headerFieldsPropertiesPath))
-        this.trailerFieldsPropertiesPath = PropertiesFile(FilepathResource(trailerFieldsPropertiesPath))
-        this.messageTypesPropertiesPath = PropertiesFile(FilepathResource(messageTypesPropertiesPath))
+class FixSpecFilePaths(fieldsAndEnumValuesPropertiesPath: String, headerFieldsPropertiesPath: String, trailerFieldsPropertiesPath: String, messageTypesPropertiesPath: String) : FixSpecPaths {
+    private val fieldsAndEnumValuesProperties: PropertiesFile by lazy {
+        PropertiesFile(FilepathResource(fieldsAndEnumValuesPropertiesPath))
+    }
+    private val headerFieldsProperties: PropertiesFile by lazy {
+        PropertiesFile(FilepathResource(headerFieldsPropertiesPath))
+    }
+    private val trailerFieldsProperties: PropertiesFile by lazy {
+        PropertiesFile(FilepathResource(trailerFieldsPropertiesPath))
+    }
+    private val messageTypesProperties: PropertiesFile by lazy {
+        PropertiesFile(FilepathResource(messageTypesPropertiesPath))
     }
 
-    override fun load(): FixSpec {
+    override val spec: FixSpec by lazy {
         val fieldsAndEnumValues = fieldsAndEnumValuesProperties.mapValue
-        val messageTypes = messageTypesPropertiesPath.mapValue
-        val headerFields = headerFieldsPropertiesPath.setValue
-        val trailerFields = trailerFieldsPropertiesPath.setValue
-        return FixSpec(fieldsAndEnumValues, headerFields, trailerFields, messageTypes)
+        val messageTypes = messageTypesProperties.mapValue
+        val headerFields = headerFieldsProperties.setValue
+        val trailerFields = trailerFieldsProperties.setValue
+        FixSpec(fieldsAndEnumValues, headerFields, trailerFields, messageTypes)
     }
 }

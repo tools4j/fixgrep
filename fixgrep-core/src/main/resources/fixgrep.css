@@ -1,0 +1,33 @@
+span.tag, span.value, span.equals {
+    font-weight: bold;
+}
+
+div.fixMsg {
+    white-space: nowrap;
+}
+
+/*div.fixMsg span{*/
+    /*font-size: 16px;*/
+/*}*/
+
+span.divider {
+    display: none;
+}
+
+span.Fg123{
+    color: lightskyblue;
+}
+
+div.console-style {
+    white-space: nowrap;
+    font: 12px/normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
+    background-color: black;
+    color: white;
+    padding: 0.5em;
+    overflow:auto;
+}
+
+div.fixMsg span {
+    padding: 0;
+    margin: 0;
+}

@@ -38,7 +38,7 @@ class OptionsAndHelpConsistencyTest extends Specification {
     def validateThatHelpItemsExistForEveryConfiguredCommandLineOption() {
         when:
         final Map<String, OptionSpec<?>> commandLineOptions = new OptionParserFactory().optionParser.recognizedOptions()
-        final Map<String, OptionHelp> helpItems = new OptionsHelp().helpByOptions
+        def helpItems = new OptionsHelp()
 
         def optionsWithoutHelp = new LinkedHashSet<String>()
         def validated = new LinkedHashSet<String>()
@@ -47,9 +47,11 @@ class OptionsAndHelpConsistencyTest extends Specification {
             for(String associatedKey: commandLineOptions.get(key).options()){
                 if(validated.contains(associatedKey)) continue
                 validated.add(associatedKey)
-                final OptionHelp help = helpItems[associatedKey]
-                if(help == null && associatedKey != "[arguments]"){
-                    optionsWithoutHelp.add("[$associatedKey:(associated with $key)]")
+                if(!helpItems.optionsThatDoNotNeedHelpItems.contains(associatedKey)){
+                    OptionHelp helpItem = helpItems.helpByOptions[associatedKey]
+                    if(helpItem == null) {
+                        optionsWithoutHelp.add("[$associatedKey:(associated with $key)]")
+                    }
                 }
             }
         }

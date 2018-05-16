@@ -163,7 +163,7 @@ class ConfigImpl : Config {
         return StringCoercer(get(key)).getAsInt(default)
     }
 
-    override fun getAsInt(key: String, default: Boolean): Boolean{
+    override fun getAsBoolean(key: String, default: Boolean): Boolean{
         return StringCoercer(get(key)).getAsBoolean(default)
     }
 

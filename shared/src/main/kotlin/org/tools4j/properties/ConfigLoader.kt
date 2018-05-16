@@ -1,5 +1,6 @@
 package org.tools4j.properties
 
+import java.io.File
 import java.io.StringReader
 import java.util.*
 
@@ -108,7 +109,7 @@ class ConfigLoader {
         }
     }
 
-    class FromHomeDir(propertiesPathAndFileNameWithExtension: String): FromFileSystem(System.getProperty("user.dir") + System.lineSeparator() + propertiesPathAndFileNameWithExtension)
+    class FromHomeDir(propertiesPathAndFileNameWithExtension: String): FromFileSystem(System.getProperty("user.home") + File.separator + propertiesPathAndFileNameWithExtension)
 
     class FromString(private val str: String): ConfigSource {
         override val config: Config? by lazy{

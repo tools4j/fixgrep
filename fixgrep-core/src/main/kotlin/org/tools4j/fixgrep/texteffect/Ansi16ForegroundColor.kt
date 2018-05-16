@@ -53,11 +53,22 @@ enum class Ansi16ForegroundColor(override val ansiCode: String): TextEffect {
         }
 
         @JvmStatic
-        fun exampleString(): String {
+        fun listAsXml(): String {
+            val sb = StringBuilder()
+            sb.append("<list>")
+            Ansi16ForegroundColor.values().forEach {
+                sb.append("<li><color name=\"").append("Fg").append(it.name).append("\">").append(it.name).append("</color></li>")
+            }
+            sb.append("</list>")
+            return sb.toString()
+        }
+
+        @JvmStatic
+        fun listForConsole(): String {
             val sb = StringBuilder()
             Ansi16ForegroundColor.values().forEach {
                 if(sb.length > 0) sb.append(", ")
-                sb.append(it.ansiCode).append("Fg").append(it.name).append(Ansi.Reset.ansiCode)
+                sb.append(it.ansiCode).append(it.name).append(Ansi.Reset.ansiCode)
             }
             return sb.toString()
         }

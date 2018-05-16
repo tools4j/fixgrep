@@ -1,5 +1,9 @@
 package org.tools4j.fixgrep
 
+import org.tools4j.fixgrep.help.Color16Demo
+import org.tools4j.fixgrep.help.Color256Demo
+import org.tools4j.fixgrep.help.ExampleAppPropertiesFileCreator
+import org.tools4j.fixgrep.help.ManGenerator
 import org.tools4j.properties.Config
 import java.io.InputStream
 import java.io.OutputStream
@@ -17,7 +21,7 @@ class FixGrep(val inputStream: InputStream, val outputStream: OutputStream, val 
             : this(inputStream, outputStream, ConfigBuilder(args).config)
 
     val formatter: Formatter by lazy {
-        Formatter(FormatSpec(config = config))
+        Formatter(FormatSpec(config))
     }
 
     val printStream: PrintStream by lazy {
@@ -33,14 +37,32 @@ class FixGrep(val inputStream: InputStream, val outputStream: OutputStream, val 
     }
 
     private fun go() {
+        try {
+            if (!config.getAsBoolean("skip.app.properties.creation")) {
+                ExampleAppPropertiesFileCreator().createIfNecessary()
+            }
+            if(config.getAsBoolean("256.color.demo", false)){
+                printStream.println(Color256Demo().demoForConsole)
+            } else if(config.getAsBoolean("16.color.demo", false)){
+                printStream.println(Color16Demo().demoForConsole)
+            } else if(config.getAsBoolean("man", false)){
+                printStream.println(ManGenerator().man)
+            } else {
+                goFixGrep()
+            }
+        } finally {
+            outputStream.flush()
+            outputStream.close()
+        }
+    }
+
+    private fun goFixGrep() {
         val reader = inputStream.bufferedReader()
-        while(true){
+        while (true) {
             val line = reader.readLine()
-            if(line == null) break
+            if (line == null) break
             else handleLine(line)
         }
-        outputStream.flush()
-        outputStream.close()
     }
 
     private fun handleLine(line: String) {

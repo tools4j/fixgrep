@@ -20,7 +20,7 @@ for i in {0..6}; do
   printf "\n\n %3b  " $i
   for j in {0..35}; do
     let "val = i+j"
-    echo -en "\033[48;5;${val}m  \033[m "
+    echo -en "\033[48;5;${val}m${val}\033[m "
   done
 done
 

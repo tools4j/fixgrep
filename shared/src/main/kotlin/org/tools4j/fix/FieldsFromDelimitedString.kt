@@ -31,6 +31,6 @@ class FieldsFromDelimitedString(private val str: String, private val delimiter: 
     }
 
     override fun toString(): String {
-        return OutsideAnnotatedSingleLineFormat(this.fields, delimiter).toString()
+        return fields.toConsoleText(delimiter.toString());
     }
 }

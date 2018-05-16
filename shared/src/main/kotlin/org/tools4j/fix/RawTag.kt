@@ -5,11 +5,15 @@ package org.tools4j.fix
  * Date: 14/06/2017
  * Time: 5:37 PM
  */
-class RawTag : Tag {
-    override val tag: Int
+open class RawTag(override val tag: Int) : Tag {
+    constructor(tag: String): this(tag.toInt())
 
-    constructor(tag: Int) {
-        this.tag = tag
+    override fun toHtml(): String {
+        return "<span class='tag rawTag'>$tag</span>"
+    }
+
+    override fun toConsoleText(): String {
+        return ""+tag
     }
 
     override fun toString(): String {
@@ -28,6 +32,4 @@ class RawTag : Tag {
     override fun hashCode(): Int {
         return tag.hashCode()
     }
-
-
 }
