@@ -2,11 +2,7 @@ package org.tools4j.fixgrep.highlights
 
 import org.tools4j.fix.Fields
 import org.tools4j.fix.FieldsImpl
-import org.tools4j.fixgrep.texteffect.Ansi
-import org.tools4j.fixgrep.texteffect.Ansi16BackgroundColor
-import org.tools4j.fixgrep.texteffect.Ansi16ForegroundColor
-import org.tools4j.fixgrep.texteffect.Ansi256Color
-import org.tools4j.fixgrep.texteffect.MiscTextEffect
+import org.tools4j.fixgrep.texteffect.*
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -24,7 +20,7 @@ class HighlightParserTest extends Specification {
     private final static String reset = Ansi.Reset.ansiCode
 
     @Unroll
-    def "test parse #expression"(final String expression, final String expectedOutput) {
+    def "test parse #expression"(final String expression, final String expectedConsoleOutput, final String expectedHtmlOutput) {
         given:
         final String fix = '35=blah|150=A|55=AUD/USD'
         final Fields fields = new FieldsImpl(fix, '|')
@@ -32,22 +28,24 @@ class HighlightParserTest extends Specification {
         when:
         final Highlight highlight = new HighlightParser().parse(expression)
         final Fields highlightedFields = highlight.apply(fields)
-        final String highlightedMessage = highlightedFields.toConsoleText('|')
-        println "Expected output: $expectedOutput"
-        println "Actual output: $highlightedMessage"
+        final String actualConsoleOutput = highlightedFields.toConsoleText('|')
+        final String actualHtmlOutput = highlightedFields.toHtml()
+        println "Expected output: $expectedConsoleOutput"
+        println "Actual output: $actualConsoleOutput"
         then:
-        assert highlightedMessage == expectedOutput
+        assert actualConsoleOutput == expectedConsoleOutput
+        assert actualHtmlOutput == expectedHtmlOutput
 
-         where:
-        expression | expectedOutput
-        '35:Blue:Field' | "${FgBlue}35=blah${reset}|150=A|55=AUD/USD"
-        '35=foo:Blue:Field' | "35=blah|150=A|55=AUD/USD"
-        '35:Bold:Field' | "${Bold}35=blah${reset}|150=A|55=AUD/USD"
-        '35=blah:Blue:Field' | "${FgBlue}35=blah${reset}|150=A|55=AUD/USD"
-        '35=blah&&150=A:Blue:Red:Field' | "${FgBlue}${BgRed}35=blah${reset}|${FgBlue}${BgRed}150=A${reset}|55=AUD/USD"
-        '35=blah&&150=A:Blue:Red:Line' | "${FgBlue}${BgRed}35=blah${reset}|${FgBlue}${BgRed}150=A${reset}|${FgBlue}${BgRed}55=AUD/USD${reset}"
-        '35=blah&&150=A:Bold:Red:Line' | "${Bold}${BgRed}35=blah${reset}|${Bold}${BgRed}150=A${reset}|${Bold}${BgRed}55=AUD/USD${reset}"
-        '150:Bg4,150=A:Fg2:Line,35=blah&&55~AUD:Blue:Red:Field' | "${Fg2}${FgBlue}${BgRed}35=blah${reset}|${Bg4}${Fg2}150=A${reset}|${Fg2}${FgBlue}${BgRed}55=AUD/USD${reset}"
-        '150:Bg4,150=A:Fg2:Line,35=blah&&55~AUD&&150:Blue:Red:Field' | "${Fg2}${FgBlue}${BgRed}35=blah${reset}|${Bg4}${Fg2}${FgBlue}${BgRed}150=A${reset}|${Fg2}${FgBlue}${BgRed}55=AUD/USD${reset}"
+        where:
+        expression                                                   | expectedConsoleOutput                                                                                                         | expectedHtmlOutput
+        '35:Blue:Field'                                              | "${FgBlue}35=blah${reset}|150=A|55=AUD/USD"                                                                                   | "<div class='fields'><span class='field FgBlue'><span class='tag rawTag'>35</span><span class='equals'>=</span><span class='value rawValue'>blah</span></span><span class='field'><span class='tag rawTag'>150</span><span class='equals'>=</span><span class='value rawValue'>A</span></span><span class='field'><span class='tag rawTag'>55</span><span class='equals'>=</span><span class='value rawValue'>AUD/USD</span></span></div>"
+        '35=foo:Blue:Field'                                          | "35=blah|150=A|55=AUD/USD"                                                                                                    | "<div class='fields'><span class='field'><span class='tag rawTag'>35</span><span class='equals'>=</span><span class='value rawValue'>blah</span></span><span class='field'><span class='tag rawTag'>150</span><span class='equals'>=</span><span class='value rawValue'>A</span></span><span class='field'><span class='tag rawTag'>55</span><span class='equals'>=</span><span class='value rawValue'>AUD/USD</span></span></div>"
+        '35:Bold:Field'                                              | "${Bold}35=blah${reset}|150=A|55=AUD/USD"                                                                                     | "<div class='fields'><span class='field Bold'><span class='tag rawTag'>35</span><span class='equals'>=</span><span class='value rawValue'>blah</span></span><span class='field'><span class='tag rawTag'>150</span><span class='equals'>=</span><span class='value rawValue'>A</span></span><span class='field'><span class='tag rawTag'>55</span><span class='equals'>=</span><span class='value rawValue'>AUD/USD</span></span></div>"
+        '35=blah:Blue:Field'                                         | "${FgBlue}35=blah${reset}|150=A|55=AUD/USD"                                                                                   | "<div class='fields'><span class='field FgBlue'><span class='tag rawTag'>35</span><span class='equals'>=</span><span class='value rawValue'>blah</span></span><span class='field'><span class='tag rawTag'>150</span><span class='equals'>=</span><span class='value rawValue'>A</span></span><span class='field'><span class='tag rawTag'>55</span><span class='equals'>=</span><span class='value rawValue'>AUD/USD</span></span></div>"
+        '35=blah&&150=A:Blue:Red:Field'                              | "${FgBlue}${BgRed}35=blah${reset}|${FgBlue}${BgRed}150=A${reset}|55=AUD/USD"                                                  | "<div class='fields'><span class='field FgBlue BgRed'><span class='tag rawTag'>35</span><span class='equals'>=</span><span class='value rawValue'>blah</span></span><span class='field FgBlue BgRed'><span class='tag rawTag'>150</span><span class='equals'>=</span><span class='value rawValue'>A</span></span><span class='field'><span class='tag rawTag'>55</span><span class='equals'>=</span><span class='value rawValue'>AUD/USD</span></span></div>"
+        '35=blah&&150=A:Blue:Red:Line'                               | "${FgBlue}${BgRed}35=blah${reset}|${FgBlue}${BgRed}150=A${reset}|${FgBlue}${BgRed}55=AUD/USD${reset}"                         | "<div class='fields'><span class='field FgBlue BgRed'><span class='tag rawTag'>35</span><span class='equals'>=</span><span class='value rawValue'>blah</span></span><span class='field FgBlue BgRed'><span class='tag rawTag'>150</span><span class='equals'>=</span><span class='value rawValue'>A</span></span><span class='field FgBlue BgRed'><span class='tag rawTag'>55</span><span class='equals'>=</span><span class='value rawValue'>AUD/USD</span></span></div>"
+        '35=blah&&150=A:Bold:Red:Line'                               | "${Bold}${BgRed}35=blah${reset}|${Bold}${BgRed}150=A${reset}|${Bold}${BgRed}55=AUD/USD${reset}"                               | "<div class='fields'><span class='field Bold BgRed'><span class='tag rawTag'>35</span><span class='equals'>=</span><span class='value rawValue'>blah</span></span><span class='field Bold BgRed'><span class='tag rawTag'>150</span><span class='equals'>=</span><span class='value rawValue'>A</span></span><span class='field Bold BgRed'><span class='tag rawTag'>55</span><span class='equals'>=</span><span class='value rawValue'>AUD/USD</span></span></div>"
+        '150:Bg4,150=A:Fg2:Line,35=blah&&55~AUD:Blue:Red:Field'      | "${Fg2}${FgBlue}${BgRed}35=blah${reset}|${Bg4}${Fg2}150=A${reset}|${Fg2}${FgBlue}${BgRed}55=AUD/USD${reset}"                  | "<div class='fields'><span class='field Fg2'><span class='tag rawTag'>35</span><span class='equals'>=</span><span class='value rawValue'>blah</span></span><span class='field Bg4'><span class='tag rawTag'>150</span><span class='equals'>=</span><span class='value rawValue'>A</span></span><span class='field Fg2'><span class='tag rawTag'>55</span><span class='equals'>=</span><span class='value rawValue'>AUD/USD</span></span></div>"
+        '150:Bg4,150=A:Fg2:Line,35=blah&&55~AUD&&150:Blue:Red:Field' | "${Fg2}${FgBlue}${BgRed}35=blah${reset}|${Bg4}${Fg2}${FgBlue}${BgRed}150=A${reset}|${Fg2}${FgBlue}${BgRed}55=AUD/USD${reset}" | "<div class='fields'><span class='field Fg2'><span class='tag rawTag'>35</span><span class='equals'>=</span><span class='value rawValue'>blah</span></span><span class='field Bg4'><span class='tag rawTag'>150</span><span class='equals'>=</span><span class='value rawValue'>A</span></span><span class='field Fg2'><span class='tag rawTag'>55</span><span class='equals'>=</span><span class='value rawValue'>AUD/USD</span></span></div>"
     }
 }

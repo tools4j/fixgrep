@@ -115,7 +115,8 @@ class Formatter(val spec: FormatSpec){
             fields = fields.exclude(spec.excludeTags)
             fields = fields.includeOnly(spec.onlyIncludeTags)
             if(!spec.suppressColors) fields = spec.highlight.apply(fields)
-            formattedString = formattedString.replace("\${msgFix}", fields.toConsoleText(spec.outputDelimiter))
+            val formattedFix = if(spec.formatInHtml) fields.toHtml() else fields.toConsoleText(spec.outputDelimiter)
+            formattedString = formattedString.replace("\${msgFix}", formattedFix)
         }
 
         for (i in 1..matcher.groupCount()) {

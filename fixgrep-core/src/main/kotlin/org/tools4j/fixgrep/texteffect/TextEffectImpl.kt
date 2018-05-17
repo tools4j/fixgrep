@@ -15,9 +15,13 @@ open class TextEffectImpl(override val ansiCode: String) : TextEffect {
         ansiCode
     }
 
+    override val htmlClass: String by lazy {
+        ansiCode.removePrefix("\u001b[")
+    }
+
     companion object {
         @JvmStatic
-        fun contains(str: String): Boolean{
+        fun containsEscapeCode(str: String): Boolean{
             return str.startsWith("\u001b[")
         }
     }

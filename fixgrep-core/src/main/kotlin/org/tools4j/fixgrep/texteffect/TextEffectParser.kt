@@ -16,7 +16,7 @@ class TextEffectParser{
         if(expression.contains(delimiter)){
             return parseCompositeTextEffect(expression)
         } else {
-            if (TextEffectImpl.contains(expression)) {
+            if (TextEffectImpl.containsEscapeCode(expression)) {
                 return TextEffectImpl(expression)
             } else if (MiscTextEffect.contains(expression)) {
                 return MiscTextEffect.parse(expression)
@@ -42,7 +42,7 @@ class TextEffectParser{
         if (split.size == 2) {
             val first = split.get(0)
             try {
-                if (TextEffectImpl.contains(first)) {
+                if (TextEffectImpl.containsEscapeCode(first)) {
                     effects.add(TextEffectImpl(first))
                 } else if (Ansi16ForegroundColor.contains(first)) {
                     effects.add(Ansi16ForegroundColor.parse(first))
@@ -56,7 +56,7 @@ class TextEffectParser{
             }
             val second = split.get(1)
             try {
-                if (TextEffectImpl.contains(second)) {
+                if (TextEffectImpl.containsEscapeCode(second)) {
                     effects.add(TextEffectImpl(second))
                 } else if (Ansi16BackgroundColor.contains(second)) {
                     effects.add(Ansi16BackgroundColor.parse(second))

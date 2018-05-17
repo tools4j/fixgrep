@@ -16,7 +16,7 @@ public class CircularStream {
     private final PipedOutputStream output;
 
     public CircularStream() throws IOException {
-        input = new PipedInputStream();
+        input = new PipedInputStream(9999);
         output = new PipedOutputStream(input);
     }
 

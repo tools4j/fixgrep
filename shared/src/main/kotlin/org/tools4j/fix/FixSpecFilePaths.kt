@@ -9,16 +9,16 @@ import org.tools4j.properties.PropertiesFile
  */
 class FixSpecFilePaths(fieldsAndEnumValuesPropertiesPath: String, headerFieldsPropertiesPath: String, trailerFieldsPropertiesPath: String, messageTypesPropertiesPath: String) : FixSpecPaths {
     private val fieldsAndEnumValuesProperties: PropertiesFile by lazy {
-        PropertiesFile(FilepathResource(fieldsAndEnumValuesPropertiesPath))
+        PropertiesFile(FileOnClasspath(fieldsAndEnumValuesPropertiesPath))
     }
     private val headerFieldsProperties: PropertiesFile by lazy {
-        PropertiesFile(FilepathResource(headerFieldsPropertiesPath))
+        PropertiesFile(FileOnClasspath(headerFieldsPropertiesPath))
     }
     private val trailerFieldsProperties: PropertiesFile by lazy {
-        PropertiesFile(FilepathResource(trailerFieldsPropertiesPath))
+        PropertiesFile(FileOnClasspath(trailerFieldsPropertiesPath))
     }
     private val messageTypesProperties: PropertiesFile by lazy {
-        PropertiesFile(FilepathResource(messageTypesPropertiesPath))
+        PropertiesFile(FileOnClasspath(messageTypesPropertiesPath))
     }
 
     override val spec: FixSpec by lazy {

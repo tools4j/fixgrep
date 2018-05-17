@@ -10,6 +10,10 @@ class MiscTextEffect(ansiCode: String, override val name: String): TextEffectImp
         ansiCode + name + Ansi.Reset.ansiCode
     }
 
+    override val htmlClass: String by lazy {
+        name
+    }
+
     companion object {
         val Bold = MiscTextEffect("\u001B[1m", "Bold")
 

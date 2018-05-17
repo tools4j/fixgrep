@@ -207,6 +207,14 @@ class ConfigImpl : Config {
         return StringCoercer(get(key)).getAsBooleanList(default)
     }
 
+    override fun hasProperty(key: String): Boolean {
+        return properties.containsKey(key)
+    }
+
+    override fun hasPropertyAndIsNotFalse(key: String): Boolean {
+        return hasProperty(key) && getAsString(key).toLowerCase() != "false"
+    }
+
     override fun getAsStringList(key: String, default: List<String>): List<String>{
         return StringCoercer(get(key)).getAsStringList(default)
     }

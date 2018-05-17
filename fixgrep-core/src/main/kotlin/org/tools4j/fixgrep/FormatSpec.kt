@@ -33,7 +33,8 @@ class FormatSpec(
         val excludeMessagesOfType: List<String> = Collections.emptyList(),
         val tagAnnotations: String,
         val fixSpec: FixSpec = Fix50SP2FixSpecFromClassPath().spec,
-        val msgColors: MessageColors = MessageColors()) {
+        val msgColors: MessageColors = MessageColors(),
+        val formatInHtml: Boolean = false) {
 
     constructor(): this(
         false,
@@ -78,7 +79,8 @@ class FormatSpec(
             includeOnlyMessagesOfType = config.getAsStringList("include.only.messages.of.type"),
             excludeMessagesOfType = config.getAsStringList("exclude.messages.of.type"),
             fixSpec = fixSpec,
-            msgColors = msgColors)
+            msgColors = msgColors,
+            formatInHtml = config.hasPropertyAndIsNotFalse("html"))
 
     val tagAnnotationSpec: AnnotationSpec by lazy {
         val annotationPositions = AnnotationPositions.parse(tagAnnotations)

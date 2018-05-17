@@ -22,6 +22,10 @@ enum class Ansi16BackgroundColor(override val ansiCode: String): TextEffect {
     BrightCyan("\u001b[46;1m"),
     BrightWhite("\u001b[47;1m");
 
+    override val htmlClass: String by lazy {
+        "Bg" + name
+    }
+
     override val prettyName: String by lazy {
         ansiCode + name + Ansi.Reset.ansiCode
     }

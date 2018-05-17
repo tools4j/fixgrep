@@ -39,8 +39,11 @@ interface Config {
     fun getAsIntList(key: String, default: List<Int>): List<Int>
     fun getAsBooleanList(key: String, default: List<Boolean>): List<Boolean>
     fun getAsStringList(key: String, default: List<String>): List<String>
+    fun hasProperty(key: String): Boolean
 
     companion object {
         fun empty(): Config {return ConfigImpl(emptyMap())}
     }
+
+    fun hasPropertyAndIsNotFalse(key: String): Boolean
 }

@@ -13,4 +13,8 @@ class HighlightedField(val field: Field, val textEffect: TextEffect): Field by f
                     returnString + Ansi.Reset.ansiCode
 
     }
+
+    override fun toHtml(): String{
+        return "<span class='field ${textEffect.htmlClass}'>" + tag.toHtml() + "<span class='equals'>=</span>" + value.toHtml() + "</span>"
+    }
 }

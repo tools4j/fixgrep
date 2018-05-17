@@ -29,6 +29,10 @@ class CompositeTextEffect(val textEffects: List<TextEffect>): TextEffect {
         textEffects.stream().map{it.ansiCode}.collect(Collectors.toList()).joinToString("")
     }
 
+    override val htmlClass: String by lazy {
+        textEffects.stream().map{it.htmlClass}.collect(Collectors.toList()).joinToString(" ")
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is CompositeTextEffect) return false
