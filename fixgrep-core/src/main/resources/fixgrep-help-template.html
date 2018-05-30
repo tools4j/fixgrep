@@ -25,14 +25,14 @@
 <h2>Formatting</h2>
 <div class="example noMan">
     <p>Fixgrep can format fix to be more readable.  e.g. from this:</p>
-    <div class="console-style">
+    <div class="console">
 8=FIX.4.29=17835=D49=CLIENT_SIM56=ACME_EXCHANGE11=C11155=AUD/USD54=260=20180312-17:37:54.09738=168172040=244=99.9842<br/>
 8=FIX.4.29=17835=849=ACME_EXCHANGE56=CLIENT_SIM37=O10011=C11141=C11155=AUD/USD54=260=20180312-17:37:54.09717=O100_1150=039=A151=168172014=044=99.9842<br/>
 8=FIX.4.29=17835=849=ACME_EXCHANGE56=CLIENT_SIM37=O5811=C6341=C6355=AUD/USD54=160=20180312-17:37:54.10217=O58_3150=239=2151=014=179853032=149415044=99.9901=Executed<br/>
 8=FIX.4.29=17835=849=ACME_EXCHANGE56=CLIENT_SIM37=O10011=C11141=C11155=AUD/USD54=260=20180312-17:37:54.10817=O100_4150=239=2151=014=168172032=14270044=99.9863=Executed<br/>
     </div>
     <p>into this:</p>
-    <div class="console-style">
+    <div class="console">
         <div class="fixMsg">
             <span class="msgTypeName Fg123">[NewOrderSingle]</span>
             <span class="annotation tagAnnotation">[ClOrdID]</span><span class="tag">11</span><span class="equals">=</span><span class="value">C111</span>

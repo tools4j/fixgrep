@@ -17,7 +17,7 @@ abstract class FixMessage(val fixSpec: FixSpec): FieldsSource, Message {
     }
 
     fun toFix(): String {
-        return NonAnnotatedSingleLineFormat(this, Ascii1Char().toChar()).toString()
+        return NonAnnotatedSingleLineFormat(this, Ascii1Char().toString()).toString()
     }
 
     fun toConsoleText(): String{

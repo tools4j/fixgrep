@@ -1,6 +1,7 @@
 package org.tools4j.fixgrep
 
 import joptsimple.OptionSpec
+import org.tools4j.fixgrep.help.DocWriterFactory
 import org.tools4j.fixgrep.help.OptionsHelp
 import org.tools4j.fixgrep.help.OptionsHelp.OptionHelp
 import spock.lang.Specification
@@ -38,7 +39,7 @@ class OptionsAndHelpConsistencyTest extends Specification {
     def validateThatHelpItemsExistForEveryConfiguredCommandLineOption() {
         when:
         final Map<String, OptionSpec<?>> commandLineOptions = new OptionParserFactory().optionParser.recognizedOptions()
-        def helpItems = new OptionsHelp()
+        def helpItems = new OptionsHelp(new DocWriterFactory.ConsoleText())
 
         def optionsWithoutHelp = new LinkedHashSet<String>()
         def validated = new LinkedHashSet<String>()
@@ -64,7 +65,7 @@ class OptionsAndHelpConsistencyTest extends Specification {
     def validateThatCommandLineOptionsExistForEveryHelpItem() {
         when:
         final Map<String, OptionSpec<?>> commandLineOptions = new OptionParserFactory().optionParser.recognizedOptions()
-        final Map<String, OptionHelp> helpItems = new OptionsHelp().helpByOptions
+        final Map<String, OptionHelp> helpItems = new OptionsHelp(new DocWriterFactory.ConsoleText()).helpByOptions
 
         def helpWithoutCommandLineOption = new LinkedHashSet<String>()
         def validated = new LinkedHashSet<String>()

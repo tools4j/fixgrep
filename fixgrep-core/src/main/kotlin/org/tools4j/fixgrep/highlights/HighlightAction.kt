@@ -8,12 +8,16 @@ import java.util.stream.Collectors
 
 class HighlightAction(val scope: HighlightScope, val textEffect: TextEffect) {
     fun apply(fields: Fields, matchingTags: List<Field>): Fields {
+        var delimiter = fields.outputDelimiter
         return FieldsImpl(fields.stream().map {
+            if (scope == HighlightScope.Line){
+                delimiter = HighlightedDelimiter(delimiter.delimiter, textEffect)
+            }
             if (scope == HighlightScope.Line || matchingTags.contains(it)) {
                 HighlightedField(it, textEffect)
             } else {
                 it
             }
-        }.collect(Collectors.toList()))
+        }.collect(Collectors.toList()), delimiter)
     }
 }

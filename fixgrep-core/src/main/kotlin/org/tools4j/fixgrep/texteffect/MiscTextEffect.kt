@@ -6,16 +6,12 @@ package org.tools4j.fixgrep.texteffect
  * Time: 6:21 AM
  */
 class MiscTextEffect(ansiCode: String, override val name: String): TextEffectImpl(ansiCode) {
-    override val prettyName: String by lazy {
-        ansiCode + name + Ansi.Reset.ansiCode
-    }
-
     override val htmlClass: String by lazy {
         name
     }
 
     companion object {
-        val Bold = MiscTextEffect("\u001B[1m", "Bold")
+        val Bold = MiscTextEffect("\u001B[1m", "bold")
 
         @JvmStatic
         fun contains(expression: String): Boolean {

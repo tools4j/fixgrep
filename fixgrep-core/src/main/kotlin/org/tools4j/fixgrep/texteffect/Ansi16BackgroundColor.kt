@@ -22,12 +22,10 @@ enum class Ansi16BackgroundColor(override val ansiCode: String): TextEffect {
     BrightCyan("\u001b[46;1m"),
     BrightWhite("\u001b[47;1m");
 
+    override val ansiResetCode: String = Ansi.Reset
+
     override val htmlClass: String by lazy {
         "Bg" + name
-    }
-
-    override val prettyName: String by lazy {
-        ansiCode + name + Ansi.Reset.ansiCode
     }
 
     companion object {
@@ -56,12 +54,10 @@ enum class Ansi16BackgroundColor(override val ansiCode: String): TextEffect {
         }
 
         @JvmStatic
-        fun listAsXml(): String {
+        fun listAsHtml(): String {
             val sb = StringBuilder()
             Ansi16BackgroundColor.values().forEach {
-                sb.append("<list>")
-                sb.append("<li><color name=\"").append("Bg").append(it.name).append("\">").append(it.name).append("</color></li>")
-                sb.append("</list>")
+                sb.append("<span class=\"").append("Bg").append(it.name).append("\">").append(it.name).append("</span>")
             }
             return sb.toString()
         }
@@ -71,7 +67,7 @@ enum class Ansi16BackgroundColor(override val ansiCode: String): TextEffect {
             val sb = StringBuilder()
             Ansi16BackgroundColor.values().forEach {
                 if(sb.length > 0) sb.append(", ")
-                sb.append(it.ansiCode).append(it.name).append(Ansi.Reset.ansiCode)
+                sb.append(it.ansiCode).append(it.name).append(it.ansiResetCode)
             }
             return sb.toString()
         }

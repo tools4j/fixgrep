@@ -5,7 +5,7 @@ package org.tools4j.fix
  * Date: 30/6/17
  * Time: 5:20 PM
  */
-class NonAnnotatedSingleLineFormat @JvmOverloads constructor(private val fieldsSource: FieldsSource, private val delimiter: Char = '|') {
+class NonAnnotatedSingleLineFormat @JvmOverloads constructor(private val fieldsSource: FieldsSource, private val delimiter: String = "|") {
     val stringValue: String by lazy {
         val sb = StringBuilder()
         for (i in 0 until fieldsSource.fields.size) {

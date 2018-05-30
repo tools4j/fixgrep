@@ -14,7 +14,7 @@ class HighlightCriteriaTagValueEqualsTest extends Specification {
     @Unroll
     def "matches #tag #matchExpr #fix #expectedToMatch"(final int tag, final String matchExpr, final String fix, final boolean expectToMatch) {
         given:
-        Fields fields = new FieldsImpl(fix, '|')
+        Fields fields = new FieldsImpl(fix, "|")
 
         when:
         def match = new HighlightCriteriaTagValueEquals(tag, matchExpr).matches(fields)

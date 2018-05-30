@@ -15,9 +15,9 @@ class Color16Demo {
 
     val demo: String by lazy {
         val sb = StringBuilder()
-        sb.append(MiscTextEffect.Bold.ansiCode + "Foreground colors:\n" + Ansi.Reset.ansiCode)
+        sb.append(MiscTextEffect.Bold.ansiCode + "Foreground colors:\n" + Ansi.Normal)
         sb.append(Ansi16ForegroundColor.listForConsole()).append("\n\n")
-        sb.append(MiscTextEffect.Bold.ansiCode + "Background colors:\n" + Ansi.Reset.ansiCode)
+        sb.append(MiscTextEffect.Bold.ansiCode + "Background colors:\n" + Ansi.Normal)
         sb.append(Ansi16BackgroundColor.listForConsole()).append("\n")
         sb.toString()
     }

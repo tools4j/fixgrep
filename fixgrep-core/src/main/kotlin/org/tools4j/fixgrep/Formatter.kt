@@ -1,10 +1,9 @@
 package org.tools4j.fixgrep
 
 import org.tools4j.extensions.constantToCapitalCase
-import org.tools4j.fix.AnnotatedFields
 import org.tools4j.fix.Fields
-import org.tools4j.fix.FieldsFromDelimitedString
 import org.tools4j.fix.FieldsAnnotator
+import org.tools4j.fix.FieldsFromDelimitedString
 import org.tools4j.fix.FixFieldTypes
 import org.tools4j.fixgrep.texteffect.Ansi
 import java.util.regex.Matcher
@@ -34,7 +33,7 @@ class Formatter(val spec: FormatSpec){
 
     fun format(matcher: Matcher): String? {
         val fixString = matcher.group(spec.lineRegexGroupForFix)
-        val fields: Fields = FieldsFromDelimitedString(fixString, spec.inputDelimiter).fields
+        val fields: Fields = FieldsFromDelimitedString(fixString, spec.inputDelimiter, spec.outputDelimiter).fields
 
         if(!shouldPrint(fields)){
             return null
@@ -65,7 +64,11 @@ class Formatter(val spec: FormatSpec){
             val replaceWith: String
             if(!spec.suppressColors) {
                 val msgColor = spec.msgColors.getColor(inputFields)
-                replaceWith = msgColor.ansiCode
+                if(spec.formatInHtml){
+                    replaceWith = "<span class='${msgColor.htmlClass}'>"
+                } else {
+                    replaceWith = msgColor.ansiCode
+                }
             } else {
                 replaceWith = ""
             }
@@ -75,7 +78,11 @@ class Formatter(val spec: FormatSpec){
         if (formattedString.contains("\${colorReset}")) {
             val replaceWith: String
             if(!spec.suppressColors) {
-                replaceWith = Ansi.Reset.ansiCode
+                if(spec.formatInHtml){
+                    replaceWith = "</span>"
+                } else {
+                    replaceWith = Ansi.Reset
+                }
             } else {
                 replaceWith = ""
             }
@@ -115,7 +122,7 @@ class Formatter(val spec: FormatSpec){
             fields = fields.exclude(spec.excludeTags)
             fields = fields.includeOnly(spec.onlyIncludeTags)
             if(!spec.suppressColors) fields = spec.highlight.apply(fields)
-            val formattedFix = if(spec.formatInHtml) fields.toHtml() else fields.toConsoleText(spec.outputDelimiter)
+            val formattedFix = if(spec.formatInHtml) fields.toHtml() else fields.toConsoleText()
             formattedString = formattedString.replace("\${msgFix}", formattedFix)
         }
 
@@ -127,6 +134,9 @@ class Formatter(val spec: FormatSpec){
                 }
             }
         }
-        return if(formattedString.isEmpty()) null else formattedString
+        return if(formattedString.isEmpty()) null else {
+            if(spec.formatInHtml) formattedString = "<div class='line'>$formattedString</div>"
+            formattedString
+        }
     }
 }

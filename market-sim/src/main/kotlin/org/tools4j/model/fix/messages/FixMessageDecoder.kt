@@ -11,6 +11,6 @@ import org.tools4j.fix.FieldsSource
  */
 interface FixMessageDecoder<out T : FixMessage> {
     val msgType: String
-    fun createMessage(str: String, delimiter: Char = Ascii1Char().toChar()): T
+    fun createMessage(str: String, delimiter: String = Ascii1Char().toString()): T
     fun createMessage(fields: Fields): T
 }

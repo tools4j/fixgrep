@@ -7,7 +7,7 @@ package org.tools4j.fixgrep.help
  */
 class ExampleAppPropertiesGenerator {
     val content: String by lazy {
-        val options = OptionsHelp()
+        val options = OptionsHelp(DocWriterFactory.ConsoleText)
         val sb = StringBuilder()
         sb.append("################################################\n")
         sb.append("# Add properties overrides into this file\n")

@@ -7,9 +7,9 @@ import java.util.stream.Collectors
  * Date: 20/6/17
  * Time: 5:43 PM
  */
-class FieldsImpl(val fields: List<Field>) : ArrayList<Field>(fields), Fields {
-    constructor(str: String, delimiter: Char) : this(FieldsFromDelimitedString(str, delimiter).fields)
-    constructor(str: String, delimiter: String) : this(FieldsFromDelimitedString(str, delimiter).fields)
+open class FieldsImpl(val fields: List<Field>, override val outputDelimiter: Delimiter) : ArrayList<Field>(fields), Fields {
+    constructor(str: String, inputDelimiter: String) : this(FieldsFromDelimitedString(str, inputDelimiter, "|").fields, DelimiterImpl("|"))
+    constructor(fields: List<Field>) : this(fields, DelimiterImpl("|"))
 
     override fun countOfField(tag: Tag): Int {
         return countOfField(tag.tag)
@@ -44,11 +44,11 @@ class FieldsImpl(val fields: List<Field>) : ArrayList<Field>(fields), Fields {
         if(excludeTags.isEmpty()){
             return this
         }
-        val outputFields = FieldsImpl(ArrayList(fields))
+        val outputFields = FieldsImpl(ArrayList(fields), outputDelimiter)
         excludeTags.forEach { exclude ->
             outputFields.removeIf {it.tag.tag == exclude}
         }
-        return FieldsImpl(outputFields)
+        return FieldsImpl(outputFields, outputDelimiter)
     }
 
     override fun includeOnly(onlyIncludeTags: List<Int>): Fields {
@@ -56,7 +56,7 @@ class FieldsImpl(val fields: List<Field>) : ArrayList<Field>(fields), Fields {
             return this
         }
         val newFields = fields.stream().filter { onlyIncludeTags.contains(it.tag.tag) }.collect(Collectors.toList())
-        return FieldsImpl(newFields)
+        return FieldsImpl(newFields, outputDelimiter)
     }
 
     override fun sortBy(desiredOrder: List<Int>): Fields {
@@ -83,7 +83,7 @@ class FieldsImpl(val fields: List<Field>) : ArrayList<Field>(fields), Fields {
             }
         }
         outputFields.addAll(existingFields)
-        return FieldsImpl(outputFields)
+        return FieldsImpl(outputFields, outputDelimiter)
     }
 
     override fun hasRepeatingTags(): Boolean {
@@ -105,21 +105,22 @@ class FieldsImpl(val fields: List<Field>) : ArrayList<Field>(fields), Fields {
         toDelimitedString()
     }
 
-    override fun toConsoleText(delimiter: String): String {
+    override fun toConsoleText(): String {
         val sb = StringBuilder()
         for (i in 0 until fields.size) {
-            if (sb.length > 0) sb.append(delimiter)
+            if (i > 0) sb.append(outputDelimiter.toConsoleText())
             sb.append(fields[i].toConsoleText())
         }
         return sb.toString()
     }
 
     override fun toHtml(): String {
-        val sb = StringBuilder("<div class='fields'>")
+        val sb = StringBuilder("<span class='fields'>")
         for (i in 0 until fields.size) {
+            if(i > 0) sb.append(outputDelimiter.toHtml())
             sb.append(fields[i].toHtml())
         }
-        sb.append("</div>")
+        sb.append("</span>")
         return sb.toString()
     }
 

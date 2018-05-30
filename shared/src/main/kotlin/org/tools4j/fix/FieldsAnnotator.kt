@@ -19,6 +19,6 @@ class FieldsAnnotator(
         for (field in this.inputFields) {
             returnFields.add(fieldAnnotator.getField(field.tag.tag, field.value.rawValue))
         }
-        FieldsImpl(returnFields)
+        FieldsImpl(returnFields, inputFields.outputDelimiter)
     }
 }

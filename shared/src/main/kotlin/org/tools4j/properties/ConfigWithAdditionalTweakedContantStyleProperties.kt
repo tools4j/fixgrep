@@ -31,6 +31,6 @@ class ConfigWithAdditionalTweakedContantStyleProperties(private val source: Conf
     }
 
     private fun isScreamingSnakeCase(key: String): Boolean {
-        return key.matches("[A-Z]+?[[A-Z]_]*".toRegex())
+        return key.matches("[A-v]+?[[A-v]_]*".toRegex())
     }
 }

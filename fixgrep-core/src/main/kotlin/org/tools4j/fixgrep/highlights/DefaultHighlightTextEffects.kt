@@ -1,9 +1,8 @@
 package org.tools4j.fixgrep.highlights
 
-import com.sun.xml.internal.ws.api.streaming.XMLStreamReaderFactory
+import org.tools4j.fixgrep.texteffect.Ansi16ForegroundColor.*
 import org.tools4j.fixgrep.texteffect.TextEffect
 import org.tools4j.fixgrep.texteffect.TextEffectParser
-import java.util.stream.Collectors
 
 class DefaultHighlightTextEffects(val effects: List<TextEffect>){
     var lastUsed = -1
@@ -19,24 +18,26 @@ class DefaultHighlightTextEffects(val effects: List<TextEffect>){
     }
 
     companion object {
-        val DEFAULT = DefaultHighlightTextEffects("FgBrightRed,FgBrightGreen,FgBrightYellow,FgBrightBlue,FgBrightMagenta,FgBrightCyan")
+        val DEFAULT = DefaultHighlightTextEffects(listOf(BrightRed, BrightGreen, BrightYellow, BrightBlue, BrightMagenta, BrightCyan))
 
-        fun toPrettyList():String{
+        fun toPrettyConsoleTextList():String{
             DEFAULT.reset()
             val sb = StringBuilder()
             DEFAULT.effects.forEach {
                 if(sb.length > 0) sb.append(", ")
-                sb.append(it.prettyName)
+                sb.append(it.ansiCode)
+                sb.append(it.name)
+                sb.append(it.ansiResetCode)
             }
             return sb.toString()
         }
 
-        fun toXmlList():String{
+        fun toPrettyHtmlList():String{
             DEFAULT.reset()
             val sb = StringBuilder()
             DEFAULT.effects.forEach {
                 if(sb.length > 0) sb.append(", ")
-                sb.append("<color name=\"").append(it.name).append("\">").append(it.name).append("</color>")
+                sb.append("<span class='${it.htmlClass}'>${it.name}</span>")
             }
             return sb.toString()
         }

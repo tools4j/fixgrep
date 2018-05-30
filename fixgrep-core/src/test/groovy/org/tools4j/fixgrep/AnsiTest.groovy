@@ -22,6 +22,6 @@ class AnsiTest extends Specification {
 
     def 'test ansi colors'(){
         expect:
-        println "${Ansi16ForegroundColor.Red.ansiCode}To be or not to be${Ansi.Reset.ansiCode}"
+        println "${Ansi16ForegroundColor.Red.ansiCode}To be or not to be${Ansi.Normal}"
     }
 }

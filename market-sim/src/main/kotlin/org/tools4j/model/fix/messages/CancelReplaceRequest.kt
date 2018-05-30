@@ -58,7 +58,7 @@ class CancelReplaceRequest(
         override val msgType: String
             get() = MSG_TYPE
 
-        override fun createMessage(str: String, delimiter: Char): CancelReplaceRequest {
+        override fun createMessage(str: String, delimiter: String): CancelReplaceRequest {
             val fields = FieldsFromDelimitedString(str, delimiter).fields
             return createMessage(fields)
 

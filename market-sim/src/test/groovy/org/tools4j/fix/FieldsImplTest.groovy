@@ -9,7 +9,7 @@ import spock.lang.Specification
  * Time: 6:17 AM
  */
 class FieldsImplTest extends Specification {
-    @Shared char a = new Ascii1Char().toChar()
+    @Shared String a = new Ascii1Char().toString()
     @Shared Fields fields = new FieldsFromDelimitedString("35=D${a}11=ABC${a}55=AUD/USD", a).fields
     @Shared Fields fieldsWithDupTag = new FieldsFromDelimitedString("35=D${a}11=ABC${a}55=AUD/USD${a}55=ABC/DEF", a).fields
     @Shared Fields emptyFields = new FieldsFromDelimitedString("", a).fields

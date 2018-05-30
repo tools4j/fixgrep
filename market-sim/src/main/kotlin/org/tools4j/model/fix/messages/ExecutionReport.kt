@@ -120,7 +120,7 @@ class ExecutionReport(
         override val msgType: String
             get() = MSG_TYPE
 
-        override fun createMessage(str: String, delimiter: Char): ExecutionReport {
+        override fun createMessage(str: String, delimiter: String): ExecutionReport {
             val fields = FieldsFromDelimitedString(str, delimiter).fields
             return createMessage(fields)
         }

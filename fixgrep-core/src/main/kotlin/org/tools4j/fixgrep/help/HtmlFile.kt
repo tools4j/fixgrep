@@ -1,8 +1,8 @@
-package org.tools4j.fixgrep.html
+package org.tools4j.fixgrep.help
 
-import java.io.File
 import java.awt.Desktop
 import java.io.BufferedWriter
+import java.io.File
 
 
 /**
@@ -26,6 +26,17 @@ open class HtmlFile(val path: String) {
         htmlFile.bufferedWriter()
     }
 
+    fun write(content: String): HtmlFile {
+        writer.write(content)
+        return this
+    }
+
+    fun writeLn(content: String): HtmlFile {
+        writer.write(content)
+        writer.write("<br/>\n")
+        return this
+    }
+
     fun open(){
         afterOpen()
     }
@@ -39,32 +50,6 @@ open class HtmlFile(val path: String) {
 
     open fun beforeClose(){}
 
-    fun writeLine(line: String){
-        writer.write(line)
-        writer.write("\n")
-    }
-
-    fun write(str: String){
-        writer.write(str)
-    }
-
-    fun writeDiv(classes: String, content: String){
-        writeLine("<div class='$classes'>\n" )
-        writeLine(content)
-        writeLine("\n</div>\n")
-    }
-
-    fun writeSpan(classes: String, content: String){
-        writeLine("<span class='$classes'>\n" )
-        writeLine(content)
-        writeLine("\n</span>\n")
-    }
-
-    fun writeHeading(level: Int, content: String){
-        writeLine("<h$level>\n" )
-        writeLine(content)
-        writeLine("\n</h$level>\n")
-    }
 
     fun launchInBrowser(){
         if (Desktop.isDesktopSupported()) {

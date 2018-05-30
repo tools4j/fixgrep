@@ -8,13 +8,7 @@ import java.util.stream.Collectors
  * Time: 6:55 AM
  */
 class CompositeTextEffect(val textEffects: List<TextEffect>): TextEffect {
-    override val prettyName: String by lazy {
-        val sb = StringBuilder()
-        for (textEffect in textEffects) {
-            sb.append(textEffect.prettyName)
-        }
-        sb.toString()
-    }
+    override val ansiResetCode: String = Ansi.Normal
 
     override val name: String by lazy {
         val sb = StringBuilder()

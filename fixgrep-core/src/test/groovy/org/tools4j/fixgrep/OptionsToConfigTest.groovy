@@ -14,7 +14,7 @@ class OptionsToConfigTest extends Specification {
     def "GetProperties"() {
         given:
         final OptionParser optionParser = new OptionParserFactory().optionParser
-        final OptionSet options = optionParser.parse("-n", "--highlights", "35:Blue,8:Yellow:Line,51=1:Purple:Tag,Side=Buy:Green", "-z", "88")
+        final OptionSet options = optionParser.parse("-n", "--highlights", "35:Blue,8:Yellow:Line,51=1:Purple:Tag,Side=Buy:Green", "-v", "88")
         final OptionsToConfig optionsToProperties = new OptionsToConfig(options);
 
         when:

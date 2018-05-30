@@ -3,11 +3,7 @@ package org.tools4j.fixgrep.help
 import joptsimple.HelpFormatter
 import joptsimple.OptionDescriptor
 import org.tools4j.fixgrep.OptionParserFactory
-import org.tools4j.fixgrep.highlights.DefaultHighlightTextEffects
-import org.tools4j.fixgrep.highlights.ExampleTable
-import org.tools4j.fixgrep.texteffect.Ansi16BackgroundColor
-import org.tools4j.fixgrep.texteffect.Ansi16ForegroundColor
-import org.tools4j.fixgrep.texteffect.Ansi256Color
+
 /**
  * User: ben
  * Date: 23/04/2018
@@ -23,7 +19,7 @@ class HelpGenerator: HelpFormatter {
     val help: String by lazy {
         val sb = StringBuilder()
         sb.append("Options:\n")
-        val optionsHelp = OptionsHelp()
+        val optionsHelp = OptionsHelp(DocWriterFactory.ConsoleText)
         for (desc in optionsHelp.helpByOptions.values.distinct()) {
             val optionVariations = desc.optionVariations
             sb.append(optionVariations.toString().padEnd(40))

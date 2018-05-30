@@ -10,7 +10,7 @@ import spock.lang.Unroll
  * Time: 6:38 AM
  */
 class SplitableByCharStringTest extends Specification {
-    @Shared private char a1 = new Ascii1Char().toChar()
+    @Shared private String a1 = new Ascii1Char().toString()
 
     @Unroll
     def "Split str:#str, regexDelim:#regexDelim, result:#result"(final String str, final char regexDelim, final String[] result) {

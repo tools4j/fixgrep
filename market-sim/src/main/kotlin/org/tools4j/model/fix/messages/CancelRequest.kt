@@ -60,7 +60,7 @@ class CancelRequest(
         override val msgType: String
             get() = MSG_TYPE
 
-        override fun createMessage(str: String, delimiter: Char): CancelRequest {
+        override fun createMessage(str: String, delimiter: String): CancelRequest {
             val fields = FieldsFromDelimitedString(str, delimiter).fields
             return createMessage(fields)
 

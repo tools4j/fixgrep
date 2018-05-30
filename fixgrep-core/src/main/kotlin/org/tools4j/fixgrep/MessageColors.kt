@@ -5,6 +5,7 @@ import org.tools4j.fix.Fields
 import org.tools4j.fix.FixMessageType
 import org.tools4j.fixgrep.texteffect.Ansi
 import org.tools4j.fixgrep.texteffect.Ansi16ForegroundColor
+import org.tools4j.fixgrep.texteffect.NullTextEffect
 import org.tools4j.fixgrep.texteffect.TextEffect
 
 /**
@@ -28,7 +29,7 @@ class MessageColors {
     }
 
     fun getColor(fields: Fields): TextEffect {
-        return colorsByMsgCodeAndExecType[fields.msgTypeAndExecTypeKey] ?: Ansi.Reset
+        return colorsByMsgCodeAndExecType[fields.msgTypeAndExecTypeKey] ?: NullTextEffect()
     }
 
     fun getColor(msgType: FixMessageType): Ansi16ForegroundColor {
@@ -180,17 +181,15 @@ class MessageColors {
                     -> Ansi16ForegroundColor.Yellow
 
             ExecType.TradeCancel,
-            ExecType.Expired
-                    -> Ansi.Reset
-
+            ExecType.Expired,
             ExecType.Calculated,
             ExecType.TradeCorrect,
             ExecType.OrderStatus,
             ExecType.TradeInAClearingHold,
             ExecType.TradeHasBeenReleasedToClearing,
             ExecType.TriggeredOrActivatedBySystem
-                    -> Ansi.Reset
-            else -> Ansi.Reset
+                -> NullTextEffect()
+            else -> NullTextEffect()
         }
     }
 }

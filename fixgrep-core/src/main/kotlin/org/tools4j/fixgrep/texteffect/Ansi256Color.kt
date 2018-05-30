@@ -11,6 +11,8 @@ class Ansi256Color(val color: Int, val backgroundForeground: AnsiForegroundBackg
         }
     }
 
+    override val ansiResetCode: String = Ansi.Reset
+
     override val ansiCode: String by lazy {
         val backgroundForegroundCode= if(backgroundForeground == AnsiForegroundBackground.BACKGROUND) "48" else "38"
         "\u001b[" + backgroundForegroundCode + ";5;" + color + "m"
@@ -18,10 +20,6 @@ class Ansi256Color(val color: Int, val backgroundForeground: AnsiForegroundBackg
 
     override val htmlClass: String by lazy {
         backgroundForeground.abbreviation + color
-    }
-
-    override val prettyName: String by lazy {
-        ansiCode + backgroundForeground.abbreviation + color + Ansi.Reset.ansiCode
     }
 
     override val name: String by lazy {

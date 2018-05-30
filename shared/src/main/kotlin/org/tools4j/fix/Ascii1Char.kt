@@ -19,8 +19,4 @@ class Ascii1Char {
     override fun toString(): String {
         return "" + ascii1Char
     }
-
-    fun toChar(): Char {
-        return ascii1Char
-    }
 }

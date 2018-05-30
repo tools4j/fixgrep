@@ -35,6 +35,11 @@ class ConfigImpl : Config {
         }
     }
 
+    constructor(key: String, value: String) {
+        this.properties = LinkedHashMap()
+        this.properties.put(key, value)
+    }
+
     override fun getWithPrefix(prefix: String): Config {
         var prefix = prefix
         if (!prefix.endsWith(".")) {

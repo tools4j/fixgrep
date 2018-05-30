@@ -73,7 +73,7 @@ class NewOrderSingle(
         override val msgType: String
             get() = MSG_TYPE
 
-        override fun createMessage(str: String, delimiter: Char): NewOrderSingle {
+        override fun createMessage(str: String, delimiter: String): NewOrderSingle {
             val fields = FieldsFromDelimitedString(str, delimiter).fields
             return createMessage(fields)
 
@@ -94,7 +94,7 @@ class NewOrderSingle(
                         fields.getField(FixFieldTypes.OrdType)!!.orderTypeValue(),
                         fixSpec = fixSpec)
             } catch (e: Exception) {
-                println("Could not create NewOrderSingle from fields: " + fields.toString().replace(Ascii1Char().toChar(), '|'))
+                println("Could not create NewOrderSingle from fields: " + fields.toString().replace(Ascii1Char().toString(), "|"))
                 e.printStackTrace()
                 throw e
             }
