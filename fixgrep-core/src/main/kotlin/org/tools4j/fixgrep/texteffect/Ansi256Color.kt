@@ -11,9 +11,9 @@ class Ansi256Color(val color: Int, val backgroundForeground: AnsiForegroundBackg
         }
     }
 
-    override val ansiResetCode: String = Ansi.Reset
+    override val consoleTextAfter: String = Ansi.Reset
 
-    override val ansiCode: String by lazy {
+    override val consoleTextBefore: String by lazy {
         val backgroundForegroundCode= if(backgroundForeground == AnsiForegroundBackground.BACKGROUND) "48" else "38"
         "\u001b[" + backgroundForegroundCode + ";5;" + color + "m"
     }

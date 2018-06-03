@@ -11,7 +11,7 @@ import org.tools4j.fixgrep.texteffect.TextEffect
  */
 class HighlightedDelimiter(override val delimiter: String, val textEffect: TextEffect): Delimiter {
     override fun toConsoleText(): String{
-        return textEffect.ansiCode + delimiter + Ansi.Normal
+        return textEffect.consoleTextBefore + delimiter + Ansi.Normal
     }
 
     override fun toHtml(): String{

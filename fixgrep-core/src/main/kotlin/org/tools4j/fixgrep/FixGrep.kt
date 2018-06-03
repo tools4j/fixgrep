@@ -67,7 +67,7 @@ class FixGrep(val inputStream: InputStream, val outputStream: OutputStream, val 
     }
 
     private fun handleLine(line: String) {
-        val matcher = formatter.shouldParse(line)
+        val matcher = formatter.logLineRegexPattern.matcher(line)
         if (matcher.find()) {
             val formattedLine = formatter.format(matcher)
             if(formattedLine != null){

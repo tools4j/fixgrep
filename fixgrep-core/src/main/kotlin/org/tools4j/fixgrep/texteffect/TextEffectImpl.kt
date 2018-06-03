@@ -5,15 +5,15 @@ package org.tools4j.fixgrep.texteffect
  * Date: 9/04/2018
  * Time: 9:40 AM
  */
-open class TextEffectImpl(override val ansiCode: String) : TextEffect {
-    override val ansiResetCode: String = Ansi.Normal
+open class TextEffectImpl(override val consoleTextBefore: String, override val consoleTextAfter: String) : TextEffect {
+    constructor(consoleTextBefore: String): this(consoleTextBefore, Ansi.Normal)
 
     override val name: String by lazy {
-        ansiCode
+        consoleTextBefore
     }
 
     override val htmlClass: String by lazy {
-        ansiCode.removePrefix("\u001b[")
+        consoleTextBefore.removePrefix("\u001b[")
     }
 
     companion object {
@@ -27,16 +27,16 @@ open class TextEffectImpl(override val ansiCode: String) : TextEffect {
         if (this === other) return true
         if (other !is TextEffectImpl) return false
 
-        if (ansiCode != other.ansiCode) return false
+        if (consoleTextBefore != other.consoleTextBefore) return false
 
         return true
     }
 
     override fun hashCode(): Int {
-        return ansiCode.hashCode()
+        return consoleTextBefore.hashCode()
     }
 
     override fun toString(): String {
-        return "RawColor(ansiCode='$ansiCode')"
+        return "RawColor(consoleTextBefore='$consoleTextBefore')"
     }
 }

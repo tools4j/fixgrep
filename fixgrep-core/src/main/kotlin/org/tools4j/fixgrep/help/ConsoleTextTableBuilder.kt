@@ -2,7 +2,6 @@ package org.tools4j.fixgrep.help
 
 import org.tools4j.extensions.lengthNotIncludingAnsiCodes
 import org.tools4j.extensions.padStringContainingAnsiCodesEnd
-import org.tools4j.fix.Ansi
 import org.tools4j.fixgrep.texteffect.HtmlOnlyTextEffect
 import org.tools4j.fixgrep.texteffect.MiscTextEffect
 import org.tools4j.fixgrep.texteffect.TextEffect
@@ -87,11 +86,11 @@ class ConsoleTextTableBuilder(val writer: DocWriter): TableBuilder {
     class Cell(val text: String, val textEffect: TextEffect?){
         val textEffectOrBlank: String by lazy {
            if(textEffect == null) ""
-           else textEffect.ansiCode
+           else textEffect.consoleTextBefore
         }
         val textEffectResetOrBlank: String by lazy {
             if(textEffect == null) ""
-            else textEffect.ansiResetCode
+            else textEffect.consoleTextAfter
         }
     }
 }

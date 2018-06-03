@@ -36,8 +36,8 @@ open class HtmlWriter(): DocWriter {
         return this
     }
 
-    override fun startSection(htmlOnlyTextEffect: HtmlOnlyTextEffect): DocWriter {
-        writeLn("<div class='${htmlOnlyTextEffect.htmlClass}'>")
+    override fun startSection(textEffect: TextEffect): DocWriter {
+        writeLn("<div class='${textEffect.htmlClass}'>")
         return this
     }
 

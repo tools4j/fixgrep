@@ -6,6 +6,7 @@ import org.tools4j.fix.FieldsAnnotator
 import org.tools4j.fix.FieldsFromDelimitedString
 import org.tools4j.fix.FixFieldTypes
 import org.tools4j.fixgrep.texteffect.Ansi
+import org.tools4j.fixgrep.utils.Constants.Companion.DOLLAR
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
@@ -14,19 +15,15 @@ import java.util.regex.Pattern
  * Date: 22/03/2018
  * Time: 6:49 AM
  */
-class Formatter(val spec: FormatSpec){
+class Formatter (val spec: FormatSpec){
     val logLineRegexPattern: Pattern by lazy {
         Pattern.compile(spec.lineRegex)
     }
 
-    fun shouldParse(line: String): Matcher{
-        return logLineRegexPattern.matcher(line)
-    }
-
     fun format(line: String): String? {
-        val matcher = shouldParse(line)
+        val matcher = logLineRegexPattern.matcher(line)
         if(!matcher.find()){
-            return "ERROR: could not match regex with line: ${line}"
+            return null
         }
         return format(matcher)
     }
@@ -67,7 +64,7 @@ class Formatter(val spec: FormatSpec){
                 if(spec.formatInHtml){
                     replaceWith = "<span class='${msgColor.htmlClass}'>"
                 } else {
-                    replaceWith = msgColor.ansiCode
+                    replaceWith = msgColor.consoleTextBefore
                 }
             } else {
                 replaceWith = ""
@@ -127,10 +124,13 @@ class Formatter(val spec: FormatSpec){
         }
 
         for (i in 1..matcher.groupCount()) {
-            if (formattedString.contains("\$${i}")) {
+            if (formattedString.contains("$" + i)) {
                 val groupValue = matcher.group(i)
                 if (groupValue != null) {
-                    formattedString = formattedString.replace("\$${i}", groupValue)
+                    formattedString = formattedString.replace("${DOLLAR}$i", groupValue)
+                } else {
+                    formattedString = formattedString.replace("$" + i + " ", "")
+                    formattedString = formattedString.replace("$" + i, "")
                 }
             }
         }

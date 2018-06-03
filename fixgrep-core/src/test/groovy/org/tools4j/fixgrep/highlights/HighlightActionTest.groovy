@@ -9,7 +9,6 @@ import spock.lang.Specification
 import spock.lang.Unroll
 
 import java.util.stream.Collectors
-import static org.tools4j.fixgrep.highlights.HighlightScope.*
 
 /**
  * User: ben
@@ -17,7 +16,7 @@ import static org.tools4j.fixgrep.highlights.HighlightScope.*
  * Time: 6:34 AM
  */
 class HighlightActionTest extends Specification {
-    private final static String color = Ansi16ForegroundColor.Blue.ansiCode
+    private final static String color = Ansi16ForegroundColor.Blue.consoleTextBefore
     private final static String reset = Ansi.Reset.ansiCode
 
     @Unroll

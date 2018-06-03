@@ -11,7 +11,7 @@ import spock.lang.Unroll
 class Ansi16BackgroundColorTest extends Specification {
     def "test GetAnsiCode"() {
         expect:
-        Ansi16BackgroundColor.Red.ansiCode == "\u001B[41m"
+        Ansi16BackgroundColor.Red.consoleTextBefore == "\u001B[41m"
     }
 
     @Unroll

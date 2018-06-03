@@ -2,7 +2,6 @@ package org.tools4j.fixgrep.texteffect
 
 import spock.lang.Specification
 import spock.lang.Unroll
-import static org.tools4j.fixgrep.texteffect.AnsiForegroundBackground.*
 
 /**
  * User: ben
@@ -12,8 +11,8 @@ import static org.tools4j.fixgrep.texteffect.AnsiForegroundBackground.*
 class Ansi16ColorTest extends Specification {
     def "GetAnsiCode"() {
         expect:
-        Ansi16Color.parse("BgBlue").ansiCode == "\u001B[44m"
-        Ansi16Color.parse("Blue").ansiCode == "\u001B[34m"
+        Ansi16Color.parse("BgBlue").getConsoleTextBefore == "\u001B[44m"
+        Ansi16Color.parse("Blue").getConsoleTextBefore == "\u001B[34m"
     }
 
     @Unroll
@@ -33,13 +32,13 @@ class Ansi16ColorTest extends Specification {
     @Unroll
     def "test parse [#expression]"(final String expression, final String expectedAnsiCode){
         expect:
-        Ansi16Color.parse(expression).ansiCode == expectedAnsiCode
+        Ansi16Color.parse(expression).getConsoleTextBefore == expectedAnsiCode
 
         where:
         expression    | expectedAnsiCode
-        "BgBrightRed" | Ansi16BackgroundColor.BrightRed.ansiCode
-        "Blue"        | Ansi16ForegroundColor.Blue.ansiCode
-        "BrightRed"   | Ansi16ForegroundColor.BrightRed.ansiCode
-        "FgBlue"      | Ansi16ForegroundColor.Blue.ansiCode
+        "BgBrightRed" | Ansi16BackgroundColor.BrightRed.consoleTextBefore
+        "Blue"        | Ansi16ForegroundColor.Blue.consoleTextBefore
+        "BrightRed"   | Ansi16ForegroundColor.BrightRed.consoleTextBefore
+        "FgBlue"      | Ansi16ForegroundColor.Blue.consoleTextBefore
     }
 }

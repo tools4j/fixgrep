@@ -20,7 +20,7 @@ class ConsoleTextTableBuilderTest extends Specification {
         writer.addTable()
             .startNewRow().addTableHeaderCell("one").addTableHeaderCell("two").addTableHeaderCell("three")
             .startNewRow().addCell("four").addCell("five").addCell("")
-            .startNewRow().addCell("once").addCell("I").addCell("caught", HtmlOnlyTextEffect.Console)
+            .startNewRow().addCell("once").addCell("I").addCell("caught", MiscTextEffect.Console)
             .startNewRow().addCell("a").addCell("fish").addCell("alive")
             .startNewRow().addCell("six", Ansi16BackgroundColor.Yellow).addCell("seven").addCell("eight")
             .startNewRow().addCell("nine").addCell("ten").addCell("then I let him go again", Ansi16ForegroundColor.Blue)

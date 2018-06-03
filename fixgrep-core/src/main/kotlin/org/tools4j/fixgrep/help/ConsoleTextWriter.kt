@@ -6,7 +6,9 @@ import org.tools4j.fixgrep.highlights.HighlightExampleTable
 import org.tools4j.fixgrep.texteffect.Ansi16BackgroundColor
 import org.tools4j.fixgrep.texteffect.Ansi16ForegroundColor
 import org.tools4j.fixgrep.texteffect.HtmlOnlyTextEffect
+import org.tools4j.fixgrep.texteffect.MiscTextEffect
 import org.tools4j.fixgrep.texteffect.TextEffect
+import java.util.*
 import java.util.function.Function
 
 /**
@@ -15,6 +17,8 @@ import java.util.function.Function
  * Time: 6:05 PM
  */
 class ConsoleTextWriter(): DocWriter {
+    val sectionTextEffectsStack = LinkedList<TextEffect>()
+
     override fun writeLink(linkText: String, url: String): DocWriter {
         write(linkText).write(":").write(url).write(" ")
         return this;
@@ -27,27 +31,30 @@ class ConsoleTextWriter(): DocWriter {
     val sb = StringBuilder()
 
     override fun startSection(): DocWriter {
-        //No-op
+        sectionTextEffectsStack.push(MiscTextEffect.Null)
         return this
     }
 
-    override fun startSection(htmlOnlyTextEffect: HtmlOnlyTextEffect): DocWriter {
-        //No-op
+
+    override fun startSection(textEffect: TextEffect): DocWriter {
+        sectionTextEffectsStack.push(textEffect)
+        write(textEffect.consoleTextBefore)
         return this
     }
 
     override fun endSection(): DocWriter {
-        //No-op
+        write(sectionTextEffectsStack.pop().consoleTextAfter)
+        writeLn()
         return this
     }
 
     override fun writeLn(line: String, textEffect: TextEffect): DocWriter {
-        write(textEffect.ansiCode).write(line).writeLn(textEffect.ansiResetCode)
+        write(textEffect.consoleTextBefore).writeLn(line).write(textEffect.consoleTextAfter)
         return this
     }
 
     override fun write(str: String, textEffect: TextEffect): ConsoleTextWriter {
-        write(textEffect.ansiCode).write(str).write(textEffect.ansiResetCode)
+        write(textEffect.consoleTextBefore).write(str).write(textEffect.consoleTextAfter)
         return this
     }
 

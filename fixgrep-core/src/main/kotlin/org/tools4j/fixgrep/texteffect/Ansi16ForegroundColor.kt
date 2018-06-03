@@ -4,7 +4,7 @@ package org.tools4j.fixgrep.texteffect
  * Date: 13/03/2018
  * Time: 5:23 PM
  */
-enum class Ansi16ForegroundColor(override val ansiCode: String): TextEffect {
+enum class Ansi16ForegroundColor(override val consoleTextBefore: String): TextEffect {
     Black("\u001B[30m"),
     Red("\u001B[31m"),
     Green("\u001B[32m"),
@@ -22,7 +22,7 @@ enum class Ansi16ForegroundColor(override val ansiCode: String): TextEffect {
     BrightCyan("\u001b[36;1m"),
     BrightWhite("\u001b[37;1m");
 
-    override val ansiResetCode: String = Ansi.Reset
+    override val consoleTextAfter: String = Ansi.Reset
 
     override val htmlClass: String by lazy {
         "Fg" + name
@@ -68,7 +68,7 @@ enum class Ansi16ForegroundColor(override val ansiCode: String): TextEffect {
             val sb = StringBuilder()
             Ansi16ForegroundColor.values().forEach {
                 if(sb.length > 0) sb.append(", ")
-                sb.append(it.ansiCode).append(it.name).append(it.ansiResetCode)
+                sb.append(it.consoleTextBefore).append(it.name).append(it.consoleTextAfter)
             }
             return sb.toString()
         }

@@ -131,10 +131,10 @@ the less 'interesting' fix fields, such as BeginString, BodyLength or Checksum. 
                 .toFormattedText()))
 
         addOptionHelp(helpByOptions, OptionHelp(
-                listOf("F", "line-format"),
+                listOf("F", "output-line-format"),
                 "The format of each line.",
                 "Thread:${'$'}1 ${'$'}{msgFix}",
-                docWriterFactory.createNew().writeLn("The line-format is a specification of how each outputted line should be displayed.  The line-format param is free text, and can include any of the following tokens:")
+                docWriterFactory.createNew().writeLn("The output-line-format is a specification of how each outputted line should be displayed.  The output-line-format param is free text, and can include any of the following tokens:")
                 .addTable()
                 .startNewRow().addTableHeaderCell("token").addTableHeaderCell("description")
                 .startNewRow().addCell("${'$'}{senderToTargetCompIdDirection}").addCell("will display the compIds of the current msg. e.g. ABC->DEF")
@@ -143,11 +143,11 @@ the less 'interesting' fix fields, such as BeginString, BodyLength or Checksum. 
                 .startNewRow().addCell("${'$'}{msgTypeName}").addCell("displays the FIX msg type name & sub-type, e.g. NewOrderSingle, CancelRequest, Exec.Fill")
                 .startNewRow().addCell("${'$'}{msgFix}").addCell("displays the formatted FIX message")
                 .startNewRow().addCell("${'$'}{n}").addCell("displays the value of that fix tag.  e.g. for a NewOrderSingle ${'$'}{35} would print 'D'")
-                .startNewRow().addCell("${'$'}n").addCell("(note, no braces), will print the captured regex group 'n' from the regex specified in the parameter line-regex (or property line.regex).")
+                .startNewRow().addCell("${'$'}n").addCell("(note, no braces), will print the captured regex group 'n' from the regex specified in the parameter input-line-format (or property input.line.format).")
                 .endTable()
                 .toFormattedText()))
 
-        addOptionHelp(helpByOptions, OptionHelp(listOf("G", "line-regexgroup-for-fix"), "Combined with the 'line-regex' parameter, is used to specify which 'capturing group' of the regex contains the actual fix message.", "2",null))
+        addOptionHelp(helpByOptions, OptionHelp(listOf("G", "line-regexgroup-for-fix"), "Combined with the 'input-line-format' parameter, is used to specify which 'capturing group' of the regex contains the actual fix message.", "2",null))
 
         addOptionHelp(helpByOptions, OptionHelp(listOf("l", "launch-browser"), "Will launch a browser containing the output log file.", null, "Will open the output file in the system browser.  Can only be used if the -f or --to-file option has been given."))
 
@@ -165,10 +165,10 @@ the less 'interesting' fix fields, such as BeginString, BodyLength or Checksum. 
                 docWriterFactory.createNew().write("By default tags and values are displayed in bold. E.g.: '[MsgType]").writeBold("35=D").write("[NEWORDERSINGLE]|[ClOrdID]").writeBold("11=ABC").write("[Symbol]").writeBold("55=AUD/USD").write(".  In some shells highlighting and bold text don't work well together resulting in partially highlighted fields and lines.  On such shells the user may wish to suppress bold tags and values, so that highlighting is not broken.").toFormattedText()))
 
         addOptionHelp(helpByOptions, OptionHelp(
-                listOf("R", "line-regex"), 
+                listOf("R", "input-line-format"),
                 "Defines the regex to use, when parsing input lines.", 
                 "\\d\\d\\d\\d-\\d\\d-\\d\\d \\[(\\d)\\] (\\d+=.*)",
-                docWriterFactory.createNew().write("Although FIX messages appear in some logs as 'pure' FIX, they can also be displayed as part of an application's normal logging, and may have text appearing before/after the FIX message.  Such as timestamps, thread identifiers, etc.  This line can be customized for your application so that fixgrep knows where to find the actual FIX message in each log line.  Use in conjunction with the parameter 'line-regexgroup-for-fix' to tell fixgrep, which regex 'group' to use.  The default value for this is ").writeBold("^(\\d{4}-[01]\\d-[0-3]\\d[T\\s][0-2]\\d:[0-5]\\d:[0-5]\\d[\\.,]\\d+)?.*?(\\d+=.*${'$'})").write(", which looks for an optional ISO timestamp followed by any characters, followed by any number of tag=value pairs which make up the FIX message.  The regex 'group' that contains the FIX message is number 2, as the second set of capturing brackets (\\d+=.*${'$'}) is where we'd expect to find the fix tag.  This default format should match against most variations of FIX logging formats, however you might want to modify it if there is any additional information that you wish to 'capture' and print back out by modifying the line=format parameter, and specifying ${'$'}n tokens.  Or if you wish to optimize the searching.  For example, if your logs contain just FIX messages (no other text), line-regex could be defined as '.*' and line-regexgroup-for-fix defined as zero 0.  (In regex group 0 is a 'special' group which returns the entire match.)").toFormattedText()))
+                docWriterFactory.createNew().write("Although FIX messages appear in some logs as 'pure' FIX, they can also be displayed as part of an application's normal logging, and may have text appearing before/after the FIX message.  Such as timestamps, thread identifiers, etc.  This line can be customized for your application so that fixgrep knows where to find the actual FIX message in each log line.  Use in conjunction with the parameter 'line-regexgroup-for-fix' to tell fixgrep, which regex 'group' to use.  The default value for this is ").writeBold("^(\\d{4}-[01]\\d-[0-3]\\d[T\\s][0-2]\\d:[0-5]\\d:[0-5]\\d[\\.,]\\d+)?.*?(\\d+=.*${'$'})").write(", which looks for an optional ISO timestamp followed by any characters, followed by any number of tag=value pairs which make up the FIX message.  The regex 'group' that contains the FIX message is number 2, as the second set of capturing brackets (\\d+=.*${'$'}) is where we'd expect to find the fix tag.  This default format should match against most variations of FIX logging formats, however you might want to modify it if there is any additional information that you wish to 'capture' and print back out by modifying the line=format parameter, and specifying ${'$'}n tokens.  Or if you wish to optimize the searching.  For example, if your logs contain just FIX messages (no other text), input-line-format could be defined as '.*' and line-regexgroup-for-fix defined as zero 0.  (In regex group 0 is a 'special' group which returns the entire match.)").toFormattedText()))
 
         addOptionHelp(helpByOptions, OptionHelp(listOf("s", "sort-by-tags"), "Defines the preferred order of the FIX tags in the formatted output.", "35,11", "Let's face it, some tags are more interesting than others.  This parameter allows you to display the more 'interesting' tags at the front of the outputted message."))
 

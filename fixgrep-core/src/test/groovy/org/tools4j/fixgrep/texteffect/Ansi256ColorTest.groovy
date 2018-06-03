@@ -12,8 +12,8 @@ import static org.tools4j.fixgrep.texteffect.AnsiForegroundBackground.*
 class Ansi256ColorTest extends Specification {
     def "test GetAnsiCode"() {
         expect:
-        new Ansi256Color(123, FOREGROUND).ansiCode == "\u001B[38;5;123m"
-        new Ansi256Color(123, BACKGROUND).ansiCode == "\u001B[48;5;123m"
+        new Ansi256Color(123, FOREGROUND).getConsoleTextBefore == "\u001B[38;5;123m"
+        new Ansi256Color(123, BACKGROUND).getConsoleTextBefore == "\u001B[48;5;123m"
     }
 
     @Unroll

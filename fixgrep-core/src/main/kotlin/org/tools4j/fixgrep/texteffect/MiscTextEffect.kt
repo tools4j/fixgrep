@@ -5,13 +5,22 @@ package org.tools4j.fixgrep.texteffect
  * Date: 25/04/2018
  * Time: 6:21 AM
  */
-class MiscTextEffect(ansiCode: String, override val name: String): TextEffectImpl(ansiCode) {
+class MiscTextEffect(consoleTextBefore: String, consoleTextAfter: String, override val name: String): TextEffectImpl(consoleTextBefore, consoleTextAfter) {
+    constructor(consoleTextBefore: String, name: String): this(consoleTextBefore, Ansi.Reset, name)
+
     override val htmlClass: String by lazy {
         name
     }
 
     companion object {
         val Bold = MiscTextEffect("\u001B[1m", "bold")
+
+        val Null = MiscTextEffect("", "", "")
+
+        val Console = MiscTextEffect(
+                "",
+                "",
+                "console")
 
         @JvmStatic
         fun contains(expression: String): Boolean {

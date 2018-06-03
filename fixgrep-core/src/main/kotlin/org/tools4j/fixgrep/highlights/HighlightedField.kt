@@ -1,16 +1,15 @@
 package org.tools4j.fixgrep.highlights
 
 import org.tools4j.fix.Field
-import org.tools4j.fixgrep.texteffect.Ansi
 import org.tools4j.fixgrep.texteffect.TextEffect
 
 class HighlightedField(val field: Field, val textEffect: TextEffect): Field by field {
     override fun toConsoleText(): String {
-        val returnString = textEffect.ansiCode + field.toConsoleText()
-        return if(textEffect.ansiResetCode == "" || returnString.endsWith(textEffect.ansiResetCode))
+        val returnString = textEffect.consoleTextBefore + field.toConsoleText()
+        return if(textEffect.consoleTextAfter == "" || returnString.endsWith(textEffect.consoleTextAfter))
                     returnString
                 else
-                    returnString + textEffect.ansiResetCode
+                    returnString + textEffect.consoleTextAfter
 
     }
 

@@ -2,6 +2,7 @@ package org.tools4j.fixgrep.help
 
 import joptsimple.OptionSpec
 import org.tools4j.fixgrep.OptionParserFactory
+import org.tools4j.fixgrep.highlights.ExamplesList
 import org.tools4j.fixgrep.texteffect.HtmlOnlyTextEffect
 import java.io.File
 
@@ -17,7 +18,7 @@ class ManGenerator(val docWriterFactory: DocWriterFactory) {
         sb.append(howToGet())
         sb.append(howToConfigure())
         sb.append(OptionsHelp(docWriterFactory).toFormattedText())
-//        sb.append(Examples)
+        sb.append(ExamplesSection(docWriterFactory).toFormattedText())
         sb.toString()
     }
 

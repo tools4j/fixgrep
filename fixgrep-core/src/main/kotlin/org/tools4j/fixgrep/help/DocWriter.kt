@@ -26,7 +26,7 @@ interface DocWriter {
     fun writeListOfAnsi16BackgroundColors(): DocWriter
     fun writeFormatExamplesTable(fix: String): HighlightExampleTable
     fun startSection(): DocWriter
-    fun startSection(htmlOnlyTextEffect: HtmlOnlyTextEffect): DocWriter
+    fun startSection(textEffect: TextEffect): DocWriter
     fun endSection(): DocWriter
     fun writeLink(linkText: String, url: String): DocWriter
     fun isHtml(): Boolean

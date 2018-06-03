@@ -25,9 +25,9 @@ class DefaultHighlightTextEffects(val effects: List<TextEffect>){
             val sb = StringBuilder()
             DEFAULT.effects.forEach {
                 if(sb.length > 0) sb.append(", ")
-                sb.append(it.ansiCode)
+                sb.append(it.consoleTextBefore)
                 sb.append(it.name)
-                sb.append(it.ansiResetCode)
+                sb.append(it.consoleTextAfter)
             }
             return sb.toString()
         }

@@ -6,8 +6,8 @@ package org.tools4j.fixgrep.texteffect
  * Time: 6:21 AM
  */
 class NullTextEffect(): TextEffect {
-    override val ansiCode: String = ""
-    override val ansiResetCode: String = ""
+    override val consoleTextBefore: String = ""
+    override val consoleTextAfter: String = ""
     override val name: String = ""
     override val htmlClass: String = ""
 }

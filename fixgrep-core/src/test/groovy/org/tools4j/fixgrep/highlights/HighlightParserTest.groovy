@@ -12,11 +12,11 @@ import spock.lang.Unroll
  * Time: 6:34 AM
  */
 class HighlightParserTest extends Specification {
-    private final static String FgBlue = Ansi16ForegroundColor.Blue.ansiCode
-    private final static String BgRed = Ansi16BackgroundColor.Red.ansiCode
-    private final static String Fg2 = Ansi256Color.parse("Fg2").ansiCode
-    private final static String Bg4 = Ansi256Color.parse("Bg4").ansiCode
-    private final static String Bold = MiscTextEffect.Bold.ansiCode
+    private final static String FgBlue = Ansi16ForegroundColor.Blue.consoleTextBefore
+    private final static String BgRed = Ansi16BackgroundColor.Red.consoleTextBefore
+    private final static String Fg2 = Ansi256Color.parse("Fg2").getConsoleTextBefore
+    private final static String Bg4 = Ansi256Color.parse("Bg4").getConsoleTextBefore
+    private final static String Bold = MiscTextEffect.Bold.getConsoleTextBefore
     private final static String reset = Ansi.Reset.ansiCode
 
     @Unroll

@@ -7,6 +7,7 @@ import org.tools4j.fix.Fix50SP2FixSpecFromClassPath
 import org.tools4j.fixgrep.help.DocWriter
 import org.tools4j.fixgrep.help.TableBuilder
 import org.tools4j.fixgrep.texteffect.HtmlOnlyTextEffect
+import org.tools4j.fixgrep.texteffect.MiscTextEffect
 import java.util.function.Function
 
 /**
@@ -32,7 +33,7 @@ class HighlightExampleTable(val fix: String, val tableBuilder: TableBuilder, val
         tableBuilder.startNewRow().addTableHeaderCell("expression").addTableHeaderCell("message")
         for(expression in examples){
             val formattedFields = highlightParser.parse(expression).apply(annotatedFields)
-            tableBuilder.startNewRow().addCell("-f " + expression).addCell(fieldsTransform.apply(formattedFields), HtmlOnlyTextEffect.Console)
+            tableBuilder.startNewRow().addCell("-f " + expression).addCell(fieldsTransform.apply(formattedFields), MiscTextEffect.Console)
         }
         return tableBuilder.endTable()
     }
