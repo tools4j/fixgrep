@@ -6,7 +6,7 @@ package org.tools4j.fixgrep.texteffect
  * Time: 9:40 AM
  */
 open class TextEffectImpl(override val consoleTextBefore: String, override val consoleTextAfter: String) : TextEffect {
-    constructor(consoleTextBefore: String): this(consoleTextBefore, Ansi.Normal)
+    constructor(consoleTextBefore: String): this(consoleTextBefore, Ansi.Reset)
 
     override val name: String by lazy {
         consoleTextBefore

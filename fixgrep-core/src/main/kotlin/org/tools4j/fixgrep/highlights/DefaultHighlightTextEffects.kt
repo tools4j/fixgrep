@@ -18,7 +18,7 @@ class DefaultHighlightTextEffects(val effects: List<TextEffect>){
     }
 
     companion object {
-        val DEFAULT = DefaultHighlightTextEffects(listOf(BrightRed, BrightGreen, BrightYellow, BrightBlue, BrightMagenta, BrightCyan))
+        val DEFAULT = DefaultHighlightTextEffects(listOf(Red, Green, Yellow, Blue, Purple, Cyan))
 
         fun toPrettyConsoleTextList():String{
             DEFAULT.reset()

@@ -17,7 +17,7 @@ class NonAnnotatedTag(tag: Int, val bold: Boolean): RawTag(tag) {
         var text = ""
         if(bold) text += Ansi.Bold
         text += tag
-        if(bold) text += Ansi.Normal
+        if(bold) text += Ansi.Reset
         return text
     }
 }

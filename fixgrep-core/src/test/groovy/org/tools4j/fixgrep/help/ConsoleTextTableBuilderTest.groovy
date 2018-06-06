@@ -2,7 +2,7 @@ package org.tools4j.fixgrep.help
 
 import org.tools4j.fixgrep.texteffect.Ansi16BackgroundColor
 import org.tools4j.fixgrep.texteffect.Ansi16ForegroundColor
-import org.tools4j.fixgrep.texteffect.HtmlOnlyTextEffect
+import org.tools4j.fixgrep.texteffect.MiscTextEffect
 import spock.lang.Specification
 
 /**
@@ -29,12 +29,12 @@ class ConsoleTextTableBuilderTest extends Specification {
         println text
 
         then:
-        assert text == "\u001B[1mMY TABLE\u001B[22m\n" +
-                "|\u001B[1m one  \u001B[22m|\u001B[1m two   \u001B[22m|\u001B[1m three                   \u001B[22m|\n" +
+        assert text == "\u001B[1mMY TABLE\u001b[0m\n" +
+                "|\u001B[1m one  \u001b[0m|\u001B[1m two   \u001b[0m|\u001B[1m three                   \u001b[0m|\n" +
                 "| four | five  |                         |\n" +
                 "| once | I     | caught                  |\n" +
                 "| a    | fish  | alive                   |\n" +
-                "|\u001B[43m six  \u001B[22m| seven | eight                   |\n" +
-                "| nine | ten   |\u001B[34m then I let him go again \u001B[22m|\n"
+                "|\u001B[43m six  \u001b[0m| seven | eight                   |\n" +
+                "| nine | ten   |\u001B[34m then I let him go again \u001b[0m|\n"
     }
 }

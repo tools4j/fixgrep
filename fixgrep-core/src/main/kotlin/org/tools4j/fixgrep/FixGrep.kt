@@ -4,6 +4,7 @@ import org.tools4j.fixgrep.help.Color16Demo
 import org.tools4j.fixgrep.help.Color256Demo
 import org.tools4j.fixgrep.help.DocWriterFactory
 import org.tools4j.fixgrep.help.ExampleAppPropertiesFileCreator
+import org.tools4j.fixgrep.help.HelpGenerator
 import org.tools4j.fixgrep.help.ManGenerator
 import org.tools4j.properties.Config
 import java.io.InputStream
@@ -47,7 +48,9 @@ class FixGrep(val inputStream: InputStream, val outputStream: OutputStream, val 
             } else if(config.getAsBoolean("16.color.demo", false)){
                 printStream.println(Color16Demo().demoForConsole)
             } else if(config.getAsBoolean("man", false)){
-                printStream.println(ManGenerator(DocWriterFactory.Html).man)
+                printStream.println(ManGenerator(DocWriterFactory.ConsoleText, config.getAsBoolean("debug", false)).man)
+            } else if(config.getAsBoolean("help", false)){
+                HelpGenerator().go(outputStream);
             } else {
                 goFixGrep()
             }

@@ -12,7 +12,6 @@ class Color256Demo {
 
     val demo: String by lazy {
         val sb = StringBuilder()
-        sb.append(consoleIntro)
         for(i in 0..15){
             sb.append("\u001B[48;5;${i}m" + getText(i) + "\u001B[m ")
         }

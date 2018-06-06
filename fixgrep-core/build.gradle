@@ -109,7 +109,7 @@ task copyZipToDistDirectory(type: Copy) {
 build.dependsOn(copyDependenciesToLib)
 copyFromLibsToDistLib
 buildZip.dependsOn createZip
-createZip.dependsOn build
+createZip.dependsOn assemble
 createZip.dependsOn copyAdditionalResources
 createZip.dependsOn copyFromLibsToDistLib
 copyZipToDistDirectory.dependsOn createZip

@@ -12,8 +12,10 @@ import java.util.Arrays.asList
  */
 class OptionParserFactory{
 
-    val optionsThatShouldNotHaveEquivalentProperties: List<String> by lazy {
-        listOf("?", "help", "[arguments]", "man", "256-color-demo", "16-color-demo", "gimme-css", "html", "launch-browser", "install")
+    companion object {
+        val optionsThatShouldNotHaveEquivalentProperties: List<String> by lazy {
+            listOf("?", "help", "[arguments]", "man", "256-color-demo", "16-color-demo", "gimme-css", "html", "launch-browser", "install")
+        }
     }
 
     val optionParser: OptionParser by lazy {
@@ -28,8 +30,7 @@ class OptionParserFactory{
                 acceptsAll(asList("F", "output-line-format")).withRequiredArg().ofType(String::class.java) // "$1 ${senderToTargetCompIdDirection} ${msgColor}[${msgTypeName}]${colorReset} ${msgFixOutsideAnnotated}"
                 acceptsAll(asList("G", "line-regexgroup-for-fix")).withRequiredArg().ofType(Integer::class.java) //="2"
                 acceptsAll(asList("h", "highlight", "highlights")).withRequiredArg().ofType(String::class.java).withValuesSeparatedBy(",") // 35:Blue,8:Yellow:Line,51=1:Purple:Tag,Side=Buy:Green (apply highlights based on criteria)
-                acceptsAll(asList("i", "install"))
-                acceptsAll(asList("l", "launch-browser")).withRequiredArg().ofType(Integer::class.java).withValuesSeparatedBy(",")
+                acceptsAll(asList("l", "launch-browser")).withOptionalArg().ofType(Integer::class.java).withValuesSeparatedBy(",")
                 acceptsAll(asList("m", "include-only-messages-of-type")).withRequiredArg().ofType(String::class.java).withValuesSeparatedBy(",")
                 acceptsAll(asList("n", "no-color", "suppress-colors"))
                 acceptsAll(asList("o", "output-delimiter", "output-delim")).withRequiredArg().ofType(String::class.java) //="|"
@@ -38,7 +39,8 @@ class OptionParserFactory{
                 acceptsAll(asList("s", "sort-by-tags")).withRequiredArg().ofType(Integer::class.java).withValuesSeparatedBy(",")
                 acceptsAll(asList("t", "only-include-tags")).withRequiredArg().ofType(Integer::class.java).withValuesSeparatedBy(",")
                 acceptsAll(asList("v", "exclude-messages-of-type")).withRequiredArg().ofType(String::class.java).withValuesSeparatedBy(",")
-                acceptsAll(asList("skip-app-properties-creation")).withRequiredArg().ofType(String::class.java)
+                acceptsAll(asList("x", "debug"))
+                acceptsAll(asList("install"))
                 //acceptsAll(asList("v", "vertical-format"))
                 acceptsAll(asList("256-color-demo"))
                 acceptsAll(asList("16-color-demo"))

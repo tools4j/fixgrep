@@ -26,14 +26,14 @@ class HighlightExampleTable(val fix: String, val tableBuilder: TableBuilder, val
 
     fun endTable(): DocWriter {
         val fixSpec = Fix50SP2FixSpecFromClassPath().spec
-        val fields = FieldsFromDelimitedString(fix, "|").fields
+        val fields = FieldsFromDelimitedString(fix, "|", "|").fields
         val annotatedFields = FieldsAnnotator(fields, fixSpec).fields
 
         tableBuilder.startNewTable(HtmlOnlyTextEffect("example-table"))
         tableBuilder.startNewRow().addTableHeaderCell("expression").addTableHeaderCell("message")
         for(expression in examples){
             val formattedFields = highlightParser.parse(expression).apply(annotatedFields)
-            tableBuilder.startNewRow().addCell("-f " + expression).addCell(fieldsTransform.apply(formattedFields), MiscTextEffect.Console)
+            tableBuilder.startNewRow().addCell("-h " + expression).addCell(fieldsTransform.apply(formattedFields), MiscTextEffect.Console)
         }
         return tableBuilder.endTable()
     }

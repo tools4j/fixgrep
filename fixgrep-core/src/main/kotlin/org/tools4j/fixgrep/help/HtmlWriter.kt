@@ -76,23 +76,32 @@ open class HtmlWriter(): DocWriter {
     }
 
     override fun writeBoldLn(line: String): HtmlWriter {
-        writeDiv("bold", line)
+        writeDiv(line, "bold")
+        return this
+    }
+
+    override fun writeBoldLn(line: String, textEffect: TextEffect): HtmlWriter {
+        writeDiv(line, "bold ${textEffect.htmlClass}")
         return this
     }
 
     override fun writeBold(str: String): HtmlWriter {
-        writeSpan("bold", str)
+        writeSpan(str, "bold")
+        return this
+    }
+
+    override fun writeBold(str: String, textEffect: TextEffect): HtmlWriter {
+        writeSpan(str, "bold ${textEffect.htmlClass}")
         return this
     }
 
     override fun writeParagraph(content: String): HtmlWriter {
-        writeDiv("", content)
+        writeDiv(content, "")
         return this
     }
 
     override fun writeLn(line: String): HtmlWriter {
         sb.append(line)
-        sb.append("<br/>\n")
         return this
     }
 
@@ -101,14 +110,14 @@ open class HtmlWriter(): DocWriter {
         return this
     }
 
-    fun writeDiv(classes: String, content: String): HtmlWriter {
+    fun writeDiv(content: String, classes: String): HtmlWriter {
         writeLn("<div class='$classes'>\n" )
         writeLn(content)
         writeLn("\n</div>\n")
         return this
     }
 
-    fun writeSpan(classes: String, content: String): HtmlWriter {
+    fun writeSpan(content: String, classes: String): HtmlWriter {
         write("<span class='$classes'>\n" )
         write(content)
         write("\n</span>\n")

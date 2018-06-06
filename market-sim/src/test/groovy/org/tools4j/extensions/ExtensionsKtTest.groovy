@@ -37,6 +37,6 @@ class ExtensionsKtTest extends Specification {
         "asdf"                          |  3        | "asdf"
         "asdf\u001B[32masdf"            | 12        | "asdf\u001B[32masdf    "
         "asdf\u001B[32masdf"            |  6        | "asdf\u001B[32masdf"
-        "\u001B[1m[MsgType]\u001B[1m35\u001B[22m\u001B[1m=\u001B[22m\u001B[1mD|11=ABC|55=AUD/USD\u001B[22m" | 32 | "\u001B[1m[MsgType]\u001B[1m35\u001B[22m\u001B[1m=\u001B[22m\u001B[1mD|11=ABC|55=AUD/USD\u001B[22m "
+        "\u001B[1m[MsgType]\u001B[1m35\u001b[0m\u001B[1m=\u001b[0m\u001B[1mD|11=ABC|55=AUD/USD\u001b[0m" | 32 | "\u001B[1m[MsgType]\u001B[1m35\u001b[0m\u001B[1m=\u001b[0m\u001B[1mD|11=ABC|55=AUD/USD\u001b[0m "
     }
 }

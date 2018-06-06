@@ -18,7 +18,9 @@ interface DocWriter {
     fun writeParagraph(content: String): DocWriter
     fun writeHeading(level: Int, content: String): DocWriter
     fun writeBoldLn(line: String): DocWriter
+    fun writeBoldLn(line: String, textEffect: TextEffect): DocWriter
     fun writeBold(str: String): DocWriter
+    fun writeBold(str: String, textEffect: TextEffect): DocWriter
     fun addTable(): TableBuilder
     fun writeListOfDefaultColors(): DocWriter
     fun toFormattedText(): String

@@ -30,7 +30,7 @@ class FieldsSortTest extends Specification {
     }
 
     protected void sortAndAssertOrderInSortedFields(String fieldsStr, List<Integer> desiredOrder, List<Integer> expectedOutputOrder) {
-        final Fields fields = new FieldsFromDelimitedString(fieldsStr, (char) ';').fields
+        final Fields fields = new FieldsFromDelimitedString(fieldsStr, ';',';').fields
         final Fields sortedFields = fields.sortBy(desiredOrder)
         final List<Integer> actualOutputOrder = sortedFields.stream().map({it.tag.tag}).collect(Collectors.toList())
         assert actualOutputOrder == expectedOutputOrder

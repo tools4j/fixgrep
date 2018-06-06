@@ -13,7 +13,7 @@ class MiscTextEffect(consoleTextBefore: String, consoleTextAfter: String, overri
     }
 
     companion object {
-        val Bold = MiscTextEffect("\u001B[1m", "bold")
+        val Bold = MiscTextEffect("\u001B[1m", "\u001B[22m", "bold")
 
         val Null = MiscTextEffect("", "", "")
 

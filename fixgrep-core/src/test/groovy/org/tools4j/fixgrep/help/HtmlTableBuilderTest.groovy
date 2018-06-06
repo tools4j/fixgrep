@@ -3,7 +3,7 @@ package org.tools4j.fixgrep.help
 import org.tools4j.fixgrep.texteffect.Ansi16BackgroundColor
 import org.tools4j.fixgrep.texteffect.Ansi256Color
 import org.tools4j.fixgrep.texteffect.AnsiForegroundBackground
-import org.tools4j.fixgrep.texteffect.HtmlOnlyTextEffect
+import org.tools4j.fixgrep.texteffect.MiscTextEffect
 import spock.lang.Specification
 
 /**

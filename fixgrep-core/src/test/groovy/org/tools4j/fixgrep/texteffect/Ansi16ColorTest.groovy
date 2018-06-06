@@ -11,8 +11,8 @@ import spock.lang.Unroll
 class Ansi16ColorTest extends Specification {
     def "GetAnsiCode"() {
         expect:
-        Ansi16Color.parse("BgBlue").getConsoleTextBefore == "\u001B[44m"
-        Ansi16Color.parse("Blue").getConsoleTextBefore == "\u001B[34m"
+        Ansi16Color.parse("BgBlue").consoleTextBefore == "\u001B[44m"
+        Ansi16Color.parse("Blue").consoleTextBefore == "\u001B[34m"
     }
 
     @Unroll
@@ -32,7 +32,7 @@ class Ansi16ColorTest extends Specification {
     @Unroll
     def "test parse [#expression]"(final String expression, final String expectedAnsiCode){
         expect:
-        Ansi16Color.parse(expression).getConsoleTextBefore == expectedAnsiCode
+        Ansi16Color.parse(expression).consoleTextBefore == expectedAnsiCode
 
         where:
         expression    | expectedAnsiCode

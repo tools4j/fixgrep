@@ -17,7 +17,7 @@ class NonAnnotatedValue(rawValue: String, val bold: Boolean = false) : RawValue(
         var text = ""
         if(bold) text += Ansi.Bold
         text += rawValue
-        if(bold) text += Ansi.Normal
+        if(bold) text += Ansi.Reset
         return text
     }
 }

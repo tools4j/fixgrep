@@ -7,5 +7,4 @@ package org.tools4j.fixgrep.texteffect
  */
 object Ansi{
     val Reset: String = "\u001B[0m"
-    val Normal: String = "\u001B[22m"
 }

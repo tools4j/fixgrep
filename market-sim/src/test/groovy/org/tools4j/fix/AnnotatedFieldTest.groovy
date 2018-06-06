@@ -10,7 +10,7 @@ import spock.lang.Unroll
  * Time: 5:50 AM
  */
 class AnnotatedFieldTest extends Specification {
-    @Shared Fields fields = new FieldsFromDelimitedString("35=D|11=ABC|55=AUD/USD", "|").fields
+    @Shared Fields fields = new FieldsFromDelimitedString("35=D|11=ABC|55=AUD/USD","|", "|").fields
     @Shared FixSpec fixSpec = new Fix50SP2FixSpecFromClassPath().spec
 
     @Unroll
@@ -25,8 +25,8 @@ class AnnotatedFieldTest extends Specification {
 
         where:
         annotationPositions                     | bold      | expectedConsoleText
-        AnnotationPositions.OUTSIDE_ANNOTATED   | true      | "[MsgType]${Ansi.Bold}35${Ansi.Normal}${Ansi.Bold}=${Ansi.Normal}${Ansi.Bold}D${Ansi.Normal}[NEWORDERSINGLE]|[ClOrdID]${Ansi.Bold}11${Ansi.Normal}${Ansi.Bold}=${Ansi.Normal}${Ansi.Bold}ABC${Ansi.Normal}|[Symbol]${Ansi.Bold}55${Ansi.Normal}${Ansi.Bold}=${Ansi.Normal}${Ansi.Bold}AUD/USD${Ansi.Normal}"
-        AnnotationPositions.LEFT_ANNOTATED      | true      | "[MsgType]${Ansi.Bold}35${Ansi.Normal}${Ansi.Bold}=${Ansi.Normal}[NEWORDERSINGLE]${Ansi.Bold}D${Ansi.Normal}|[ClOrdID]${Ansi.Bold}11${Ansi.Normal}${Ansi.Bold}=${Ansi.Normal}${Ansi.Bold}ABC${Ansi.Normal}|[Symbol]${Ansi.Bold}55${Ansi.Normal}${Ansi.Bold}=${Ansi.Normal}${Ansi.Bold}AUD/USD${Ansi.Normal}"
+        AnnotationPositions.OUTSIDE_ANNOTATED   | true      | "[MsgType]${Ansi.Bold}35${Ansi.Reset}${Ansi.Bold}=${Ansi.Reset}${Ansi.Bold}D${Ansi.Reset}[NEWORDERSINGLE]|[ClOrdID]${Ansi.Bold}11${Ansi.Reset}${Ansi.Bold}=${Ansi.Reset}${Ansi.Bold}ABC${Ansi.Reset}|[Symbol]${Ansi.Bold}55${Ansi.Reset}${Ansi.Bold}=${Ansi.Reset}${Ansi.Bold}AUD/USD${Ansi.Reset}"
+        AnnotationPositions.LEFT_ANNOTATED      | true      | "[MsgType]${Ansi.Bold}35${Ansi.Reset}${Ansi.Bold}=${Ansi.Reset}[NEWORDERSINGLE]${Ansi.Bold}D${Ansi.Reset}|[ClOrdID]${Ansi.Bold}11${Ansi.Reset}${Ansi.Bold}=${Ansi.Reset}${Ansi.Bold}ABC${Ansi.Reset}|[Symbol]${Ansi.Bold}55${Ansi.Reset}${Ansi.Bold}=${Ansi.Reset}${Ansi.Bold}AUD/USD${Ansi.Reset}"
         AnnotationPositions.OUTSIDE_ANNOTATED   | false     | "[MsgType]35=D[NEWORDERSINGLE]|[ClOrdID]11=ABC|[Symbol]55=AUD/USD"
         AnnotationPositions.LEFT_ANNOTATED      | false     | "[MsgType]35=[NEWORDERSINGLE]D|[ClOrdID]11=ABC|[Symbol]55=AUD/USD"
     }
@@ -39,7 +39,7 @@ class AnnotatedFieldTest extends Specification {
 
         then:
         assert actualHtml ==
-                "<div class='fields'>" +
+                "<span class='fields'>" +
                     "<span class='field annotatedField'>" +
                         "<span class='tag annotation'>[MsgType]</span>" +
                         "<span class='tag tagNumber bold'>35</span>" +
@@ -47,19 +47,21 @@ class AnnotatedFieldTest extends Specification {
                         "<span class='value rawValue bold'>D</span>" +
                         "<span class='value annotation'>[NEWORDERSINGLE]</span>" +
                     "</span>" +
+                    "<span class='delim'>|</span>" +
                     "<span class='field annotatedField'>" +
                         "<span class='tag annotation'>[ClOrdID]</span>" +
                         "<span class='tag tagNumber bold'>11</span>" +
                         "<span class='equals bold'>=</span>" +
                         "<span class='value rawValue bold'>ABC</span>" +
                     "</span>" +
+                    "<span class='delim'>|</span>" +
                     "<span class='field annotatedField'>" +
                         "<span class='tag annotation'>[Symbol]</span>" +
                         "<span class='tag tagNumber bold'>55</span>" +
                         "<span class='equals bold'>=</span>" +
                         "<span class='value rawValue bold'>AUD/USD</span>" +
                     "</span>" +
-                "</div>"
+                "</span>"
     }
 
     def "ToHtml - Outside annotations - bold=false"() {
@@ -70,7 +72,7 @@ class AnnotatedFieldTest extends Specification {
 
         then:
         assert actualHtml ==
-                "<div class='fields'>" +
+                "<span class='fields'>" +
                     "<span class='field annotatedField'>" +
                         "<span class='tag annotation'>[MsgType]</span>" +
                         "<span class='tag tagNumber'>35</span>" +
@@ -78,19 +80,21 @@ class AnnotatedFieldTest extends Specification {
                         "<span class='value rawValue'>D</span>" +
                         "<span class='value annotation'>[NEWORDERSINGLE]</span>" +
                     "</span>" +
-                        "<span class='field annotatedField'>" +
+                    "<span class='delim'>|</span>" +
+                    "<span class='field annotatedField'>" +
                         "<span class='tag annotation'>[ClOrdID]</span>" +
                         "<span class='tag tagNumber'>11</span>" +
                         "<span class='equals'>=</span>" +
                         "<span class='value rawValue'>ABC</span>" +
                     "</span>" +
-                        "<span class='field annotatedField'>" +
+                    "<span class='delim'>|</span>" +
+                    "<span class='field annotatedField'>" +
                         "<span class='tag annotation'>[Symbol]</span>" +
                         "<span class='tag tagNumber'>55</span>" +
                         "<span class='equals'>=</span>" +
                         "<span class='value rawValue'>AUD/USD</span>" +
                     "</span>" +
-                "</div>"
+                "</span>"
     }
 
 
@@ -102,7 +106,7 @@ class AnnotatedFieldTest extends Specification {
 
         then:
         assert actualHtml ==
-                "<div class='fields'>" +
+                "<span class='fields'>" +
                     "<span class='field annotatedField'>" +
                         "<span class='tag annotation'>[MsgType]</span>" +
                         "<span class='tag tagNumber bold'>35</span>" +
@@ -110,19 +114,21 @@ class AnnotatedFieldTest extends Specification {
                         "<span class='value annotation'>[NEWORDERSINGLE]</span>" +
                         "<span class='value rawValue bold'>D</span>" +
                     "</span>" +
-                        "<span class='field annotatedField'>" +
+                    "<span class='delim'>|</span>" +
+                    "<span class='field annotatedField'>" +
                         "<span class='tag annotation'>[ClOrdID]</span>" +
                         "<span class='tag tagNumber bold'>11</span>" +
                         "<span class='equals bold'>=</span>" +
                         "<span class='value rawValue bold'>ABC</span>" +
                     "</span>" +
-                        "<span class='field annotatedField'>" +
+                    "<span class='delim'>|</span>" +
+                    "<span class='field annotatedField'>" +
                         "<span class='tag annotation'>[Symbol]</span>" +
                         "<span class='tag tagNumber bold'>55</span>" +
                         "<span class='equals bold'>=</span>" +
                         "<span class='value rawValue bold'>AUD/USD</span>" +
                     "</span>" +
-                "</div>"
+                "</span>"
     }
 
 
@@ -135,7 +141,7 @@ class AnnotatedFieldTest extends Specification {
 
         then:
         assert actualHtml ==
-                "<div class='fields'>" +
+                "<span class='fields'>" +
                     "<span class='field annotatedField'>" +
                         "<span class='tag annotation'>[MsgType]</span>" +
                         "<span class='tag tagNumber'>35</span>" +
@@ -143,18 +149,20 @@ class AnnotatedFieldTest extends Specification {
                         "<span class='value annotation'>[NEWORDERSINGLE]</span>" +
                         "<span class='value rawValue'>D</span>" +
                     "</span>" +
-                        "<span class='field annotatedField'>" +
+                    "<span class='delim'>|</span>" +
+                    "<span class='field annotatedField'>" +
                         "<span class='tag annotation'>[ClOrdID]</span>" +
                         "<span class='tag tagNumber'>11</span>" +
                         "<span class='equals'>=</span>" +
                         "<span class='value rawValue'>ABC</span>" +
                     "</span>" +
-                        "<span class='field annotatedField'>" +
+                    "<span class='delim'>|</span>" +
+                    "<span class='field annotatedField'>" +
                         "<span class='tag annotation'>[Symbol]</span>" +
                         "<span class='tag tagNumber'>55</span>" +
                         "<span class='equals'>=</span>" +
                         "<span class='value rawValue'>AUD/USD</span>" +
                     "</span>" +
-                "</div>"
+                "</span>"
     }
 }

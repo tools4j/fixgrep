@@ -86,19 +86,19 @@ the less 'interesting' fix fields, such as BeginString, BodyLength or Checksum. 
                 .writeLn(" are optional. It uses ansi escape codes to print display attributes which affect how the text is displayed.  If this is not specified, fixgrep will loop through a predefined set of foreground colors. If specified, it can be of four different formats. 16 color text effects, 256 color text effects, Bold, or a raw escape code.  Whether these escape codes will work will depend on your particular shell environment.")
                 .writeHeading(2, "scope")
                 .writeLn(" is optional, and can be either 'Field' or 'Line', which controls whether just the field is highlighted, or the whole line.  If not specified, just the Field is highlighted.'")
-                .writeHeading(2, "Specifying (or not specifying) texteffects")
-                .writeLn("Use the defaults!  If no texteffect is specified, fixgrep will loop through a predefined set of foreground colors.  Those being: ").writeListOfDefaultColors()
-                .writeLn("16-color text effects - comprise of the ansi 8 colors, and 8 'bright' colors, used as either a foreground text color, or a background color.  You can specify these by using the format [Fg|Bg][Color]. e.g.")
+                .writeHeading(2, "Specifying texteffects")
+                .write("Defaults - ", MiscTextEffect.Bold).writeLn("If no texteffect is specified, then default colors are used.  Fixgrep will loop through a predefined set of foreground colors.  Those being: ").writeListOfDefaultColors().writeLn()
+                .write("16-color text effects - ", MiscTextEffect.Bold).writeLn("comprise of the ansi 8 colors, and 8 'bright' colors, used as either a foreground text color, or a background color.  You can specify these by using the format [Fg|Bg][Color]. e.g.")
                 .writeListOfAnsi16ForegroundColors()
                 .write(" and ")
                 .writeListOfAnsi16BackgroundColors()
-                .writeLn("256-color text effects - (lists can be found on the web, such as here: https://en.wikipedia.org/wiki/ANSI_escape_code#8-bit You can specify these using the format [Fg|Bg][num]. e.g. ")
+                .write("256-color text effects - ", MiscTextEffect.Bold).writeLn("Lists can be found on the web, such as here: https://en.wikipedia.org/wiki/ANSI_escape_code#8-bit You can specify these using the format [Fg|Bg][num]. e.g. ")
                 .write("Fg5", Ansi256Color(5, AnsiForegroundBackground.FOREGROUND)).write(", ")
                 .write("Fg23", Ansi256Color(23, AnsiForegroundBackground.FOREGROUND)).write(", ")
                 .write("Bg107", Ansi256Color(107, AnsiForegroundBackground.BACKGROUND)).write(", ")
                 .write("Bg58", Ansi256Color(58, AnsiForegroundBackground.BACKGROUND)).writeLn()
-                .writeBoldLn("Raw Escape Codes").writeLn(" - Allows you to specify whatever codes you want. e.g. RGB colors in the format <pre>\u001B[38;2;<r>;<g>;<b>m</pre>, as long as the texteffect string starts with the escape code followed by a left square bracket, fixgrep will assume you are using a raw escape code.")
-                .writeHeading(2, "Examples:")
+                .writeBold("Raw Escape Codes - ").write(" - Allows you to specify whatever codes you want. e.g. RGB colors in the format").write("\\u001B[38;2;r;g;bm", MiscTextEffect.Console).writeLn(" (where r,g,b are the numeric RGB values.)  As long as the texteffect string starts with the escape code followed by a left square bracket, fixgrep will assume you are using a raw escape code.")
+                .writeHeading(2, "Example highlights:")
                 .writeFormatExamplesTable(fix)
                 .add("35")
                 .add("35:Bold")
@@ -149,6 +149,8 @@ the less 'interesting' fix fields, such as BeginString, BodyLength or Checksum. 
 
         addOptionHelp(helpByOptions, OptionHelp(listOf("G", "line-regexgroup-for-fix"), "Combined with the 'input-line-format' parameter, is used to specify which 'capturing group' of the regex contains the actual fix message.", "2",null))
 
+        addOptionHelp(helpByOptions, OptionHelp(listOf("install"), "Create a customizable application.properties file in the ~/.fixgrep directory", null,"Fixgrep will try to create a folder in the users home directory called '.fixgrep', and inside that folder fixgrep will try to create an application.properties file that the user can customize."))
+
         addOptionHelp(helpByOptions, OptionHelp(listOf("l", "launch-browser"), "Will launch a browser containing the output log file.", null, "Will open the output file in the system browser.  Can only be used if the -f or --to-file option has been given."))
 
         addOptionHelp(helpByOptions, OptionHelp(listOf("m", "include-only-messages-of-type"), "A comma separated list of msg types to display.", "D,8", "e.g. to display only NewOrderSingles and ExecutionReports, use 35,8"))
@@ -176,9 +178,9 @@ the less 'interesting' fix fields, such as BeginString, BodyLength or Checksum. 
 
         addOptionHelp(helpByOptions, OptionHelp(listOf("v", "exclude-messages-of-type"), "Comma separated list of msgType codes.  Can be used to hide messages of certain types from being displayed.", "A,O", "e.g. To 'hide' Logon and Heartbeat messages, this parameter could be defined as 'A,0'"))
 
-        addOptionHelp(helpByOptions, OptionHelp(listOf("?", "help"), "Displays help text", "",null))
+        addOptionHelp(helpByOptions, OptionHelp(listOf("x", "debug"), "Run in debug mode.", null, null))
 
-        addOptionHelp(helpByOptions, OptionHelp(listOf("skip-app-properties-creation"), "Skips the creation of a customizable application.properties file in the ~/.fixgrep directory", "true","By default fixgrep will try an create a folder in the users home directory called '.fixgrep', and inside that folder a an application.properties file that the user can customize.  Set this property/option if you wish to skip this step."))
+        addOptionHelp(helpByOptions, OptionHelp(listOf("?", "help"), "Displays help text", "",null))
 
         addOptionHelp(helpByOptions, OptionHelp(listOf("256-color-demo"), "Displays a table of 256 colors using 8 bit Ansi Escape codes.", null,null))
 
@@ -212,7 +214,7 @@ the less 'interesting' fix fields, such as BeginString, BodyLength or Checksum. 
                     .writeLn(optionVariations.toString(), MiscTextEffect.Bold)
                     .writeLn(tagline, HtmlOnlyTextEffect("tagline"))
             if(description != null) writer.writeLn(description, HtmlOnlyTextEffect("description"))
-            return writer.writeLn().endSection().toFormattedText()
+            return writer.endSection().toFormattedText()
         }
 
         override fun equals(other: Any?): Boolean {
@@ -263,7 +265,7 @@ the less 'interesting' fix fields, such as BeginString, BodyLength or Checksum. 
 
         @JvmStatic
         fun main(args: Array<String>) {
-            println(OptionsHelp(DocWriterFactory.ConsoleText).toFormattedText())
+            println(OptionsHelp(DocWriterFactory.Html).toFormattedText())
         }
     }
 }

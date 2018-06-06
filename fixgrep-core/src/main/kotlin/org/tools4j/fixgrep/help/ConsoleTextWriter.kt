@@ -19,6 +19,16 @@ import java.util.function.Function
 class ConsoleTextWriter(): DocWriter {
     val sectionTextEffectsStack = LinkedList<TextEffect>()
 
+    override fun writeBold(str: String, textEffect: TextEffect): DocWriter {
+        write(textEffect.consoleTextBefore).writeBold(str).write(textEffect.consoleTextAfter)
+        return this
+    }
+
+    override fun writeBoldLn(line: String, textEffect: TextEffect): DocWriter {
+        write(textEffect.consoleTextBefore).writeBoldLn(line).write(textEffect.consoleTextAfter)
+        return this
+    }
+
     override fun writeLink(linkText: String, url: String): DocWriter {
         write(linkText).write(":").write(url).write(" ")
         return this;
@@ -106,7 +116,11 @@ class ConsoleTextWriter(): DocWriter {
 
     override fun writeHeading(level: Int, content: String): ConsoleTextWriter {
         if(level == 1){
+            writeBoldLn("========================================================================================================")
             writeBoldLn(content.toUpperCase())
+            writeBoldLn("========================================================================================================")
+        } else if(level == 2) {
+            writeBoldLn(content)
         } else {
             writeBoldLn(content)
         }
@@ -114,12 +128,12 @@ class ConsoleTextWriter(): DocWriter {
     }
 
     override fun writeBoldLn(line: String): ConsoleTextWriter {
-        writeLn(Ansi.Bold + line + Ansi.Normal)
+        writeLn(Ansi.Bold + line + Ansi.Reset)
         return this
     }
 
     override fun writeBold(str: String): ConsoleTextWriter {
-        write(Ansi.Bold + str + Ansi.Normal)
+        write(Ansi.Bold + str + Ansi.Reset)
         return this
     }
 

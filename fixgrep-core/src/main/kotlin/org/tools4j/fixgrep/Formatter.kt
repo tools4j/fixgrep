@@ -134,9 +134,15 @@ class Formatter (val spec: FormatSpec){
                 }
             }
         }
-        return if(formattedString.isEmpty()) null else {
-            if(spec.formatInHtml) formattedString = "<div class='line'>$formattedString</div>"
-            formattedString
+
+        if(formattedString.isEmpty()){
+            return null
+        } else if(spec.formatInHtml) {
+            return "<div class='line'>$formattedString</div>"
+        } else if(spec.debug){
+            return formattedString.replace("\u001b", "\\u001b")
+        } else {
+            return formattedString
         }
     }
 }

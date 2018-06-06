@@ -17,7 +17,7 @@ import java.util.stream.Collectors
  */
 class HighlightActionTest extends Specification {
     private final static String color = Ansi16ForegroundColor.Blue.consoleTextBefore
-    private final static String reset = Ansi.Reset.ansiCode
+    private final static String normal = Ansi.Reset
 
     @Unroll
     def "ConsoleText highlight #matchingTags #scope #fix #expectedOutput"(final List<Integer> matchingTags, final HighlightScope scope, final String fix, final String expectedOutput) {
@@ -35,11 +35,11 @@ class HighlightActionTest extends Specification {
 
          where:
         matchingTags | scope                | fix                       | expectedOutput
-        [35]         | HighlightScope.Field |'35=blah|150=A|55=AUD/USD' | "${color}35=blah${reset}|150=A|55=AUD/USD"
-        [35,55]      | HighlightScope.Field |'35=blah|150=A|55=AUD/USD' | "${color}35=blah${reset}|150=A|${color}55=AUD/USD${reset}"
-        [35,55,150]  | HighlightScope.Field |'35=blah|150=A|55=AUD/USD' | "${color}35=blah${reset}|${color}150=A${reset}|${color}55=AUD/USD${reset}"
+        [35]         | HighlightScope.Field |'35=blah|150=A|55=AUD/USD' | "${color}35=blah${normal}|150=A|55=AUD/USD"
+        [35,55]      | HighlightScope.Field |'35=blah|150=A|55=AUD/USD' | "${color}35=blah${normal}|150=A|${color}55=AUD/USD${normal}"
+        [35,55,150]  | HighlightScope.Field |'35=blah|150=A|55=AUD/USD' | "${color}35=blah${normal}|${color}150=A${normal}|${color}55=AUD/USD${normal}"
         [22]         | HighlightScope.Field |'35=blah|150=A|55=AUD/USD' | "35=blah|150=A|55=AUD/USD"
-        [22]         | HighlightScope.Line  |'35=blah|150=A|55=AUD/USD' | "${color}35=blah${reset}|${color}150=A${reset}|${color}55=AUD/USD${reset}"
+        [22]         | HighlightScope.Line  |'35=blah|150=A|55=AUD/USD' | "${color}35=blah${normal}${color}|${normal}${color}150=A${normal}${color}|${normal}${color}55=AUD/USD${normal}"
     }
 
     @Unroll
@@ -62,6 +62,6 @@ class HighlightActionTest extends Specification {
         [35,55]      | HighlightScope.Field |'35=blah|150=A|55=AUD/USD' | "<span class='fields'><span class='field FgBlue'><span class='tag rawTag'>35</span><span class='equals'>=</span><span class='value rawValue'>blah</span></span><span class='delim'>|</span><span class='field'><span class='tag rawTag'>150</span><span class='equals'>=</span><span class='value rawValue'>A</span></span><span class='delim'>|</span><span class='field FgBlue'><span class='tag rawTag'>55</span><span class='equals'>=</span><span class='value rawValue'>AUD/USD</span></span></span>"
         [35,55,150]  | HighlightScope.Field |'35=blah|150=A|55=AUD/USD' | "<span class='fields'><span class='field FgBlue'><span class='tag rawTag'>35</span><span class='equals'>=</span><span class='value rawValue'>blah</span></span><span class='delim'>|</span><span class='field FgBlue'><span class='tag rawTag'>150</span><span class='equals'>=</span><span class='value rawValue'>A</span></span><span class='delim'>|</span><span class='field FgBlue'><span class='tag rawTag'>55</span><span class='equals'>=</span><span class='value rawValue'>AUD/USD</span></span></span>"
         [22]         | HighlightScope.Field |'35=blah|150=A|55=AUD/USD' | "<span class='fields'><span class='field'><span class='tag rawTag'>35</span><span class='equals'>=</span><span class='value rawValue'>blah</span></span><span class='delim'>|</span><span class='field'><span class='tag rawTag'>150</span><span class='equals'>=</span><span class='value rawValue'>A</span></span><span class='delim'>|</span><span class='field'><span class='tag rawTag'>55</span><span class='equals'>=</span><span class='value rawValue'>AUD/USD</span></span></span>"
-        [22]         | HighlightScope.Line  |'35=blah|150=A|55=AUD/USD' | "<span class='fields'><span class='field FgBlue'><span class='tag rawTag'>35</span><span class='equals'>=</span><span class='value rawValue'>blah</span></span><span class='delim'>|</span><span class='field FgBlue'><span class='tag rawTag'>150</span><span class='equals'>=</span><span class='value rawValue'>A</span></span><span class='delim'>|</span><span class='field FgBlue'><span class='tag rawTag'>55</span><span class='equals'>=</span><span class='value rawValue'>AUD/USD</span></span></span>"
+        [22]         | HighlightScope.Line  |'35=blah|150=A|55=AUD/USD' | "<span class='fields'><span class='field FgBlue'><span class='tag rawTag'>35</span><span class='equals'>=</span><span class='value rawValue'>blah</span></span><span class='delim FgBlue'>|</span><span class='field FgBlue'><span class='tag rawTag'>150</span><span class='equals'>=</span><span class='value rawValue'>A</span></span><span class='delim FgBlue'>|</span><span class='field FgBlue'><span class='tag rawTag'>55</span><span class='equals'>=</span><span class='value rawValue'>AUD/USD</span></span></span>"
     }
 }

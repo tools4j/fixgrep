@@ -75,3 +75,12 @@ public fun CharSequence.padStringContainingAnsiCodesEnd(length: Int, padChar: Ch
     return AnsiHelper.padStringContainingAnsiCodesEnd(this, length, padChar)
 }
 
+public fun <T> Collection<T>.containsAny(other: Collection<T>): Boolean {
+    other.forEach{
+        if(this.contains(it)){
+            return true
+        }
+    }
+    return false
+}
+

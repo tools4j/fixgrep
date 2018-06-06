@@ -8,6 +8,7 @@ package org.tools4j.fix
 class Ansi {
     companion object {
         val Bold = "\u001B[1m"
-        val Normal = "\u001B[22m"
+        val Reset = "\u001b[0m"
+        val Normal = "\u001b[22m"
     }
 }

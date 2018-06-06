@@ -3,6 +3,7 @@ package org.tools4j.fixgrep.help
 import joptsimple.HelpFormatter
 import joptsimple.OptionDescriptor
 import org.tools4j.fixgrep.OptionParserFactory
+import java.io.OutputStream
 
 /**
  * User: ben
@@ -14,6 +15,12 @@ class HelpGenerator: HelpFormatter {
 
     override fun format(options: MutableMap<String, out OptionDescriptor>): String {
         return help
+    }
+
+    fun go(os: OutputStream){
+        val optionParser = OptionParserFactory().optionParser
+        optionParser.formatHelpWith(this)
+        optionParser.printHelpOn(os)
     }
 
     val help: String by lazy {
