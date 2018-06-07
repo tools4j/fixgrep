@@ -18,6 +18,14 @@ class ConfigImpl : Config {
         this.properties.putAll(properties)
     }
 
+    override fun toPrettyString(): String {
+        val sb = StringBuilder()
+        for(key in properties.keys){
+            sb.append(key).append("=").append(properties[key]).append("\n")
+        }
+        return sb.toString()
+    }
+
     val nextUniqueKeyParts: Set<String>
         get() {
             val uniqueKeyParts = LinkedHashSet<String>()

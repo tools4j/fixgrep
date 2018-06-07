@@ -3,6 +3,7 @@ package org.tools4j.fixgrep
 import joptsimple.OptionParser
 import joptsimple.util.RegexMatcher.regex
 import java.util.Arrays.asList
+import java.util.stream.Collectors
 
 
 /**
@@ -14,7 +15,11 @@ class OptionParserFactory{
 
     companion object {
         val optionsThatShouldNotHaveEquivalentProperties: List<String> by lazy {
-            listOf("?", "help", "[arguments]", "man", "256-color-demo", "16-color-demo", "gimme-css", "html", "launch-browser", "install")
+            listOf("?", "help", "[arguments]", "man", "256-color-demo", "16-color-demo", "gimme-css", "html", "launch-browser", "install", "debug", "to-file", "piped-input")
+        }
+
+        val propertiesThatShouldNotBeConfigurable: List<String> by lazy {
+            optionsThatShouldNotHaveEquivalentProperties.stream().map { it.replace("-", ".") }.collect(Collectors.toList())
         }
     }
 
@@ -34,7 +39,8 @@ class OptionParserFactory{
                 acceptsAll(asList("m", "include-only-messages-of-type")).withRequiredArg().ofType(String::class.java).withValuesSeparatedBy(",")
                 acceptsAll(asList("n", "no-color", "suppress-colors"))
                 acceptsAll(asList("o", "output-delimiter", "output-delim")).withRequiredArg().ofType(String::class.java) //="|"
-                acceptsAll(asList("p", "suppress-bold-tags-and-values"))
+                acceptsAll(asList("p", "piped", "piped-input"))
+                acceptsAll(asList("q", "suppress-bold-tags-and-values"))
                 acceptsAll(asList("R", "input-line-format")).withRequiredArg().ofType(String::class.java) //="^(\\d{4}-[01]\\d-[0-3]\\d[T\\s][0-2]\\d:[0-5]\\d:[0-5]\\d[\\.,]\\d+)?.*?(\\d+=.*$)"
                 acceptsAll(asList("s", "sort-by-tags")).withRequiredArg().ofType(Integer::class.java).withValuesSeparatedBy(",")
                 acceptsAll(asList("t", "only-include-tags")).withRequiredArg().ofType(Integer::class.java).withValuesSeparatedBy(",")

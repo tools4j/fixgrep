@@ -40,6 +40,7 @@ interface Config {
     fun getAsBooleanList(key: String, default: List<Boolean>): List<Boolean>
     fun getAsStringList(key: String, default: List<String>): List<String>
     fun hasProperty(key: String): Boolean
+    fun toPrettyString(): String
 
     companion object {
         fun empty(): Config {return ConfigImpl(emptyMap())}

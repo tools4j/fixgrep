@@ -1,5 +1,7 @@
 package org.tools4j.fixgrep.help
 
+import org.tools4j.fixgrep.OptionParserFactory
+
 /**
  * User: ben
  * Date: 8/05/2018
@@ -13,8 +15,12 @@ class ExampleAppPropertiesGenerator {
         sb.append("# Add properties overrides into this file\n")
         sb.append("################################################\n\n")
         for(entry in options.helpByPropertyValues){
-            sb.append("# ").append(entry.value.tagline).append("\n")
-            sb.append("# ").append(entry.key).append("=").append(entry.value.exampleValue).append("\n\n")
+            if(!OptionParserFactory.propertiesThatShouldNotBeConfigurable.contains(entry.key)){
+                sb.append("# ").append(entry.value.tagline).append("\n")
+                sb.append("# ").append(entry.key)
+                if(entry.value.exampleValue != null) sb.append("=").append(entry.value.exampleValue)
+                sb.append("\n\n")
+            }
         }
         sb.toString()
     }

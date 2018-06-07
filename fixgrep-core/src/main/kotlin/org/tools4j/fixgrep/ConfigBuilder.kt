@@ -1,7 +1,9 @@
 package org.tools4j.fixgrep
 
+import mu.KLogging
 import org.tools4j.properties.ConfigLoader
 import org.tools4j.properties.Config
+import org.tools4j.properties.ConfigAndArguments
 import org.tools4j.properties.ConfigImpl
 
 /**
@@ -14,16 +16,35 @@ class ConfigBuilder(val args: Array<String>, val overrides: Config?){
     constructor(args: List<String>): this(args.toTypedArray(), null)
     constructor(args: List<String>, overrides: Config?): this(args.toTypedArray(), overrides)
 
-    val config: Config by lazy {
-        val optionsConfig = OptionsToConfig(OptionParserFactory().optionParser.parse(*args)).config
+    companion object: KLogging()
+
+    val configAndArguments: ConfigAndArguments by lazy {
+        val parsedOptions = OptionParserFactory().optionParser.parse(*args)
+        val optionsConfig = OptionsToConfig(parsedOptions).config
         val classpathConfig = ConfigLoader.fromClasspath("application.properties")!!
         val homeDirConfig = ConfigLoader.fromHomeDir(".fixgrep/application.properties")
 
+        logger.info("================================")
+        logger.info("Non-option arguments: "+ parsedOptions.nonOptionArguments())
+        logger.info("================================")
+        logger.info("Options: "+ args.toList())
+        logger.info("================================")
+        logger.info("Options config:\n"+ optionsConfig.toPrettyString())
+        logger.info("================================")
+        logger.info("Classpath config:\n"+ classpathConfig.toPrettyString())
+        logger.info("================================")
+        logger.info("HomeDir config:\n"+ homeDirConfig?.toPrettyString())
+
+
         val config: Config = ConfigImpl()
-        config
+        val resolvedConfig = config
                 .overrideWith(classpathConfig)
                 .overrideWith(homeDirConfig)
                 .overrideWith(overrides)
                 .overrideWith(optionsConfig)
+
+        logger.info("================================")
+        logger.info("Resolved config:\n"+ resolvedConfig.toPrettyString())
+        ConfigAndArguments(resolvedConfig, parsedOptions.nonOptionArguments())
     }
 }

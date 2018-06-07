@@ -160,8 +160,10 @@ the less 'interesting' fix fields, such as BeginString, BodyLength or Checksum. 
 
         addOptionHelp(helpByOptions, OptionHelp(listOf("o", "output-delimiter", "output-delim"), "Defines the delimiter to print between FIX tags in the formatted output.", ";", null))
 
+        addOptionHelp(helpByOptions, OptionHelp(listOf("p", "piped", "piped-input"), "Whether or not piped input is being used.  Is set automatically by fixgrep script", null, "Normally there is no need to specify this, as it is detected and set by teh fixgrep bash script."))
+
         addOptionHelp(helpByOptions, OptionHelp(
-                listOf("p", "suppress-bold-tags-and-values"),
+                listOf("q", "suppress-bold-tags-and-values"),
                 "Suppresses the bold formatting of tags and values.",
                 "true",
                 docWriterFactory.createNew().write("By default tags and values are displayed in bold. E.g.: '[MsgType]").writeBold("35=D").write("[NEWORDERSINGLE]|[ClOrdID]").writeBold("11=ABC").write("[Symbol]").writeBold("55=AUD/USD").write(".  In some shells highlighting and bold text don't work well together resulting in partially highlighted fields and lines.  On such shells the user may wish to suppress bold tags and values, so that highlighting is not broken.").toFormattedText()))

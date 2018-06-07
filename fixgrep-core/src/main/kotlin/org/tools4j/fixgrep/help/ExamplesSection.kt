@@ -11,24 +11,24 @@ import org.tools4j.fixgrep.utils.Constants.Companion.DOLLAR
 class ExamplesSection(val docWriterFactory: DocWriterFactory) {
     fun toFormattedText(): String {
         val lines = listOf(
-                "2018-05-30T07:12:34.456 8=FIX.5.0|9=123|35=D|49=ABC_CORP|56=ACME_EXCHANGE|11=C28|55=AUD/USD|54=2|38=1464820|40=2|44=100.026|10=131",
-                "2018-05-30T07:12:35.101 8=FIX.5.0|9=234|35=8|49=ACME_EXCHANGE|56=ABC_CORP|37=O26|11=C28|41=C28|55=AUD/USD|54=2|17=O26_1|150=0|39=A|151=1464820|14=0|44=100.02|10=434",
-                "2018-05-30T07:22:12.350 8=FIX.5.0|9=345|35=G|49=ABC_CORP|56=ACME_EXCHANGE|41=C28|11=C32|55=AUD/USD|54=2|38=1465320|40=2|44=100.12|10=211",
-                "2018-05-30T07:22:13.670 8=FIX.5.0|9=456|35=8|49=ACME_EXCHANGE|56=ABC_CORP|37=O26|11=C32|41=C28|55=AUD/USD|54=2|17=O26_2|150=5|39=0|151=1465320|14=0|44=100.12|10=566",
-                "2018-05-30T07:34:34.060 8=FIX.5.0|9=567|35=8|49=ACME_EXCHANGE|56=ABC_CORP|37=O26|11=C32|41=C28|55=AUD/USD|54=2|17=O26_3|150=2|39=0|151=1072490|14=392830|32=392830|44=100.00|58=Executed|10=788")
+                "35=D|11=C28|55=AUD/USD|54=2|38=1464820|44=100.026",
+                "35=8|11=C28|150=0|151=1464820|14=0|44=100.02",
+                "35=G|11=C32|38=1465320|40=2|44=100.12",
+                "35=8|11=C32|150=5|151=1465320|14=0|44=100.12",
+                "35=8|11=C32|150=2|151=1072490|14=392830|44=100.00")
 
         val docWriter = docWriterFactory.createNew()
         docWriter
                 .writeHeading(1, "EXAMPLES")
-                .writeLn("Examples are being applied to the following lines of fix: ")
+                .writeLn("Examples are being applied to the following lines of fix.  I have purposefully over simplied these FIX messages and stripped them down so that they might fit horizontally on a console: ")
                 .startSection(MiscTextEffect.Console)
         lines.forEach { docWriter.writeLn(it) }
         docWriter.endSection()
 
         var examplesList = ExamplesList(lines, docWriter)
         examplesList.add("<no arguments>", "This is how fix messages will appear by default by fixgrep.  Notice that the date has been stripped from the front of each message.  See later examples on how to add this date back in.")
-        examplesList.add("--exclude-tags 8,9,10", "Exclude tags 8 (BeginString),9 (BodyLength),10 (CheckSum) from showing.  These are repetitive tags which most of the time just add 'noise' to fix messages.  To exclude these from all calls, configure the exclude.tags property in your ~/.fixgrep/application.properties file.")
-        examplesList.add("-e 8,9,10", "Same configuration to exclude tags 8,9,10 but using short form option -e")
+        examplesList.add("--exclude-tags 55,11", "Exclude tags 55 and 11.")
+        examplesList.add("-e 55,11", "Same configuration to exclude tags 55,11 but using short form option -e")
         examplesList.add("--exclude-messages-of-type 8", "Excludes messages of type 8 (ExecutionReport).")
         examplesList.add("-v 8", "Same exclusion of ExecutionReports using the 'short form' option v")
         examplesList.add("-v D", "Excluding messages of type D (NewOrderSingle)")
@@ -52,7 +52,7 @@ class ExamplesSection(val docWriterFactory: DocWriterFactory) {
         examplesList.add("-o :", "Same, but using short form option -o")
         examplesList.add("--sort-by-tags 55,11", "For each fix line, show tags 55 then 11 first if they exist, followed by other tags in the order that they originally appeared.")
         examplesList.add("-s 55,11", "Same configuration, but using short form option -s.")
-        examplesList.add("-s 55,11,37", "Show tags 55, then 11, then 37 first on each line, followed by other tags in the order that they originally appeared.")
+        examplesList.add("-s 55,11,35", "Show tags 55, then 11, then 35 first on each line, followed by other tags in the order that they originally appeared.")
         examplesList.add("--only-include-tags 35", "Only show tag 35.")
         examplesList.add("-t 35", "Same configuration to only show tag 35, but using short form option -t")
         examplesList.add("-t 35,55", "Only show tags 35 and 55")
@@ -61,7 +61,7 @@ class ExamplesSection(val docWriterFactory: DocWriterFactory) {
         examplesList.add("-h 35", "Same highlight but using short form option -h")
         examplesList.add("-h 35=8", "Highlight tag 35 when it's value is 8 (ExecutionReport)")
         examplesList.add("-h 35=8:Line", "Highlight whole lines when tag 35=8 (ExecutionReport)")
-        examplesList.add("-h 35=8:Bg3:Line", "Highlight whole lines with background color 3 of the 256 color map, when tag 35=8 (ExecutionReport)")
+        examplesList.add("-h 35=8:Bg12:Line", "Highlight whole lines with background color 3 of the 256 color map, when tag 35=8 (ExecutionReport)")
         examplesList.add("-h 35,55", "Highlight tags 35 and 55.")
         examplesList.add("-h 35:Bg8,55:Bg9", "Highlight tag 35 with a background color of 8.  Highlight tag 55 with a background color of 9.")
         examplesList.add("-h 35=D:Line,55", "When a message has tag 35=D, highlight the whole line.  Also highlight tag 55.")
@@ -70,14 +70,14 @@ class ExamplesSection(val docWriterFactory: DocWriterFactory) {
         examplesList.end()
 
         val lines2 = listOf(
-                "2018-05-30T07:12:34.456 Thread-11 gbfix001 8=FIX.5.0|9=123|35=D|11=C28|55=AUD/USD|54=2|38=1464820|40=2|44=100.026|10=131",
+                "2018-05-30T07:12:34.456 Thread-11 gbfix001 35=D|11=C28|55=AUD/USD|54=2|38=1464820|44=100.026",
                 "2018-05-30T07:12:35.101 Thread-11 gbfix001 Processing new order single, ClOrderId=11, mid price captured at time 07:12:34.011=100.3",
                 "2018-05-30T07:12:35.101 Thread-11 gbfix001 Sending back PendingNew for OrderId=O26 ClOrderId=11",
-                "2018-05-30T07:12:35.101 Thread-11 gbfix001 8=FIX.5.0|9=234|35=8|37=O26|11=C28|41=C28|55=AUD/USD|54=2|17=O26_1|150=0|151=1464820|14=0|44=100.02|10=434",
-                "2018-05-30T07:22:12.350 Thread-06 gbfix001 8=FIX.5.0|9=345|35=G|41=C28|11=C32|55=AUD/USD|54=2|38=1465320|40=2|44=100.12|10=211",
+                "2018-05-30T07:12:35.101 Thread-11 gbfix001 35=8|11=C28|150=0|151=1464820|14=0|44=100.02",
+                "2018-05-30T07:22:12.350 Thread-06 gbfix001 35=G|11=C32|38=1465320|40=2|44=100.12",
                 "2018-05-30T07:12:35.101 Thread-06 gbfix002 Amend request recieved for OrderId=O26",
-                "2018-05-30T07:22:13.670 Thread-01 gbfix002 8=FIX.5.0|9=456|35=8|37=O26|11=C32|41=C28|55=AUD/USD|54=2|17=O26_2|150=5|151=1465320|14=0|44=100.12|10=566",
-                "2018-05-30T07:34:34.060 Thread-13 gbfix002 8=FIX.5.0|9=567|35=8|37=O26|11=C32|41=C28|55=AUD/USD|54=2|17=O26_3|150=2|151=1072490|14=392830|32=392830|44=100.00|58=Executed|10=788")
+                "2018-05-30T07:22:13.670 Thread-01 gbfix002 35=8|11=C32|150=5|151=1465320|14=0|44=100.12",
+                "2018-05-30T07:34:34.060 Thread-13 gbfix002 35=8|11=C32|150=2|151=1072490|14=392830|44=100.00")
 
         examplesList = ExamplesList(lines2, docWriter)
 
@@ -96,20 +96,20 @@ class ExamplesSection(val docWriterFactory: DocWriterFactory) {
                 .writeLn("Parsing our new input lines outputs this:")
 
         examplesList.add("<no arguments>", "Parsing new log lines with no arguments.")
-        examplesList.add("--input-line-format ^(\\d{4}-[01]\\d-[0-3]\\d[T\\s][0-2]\\d:[0-5]\\d:[0-5]\\d[\\.,]\\d+)?.*?(8=FIX.*\$)", "Oh no! In the example above, fixgrep assumed the line containing '...mid price captured at time 07:12:34.011=100.3' contained a FIX message because of the '11=100.3' text, it then printed out: '[ClOrdID]11=100.3'.  To remedy this, we can use a more specific regex:")
-        examplesList.add("--output-line-format ${'$'}1:${'$'}{msgFix} --input-line-format ^(\\d{4}-[01]\\d-[0-3]\\d[T\\s][0-2]\\d:[0-5]\\d:[0-5]\\d[\\.,]\\d+)?.*?(8=FIX.*\$)", "That's better.  Now that log line is not picked up.  Let's assume we do wish to show the date at the start of each line.  We do this by specifying $DOLLAR$1 at the start of the output-line-format.")
-        examplesList.add("--output-line-format ${'$'}1:${'$'}{msgFix} --input-line-format ^\\d{4}-[01]\\d-[0-3]\\d[T\\s]([0-2]\\d:[0-5]\\d:[0-5]\\d[\\.,]\\d+)?.*?(8=FIX.*\$)", "Whilst we're at it, let's just print out the time by slightly modifying the position of the first set of capturing brackets, as the whole date becomes a bit redundant.")
-        examplesList.add("--output-line-format ${DOLLAR}1:${DOLLAR}{msgTypeName}:${'$'}{msgFix} --input-line-format ^\\d{4}-[01]\\d-[0-3]\\d[T\\s]([0-2]\\d:[0-5]\\d:[0-5]\\d[\\.,]\\d+)?.*?(8=FIX.*\$)", "We can use another pre-defined tag ${DOLLAR}{msgTypeName} to print out not just the messageType, but also the execType if it's an execution report.")
-        examplesList.add("--output-line-format ${DOLLAR}1:${'$'}{msgColor}${DOLLAR}{msgTypeName}${'$'}{colorReset}:${'$'}{msgFix} --input-line-format ^\\d{4}-[01]\\d-[0-3]\\d[T\\s]([0-2]\\d:[0-5]\\d:[0-5]\\d[\\.,]\\d+)?.*?(8=FIX.*\$)", "And add coloring per message type")
-        examplesList.add("--exclude-tags 8,9,35,10 --output-line-format ${DOLLAR}1:${'$'}{msgColor}${DOLLAR}{msgTypeName}${'$'}{colorReset}:${'$'}{msgFix} --input-line-format ^\\d{4}-[01]\\d-[0-3]\\d[T\\s]([0-2]\\d:[0-5]\\d:[0-5]\\d[\\.,]\\d+)?.*?(8=FIX.*\$)", "Now let's get rid of some of the tags we just don't care about. (I'm going to hide 35 as well, because we're already printing out the messageTypeName)")
+        examplesList.add("--input-line-format ^(\\d{4}-[01]\\d-[0-3]\\d[T\\s][0-2]\\d:[0-5]\\d:[0-5]\\d[\\.,]\\d+)?.*?(35=.*\$)", "Oh no! In the example above, fixgrep assumed the line containing '...mid price captured at time 07:12:34.011=100.3' contained a FIX message because of the '11=100.3' text, it then printed out: '[ClOrdID]11=100.3'.  To remedy this, we can use a more specific regex:")
+        examplesList.add("--output-line-format ${'$'}1:${'$'}{msgFix} --input-line-format ^(\\d{4}-[01]\\d-[0-3]\\d[T\\s][0-2]\\d:[0-5]\\d:[0-5]\\d[\\.,]\\d+)?.*?(35=.*\$)", "That's better.  Now that log line is not picked up.  Let's assume we do wish to show the date at the start of each line.  We do this by specifying $DOLLAR$1 at the start of the output-line-format.")
+        examplesList.add("--output-line-format ${'$'}1:${'$'}{msgFix} --input-line-format ^\\d{4}-[01]\\d-[0-3]\\d[T\\s]([0-2]\\d:[0-5]\\d:[0-5]\\d[\\.,]\\d+)?.*?(35=.*\$)", "Whilst we're at it, let's just print out the time by slightly modifying the position of the first set of capturing brackets, as the whole date becomes a bit redundant.")
+        examplesList.add("--output-line-format ${DOLLAR}1:${DOLLAR}{msgTypeName}:${'$'}{msgFix} --input-line-format ^\\d{4}-[01]\\d-[0-3]\\d[T\\s]([0-2]\\d:[0-5]\\d:[0-5]\\d[\\.,]\\d+)?.*?(35=.*\$)", "We can use another pre-defined tag ${DOLLAR}{msgTypeName} to print out not just the messageType, but also the execType if it's an execution report.")
+        examplesList.add("--output-line-format ${DOLLAR}1:${'$'}{msgColor}${DOLLAR}{msgTypeName}${'$'}{colorReset}:${'$'}{msgFix} --input-line-format ^\\d{4}-[01]\\d-[0-3]\\d[T\\s]([0-2]\\d:[0-5]\\d:[0-5]\\d[\\.,]\\d+)?.*?(35=.*\$)", "And add coloring per message type")
+        examplesList.add("--exclude-tags 35 --output-line-format ${DOLLAR}1:${'$'}{msgColor}${DOLLAR}{msgTypeName}${'$'}{colorReset}:${'$'}{msgFix} --input-line-format ^\\d{4}-[01]\\d-[0-3]\\d[T\\s]([0-2]\\d:[0-5]\\d:[0-5]\\d[\\.,]\\d+)?.*?(35=.*\$)", "I'm going to exclude (hide) field 35 as I already have the MessageType printed at the start of the line.")
 
         docWriter.writeLn("This is now looking more presentable.  If I want to have these settings applied each time I run fixgrep, I just need to modify my ~/.fixgrep/application.properties file. Fixgrep can automatically create this file by running:")
         docWriter.writeLn("fixgrep --install", MiscTextEffect.Console)
         docWriter.writeLn("And populate this file with the corresponding property settings (notice I've replaced the option dashes, with property dots):")
         docWriter.writeLn(
-                "exclude.tags=8,9,35,10\n" +
+                "exclude.tags=35\n" +
                 "output.line.format=${DOLLAR}1:${'$'}{msgColor}${DOLLAR}{msgTypeName}${'$'}{colorReset}:${'$'}{msgFix}\n" +
-                "input.line.format=^\\d{4}-[01]\\d-[0-3]\\d[T\\s]([0-2]\\d:[0-5]\\d:[0-5]\\d[\\.,]\\d+)?.*?(8=FIX.*\$)", MiscTextEffect.Console)
+                "input.line.format=^\\d{4}-[01]\\d-[0-3]\\d[T\\s]([0-2]\\d:[0-5]\\d:[0-5]\\d[\\.,]\\d+)?.*?(35=.*\$)", MiscTextEffect.Console)
 
         examplesList.end()
 

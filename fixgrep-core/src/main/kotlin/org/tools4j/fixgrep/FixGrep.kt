@@ -6,7 +6,7 @@ import org.tools4j.fixgrep.help.DocWriterFactory
 import org.tools4j.fixgrep.help.ExampleAppPropertiesFileCreator
 import org.tools4j.fixgrep.help.HelpGenerator
 import org.tools4j.fixgrep.help.ManGenerator
-import org.tools4j.properties.Config
+import org.tools4j.properties.ConfigAndArguments
 import java.io.InputStream
 import java.io.OutputStream
 import java.io.PrintStream
@@ -17,13 +17,13 @@ import java.io.PrintStream
  * Date: 12/03/2018
  * Time: 7:00 AM
  */
-class FixGrep(val inputStream: InputStream, val outputStream: OutputStream, val config: Config) {
+class FixGrep(val inputStream: InputStream, val outputStream: OutputStream, val configAndArguments: ConfigAndArguments) {
 
     constructor(inputStream: InputStream, outputStream: OutputStream, args: Array<String>)
-            : this(inputStream, outputStream, ConfigBuilder(args).config)
+            : this(inputStream, outputStream, ConfigBuilder(args).configAndArguments)
 
     val formatter: Formatter by lazy {
-        Formatter(FormatSpec(config))
+        Formatter(FormatSpec(configAndArguments.config))
     }
 
     val printStream: PrintStream by lazy {
@@ -40,9 +40,7 @@ class FixGrep(val inputStream: InputStream, val outputStream: OutputStream, val 
 
     private fun go() {
         try {
-            if (!config.getAsBoolean("skip.app.properties.creation")) {
-                ExampleAppPropertiesFileCreator().createIfNecessary()
-            }
+            val config = configAndArguments.config
             if(config.getAsBoolean("256.color.demo", false)){
                 printStream.println(Color256Demo().demoForConsole)
             } else if(config.getAsBoolean("16.color.demo", false)){
@@ -51,8 +49,12 @@ class FixGrep(val inputStream: InputStream, val outputStream: OutputStream, val 
                 printStream.println(ManGenerator(DocWriterFactory.ConsoleText, config.getAsBoolean("debug", false)).man)
             } else if(config.getAsBoolean("help", false)){
                 HelpGenerator().go(outputStream);
+            } else if(config.getAsBoolean("install", false)){
+                ExampleAppPropertiesFileCreator().createIfNecessary()
+            } else if(config.getAsBoolean("piped.input", false)){
+                readFromPipedInput()
             } else {
-                goFixGrep()
+                println("Will look for file")
             }
         } finally {
             outputStream.flush()
@@ -60,10 +62,12 @@ class FixGrep(val inputStream: InputStream, val outputStream: OutputStream, val 
         }
     }
 
-    private fun goFixGrep() {
+    private fun readFromPipedInput() {
         val reader = inputStream.bufferedReader()
+        println("About to read from piped input")
         while (true) {
             val line = reader.readLine()
+            println("After reading first line: $line")
             if (line == null) break
             else handleLine(line)
         }
