@@ -13,7 +13,9 @@ class ConfigImpl : Config {
     private val properties: Map<String, String>
     constructor(repo: Config) : this(repo.asMap()) {}
 
-    @JvmOverloads constructor(properties: Map<String, String> = LinkedHashMap()) {
+    constructor(): this(LinkedHashMap<String, String>())
+
+    constructor(properties: Map<String, String>) {
         this.properties = LinkedHashMap()
         this.properties.putAll(properties)
     }
@@ -220,7 +222,7 @@ class ConfigImpl : Config {
         return StringCoercer(get(key)).getAsBooleanList(default)
     }
 
-    override fun hasProperty(key: String): Boolean {
+    override fun  hasProperty(key: String): Boolean {
         return properties.containsKey(key)
     }
 

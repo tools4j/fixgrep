@@ -3,6 +3,7 @@ package org.tools4j.fixgrep
 import org.tools4j.fix.Ascii1Char
 import org.tools4j.fixgrep.html.TemplatedHtmlFile
 import org.tools4j.properties.Config
+import org.tools4j.properties.ConfigAndArguments
 import org.tools4j.properties.ConfigImpl
 import org.tools4j.util.CircularBufferedReaderWriter
 import org.tools4j.utils.ArgsAsString
@@ -30,13 +31,6 @@ class FixGrepTest extends Specification {
 
     def setupSpec(){
         testOverrides = new ConfigImpl(['output.line.format': '${msgFix}'])
-//        new CssFile().copyToWorkingDirIfRequired()
-//        htmlFile = new TemplatedHtmlFile();
-//        htmlFile.open();
-    }
-
-    def cleanupSpec(){
-//        htmlFile.close()
     }
 
     @Unroll
@@ -57,8 +51,6 @@ class FixGrepTest extends Specification {
 //        '--debug'                          | '[MsgType]\\u001b[1m35\\u001b[0m\\u001b[1m=\\u001b[0m\\u001b[1mD\\u001b[0m[NEWORDERSINGLE]|[ClOrdID]\\u001b[1m11\\u001b[0m\\u001b[1m=\\u001b[0m\\u001b[1mABC\\u001b[0m|[Symbol]\\u001b[1m55\\u001b[0m\\u001b[1m=\\u001b[0m\\u001b[1mAUD/USD\\u001b[0m\n[MsgType]\\u001b[1m35\\u001b[0m\\u001b[1m=\\u001b[0m\\u001b[1m8\\u001b[0m[EXECUTIONREPORT]|[ExecType]\\u001b[1m150\\u001b[0m\\u001b[1m=\\u001b[0m\\u001b[1mF\\u001b[0m[TRADE_PARTIAL_FILL_OR_FILL]|[Symbol]\\u001b[1m55\\u001b[0m\\u001b[1m=\\u001b[0m\\u001b[1mAUD/USD\\u001b[0m'
 //        '-x'                               | '[MsgType]\\u001b[1m35\\u001b[0m\\u001b[1m=\\u001b[0m\\u001b[1mD\\u001b[0m[NEWORDERSINGLE]|[ClOrdID]\\u001b[1m11\\u001b[0m\\u001b[1m=\\u001b[0m\\u001b[1mABC\\u001b[0m|[Symbol]\\u001b[1m55\\u001b[0m\\u001b[1m=\\u001b[0m\\u001b[1mAUD/USD\\u001b[0m\n[MsgType]\\u001b[1m35\\u001b[0m\\u001b[1m=\\u001b[0m\\u001b[1m8\\u001b[0m[EXECUTIONREPORT]|[ExecType]\\u001b[1m150\\u001b[0m\\u001b[1m=\\u001b[0m\\u001b[1mF\\u001b[0m[TRADE_PARTIAL_FILL_OR_FILL]|[Symbol]\\u001b[1m55\\u001b[0m\\u001b[1m=\\u001b[0m\\u001b[1mAUD/USD\\u001b[0m'
 //        '-q'                               | '[MsgType]35=D[NEWORDERSINGLE]|[ClOrdID]11=ABC|[Symbol]55=AUD/USD\n[MsgType]35=8[EXECUTIONREPORT]|[ExecType]150=F[TRADE_PARTIAL_FILL_OR_FILL]|[Symbol]55=AUD/USD'
-//        '--suppress-bold-tags-and-values'  | '[MsgType]35=D[NEWORDERSINGLE]|[ClOrdID]11=ABC|[Symbol]55=AUD/USD\n[MsgType]35=8[EXECUTIONREPORT]|[ExecType]150=F[TRADE_PARTIAL_FILL_OR_FILL]|[Symbol]55=AUD/USD'
-//        '--exclude-messages-of-type 8'     | '[MsgType]\u001b[1m35\u001b[0m\u001b[1m=\u001b[0m\u001b[1mD\u001b[0m[NEWORDERSINGLE]|[ClOrdID]\u001b[1m11\u001b[0m\u001b[1m=\u001b[0m\u001b[1mABC\u001b[0m|[Symbol]\u001b[1m55\u001b[0m\u001b[1m=\u001b[0m\u001b[1mAUD/USD\u001b[0m'
 //        '-v 8'                             | '[MsgType]\u001b[1m35\u001b[0m\u001b[1m=\u001b[0m\u001b[1mD\u001b[0m[NEWORDERSINGLE]|[ClOrdID]\u001b[1m11\u001b[0m\u001b[1m=\u001b[0m\u001b[1mABC\u001b[0m|[Symbol]\u001b[1m55\u001b[0m\u001b[1m=\u001b[0m\u001b[1mAUD/USD\u001b[0m'
 //        '--exclude-messages-of-type D'     | '[MsgType]\u001b[1m35\u001b[0m\u001b[1m=\u001b[0m\u001b[1m8\u001b[0m[EXECUTIONREPORT]|[ExecType]\u001b[1m150\u001b[0m\u001b[1m=\u001b[0m\u001b[1mF\u001b[0m[TRADE_PARTIAL_FILL_OR_FILL]|[Symbol]\u001b[1m55\u001b[0m\u001b[1m=\u001b[0m\u001b[1mAUD/USD\u001b[0m'
 //        '--exclude-messages-of-type D,8'   | ''
@@ -186,7 +178,7 @@ class FixGrepTest extends Specification {
 
         final CircularBufferedReaderWriter input = new CircularBufferedReaderWriter();
         final CircularBufferedReaderWriter output = new CircularBufferedReaderWriter();
-        final Config testConfig = new ConfigBuilder(argsList, this.testOverrides).getConfigAndArguments
+        final ConfigAndArguments testConfig = new ConfigBuilder(argsList, this.testOverrides).getConfigAndArguments
 
         input.writer.write(fix)
         input.writer.flush()

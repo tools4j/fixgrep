@@ -8,7 +8,7 @@ import org.tools4j.properties.ConfigLoader
  * Date: 4/05/2018
  * Time: 8:48 AM
  */
-class TestConfigBuilder {
+class  TestConfigBuilder {
     public static Config load(){
         return ConfigLoader.fromClasspath("application.properties")
     }

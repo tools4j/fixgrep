@@ -155,12 +155,11 @@ the less 'interesting' fix fields, such as BeginString, BodyLength or Checksum. 
 
         addOptionHelp(helpByOptions, OptionHelp(listOf("m", "include-only-messages-of-type"), "A comma separated list of msg types to display.", "D,8", "e.g. to display only NewOrderSingles and ExecutionReports, use 35,8"))
 
-
         addOptionHelp(helpByOptions, OptionHelp(listOf("n", "no-color", "suppress-colors"), "Suppresses any colorization in lines.", "true", "Note, see the 'suppress-bold-tags-and-values' parameter to also suppress usage of bold text effect on formatted lines"))
 
         addOptionHelp(helpByOptions, OptionHelp(listOf("o", "output-delimiter", "output-delim"), "Defines the delimiter to print between FIX tags in the formatted output.", ";", null))
 
-        addOptionHelp(helpByOptions, OptionHelp(listOf("p", "piped", "piped-input"), "Whether or not piped input is being used.  Is set automatically by fixgrep script", null, "Normally there is no need to specify this, as it is detected and set by teh fixgrep bash script."))
+        addOptionHelp(helpByOptions, OptionHelp(listOf("p", "piped", "piped-input"), "Whether or not piped input is being used.  Should not every be required.  Is used by fixgrep bash script to communicate with fixgrep java app.", null, "Normally there is no need to specify this, as it is detected and set by teh fixgrep bash script."))
 
         addOptionHelp(helpByOptions, OptionHelp(
                 listOf("q", "suppress-bold-tags-and-values"),

@@ -36,9 +36,9 @@ class ExamplesList (val fixLines: List<String>, val docWriter: DocWriter) {
         configOverrides.put("input.delimiter", "|")
         configOverrides.put("output.line.format", "${'$'}{msgFix}")
 
-        val config = ConfigBuilder(example.args, ConfigImpl(configOverrides)).configAndArguments
+        val configAndArguments = ConfigBuilder(example.args, ConfigImpl(configOverrides)).configAndArguments
 
-        val spec = FormatSpec(config = config, fixSpec = fixSpec)
+        val spec = FormatSpec(config = configAndArguments.config, fixSpec = fixSpec)
         val formatter = Formatter(spec)
         docWriter.startSection(MiscTextEffect.Console)
         for(line in fixLines){

@@ -25,6 +25,7 @@ class HelpGenerator: HelpFormatter {
 
     val help: String by lazy {
         val sb = StringBuilder()
+        sb.append("Usage: fixgrep [options] [files ...]\n")
         sb.append("Options:\n")
         val optionsHelp = OptionsHelp(DocWriterFactory.ConsoleText)
         for (desc in optionsHelp.helpByOptions.values.distinct()) {
