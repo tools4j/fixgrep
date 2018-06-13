@@ -25,7 +25,7 @@ class StringCoercer(val str: String?): Coercer {
     }
 
     override fun getAsBoolean(): Boolean {
-        return str!!.trim().toBoolean()
+        return if(str != null) str.trim().toBoolean() else false
     }
 
     override fun getAsDouble(default: Double): Double {

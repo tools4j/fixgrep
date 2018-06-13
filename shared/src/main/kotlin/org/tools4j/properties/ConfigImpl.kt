@@ -10,12 +10,12 @@ import kotlin.collections.LinkedHashMap
  */
 class ConfigImpl : Config {
     private val ESCAPED_VARIABLE_PATTERN = java.util.regex.Pattern.compile("\\\\(\\$\\{)")
-    private val properties: Map<String, String>
+    private val properties: Map<String, String?>
     constructor(repo: Config) : this(repo.asMap()) {}
 
     constructor(): this(LinkedHashMap<String, String>())
 
-    constructor(properties: Map<String, String>) {
+    constructor(properties: Map<String, String?>) {
         this.properties = LinkedHashMap()
         this.properties.putAll(properties)
     }
@@ -99,7 +99,7 @@ class ConfigImpl : Config {
 
     override fun overrideWith(other: Config?): Config {
         if(other == null) return this
-        val map: MutableMap<String, String> = LinkedHashMap(properties)
+        val map: MutableMap<String, String?> = LinkedHashMap(properties)
         map.putAll(other.asMap())
         return ConfigImpl(map)
     }
@@ -110,8 +110,8 @@ class ConfigImpl : Config {
                 '}'.toString()
     }
 
-    override fun asMap(): Map<String, String> {
-        return LinkedHashMap(properties)
+    override fun asMap(): Map<String, String?> {
+        return LinkedHashMap<String, String?>(properties)
     }
 
     override fun resolveVariablesWithinValues(): Config {
@@ -119,7 +119,7 @@ class ConfigImpl : Config {
     }
 
     override fun resolveVariablesWithinValues(vararg additionalPropertiesToHelpWithResolution: Config): Config {
-        val additionalProperties = LinkedHashMap<String, String>()
+        val additionalProperties = LinkedHashMap<String, String?>()
         for (i in additionalPropertiesToHelpWithResolution.indices) {
             additionalProperties.putAll(additionalPropertiesToHelpWithResolution[i].asMap())
         }
@@ -159,7 +159,8 @@ class ConfigImpl : Config {
     }
 
     override fun getAsBoolean(key: String): Boolean{
-        return StringCoercer(get(key)).getAsBoolean()
+        if(properties.containsKey(key) && get(key) == null) return true
+        else return StringCoercer(get(key)).getAsBoolean()
     }
 
     override fun getAsString(key: String): String{
@@ -179,7 +180,8 @@ class ConfigImpl : Config {
     }
 
     override fun getAsBoolean(key: String, default: Boolean): Boolean{
-        return StringCoercer(get(key)).getAsBoolean(default)
+        if(properties.containsKey(key) && get(key) == null) return true
+        else return StringCoercer(get(key)).getAsBoolean(default)
     }
 
     override fun getAsString(key: String, default: String): String{
@@ -227,7 +229,7 @@ class ConfigImpl : Config {
     }
 
     override fun hasPropertyAndIsNotFalse(key: String): Boolean {
-        return hasProperty(key) && getAsString(key).toLowerCase() != "false"
+        return hasProperty(key) && get(key) != null && getAsString(key).toLowerCase() != "false"
     }
 
     override fun getAsStringList(key: String, default: List<String>): List<String>{

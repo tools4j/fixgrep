@@ -14,7 +14,7 @@ import java.util.stream.Collectors
  */
 class OptionsToConfig(val optionSet: OptionSet) {
     val config: Config by lazy {
-        val configMap: MutableMap<String, String> = LinkedHashMap()
+        val configMap: MutableMap<String, String?> = LinkedHashMap()
         val options = optionSet.asMap().keys.stream().map { longest(it.options()) }.collect(Collectors.toList())
 
         for(option in options){
@@ -22,7 +22,7 @@ class OptionsToConfig(val optionSet: OptionSet) {
             if(optionSet.has(option)){
                 val values = optionSet.valuesOf(option)
                 if(values.isEmpty()) {
-                    configMap.put(cleanedName, "true")
+                    configMap.put(cleanedName, null)
                 } else if(isOptionDefinedAsList(optionSet, option)){
                     configMap.put(cleanedName, values.toString())
                 } else {

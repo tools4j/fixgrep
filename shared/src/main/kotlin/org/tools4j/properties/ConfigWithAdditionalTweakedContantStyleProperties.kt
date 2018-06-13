@@ -17,7 +17,7 @@ import java.util.HashMap
  */
 class ConfigWithAdditionalTweakedContantStyleProperties(private val source: Config) : ConfigSource {
     override val config: Config by lazy {
-        val properties: MutableMap<String,String> = HashMap(source.asMap())
+        val properties: MutableMap<String,String?> = HashMap(source.asMap())
         val convertedProperties: MutableMap<String, String> = HashMap()
         properties.keys.stream().filter {isScreamingSnakeCase(it)}.forEach {
             convertedProperties[toPropertiesStyle(it)] = properties[it]!!

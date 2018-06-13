@@ -189,7 +189,7 @@ the less 'interesting' fix fields, such as BeginString, BodyLength or Checksum. 
 
         addOptionHelp(helpByOptions, OptionHelp(listOf("man"), "Displays man page.", null,null))
 
-        addOptionHelp(helpByOptions, OptionHelp(listOf("html"), "Displays results in HTML format.", "page","If the optional 'page' attribute is specified, then the HTML will be contain proper headers and footers.  It will also reference fixgrep.css  Use the option --gimme-css to get a copy of this css file if you wish to use this default styling.  Or of course feel free to modify/write your own css."))
+        addOptionHelp(helpByOptions, OptionHelp(listOf("html"), "Displays results in HTML format.", "page","There are two possible arguments for this option 'page' and 'raw'.  'page' is assumed as the default if no argument is given.  When in 'page' mode, then the HTML will be contain proper headers and footers and will include styles to format the output FIX.  If in 'raw' format, just the HTML required to render the tags is output.  No styles, header or footers will be output."))
 
         addOptionHelp(helpByOptions, OptionHelp(listOf("gimme-css"), "Downloads a copy of the default fixgrep.css file to use with any fixgrep output formatted in HTML.", null,null))
 

@@ -11,15 +11,14 @@ import org.tools4j.properties.ConfigImpl
  * Date: 16/04/2018
  * Time: 6:42 AM
  */
-class ConfigBuilder(val args: Array<String>, val overrides: Config?){
-    constructor(args: Array<String>): this(args, null)
-    constructor(args: List<String>): this(args.toTypedArray(), null)
-    constructor(args: List<String>, overrides: Config?): this(args.toTypedArray(), overrides)
+class ConfigBuilder(val args: List<String>, val overrides: Config?){
+    constructor(args: Array<String>): this(args.toList(), null)
+    constructor(args: List<String>): this(args, null)
 
     companion object: KLogging()
 
     val configAndArguments: ConfigAndArguments by lazy {
-        val parsedOptions = OptionParserFactory().optionParser.parse(*args)
+        val parsedOptions = OptionParserFactory().optionParser.parse(*args.toTypedArray())
         val optionsConfig = OptionsToConfig(parsedOptions).config
         val classpathConfig = ConfigLoader.fromClasspath("application.properties")!!
         val homeDirConfig = ConfigLoader.fromHomeDir(".fixgrep/application.properties")
@@ -45,6 +44,6 @@ class ConfigBuilder(val args: Array<String>, val overrides: Config?){
 
         logger.info("================================")
         logger.info("Resolved config:\n"+ resolvedConfig.toPrettyString())
-        ConfigAndArguments(resolvedConfig, parsedOptions.nonOptionArguments())
+        ConfigAndArguments(resolvedConfig, parsedOptions.nonOptionArguments(), args)
     }
 }

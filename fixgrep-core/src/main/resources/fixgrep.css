@@ -14,14 +14,40 @@ span.Fg123{
     color: lightskyblue;
 }
 
+body.fix-output div.header {
+    background-color: #333;
+    padding: 0.4em 1em 0.4em 1em;
+}
+
+body.fix-output div.footer {
+    background-color: #333;
+    padding: 0.2em 1em 0.2em 1em;
+    font: 10px/normal 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
+    color: white;
+}
+
+body.fix-output h1 {
+    font: 24px/normal 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
+    color: white;
+    margin: 0;
+    padding: 0;
+}
+
 div.console {
     white-space: nowrap;
-    font: 12px/normal 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
-    background-color: black;
+    #font: 12px/normal 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
+    font: 11px 'andale mono','lucida console',monospace;
+    background-color: #333;
     color: white;
     padding: 0.5em;
-    overflow:auto;
+    overflow: visible;
+    font-weight: lighter;
 }
+
+div.console span.bold {
+    font: 11px 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
+}
+
 
 div.fixMsg span {
     padding: 0;

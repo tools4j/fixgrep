@@ -25,7 +25,6 @@ class ExampleAppPropertiesFileCreatorTest extends Specification {
             }
         }
         exampleAppPropertiesFileCreator = new ExampleAppPropertiesFileCreator();
-        exampleAppPropertiesFileCreator.deleteProcessFailedFlagFile()
     }
 
     def "CreateIfNecessary"() {

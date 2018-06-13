@@ -2,6 +2,7 @@ package org.tools4j.fixgrep
 
 import org.tools4j.fix.ClasspathResource
 import org.tools4j.properties.Config
+import org.tools4j.properties.ConfigAndArguments
 import org.tools4j.properties.ConfigImpl
 import spock.lang.Specification
 
@@ -14,15 +15,17 @@ class FixGrepOnLargeFileTest extends Specification {
     def 'run fixgrep file test'(){
         given:
         Config testSpecificConfig = new ConfigImpl(['input.line.format': '^(\\d{4}-[01]\\d-[0-3]\\d[T\\s][0-2]\\d:[0-5]\\d:[0-5]\\d[\\.,]\\d+)?.*?RawFix:(\\d+=.*$)',
-                                                    'output.line.format': '$1 ${senderToTargetCompIdDirection} ${msgColor}[${msgTypeName}]${colorReset} ${msgFix}'])
+                                                    'output.line.format': '$1 ${senderToTargetCompIdDirection} ${msgColor}[${msgTypeName}]${colorReset} ${msgFix}',
+                                                    'piped.input': 'true'])
 
-        Config testConfig = TestConfigBuilder.load().overrideWith(testSpecificConfig)
+        Config config = TestConfigBuilder.load().overrideWith(testSpecificConfig)
+        ConfigAndArguments configAndArguments = new ConfigAndArguments(config)
 
         when:
         final File actualOutputFile = new File("fixgrep-file-test-output.log")
         if(actualOutputFile.exists()) actualOutputFile.delete()
         final OutputStream outputStream = new FileOutputStream(actualOutputFile);
-        new FixGrep(this.class.getResourceAsStream('/test.log'), outputStream, testConfig).go()
+        new FixGrep(this.class.getResourceAsStream('/test.log'), outputStream, configAndArguments).go()
         final expectedOutputFile = new ClasspathResource("/test-expected-output.log").asBufferedReader()
 
         then:

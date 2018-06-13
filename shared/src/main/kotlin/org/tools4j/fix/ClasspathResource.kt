@@ -28,4 +28,8 @@ class ClasspathResource(private val path: String) : FileResource {
     fun asReader(): Reader {
         return InputStreamReader(asInputStream())
     }
+
+    override fun toString(): String {
+        return asReader().readText()
+    }
 }

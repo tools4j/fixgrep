@@ -1,6 +1,8 @@
 package org.tools4j.fixgrep
 
 import org.tools4j.properties.Config
+import org.tools4j.properties.ConfigAndArguments
+import org.tools4j.properties.ConfigImpl
 import org.tools4j.properties.ConfigLoader
 
 /**
@@ -10,6 +12,6 @@ import org.tools4j.properties.ConfigLoader
  */
 class  TestConfigBuilder {
     public static Config load(){
-        return ConfigLoader.fromClasspath("application.properties")
+        return new ConfigImpl(ConfigLoader.fromClasspath("application.properties"))
     }
 }

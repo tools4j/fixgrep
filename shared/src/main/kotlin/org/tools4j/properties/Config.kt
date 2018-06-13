@@ -14,7 +14,7 @@ interface Config {
 
     operator fun get(key: String, defaultValue: String): String?
     fun overrideWith(other: Config?): Config
-    fun asMap(): Map<String, String>
+    fun asMap(): Map<String, String?>
     fun resolveVariablesWithinValues(): Config
     fun resolveVariablesWithinValues(vararg additionalPropertiesToHelpWithResolution: Config): Config
     fun toPrettyString(indent: String = "    "): String
@@ -44,6 +44,7 @@ interface Config {
 
     companion object {
         fun empty(): Config {return ConfigImpl(emptyMap())}
+        val PRESENT = Object()
     }
 
     fun hasPropertyAndIsNotFalse(key: String): Boolean

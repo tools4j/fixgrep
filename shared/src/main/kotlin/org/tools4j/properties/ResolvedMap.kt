@@ -10,9 +10,9 @@ import java.util.regex.Matcher
  * Date: 26/10/17
  * Time: 5:40 PM
  */
-class ResolvedMap(private val primaryMap: Map<String, String>, vararg secondaryMaps: Map<String, String>) {
+class ResolvedMap(private val primaryMap: Map<String, String?>, vararg secondaryMaps: Map<String, String?>) {
     private val VARIABLE_PATTERN = java.util.regex.Pattern.compile("(?<!\\\\)\\$\\{([^\\}^(?:\\$\\{)]+)\\}")
-    private val secondaryMap: MutableMap<String, String>
+    private val secondaryMap: MutableMap<String, String?>
 
     init {
         this.secondaryMap = HashMap()
@@ -58,7 +58,7 @@ class ResolvedMap(private val primaryMap: Map<String, String>, vararg secondaryM
     fun resolve(): Map<String, String> {
         val resolved = HashSet<String>(primaryMap.size)
         val unresolved = HashSet<String>(primaryMap.size)
-        val map: MutableMap<String, String> = LinkedHashMap(this.primaryMap.size + this.secondaryMap.size)
+        val map: MutableMap<String, String?> = LinkedHashMap(this.primaryMap.size + this.secondaryMap.size)
 
         //Initialize the maps and sets
         map.putAll(this.primaryMap)
