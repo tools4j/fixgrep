@@ -83,7 +83,25 @@ task copyFromLibsToDistLib(type: Copy) {
     into "$buildDir/dist/files/lib"
 }
 
+task createHtmlManPage(type:JavaExec) {
+    main = "org.tools4j.fixgrep.FixGrepMain"
+    classpath = sourceSets.main.runtimeClasspath
+    args = ["--man", "--html", "page", "--to-file", "$buildDir/dist/files/man.html"]
+}
+
+task createTextManPage(type:JavaExec) {
+    main = "org.tools4j.fixgrep.FixGrepMain"
+    classpath = sourceSets.main.runtimeClasspath
+    args = ["--man", "page", "--to-file", "$buildDir/dist/files/man.txt"]
+}
+
 task createZip(type: Zip) {
+    dependsOn assemble
+    dependsOn copyAdditionalResources
+    dependsOn copyFromLibsToDistLib
+    dependsOn createHtmlManPage
+    dependsOn createTextManPage
+
     from 'build/dist/files'
     include '*'
     include '*/*'
@@ -94,6 +112,8 @@ task createZip(type: Zip) {
 
 task buildZip {
     group 'build'
+    dependsOn "createZip"
+
     description 'Produces the Tabular zip file.'
     doLast {
         println 'Done!'
@@ -101,15 +121,10 @@ task buildZip {
 }
 
 task copyZipToDistDirectory(type: Copy) {
+    dependsOn createZip
     from 'build/dist/zip/'
     into 'dist/'
 }
 
 
 build.dependsOn(copyDependenciesToLib)
-copyFromLibsToDistLib
-buildZip.dependsOn createZip
-createZip.dependsOn assemble
-createZip.dependsOn copyAdditionalResources
-createZip.dependsOn copyFromLibsToDistLib
-copyZipToDistDirectory.dependsOn createZip

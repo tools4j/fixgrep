@@ -48,16 +48,16 @@ class ManGenerator(val docWriterFactory: DocWriterFactory, val debug: Boolean = 
         lines.forEach { writer.writeLn(it) }
         writer.endSection()
                 .writeLn("into this:")
-                .writeLn(formattedExample)
+                .write(formattedExample)
                 .toFormattedText();
 
-        writer.writeLn("fixgrep features:")
+        writer.writeHeading(2, "fixgrep features:")
         writer.startList()
         writer.listItem("Filtering of messages by field criteria")
         writer.listItem("Hide tags")
         writer.listItem("Change the order that tags are displayed")
         writer.listItem("Highlight tags and lines based on criteria")
-        writer.listItem("Output to console or to HTML")
+        writer.listItem("Output to text or html format")
         writer.endList()
         return writer.toFormattedText()
     }
