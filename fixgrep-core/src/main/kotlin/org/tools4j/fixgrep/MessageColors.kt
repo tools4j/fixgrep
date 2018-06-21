@@ -35,7 +35,7 @@ class MessageColors {
     fun getColor(msgType: FixMessageType): Ansi16ForegroundColor {
         return when (msgType) {
             FixMessageType.NewOrderSingle
-            -> Ansi16ForegroundColor.BrightBlue
+            -> Ansi16ForegroundColor.Cyan
 
             FixMessageType.Heartbeat,
             FixMessageType.TestRequest,
@@ -152,8 +152,8 @@ class MessageColors {
             FixMessageType.StreamAssignmentReportACK,
             FixMessageType.PartyDetailsListRequest,
             FixMessageType.PartyDetailsListReport
-            -> Ansi16ForegroundColor.Purple
-            else -> Ansi16ForegroundColor.Purple
+            -> Ansi16ForegroundColor.Yellow
+            else -> Ansi16ForegroundColor.Yellow
         }    
     }
 
@@ -164,7 +164,7 @@ class MessageColors {
             ExecType.Fill,
             ExecType.Replaced,
             ExecType.Trade
-                    -> Ansi16ForegroundColor.Blue
+                    -> Ansi16ForegroundColor.Green
 
             ExecType.DoneForDay
                     -> Ansi16ForegroundColor.Green

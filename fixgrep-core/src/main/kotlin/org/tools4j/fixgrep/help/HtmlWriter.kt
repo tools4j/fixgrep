@@ -17,6 +17,33 @@ import java.util.function.Function
 open class HtmlWriter(): DocWriter {
     val sb = StringBuilder()
 
+    override fun startList(): DocWriter {
+        write("<ul>\n")
+        return this
+    }
+
+    override fun listItem(itemText: String): DocWriter {
+        startListItem()
+        write(itemText)
+        endListItem()
+        return this
+    }
+
+    override fun startListItem(): DocWriter {
+        write("<li>")
+        return this
+    }
+
+    override fun endListItem(): DocWriter {
+        write("</li>\n")
+        return this
+    }
+
+    override fun endList(): DocWriter {
+        write("</ul>\n")
+        return this
+    }
+
     override fun isHtml(): Boolean {
         return true
     }
@@ -32,17 +59,17 @@ open class HtmlWriter(): DocWriter {
     }
 
     override fun startSection(): DocWriter {
-        writeLn("<div>")
+        write("<div>\n")
         return this
     }
 
     override fun startSection(textEffect: TextEffect): DocWriter {
-        writeLn("<div class='${textEffect.htmlClass}'>")
+        write("<div class='${textEffect.htmlClass}'>\n")
         return this
     }
 
     override fun endSection(): DocWriter {
-        writeLn("</div>")
+        write("</div>\n")
         return this
     }
 
@@ -101,7 +128,7 @@ open class HtmlWriter(): DocWriter {
     }
 
     override fun writeLn(line: String): HtmlWriter {
-        sb.append(line)
+        sb.append(line).append("<br/>")
         return this
     }
 
@@ -111,9 +138,9 @@ open class HtmlWriter(): DocWriter {
     }
 
     fun writeDiv(content: String, classes: String): HtmlWriter {
-        writeLn("<div class='$classes'>\n" )
-        writeLn(content)
-        writeLn("\n</div>\n")
+        write("<div class='$classes'>\n" )
+        write(content)
+        write("\n</div>\n")
         return this
     }
 
@@ -125,7 +152,7 @@ open class HtmlWriter(): DocWriter {
     }
 
     override fun writeHeading(level: Int, content: String): HtmlWriter {
-        write("<h$level>" )
+        write("<h$level id='" + content.trim().replace(Regex("\\s"), "-") + "'>" )
         write(content)
         write("</h$level>\n")
         return this
@@ -133,6 +160,11 @@ open class HtmlWriter(): DocWriter {
 
     override fun addTable(): TableBuilder {
         val tableBuilder = HtmlTableBuilder(this)
+        return tableBuilder.startNewTable()
+    }
+
+    override fun addTable(textEffect: TextEffect): TableBuilder {
+        val tableBuilder = HtmlTableBuilder(this, textEffect)
         return tableBuilder.startNewTable()
     }
 

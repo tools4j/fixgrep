@@ -19,6 +19,30 @@ import java.util.function.Function
 class ConsoleTextWriter(): DocWriter {
     val sectionTextEffectsStack = LinkedList<TextEffect>()
 
+    override fun startList(): DocWriter {
+        return this
+    }
+
+    override fun listItem(itemText: String): DocWriter {
+        startListItem()
+        writeLn(itemText)
+        endListItem()
+        return this
+    }
+
+    override fun startListItem(): DocWriter {
+        write("* ")
+        return this
+    }
+
+    override fun endListItem(): DocWriter {
+        return this
+    }
+
+    override fun endList(): DocWriter {
+        return this
+    }
+
     override fun writeBold(str: String, textEffect: TextEffect): DocWriter {
         write(textEffect.consoleTextBefore).writeBold(str).write(textEffect.consoleTextAfter)
         return this
@@ -85,6 +109,10 @@ class ConsoleTextWriter(): DocWriter {
 
     override fun writeFormatExamplesTable(fix: String): HighlightExampleTable {
         return HighlightExampleTable(fix, addTable(), Function {it.toConsoleText()})
+    }
+
+    override fun addTable(textEffect: TextEffect): TableBuilder {
+        return addTable()
     }
 
     override fun addTable(): TableBuilder {

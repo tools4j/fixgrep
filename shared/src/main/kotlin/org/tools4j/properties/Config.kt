@@ -48,4 +48,7 @@ interface Config {
     }
 
     fun hasPropertyAndIsNotFalse(key: String): Boolean
+    fun hasPropertyAndIsTrueOrNull(key: String): Boolean {
+        return get(key) == null || get(key).toString().toLowerCase().equals("true")
+    }
 }

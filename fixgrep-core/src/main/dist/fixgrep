@@ -1,13 +1,18 @@
 #!/bin/bash
 
-ADDITIONAL_PARAMS=""
-
-if ! [ -t 0 ]; then
-    ADDITIONAL_PARAMS="--piped"
-fi
-
 if ! [[ $(java -version 2>&1 | egrep '(1.8|1.9|1.10)') ]]; then
     echo "Could not find appropriate java version installed.  Please ensure that java >= 1.8 is installed and on your path.  Results of java version check $(java -version)"
 fi
 
-java -XX:+UseSerialGC -cp "lib/*" org.tools4j.fixgrep.FixGrepMain "$ADDITIONAL_PARAMS" "$@" <&0
+ADDITIONAL_PARAM=""
+COMMAND_POSTFIX=""
+
+if [ "$@" = "man" ]; then
+    ADDITIONAL_PARAM="--man"
+    COMMAND_POSTFIX=" | less -R"
+
+elif ! [ -t 0 ]; then
+    ADDITIONAL_PARAM="--piped"
+fi
+
+eval "java -XX:+UseSerialGC -cp \"lib/*\" org.tools4j.fixgrep.FixGrepMain $ADDITIONAL_PARAM $@ <&0 $COMMAND_POSTFIX"

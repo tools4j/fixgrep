@@ -8,16 +8,17 @@ import org.tools4j.fixgrep.texteffect.TextEffect
  * Date: 22/05/2018
  * Time: 6:19 PM
  */
-class HtmlTableBuilder(val writer: DocWriter): TableBuilder {
+class HtmlTableBuilder(val writer: DocWriter, val textEffect: TextEffect? = null): TableBuilder {
     var atLeastOneRowStarted = false
 
     override fun startNewTable(): HtmlTableBuilder {
-        writer.write("<table class='doc-table'>\n")
+        val tableClass = textEffect?.htmlClass ?:"doc-table"
+        writer.write("<table class='$tableClass'>\n")
         return this
     }
 
-    override fun startNewTable(htmlOnlyTextEffect: HtmlOnlyTextEffect): TableBuilder {
-        writer.write("<table class='${htmlOnlyTextEffect.htmlClass}'>\n")
+    override fun startNewTable(htmlOnlyTextEffect: HtmlOnlyTextEffect): HtmlTableBuilder {
+        writer.write("<table class='doc-table ${htmlOnlyTextEffect.htmlClass}'>\n")
         return this
     }
 

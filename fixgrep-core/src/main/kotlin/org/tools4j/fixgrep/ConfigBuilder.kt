@@ -22,9 +22,15 @@ class ConfigBuilder(val args: List<String>, val overrides: Config?){
         val optionsConfig = OptionsToConfig(parsedOptions).config
         val classpathConfig = ConfigLoader.fromClasspath("application.properties")!!
         val homeDirConfig = ConfigLoader.fromHomeDir(".fixgrep/application.properties")
+        val rawArguments = parsedOptions.nonOptionArguments()
+        val cleanedArguments = rawArguments
+                .filter { it != null && !it.toString().trim().isEmpty() }
+                .map { it.toString().trim() }
+                .flatMap { it.split(Regex("\\s")) }
+                .toList()
 
         logger.info("================================")
-        logger.info("Non-option arguments: "+ parsedOptions.nonOptionArguments())
+        logger.info("Non-option arguments: "+ cleanedArguments)
         logger.info("================================")
         logger.info("Options: "+ args.toList())
         logger.info("================================")
@@ -44,6 +50,6 @@ class ConfigBuilder(val args: List<String>, val overrides: Config?){
 
         logger.info("================================")
         logger.info("Resolved config:\n"+ resolvedConfig.toPrettyString())
-        ConfigAndArguments(resolvedConfig, parsedOptions.nonOptionArguments(), args)
+        ConfigAndArguments(resolvedConfig, cleanedArguments, args)
     }
 }

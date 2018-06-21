@@ -1,3 +1,15 @@
+body {
+    background-color: #f5f5f5;
+    text-rendering: optimizelegibility;
+    font-size: 16px;
+    color: #333;
+    line-height: 1.5em;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 400;
+    font-family: varela round,sans-serif;
+    margin: 0;
+}
+
 div.fixMsg {
     white-space: nowrap;
 }
@@ -14,44 +26,202 @@ span.Fg123{
     color: lightskyblue;
 }
 
-body.fix-output div.header {
-    background-color: #333;
-    padding: 0.4em 1em 0.4em 1em;
+
+div.top-strip {
+    background-color: #6db63f;
+    font-size: 0.2em;
+    line-height: 1em;
 }
 
-body.fix-output div.footer {
+div.header {
+    background-color: #34302d;
+    padding: 1em 1em 1em 1em;
+}
+
+div.header span {
+    font: 24px/normal 'Consolas', 'Menlo', 'Ubuntu Mono', 'source-code-pro', monospace;
+    margin: 0;
+    color: white;
+    padding: 0;
+}
+
+div.content {
+    margin: 12px;
+}
+
+body div.footer {
     background-color: #333;
     padding: 0.2em 1em 0.2em 1em;
-    font: 10px/normal 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
+    font: 10px/normal 'Consolas', 'Menlo', 'Ubuntu Mono', 'source-code-pro', monospace;
     color: white;
-}
-
-body.fix-output h1 {
-    font: 24px/normal 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
-    color: white;
-    margin: 0;
-    padding: 0;
 }
 
 div.console {
     white-space: nowrap;
-    #font: 12px/normal 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
-    font: 11px 'andale mono','lucida console',monospace;
+    font: 12px/normal 'Consolas', 'Menlo', 'Ubuntu Mono', 'source-code-pro', monospace;
+    #font: 11px 'andale mono','lucida console',monospace;
     background-color: #333;
     color: white;
     padding: 0.5em;
-    overflow: visible;
-    font-weight: lighter;
+    overflow: auto;
+    text-rendering: optimizelegibility;
 }
 
-div.console span.bold {
-    font: 11px 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
+table.doc-table td, table.doc-table th {
+    #white-space: nowrap;
+    font: 12px/normal 'Consolas', 'Menlo', 'Ubuntu Mono', 'source-code-pro', monospace;
+    background-color: #333;
+    color: white;
+    padding: 0.5em;
+    overflow: auto;
+    text-rendering: optimizelegibility;
+    text-align: left;
 }
 
+table.doc-table th {
+    font-weight: bold;
+    font-family: varela round,sans-serif;
+    font-size: 15px;
+}
+
+table.color256-table td {
+    font: 12px/normal 'Consolas', 'Menlo', 'Ubuntu Mono', 'source-code-pro', monospace;
+    padding: 0.2em;
+}
+
+.bold { font-weight: bold; }
+
+
+div.console span.field span {
+    opacity: 0.7;
+}
+
+div.console span.field span.bold {
+    opacity: 1.0;
+    font-weight: normal;
+}
 
 div.fixMsg span {
     padding: 0;
     margin: 0;
+}
+
+#toc a {
+    color: #34302d;
+}
+
+h1 {
+    border-top: 4px solid #6db63f;
+}
+
+h1 a {
+    font-family: Montserrat,sans-serif;
+    color: #34302d;
+    text-rendering: optimizelegibility;
+    font-size: 36px;
+    font-weight: 400;
+    text-decoration: none;
+    display: block;
+    padding-top: 0.4em;
+}
+
+
+h2 {
+    font-family: Montserrat,sans-serif;
+    color: #34302d;
+    font-weight: 700;
+    line-height: 1.5em;
+    text-transform: uppercase;
+    font-size: 17.5px;
+    text-rendering: optimizelegibility;
+    text-decoration: none;
+    padding-bottom: 0;
+    margin-bottom: 0.2em;
+}
+
+h2 a {
+    font-family: Montserrat,sans-serif;
+    color: #34302d;
+    font-weight: 700;
+    line-height: 1.5em;
+    text-transform: uppercase;
+    font-size: 17.5px;
+    text-rendering: optimizelegibility;
+    text-decoration: none;
+    margin: 0;
+}
+
+h3 {
+    font-family: Montserrat,sans-serif;
+    color: #34302d;
+    font-weight: 700;
+    line-height: 1.5em;
+    font-size: 15px;
+    text-rendering: optimizelegibility;
+    text-decoration: none;
+    padding-bottom: 0;
+    margin-bottom: 0.2em;
+}
+
+h3 a {
+    font-family: Montserrat,sans-serif;
+    color: #34302d;
+    font-weight: 700;
+    line-height: 1.5em;
+    font-size: 17px;
+    text-rendering: optimizelegibility;
+    text-decoration: none;
+    margin: 0;
+}
+
+div.example-description {
+    margin-top: 1.5em;
+    border-top: 1px dashed gray;
+    padding-top: 0.5em;
+}
+
+div.example-arguments, div.option h2, div.option h2 a{
+    font-family: 'Consolas', 'Menlo', 'Ubuntu Mono', 'source-code-pro', monospace;
+    font-size: 14px;
+    text-transform: none;
+    text-rendering: optimizelegibility;
+    font-weight: bold;
+    line-height: 2em;
+}
+
+
+div.example-list h2, div.example-list h2 a{
+    font-family: 'Consolas', 'Menlo', 'Ubuntu Mono', 'source-code-pro', monospace;
+    font-size: 14px;
+    text-transform: none;
+    text-rendering: optimizelegibility;
+    font-weight: bold;
+    line-height: 2em;
+}
+
+
+div.option h2 a{
+    margin-bottom: 1.0em;
+}
+
+div.option {
+    margin-top: 0.5em;
+    border-top: 1px dashed gray;
+    padding-top: 0;
+    padding-bottom: 1.0em;
+}
+
+ul {
+    margin-top: 0.2em;
+    margin-bottom: 0.2em;
+}
+
+span.color-demo span {
+    margin-right: 0.2em;
+    font-family: 'Consolas', 'Menlo', 'Ubuntu Mono', 'source-code-pro', monospace;
+    font-size: 14px;
+    text-rendering: optimizelegibility;
+    padding: 0.1em 0.5em 0.1em 0.5em;
 }
 
 .FgBlack{ color: black; }
@@ -70,6 +240,24 @@ div.fixMsg span {
 .FgBrightMagenta{ color: magenta; font-weight: bold; }
 .FgBrightCyan{ color: cyan; font-weight: bold; }
 .FgBrightWhite{ color: white; font-weight: bold; }
+
+
+.BgBlack{ background-color: black; }
+.BgRed{ background-color: red; }
+.BgGreen{ background-color: green; }
+.BgYellow{ background-color: yellow; }
+.BgBlue{ background-color: blue; }
+.BgPurple{ background-color: purple; }
+.BgCyan{ background-color: cyan; }
+.BgWhite{ background-color: white; }
+.BgGray{ background-color: gray; }
+.BgBrightRed{ background-color: red; }
+.BgBrightGreen{ background-color: green; }
+.BgBrightYellow{ background-color: yellow; }
+.BgBrightBlue{ background-color: blue; }
+.BgBrightMagenta{ background-color: magenta; }
+.BgBrightCyan{ background-color: cyan; }
+.BgBrightWhite{ background-color: white; }
 
 
 .Fg0{ color: #000000; }
@@ -586,4 +774,3 @@ div.fixMsg span {
 .Bg254{ background-color: #e4e4e4; }
 .Bg255{ background-color: #eeeeee; }
 
-.bold { font-weight: bold; }

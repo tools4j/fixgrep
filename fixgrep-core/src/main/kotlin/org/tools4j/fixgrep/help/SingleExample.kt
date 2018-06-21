@@ -13,31 +13,21 @@ import org.tools4j.properties.ConfigImpl
  * Date: 24/04/2018
  * Time: 5:25 PM
  */
-class ExamplesList (val fixLines: List<String>, val docWriter: DocWriter) {
+class SingleExample (val fixLines: List<String>, val args: List<String>, val docWriterFactory: DocWriterFactory) {
     val fixSpec = Fix50SP2FixSpecFromClassPath().spec
+
+    val docWriter: DocWriter by lazy { docWriterFactory.createNew() }
 
     init {
         docWriter.startSection(HtmlOnlyTextEffect("example-list"))
     }
 
-    fun add(args: String, description: String): ExamplesList {
-        if(args == "<no arguments>") return add(emptyList(), description)
-        else return add(args.split(" "), description)
-    }
-
-    fun add(args: List<String>, description: String): ExamplesList {
-        val example = Example(description, args)
-        docWriter.writeLn(example.description, HtmlOnlyTextEffect("example-description"))
-        if(args.isEmpty()) docWriter.writeLn("<no arguments>", HtmlOnlyTextEffect("example-arguments"))
-        else docWriter.writeLn(example.args.joinToString(" "), HtmlOnlyTextEffect("example-arguments"))
-
+    fun toFormattedString(): String {
         val configOverrides: MutableMap<String, String> = LinkedHashMap()
         configOverrides.put("html", ""+docWriter.isHtml())
-        configOverrides.put("input.delimiter", "|")
-        configOverrides.put("output.line.format", "${'$'}{msgFix}")
-
-        val configAndArguments = ConfigBuilder(example.args, ConfigImpl(configOverrides)).configAndArguments
-
+        configOverrides.put("input.delimiter", "^A")
+        configOverrides.put("output.line.format", "${'$'}{msgColor}${'$'}{msgTypeName}${'$'}{colorReset}:${'$'}{msgFix}")
+        val configAndArguments = ConfigBuilder(args, ConfigImpl(configOverrides)).configAndArguments
         val spec = FormatSpec(config = configAndArguments.config, fixSpec = fixSpec)
         val formatter = Formatter(spec)
         docWriter.startSection(MiscTextEffect.Console)
@@ -46,12 +36,6 @@ class ExamplesList (val fixLines: List<String>, val docWriter: DocWriter) {
             if(formattedLine != null) docWriter.write(formattedLine + "\n")
         }
         docWriter.endSection()
-        return this
+        return docWriter.toFormattedText()
     }
-
-    fun end(){
-        docWriter.endSection()
-    }
-
-    class Example(val description: String, val args: List<String>)
 }

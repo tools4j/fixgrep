@@ -229,7 +229,7 @@ class ConfigImpl : Config {
     }
 
     override fun hasPropertyAndIsNotFalse(key: String): Boolean {
-        return hasProperty(key) && get(key) != null && getAsString(key).toLowerCase() != "false"
+        return hasProperty(key) && (get(key) == null || getAsString(key).toLowerCase() != "false")
     }
 
     override fun getAsStringList(key: String, default: List<String>): List<String>{

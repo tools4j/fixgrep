@@ -72,7 +72,7 @@ class ConsoleTextTableBuilder(val writer: DocWriter): TableBuilder {
                           .write(cell.text.padStringContainingAnsiCodesEnd(columnWidth!!))
                           .write(cell.textEffectResetOrBlank)
                     if(i == (row.cells.size - 1)){
-                        writer.writeLn("|")
+                        writer.write("|\n")
                     }
                 }
             }

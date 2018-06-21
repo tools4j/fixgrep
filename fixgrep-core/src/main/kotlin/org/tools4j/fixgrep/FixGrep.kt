@@ -1,8 +1,8 @@
 package org.tools4j.fixgrep
 
 import mu.KLogging
-import org.tools4j.fixgrep.help.Color16Demo
-import org.tools4j.fixgrep.help.Color256Demo
+import org.tools4j.fixgrep.help.Color16ConsoleDemo
+import org.tools4j.fixgrep.help.Color256ConsoleDemo
 import org.tools4j.fixgrep.help.DocWriterFactory
 import org.tools4j.fixgrep.help.ExampleAppPropertiesFileCreator
 import org.tools4j.fixgrep.help.HelpGenerator
@@ -38,28 +38,26 @@ class FixGrep(val inputStream: InputStream?, val outputStream: OutputStream, val
             val config = configAndArguments.config
 
             if(config.hasProperty("html") && config.getAsString("html", "page") == "page"){
-                val heading = if(config.getAsBoolean("man", false)){
-                    "Fixgrep Man Page"
+                if(config.getAsBoolean("man", false)){
+                    HtmlPageHeader("fixgrep Man Page", true).write(printStream)
                 } else {
-                    "fixgrep " + configAndArguments.originalApplicationArguments.joinToString(" ")
+                    val heading = "fixgrep " + configAndArguments.originalApplicationArguments.joinToString(" ")
+                    HtmlPageHeader(heading).write(printStream)
                 }
-                HtmlPageHeader(heading).write(printStream)
             }
 
             if(config.getAsBoolean("256.color.demo", false)){
-                printStream.println(Color256Demo().demoForConsole)
+                printStream.println(Color256ConsoleDemo().demoForConsole)
             } else if(config.getAsBoolean("16.color.demo", false)){
-                printStream.println(Color16Demo().demoForConsole)
+                printStream.println(Color16ConsoleDemo().demoForConsole)
             } else if(config.getAsBoolean("man", false)){
-                val docWriterFactory = if(config.getAsBoolean("html", false)) DocWriterFactory.Html else DocWriterFactory.ConsoleText
+                val docWriterFactory = if(config.hasPropertyAndIsNotFalse("html")) DocWriterFactory.Html else DocWriterFactory.ConsoleText
                 printStream.println(ManGenerator(docWriterFactory, config.getAsBoolean("debug", false)).man)
             } else if(config.getAsBoolean("help", false)){
                 HelpGenerator().go(outputStream);
             } else if(config.getAsBoolean("install", false)){
                 ExampleAppPropertiesFileCreator().createIfNecessary()
-            }
-
-            if(config.getAsBoolean("piped.input", false) && inputStream != null){
+            } else if(config.getAsBoolean("piped.input", false) && inputStream != null){
                 readFromPipedInput()
             } else {
                 readFromFiles(configAndArguments.arguments)

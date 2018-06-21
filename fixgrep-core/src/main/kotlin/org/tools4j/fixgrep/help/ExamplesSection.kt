@@ -1,5 +1,6 @@
 package org.tools4j.fixgrep.help
 
+import org.tools4j.fixgrep.texteffect.HtmlOnlyTextEffect
 import org.tools4j.fixgrep.texteffect.MiscTextEffect
 import org.tools4j.fixgrep.utils.Constants.Companion.DOLLAR
 
@@ -19,10 +20,10 @@ class ExamplesSection(val docWriterFactory: DocWriterFactory) {
 
         val docWriter = docWriterFactory.createNew()
         docWriter
-                .writeHeading(1, "EXAMPLES")
+                .writeHeading(1, "Examples")
                 .writeLn("Examples are being applied to the following lines of fix.  I have purposefully over simplied these FIX messages and stripped them down so that they might fit horizontally on a console: ")
                 .startSection(MiscTextEffect.Console)
-        lines.forEach { docWriter.writeLn(it) }
+        lines.forEach { docWriter.startSection(HtmlOnlyTextEffect("line")).write(it).endSection() }
         docWriter.endSection()
 
         var examplesList = ExamplesList(lines, docWriter)
@@ -63,7 +64,7 @@ class ExamplesSection(val docWriterFactory: DocWriterFactory) {
         examplesList.add("-h 35=8:Line", "Highlight whole lines when tag 35=8 (ExecutionReport)")
         examplesList.add("-h 35=8:Bg12:Line", "Highlight whole lines with background color 3 of the 256 color map, when tag 35=8 (ExecutionReport)")
         examplesList.add("-h 35,55", "Highlight tags 35 and 55.")
-        examplesList.add("-h 35:Bg8,55:Bg9", "Highlight tag 35 with a background color of 8.  Highlight tag 55 with a background color of 9.")
+        examplesList.add("-h 35:Bg176,55:Bg9", "Highlight tag 35 with a background color of 8.  Highlight tag 55 with a background color of 9.")
         examplesList.add("-h 35=D:Line,55", "When a message has tag 35=D, highlight the whole line.  Also highlight tag 55.")
         examplesList.add("--suppress-bold-tags-and-values", "Don't use bold text effects in the output fix.")
         examplesList.add("-p", "Same configuration but with short form option -p")

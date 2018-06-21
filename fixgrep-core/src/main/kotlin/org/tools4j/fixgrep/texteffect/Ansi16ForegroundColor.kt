@@ -28,6 +28,11 @@ enum class Ansi16ForegroundColor(override val consoleTextBefore: String): TextEf
         "Fg" + name
     }
 
+    val backgroundColorForDemo: Ansi16BackgroundColor by lazy {
+        if(this == Black || this == Blue || this == BrightBlue || this == Gray) Ansi16BackgroundColor.White
+        else Ansi16BackgroundColor.Black
+    }
+
     companion object {
         @JvmStatic
         fun contains(str: String): Boolean{
@@ -57,9 +62,11 @@ enum class Ansi16ForegroundColor(override val consoleTextBefore: String): TextEf
         @JvmStatic
         fun listAsHtml(): String {
             val sb = StringBuilder()
+            sb.append("<span class='color-demo'>\n")
             Ansi16ForegroundColor.values().forEach {
-                sb.append("<span style='").append("Fg").append(it.name).append("'>").append(it.name).append("</span>")
+                sb.append("<span class='").append("Fg").append(it.name).append(" Bg").append(it.backgroundColorForDemo.name).append("'>").append("Fg"+it.name).append("</span>")
             }
+            sb.append("</span>")
             return sb.toString()
         }
 
@@ -68,7 +75,7 @@ enum class Ansi16ForegroundColor(override val consoleTextBefore: String): TextEf
             val sb = StringBuilder()
             Ansi16ForegroundColor.values().forEach {
                 if(sb.length > 0) sb.append(", ")
-                sb.append(it.consoleTextBefore).append(it.name).append(it.consoleTextAfter)
+                sb.append(it.consoleTextBefore).append(it.backgroundColorForDemo.consoleTextBefore).append("Fg"+it.name).append(it.consoleTextAfter)
             }
             return sb.toString()
         }

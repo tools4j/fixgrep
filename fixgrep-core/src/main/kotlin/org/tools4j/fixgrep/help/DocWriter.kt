@@ -22,6 +22,7 @@ interface DocWriter {
     fun writeBold(str: String): DocWriter
     fun writeBold(str: String, textEffect: TextEffect): DocWriter
     fun addTable(): TableBuilder
+    fun addTable(textEffect: TextEffect): TableBuilder
     fun writeListOfDefaultColors(): DocWriter
     fun toFormattedText(): String
     fun writeListOfAnsi16ForegroundColors(): DocWriter
@@ -32,4 +33,9 @@ interface DocWriter {
     fun endSection(): DocWriter
     fun writeLink(linkText: String, url: String): DocWriter
     fun isHtml(): Boolean
+    fun startList(): DocWriter
+    fun listItem(itemText: String): DocWriter
+    fun startListItem(): DocWriter
+    fun endListItem(): DocWriter
+    fun endList(): DocWriter
 }
