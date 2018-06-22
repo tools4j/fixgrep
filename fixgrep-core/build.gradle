@@ -9,19 +9,15 @@ buildscript {
     }
 }
 
-group 'org.tools4j.fixgrep'
-version '1.0-SNAPSHOT'
+// import the script which runs the version generation
+apply from: 'git-versioner.gradle'
 
-//buildscript {
-//    dependencies {
-//        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.0'
-//    }
-//}
+group 'org.tools4j.fixgrep'
+version "$gitVersionName"
 
 apply plugin: 'groovy'
 apply plugin: 'java'
 apply plugin: 'kotlin'
-//apply plugin: 'org.junit.platform.gradle.plugin'
 
 sourceCompatibility = 1.8
 
@@ -30,36 +26,29 @@ repositories {
     maven { url "http://dl.bintray.com/jetbrains/spek" }
 }
 
-//junitPlatform {
-//    filters {
-//        engines {
-//            include 'spek'
-//        }
-//    }
-//}
-
 dependencies {
     compile project(':shared')
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     compile "io.github.microutils:kotlin-logging:1.4.9"
     compile 'ch.qos.logback:logback-classic:1.2.3'
-//    compile 'com.typesafe:config:1.3.2'
     compile 'net.sf.jopt-simple:jopt-simple:5.0.4'
     compile "com.google.guava:guava-collections:r03"
-   // compile 'org.slf4j:slf4j-simple:1.7.5'
 
     testCompile "org.codehaus.groovy:groovy-all:2.4.1"
     testCompile 'junit:junit:4.12'
     testCompile "org.spockframework:spock-core:1.0-groovy-2.4"
     testCompile "org.tools4j:groovy-tables:1.3"
     testCompile "org.hamcrest:hamcrest-core:1.3" // only necessary if Hamcrest matchers are used
-
-//    testRuntime "org.objenesis:objenesis:2.1"    // allows mocking of classes without default constructor (together with CGLIB)
-//    testRuntime "cglib:cglib-nodep:3.1"          // allows mocking of classes (in addition to interfaces)
-//    testCompile 'org.jetbrains.spek:spek-api:1.1.5'
-//    testRuntime 'org.jetbrains.spek:spek-junit-platform-engine:1.1.5'
-//    testCompile 'org.assertj:assertj-core:3.9.0'
 }
+
+
+// Optional: configure the versioner
+/*ext.gitVersioner = [
+        defaultBranch           : "develop",  // default "master"
+        yearFactor              : 1200,       // default "1000", increasing every 8.57h
+        snapshotEnabled         : false,      // default false, the "-SNAPSHOT" postfix
+        localChangesCountEnabled: false       // default false, the (<commitCount>) before -SNAPSHOT
+]*/
 
 compileKotlin {
     kotlinOptions.jvmTarget = "1.8"
@@ -86,7 +75,8 @@ task copyFromLibsToDistLib(type: Copy) {
 task createHtmlManPage(type:JavaExec) {
     main = "org.tools4j.fixgrep.FixGrepMain"
     classpath = sourceSets.main.runtimeClasspath
-    args = ["--man", "--html", "page", "--to-file", "$buildDir/dist/files/man.html"]
+    args = ["--man", "--html", "page", "--to-file", "../index.html"]
+    environment("FIXGREP_VERSION", "$gitVersionName")
 }
 
 task createTextManPage(type:JavaExec) {

@@ -25,7 +25,7 @@ class ConsoleTextWriter(): DocWriter {
 
     override fun listItem(itemText: String): DocWriter {
         startListItem()
-        writeLn(itemText)
+        write(itemText)
         endListItem()
         return this
     }
@@ -36,6 +36,7 @@ class ConsoleTextWriter(): DocWriter {
     }
 
     override fun endListItem(): DocWriter {
+        writeLn()
         return this
     }
 

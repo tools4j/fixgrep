@@ -52,7 +52,7 @@ class FixGrep(val inputStream: InputStream?, val outputStream: OutputStream, val
                 printStream.println(Color16ConsoleDemo().demoForConsole)
             } else if(config.getAsBoolean("man", false)){
                 val docWriterFactory = if(config.hasPropertyAndIsNotFalse("html")) DocWriterFactory.Html else DocWriterFactory.ConsoleText
-                printStream.println(ManGenerator(docWriterFactory, config.getAsBoolean("debug", false)).man)
+                printStream.println(ManGenerator(docWriterFactory, configAndArguments, config.getAsBoolean("debug", false)).man)
             } else if(config.getAsBoolean("help", false)){
                 HelpGenerator().go(outputStream);
             } else if(config.getAsBoolean("install", false)){

@@ -2,7 +2,6 @@ package org.tools4j.fixgrep
 
 import org.tools4j.fixgrep.utils.OutputFile
 import java.awt.Desktop
-import java.io.File
 import java.io.InputStream
 import java.io.OutputStream
 import java.net.URL
@@ -26,7 +25,7 @@ class FixGrepMain(val inputStream: InputStream?, val outputStream: OutputStream,
         val configAndArguments = ConfigBuilder(args).configAndArguments
 
         if(configAndArguments.arguments.size >= 2 && configAndArguments.arguments.get(0) == "man" && configAndArguments.arguments.get(1) == "online"){
-            val uri = URL("http://www.microsoft.com").toURI()
+            val uri = URL(configAndArguments.config.getAsString("fixgrep.online.help.url")).toURI()
             if (Desktop.isDesktopSupported()) {
                 Desktop.getDesktop().browse(uri)
             } else {

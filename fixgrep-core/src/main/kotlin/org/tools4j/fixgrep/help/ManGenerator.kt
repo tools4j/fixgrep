@@ -4,7 +4,7 @@ import org.tools4j.extensions.containsAny
 import org.tools4j.fixgrep.OptionParserFactory
 import org.tools4j.fixgrep.texteffect.HtmlOnlyTextEffect
 import org.tools4j.fixgrep.texteffect.MiscTextEffect
-import java.io.File
+import org.tools4j.properties.ConfigAndArguments
 
 /**
  * User: ben
@@ -12,7 +12,7 @@ import java.io.File
  * Time: 5:25 PM
  */
 
-class ManGenerator(val docWriterFactory: DocWriterFactory, val debug: Boolean = false) {
+class ManGenerator(val docWriterFactory: DocWriterFactory, val configAndArguments: ConfigAndArguments, val debug: Boolean = false) {
     val man: String by lazy {
         val sb = StringBuilder()
         sb.append(whatIsFixgrep())
@@ -63,18 +63,25 @@ class ManGenerator(val docWriterFactory: DocWriterFactory, val debug: Boolean = 
     }
 
     private fun howToGet(): String {
+        val fixgrepDownloadUrl = configAndArguments.config.getAsString("fixgrep.download.url")
+        val fixgrepVcsUrl = configAndArguments.config.getAsString("fixgrep.vcs.home.url")
+
         return docWriterFactory.createNew().writeHeading(1, "How to get")
                 .write("Download the latest version from ")
-                .writeLink("here", "http://blah.com/blah").writeLn()
-                .writeLn("GitHub project can be found ")
-                .writeLink("here", "http://blah.com/blah").writeLn()
+                .writeLink("here", fixgrepDownloadUrl).writeLn()
+                .write("GitHub project can be found ")
+                .writeLink("here", fixgrepVcsUrl).writeLn()
                 .toFormattedText();
+
+
     }
 
     private fun howToGetHelp(): String {
+        val fixgrepHelpUrl = configAndArguments.config.getAsString("fixgrep.online.help.url")
+
         return docWriterFactory.createNew().writeHeading(1, "How to get help")
                 .startList()
-                .startListItem().write("Online at ").writeLink("www.blah.com", "www.blah.com").endListItem()
+                .startListItem().write("Online ").writeLink("here", "www.blah.com").endListItem()
                 .listItem("Running 'fixgrep man online' (no dashes) will open this page in your default browser.")
                 .listItem("Running 'fixgrep man' (no dashes) will display the fixgrep man page.")
                 .listItem("Running 'fixgrep --man' (with dashes) will display the fixgrep man page in raw format without scrolling.")
@@ -131,16 +138,5 @@ class ManGenerator(val docWriterFactory: DocWriterFactory, val debug: Boolean = 
                 .writeLn("Fixgrep is released under MIT license.")
                 .writeLn("It is free to use and/or modify in both commercial and non-comercial environments.")
                 .toFormattedText();
-    }
-
-    companion object {
-        val fix = "35=D|11=ABC|55=AUD/USD"
-
-        @JvmStatic
-        fun main(args: Array<String>) {
-            println(ManGenerator(DocWriterFactory.ConsoleText, true).man)
-            val htmlFile = File("man.html")
-            htmlFile.writeText(ManGenerator(DocWriterFactory.Html).man)
-        }
     }
 }
