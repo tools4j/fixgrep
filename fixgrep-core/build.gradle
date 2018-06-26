@@ -1,3 +1,5 @@
+import java.text.SimpleDateFormat
+
 buildscript {
     ext.kotlin_version = '1.2.30'
 
@@ -9,11 +11,20 @@ buildscript {
     }
 }
 
-// import the script which runs the version generation
-apply from: 'git-versioner.gradle'
-
 group 'org.tools4j.fixgrep'
-version "$gitVersionName"
+version "1.0"
+
+def versionPropsFile = file('version.properties')
+def buildVersion
+def fullVersion
+if (versionPropsFile.canRead()) {
+    def Properties versionProps = new Properties()
+    versionProps.load(new FileInputStream(versionPropsFile))
+    buildVersion = versionProps['BUILD_VERSION'].toInteger()
+    fullVersion=version+"."+buildVersion
+} else {
+    throw new FileNotFoundException("Could not read version.properties!")
+}
 
 apply plugin: 'groovy'
 apply plugin: 'java'
@@ -24,6 +35,17 @@ sourceCompatibility = 1.8
 repositories {
     mavenCentral()
     maven { url "http://dl.bintray.com/jetbrains/spek" }
+}
+
+sourceSets {
+    perf {
+        groovy {
+            compileClasspath += main.output + test.output
+            runtimeClasspath += main.output + test.output
+            srcDir 'src/perf/groovy'
+        }
+        resources.srcDir file('src/perf/resources')
+    }
 }
 
 dependencies {
@@ -37,18 +59,47 @@ dependencies {
     testCompile "org.codehaus.groovy:groovy-all:2.4.1"
     testCompile 'junit:junit:4.12'
     testCompile "org.spockframework:spock-core:1.0-groovy-2.4"
-    testCompile "org.tools4j:groovy-tables:1.3"
-    testCompile "org.hamcrest:hamcrest-core:1.3" // only necessary if Hamcrest matchers are used
+
+    perfCompile "org.codehaus.groovy:groovy-all:2.4.1"
+    perfCompile 'junit:junit:4.12'
+    perfCompile "org.spockframework:spock-core:1.0-groovy-2.4"
+    perfCompile project(':shared')
 }
 
+configurations {
+    perfCompile.extendsFrom testCompile
+    perfRuntime.extendsFrom testRuntime
+}
 
-// Optional: configure the versioner
-/*ext.gitVersioner = [
-        defaultBranch           : "develop",  // default "master"
-        yearFactor              : 1200,       // default "1000", increasing every 8.57h
-        snapshotEnabled         : false,      // default false, the "-SNAPSHOT" postfix
-        localChangesCountEnabled: false       // default false, the (<commitCount>) before -SNAPSHOT
-]*/
+task versionTxt()  {
+    doLast {
+        new File("build/dist/files/meta/version.txt").text = """Version: $fullVersion
+Buildtime: ${new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date())}
+Application-name: fixgrep
+"""
+    }
+}
+
+ext.autoIncrementBuildNumber = {
+    if (versionPropsFile.canRead()) {
+        def Properties versionProps = new Properties()
+        versionProps.load(new FileInputStream(versionPropsFile))
+        buildVersion = versionProps['BUILD_VERSION'].toInteger() + 1
+        versionProps['BUILD_VERSION'] = buildVersion.toString()
+        versionProps.store(versionPropsFile.newWriter(), null)
+        fullVersion=version+"."+buildVersion
+        println "Updated buildVersion to: $buildVersion"
+        println "Updated fullVersion to: $fullVersion"
+    } else {
+        throw new FileNotFoundException("Could not read version.properties!")
+    }
+}
+
+task perf(type: Test, description: 'Runs the perf tests.', group: 'Verification') {
+    testClassesDirs = sourceSets.perf.output.classesDirs
+    classpath = sourceSets.perf.runtimeClasspath
+    outputs.upToDateWhen { false }
+}
 
 compileKotlin {
     kotlinOptions.jvmTarget = "1.8"
@@ -67,6 +118,11 @@ task copyAdditionalResources(type: Copy) {
     into 'build/dist/files'
 }
 
+task copyPerfResults(type: Copy) {
+    from 'build/reports/tests/perf/benchmarks.txt'
+    into 'build/dist/files/meta'
+}
+
 task copyFromLibsToDistLib(type: Copy) {
     from "$buildDir/libs"
     into "$buildDir/dist/files/lib"
@@ -75,8 +131,8 @@ task copyFromLibsToDistLib(type: Copy) {
 task createHtmlManPage(type:JavaExec) {
     main = "org.tools4j.fixgrep.FixGrepMain"
     classpath = sourceSets.main.runtimeClasspath
-    args = ["--man", "--html", "page", "--to-file", "../index.html"]
-    environment("FIXGREP_VERSION", "$gitVersionName")
+    args = ["--man", "--html", "page", "--to-file", "../docs/index.html"]
+    environment("FIXGREP_VERSION", "$fullVersion")
 }
 
 task createTextManPage(type:JavaExec) {
@@ -85,20 +141,45 @@ task createTextManPage(type:JavaExec) {
     args = ["--man", "page", "--to-file", "$buildDir/dist/files/man.txt"]
 }
 
+task deleteAnyOldZipFiles(type: Delete) {
+    delete fileTree('build/dist/zip') {
+        include '**/*.zip'
+    }
+}
+
 task createZip(type: Zip) {
     dependsOn assemble
     dependsOn copyAdditionalResources
+    dependsOn copyPerfResults
     dependsOn copyFromLibsToDistLib
     dependsOn createHtmlManPage
     dependsOn createTextManPage
+    dependsOn versionTxt
+    dependsOn deleteAnyOldZipFiles
 
     from 'build/dist/files'
     include '*'
     include '*/*'
-    archiveName "fixgrep-${version}.zip"
+    archiveName "fixgrep-UNKNOWN.zip"
     destinationDir(file('build/dist/zip/'))
 }
 
+task copyZipIntoReleasesDir(type: Copy) {
+    dependsOn createZip
+    from 'build/dist/zip/'
+    into 'releases/'
+    include '*.zip'
+}
+
+/*
+Calling release will 'dynamically' set the version
+ */
+task release {
+    finalizedBy copyZipIntoReleasesDir
+    doLast {
+        createZip.archiveName = "fixgrep-${fullVersion}.zip"
+    }
+}
 
 task buildZip {
     group 'build'
@@ -118,3 +199,10 @@ task copyZipToDistDirectory(type: Copy) {
 
 
 build.dependsOn(copyDependenciesToLib)
+
+gradle.taskGraph.whenReady {taskGraph ->
+    if (taskGraph.hasTask(release)) {  /* when run debug task */
+        println "Detected that we are running release"
+        autoIncrementBuildNumber()
+    }
+}

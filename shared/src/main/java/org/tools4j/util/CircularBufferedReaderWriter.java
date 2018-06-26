@@ -25,6 +25,12 @@ public class CircularBufferedReaderWriter {
         reader = new BufferedReader(cs.getReader());
     }
 
+    public CircularBufferedReaderWriter(int bufferSize) throws IOException {
+        cs = new CircularReaderWriter();
+        writer = new BufferedWriter(cs.getWriter(), bufferSize);
+        reader = new BufferedReader(cs.getReader(), bufferSize);
+    }
+
     public BufferedWriter getWriter() {
         return writer;
     }
