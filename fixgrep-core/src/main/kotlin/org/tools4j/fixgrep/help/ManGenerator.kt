@@ -17,8 +17,8 @@ class ManGenerator(val docWriterFactory: DocWriterFactory, val configAndArgument
         val sb = StringBuilder()
         sb.append(whatIsFixgrep())
         sb.append(howToGet())
-        sb.append(howToGetHelp())
         sb.append(howToInstall())
+        sb.append(howToGetHelp())
         sb.append(howToRun())
         sb.append(howToConfigure())
         sb.append(OptionsHelp(docWriterFactory).toFormattedText())
@@ -42,7 +42,7 @@ class ManGenerator(val docWriterFactory: DocWriterFactory, val configAndArgument
         val formattedExample = SingleExample(lines, listOf("-e", "8,9,35"), docWriterFactory).toFormattedString()
         writer
                 .writeHeading(1, "What is fixgrep")
-                .writeLn("fixgrep is a command line utility for searching through, and making FIX protocol messages more readable.")
+                .writeLn("fixgrep is a command line utility for making FIX protocol messages more readable.")
                 .writeLn("fixgrep can turn this:")
                 .startSection(MiscTextEffect.Console)
         lines.forEach { writer.writeLn(it) }
@@ -93,8 +93,13 @@ class ManGenerator(val docWriterFactory: DocWriterFactory, val configAndArgument
     private fun howToInstall(): String {
         return docWriterFactory.createNew()
                 .writeHeading(1, "How to install")
-                .writeLn("You will need to install a version of java (you only need a jre, although a jdk will also work fine.)  Version must be version Java 8 for higher.  (Java jre/jdk 1.8 or higher).")
-                .writeLn("Once downloaded fixgrep, just unzip the content into a directory.  Put that directory on your path.")
+                .startList()
+                .listItem("You will need to install a version of java (you only need a jre, although a jdk will also work fine.)  Version must be version Java 8 for higher.  (Java jre/jdk 1.8 or higher).")
+                .listItem("Download the fixgrep zip file")
+                .listItem("Unzip into a directory from where you wish to run fixgrep")
+                .listItem("Add execute permissions to the fixgrep bash script.  e.g. chmod u+x fixgrep")
+                .listItem("Ensure that the directory where you unzipped fixgrep is on your path")
+                .endList()
                 .toFormattedText();
     }
 
@@ -105,7 +110,7 @@ class ManGenerator(val docWriterFactory: DocWriterFactory, val configAndArgument
                 .writeLn("grep 11=ABC my-large-file.fix | fixgrep [options]", MiscTextEffect.Console)
                 .writeLn("The second is specifying a file argument at the end of the fixgrep command.  e.g.")
                 .writeLn("fixgrep [options] my-file.fix", MiscTextEffect.Console)
-                .writeLn("Note, fixgrep does not curently support wildcards to specify multiple files.  That feature is on it's way.")
+                .writeLn("Note, fixgrep does not curently support wildcards to specify multiple files.")
                 .toFormattedText();
     }
 
@@ -154,8 +159,8 @@ class ManGenerator(val docWriterFactory: DocWriterFactory, val configAndArgument
     private fun licencing(): String {
         return docWriterFactory.createNew()
                 .writeHeading(1, "Licensing")
-                .writeLn("Fixgrep is released under MIT license.")
-                .writeLn("It is free to use and/or modify in both commercial and non-comercial environments.")
+                .write("Fixgrep is released under MIT license, a copy of which can be found ").writeLink("here", "https://opensource.org/licenses/MIT").writeLn()
+                .writeLn("This software is free to use/distribute/modify in both commercial and non-commercial environments.")
                 .toFormattedText();
     }
 }

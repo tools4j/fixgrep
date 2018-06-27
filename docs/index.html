@@ -229,36 +229,36 @@ span.color-demo span {
 }
 
 .FgBlack{ color: black; }
-.FgRed{ color: red; }
-.FgGreen{ color: green; }
+.FgRed{ color: #FF4444; }
+.FgGreen{ color: #00ff87; }
 .FgYellow{ color: yellow; }
-.FgBlue{ color: blue; }
-.FgPurple{ color: purple; }
-.FgCyan{ color: cyan; }
+.FgBlue{ color: #00afff; }
+.FgPurple{ color: #FF00FF; }
+.FgCyan{ color: aqua; }
 .FgWhite{ color: white; }
 .FgGray{ color: gray; }
-.FgBrightRed{ color: red; font-weight: bold; }
-.FgBrightGreen{ color: green; font-weight: bold; }
+.FgBrightRed{ color: #ff0000; font-weight: bold; }
+.FgBrightGreen{ color: #00ff00; font-weight: bold; }
 .FgBrightYellow{ color: yellow; font-weight: bold; }
-.FgBrightBlue{ color: blue; font-weight: bold; }
+.FgBrightBlue{ color: deepskyblue; font-weight: bold; }
 .FgBrightMagenta{ color: magenta; font-weight: bold; }
 .FgBrightCyan{ color: cyan; font-weight: bold; }
 .FgBrightWhite{ color: white; font-weight: bold; }
 
 
 .BgBlack{ background-color: black; }
-.BgRed{ background-color: red; }
-.BgGreen{ background-color: green; }
+.BgRed{ background-color: #FF4444; }
+.BgGreen{ background-color: #00ff87; }
 .BgYellow{ background-color: yellow; }
-.BgBlue{ background-color: blue; }
-.BgPurple{ background-color: purple; }
-.BgCyan{ background-color: cyan; }
+.BgBlue{ background-color: #00afff; }
+.BgPurple{ background-color: #FF00FF; }
+.BgCyan{ background-color: aqua; }
 .BgWhite{ background-color: white; }
 .BgGray{ background-color: gray; }
-.BgBrightRed{ background-color: red; }
-.BgBrightGreen{ background-color: green; }
+.BgBrightRed{ background-color: #ff0000; }
+.BgBrightGreen{ background-color: #00ff00; }
 .BgBrightYellow{ background-color: yellow; }
-.BgBrightBlue{ background-color: blue; }
+.BgBrightBlue{ background-color: deepskyblue; }
 .BgBrightMagenta{ background-color: magenta; }
 .BgBrightCyan{ background-color: cyan; }
 .BgBrightWhite{ background-color: white; }
@@ -855,23 +855,30 @@ into this:<br/><div class='example-list'>
 <li>Output to text or html format</li>
 </ul>
 <h1 id='How-to-get'>How to get</h1>
-Download the latest version from <a href='http://www.apple.com'>here</a><br/>GitHub project can be found <a href='http://www.oracle.com'>here</a><br/><h1 id='How-to-get-help'>How to get help</h1>
+Download the latest version from <a href='https://github.com/tools4j/fixgrep/tree/master/fixgrep-core'>here</a><br/>GitHub project can be found <a href='https://github.com/tools4j/fixgrep/'>here</a><br/><h1 id='How-to-install'>How to install</h1>
 <ul>
-<li>Online <a href='http://mail.google.com'>here</a></li>
+<li>You will need to install a version of java (you only need a jre, although a jdk will also work fine.)  Version must be version Java 8 for higher.  (Java jre/jdk 1.8 or higher).</li>
+<li>Download the fixgrep zip file</li>
+<li>Unzip into a directory from where you wish to run fixgrep</li>
+<li>Add execute permissions to the fixgrep bash script.  e.g. chmod u+x fixgrep</li>
+<li>Ensure that the directory where you unzipped fixgrep is on your path</li>
+</ul>
+<h1 id='How-to-get-help'>How to get help</h1>
+<ul>
+<li>Online <a href='https://tools4j.github.io/fixgrep/index.html'>here</a></li>
 <li>Running 'fixgrep man online' (no dashes) will open this page in your default browser.</li>
 <li>Running 'fixgrep man' (no dashes) will display the fixgrep man page.</li>
 <li>Running 'fixgrep --man' (with dashes) will display the fixgrep man page in raw format without scrolling.</li>
 <li>Running 'fixgrep -?' will print a list of options.</li>
 </ul>
-<h1 id='How-to-install'>How to install</h1>
-You will need to install a version of java (you only need a jre, although a jdk will also work fine.)  Version must be version Java 8 for higher.  (Java jre/jdk 1.8 or higher).<br/>Once downloaded fixgrep, just unzip the content into a directory.  Put that directory on your path.<br/><h1 id='How-to-run'>How to run</h1>
+<h1 id='How-to-run'>How to run</h1>
 There is a bash script file 'fixgrep' which should be your main interface to fixgrep. There are two ways to send fix data into fixgrep.  The first is 'piping'  e.g.<br/><div class='console'>
 grep 11=ABC my-large-file.fix | fixgrep [options]
 </div>
 The second is specifying a file argument at the end of the fixgrep command.  e.g.<br/><div class='console'>
 fixgrep [options] my-file.fix
 </div>
-Note, fixgrep does not curently support wildcards to specify multiple files.  That feature is on it's way.<br/><h1 id='Ways-to-configure-fixgrep'>Ways to configure fixgrep</h1>
+Note, fixgrep does not curently support wildcards to specify multiple files.<br/><h1 id='Ways-to-configure-fixgrep'>Ways to configure fixgrep</h1>
 <h2 id='Fixgrep-can-be-configured-via-three-methods.'>Fixgrep can be configured via three methods.</h2>
 <ul>
 <li><span class='bold'>
