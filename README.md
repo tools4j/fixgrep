@@ -21,7 +21,7 @@ Download the latest version from [here](https://github.com/tools4j/fixgrep/tree/
 # How to get help
 Please visit the fixgrep home page [https://tools4j.github.io/fixgrep/index.html](https://tools4j.github.io/fixgrep/index.html) for detailed help and information.
 Alternatively:
-* Running 'fixgrep man online' (no dashes) will open this page in your default browser.
+* Running 'fixgrep man online' (no dashes) will open the above home page in your default browser.
 * Running 'fixgrep man' (no dashes) will display the fixgrep man page.
-* Running 'fixgrep --man' (with dashes) will display the fixgrep man page in raw format without scrolling.
+* Running 'fixgrep --man' (with dashes) will display the fixgrep man page without scrolling.
 * Running 'fixgrep -?' will print a list of options.
