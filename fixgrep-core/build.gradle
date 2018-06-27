@@ -148,7 +148,9 @@ task deleteAnyOldZipFiles(type: Delete) {
 }
 
 task createZip(type: Zip) {
-    dependsOn assemble
+    dependsOn build
+    dependsOn test
+    dependsOn perf
     dependsOn copyAdditionalResources
     dependsOn copyPerfResults
     dependsOn copyFromLibsToDistLib

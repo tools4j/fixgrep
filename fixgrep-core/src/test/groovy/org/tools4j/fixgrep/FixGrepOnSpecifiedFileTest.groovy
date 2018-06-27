@@ -15,7 +15,7 @@ class FixGrepOnSpecifiedFileTest extends Specification {
     def 'run fixgrep file test'(){
         given:
         Config testConfig = TestConfigBuilder.load().overrideWith(new ConfigImpl(["no.color": "true", "suppress.bold.tags.and.values": "true"]))
-        ConfigAndArguments configAndArguments = new ConfigAndArguments(testConfig, Arrays.asList("fixgrep-core/src/test/resources/small-log1.log"))
+        ConfigAndArguments configAndArguments = new ConfigAndArguments(testConfig, Arrays.asList("src/test/resources/small-log1.log"))
 
         when:
         final CircularBufferedReaderWriter output = new CircularBufferedReaderWriter();
@@ -31,7 +31,7 @@ class FixGrepOnSpecifiedFileTest extends Specification {
     def 'run fixgrep multiple file test'(){
         given:
         Config testConfig = TestConfigBuilder.load().overrideWith(new ConfigImpl(["no.color": "true", "suppress.bold.tags.and.values": "true"]))
-        ConfigAndArguments configAndArguments = new ConfigAndArguments(testConfig, Arrays.asList("", "fixgrep-core/src/test/resources/small-log1.log", "fixgrep-core/src/test/resources/small-log2.log"))
+        ConfigAndArguments configAndArguments = new ConfigAndArguments(testConfig, Arrays.asList("", "src/test/resources/small-log1.log", "src/test/resources/small-log2.log"))
 
         when:
         final CircularBufferedReaderWriter output = new CircularBufferedReaderWriter();

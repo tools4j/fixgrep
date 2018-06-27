@@ -27,7 +27,7 @@ class HtmlTableBuilderTest extends Specification {
                 .endTable()
 
         then:
-        assert writer.toFormattedText() == "<h1>my table</h1>\n" +
+        assert writer.toFormattedText() == "<h1 id='my-table'>my table</h1>\n" +
                 "<table class='doc-table'>\n" +
                 "<tr><th>one</th><th>two</th><th>three</th></tr>\n" +
                 "<tr><td>four</td><td>five</td><td></td></tr>\n" +
@@ -35,6 +35,7 @@ class HtmlTableBuilderTest extends Specification {
                 "<tr><td>a</td><td>fish</td><td>alive</td></tr>\n" +
                 "<tr><td class='BgYellow'>six</td><td>seven</td><td>eight</td></tr>\n" +
                 "<tr><td>nine</td><td>ten</td><td class='Fg44'>then I let him go again</td></tr>\n" +
-                "</table>\n"
+                "</table>\n" +
+                ""
     }
 }

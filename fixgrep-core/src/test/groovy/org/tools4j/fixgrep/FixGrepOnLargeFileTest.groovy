@@ -30,6 +30,9 @@ class FixGrepOnLargeFileTest extends Specification {
 
         then:
         assert assertTwoFilesAreEqual(actualOutputFile, expectedOutputFile)
+
+        cleanup:
+        actualOutputFile.delete()
     }
 
     boolean assertTwoFilesAreEqual(final File actualFile, final BufferedReader expected) {
@@ -51,14 +54,4 @@ class FixGrepOnLargeFileTest extends Specification {
         }
     }
 
-
-//Use this when the output changes, and need to change the expected output
-    private OutputStream getOutputStreamToWriteToFile() {
-        final File outputFile = new File('test-expected-output.log')
-        if(outputFile.exists()){
-            outputFile.delete()
-        }
-        outputFile.createNewFile()
-        return new FileOutputStream(outputFile);
-    }
 }

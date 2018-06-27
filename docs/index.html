@@ -836,7 +836,7 @@ function TableOfContents(container, output) {
 <div class='content' id='contents'>
 
 <h1 id='What-is-fixgrep'>What is fixgrep</h1>
-fixgrep is a command line utility for searching through, and making FIX protocol messages more readable.<br/>fixgrep can turn this:<br/><div class='console'>
+fixgrep is a command line utility for making FIX protocol messages more readable.<br/>fixgrep can turn this:<br/><div class='console'>
 8=FIX.5.2^A9=232^A35=D^A11=C28^A55=AUD/USD^A54=2^A38=1464820^A44=100.026<br/>8=FIX.5.2^A9=54^A35=8^A11=C28^A150=0^A151=1464820^A14=0^A44=100.02<br/>8=FIX.5.2^A9=67^A35=G^A9=232^A11=C32^A38=1465320^A40=2^A44=100.12<br/>8=FIX.5.2^A9=23^A35=8^A11=C32^A150=5^A151=1465320^A14=0^A44=100.12<br/>8=FIX.5.2^A9=56^A35=8^A11=C32^A150=2^A151=1072490^A14=392830^A44=100.00<br/></div>
 into this:<br/><div class='example-list'>
 <div class='console'>
@@ -855,7 +855,7 @@ into this:<br/><div class='example-list'>
 <li>Output to text or html format</li>
 </ul>
 <h1 id='How-to-get'>How to get</h1>
-Download the latest version from <a href='https://github.com/tools4j/fixgrep/tree/master/fixgrep-core'>here</a><br/>GitHub project can be found <a href='https://github.com/tools4j/fixgrep/'>here</a><br/><h1 id='How-to-install'>How to install</h1>
+Download the latest version from <a href='https://github.com/tools4j/fixgrep/tree/master/fixgrep-core/releases'>here</a><br/>GitHub project can be found <a href='https://github.com/tools4j/fixgrep/'>here</a><br/><h1 id='How-to-install'>How to install</h1>
 <ul>
 <li>You will need to install a version of java (you only need a jre, although a jdk will also work fine.)  Version must be version Java 8 for higher.  (Java jre/jdk 1.8 or higher).</li>
 <li>Download the fixgrep zip file</li>
@@ -1830,7 +1830,7 @@ It depends.  Applications such as 'more' or 'less' don't need to read an entire 
 Fixgrep should not use much more than 64MB.  It is uses considerably more than 64MB, please let me know.<br/><h2 id='How-much-CPU-does-fixgrep-use?'>How much CPU does fixgrep use?</h2>
 Fixgrep is a single threaded app, so at most it shouldn't use more than one core whilst it is running.<br/><h2 id='How-can-I-reduce-the-impact-on-other-existing-processes-whilst-running-fixgrep.'>How can I reduce the impact on other existing processes whilst running fixgrep.</h2>
 The regex which is run on each line to determine if the line is a fix message, and to capture the fix message is the single biggest CPU user in fixgrep.  See the help for the input-line-format option for hints on how to make this fast.<br/>Another way is to use the 'nice' command by specifying 'nice' before the 'fixgrep' script.  e.g. 'nice fixgrep myfixlog.log' or 'cat myfixlog.log | nice fixgrep'<br/>Nice takes a parameter which specifies how 'nice' you wish to be to other processes.  Have a look at the nice man page for more info.<br/><h1 id='Licensing'>Licensing</h1>
-Fixgrep is released under MIT license.<br/>It is free to use and/or modify in both commercial and non-comercial environments.<br/>
+Fixgrep is released under MIT license, a copy of which can be found <a href='https://opensource.org/licenses/MIT'>here</a><br/>This software is free to use/distribute/modify in both commercial and non-commercial environments.<br/>
 </div>
 <div class='footer'></div>
 </body>

@@ -25,8 +25,8 @@ class AnnotatedFieldTest extends Specification {
 
         where:
         annotationPositions                     | bold      | expectedConsoleText
-        AnnotationPositions.OUTSIDE_ANNOTATED   | true      | "[MsgType]${Ansi.Bold}35${Ansi.Reset}${Ansi.Bold}=${Ansi.Reset}${Ansi.Bold}D${Ansi.Reset}[NEWORDERSINGLE]|[ClOrdID]${Ansi.Bold}11${Ansi.Reset}${Ansi.Bold}=${Ansi.Reset}${Ansi.Bold}ABC${Ansi.Reset}|[Symbol]${Ansi.Bold}55${Ansi.Reset}${Ansi.Bold}=${Ansi.Reset}${Ansi.Bold}AUD/USD${Ansi.Reset}"
-        AnnotationPositions.LEFT_ANNOTATED      | true      | "[MsgType]${Ansi.Bold}35${Ansi.Reset}${Ansi.Bold}=${Ansi.Reset}[NEWORDERSINGLE]${Ansi.Bold}D${Ansi.Reset}|[ClOrdID]${Ansi.Bold}11${Ansi.Reset}${Ansi.Bold}=${Ansi.Reset}${Ansi.Bold}ABC${Ansi.Reset}|[Symbol]${Ansi.Bold}55${Ansi.Reset}${Ansi.Bold}=${Ansi.Reset}${Ansi.Bold}AUD/USD${Ansi.Reset}"
+        AnnotationPositions.OUTSIDE_ANNOTATED   | true      | "[MsgType][1m35[22m[1m=[22m[1mD[22m[NEWORDERSINGLE]|[ClOrdID][1m11[22m[1m=[22m[1mABC[0m|[Symbol][1m55[22m[1m=[22m[1mAUD/USD[0m"
+        AnnotationPositions.LEFT_ANNOTATED      | true      | "[MsgType][1m35[22m[1m=[22m[NEWORDERSINGLE][1mD[22m|[ClOrdID][1m11[22m[1m=[22m[1mABC[0m|[Symbol][1m55[22m[1m=[22m[1mAUD/USD[0m"
         AnnotationPositions.OUTSIDE_ANNOTATED   | false     | "[MsgType]35=D[NEWORDERSINGLE]|[ClOrdID]11=ABC|[Symbol]55=AUD/USD"
         AnnotationPositions.LEFT_ANNOTATED      | false     | "[MsgType]35=[NEWORDERSINGLE]D|[ClOrdID]11=ABC|[Symbol]55=AUD/USD"
     }
