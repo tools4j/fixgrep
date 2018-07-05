@@ -2,7 +2,7 @@
 
 ADDITIONAL_PARAMS=""
 
-if [ "$@" = "man" ]; then
+if [ "$1" = "man" ]; then
     DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
     less -R $DIR/man.txt
     exit 0

@@ -73,7 +73,9 @@ configurations {
 
 task versionTxt()  {
     doLast {
-        new File("build/dist/files/meta/version.txt").text = """Version: $fullVersion
+        final File versionFile = new File("build/dist/files/meta/version.txt")
+        versionFile.parentFile.mkdirs()
+        versionFile.text = """Version: $fullVersion
 Buildtime: ${new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date())}
 Application-name: fixgrep
 """
