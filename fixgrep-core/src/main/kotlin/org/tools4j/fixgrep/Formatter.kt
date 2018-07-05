@@ -30,7 +30,7 @@ class Formatter (val spec: FormatSpec){
 
     fun format(matcher: Matcher): String? {
         val fixString = matcher.group(spec.lineRegexGroupForFix)
-        val fields: Fields = FieldsFromDelimitedString(fixString, spec.inputDelimiter, spec.outputDelimiter).fields
+        val fields: Fields = FieldsFromDelimitedString(fixString, spec.inputDelimiter).fields
 
         if(!shouldPrint(fields)){
             return null
@@ -119,7 +119,7 @@ class Formatter (val spec: FormatSpec){
             fields = fields.exclude(spec.excludeTags)
             fields = fields.includeOnly(spec.onlyIncludeTags)
             if(!spec.suppressColors) fields = spec.highlight.apply(fields)
-            val formattedFix = if(spec.formatInHtml) fields.toHtml() else fields.toConsoleText()
+            val formattedFix = spec.fieldsFormatter.toFormattedText(fields)
             formattedString = formattedString.replace("\${msgFix}", formattedFix)
         }
 

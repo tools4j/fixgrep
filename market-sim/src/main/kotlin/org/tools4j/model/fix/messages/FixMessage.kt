@@ -13,7 +13,7 @@ import org.tools4j.fix.NonAnnotatedSingleLineFormat
  */
 abstract class FixMessage(val fixSpec: FixSpec): FieldsSource, Message {
     val consoleText: String by lazy {
-        FieldsAnnotator(this.fields, fixSpec).fields.toConsoleText()
+        FieldsAnnotator(this.fields, fixSpec).fields.toDelimitedString("|")
     }
 
     fun toFix(): String {

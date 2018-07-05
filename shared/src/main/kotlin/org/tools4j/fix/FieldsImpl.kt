@@ -8,7 +8,7 @@ import java.util.stream.Collectors
  * Time: 5:43 PM
  */
 open class FieldsImpl(val fields: List<Field>, override val outputDelimiter: Delimiter) : ArrayList<Field>(fields), Fields {
-    constructor(str: String, inputDelimiter: String) : this(FieldsFromDelimitedString(str, inputDelimiter, "|").fields, DelimiterImpl("|"))
+    constructor(str: String, inputDelimiter: String) : this(FieldsFromDelimitedString(str, inputDelimiter).fields, DelimiterImpl("|"))
     constructor(fields: List<Field>) : this(fields, DelimiterImpl("|"))
 
     override fun countOfField(tag: Tag): Int {
@@ -103,25 +103,6 @@ open class FieldsImpl(val fields: List<Field>, override val outputDelimiter: Del
 
     override val pipeDelimitedString: String by lazy {
         toDelimitedString()
-    }
-
-    override fun toConsoleText(): String {
-        val sb = StringBuilder()
-        for (i in 0 until fields.size) {
-            if (i > 0) sb.append(outputDelimiter.toConsoleText())
-            sb.append(fields[i].toConsoleText())
-        }
-        return sb.toString()
-    }
-
-    override fun toHtml(): String {
-        val sb = StringBuilder("<span class='fields'>")
-        for (i in 0 until fields.size) {
-            if(i > 0) sb.append(outputDelimiter.toHtml())
-            sb.append(fields[i].toHtml())
-        }
-        sb.append("</span>")
-        return sb.toString()
     }
 
     override val msgTypeCode: String by lazy {

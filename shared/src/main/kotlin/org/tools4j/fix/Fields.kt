@@ -21,8 +21,6 @@ interface Fields: MutableList<Field>{
     val msgTypeCode: String
     val msgTypeAndExecTypeKey: String
     val outputDelimiter: Delimiter
-    fun toHtml(): String
-    fun toConsoleText(): String;
     fun hasRepeatingTags(): Boolean
 
     fun toDelimitedString(delimiter: String): String {

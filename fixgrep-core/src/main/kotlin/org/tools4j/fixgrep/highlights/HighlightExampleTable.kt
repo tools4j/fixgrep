@@ -26,7 +26,7 @@ class HighlightExampleTable(val fix: String, val tableBuilder: TableBuilder, val
 
     fun endTable(): DocWriter {
         val fixSpec = Fix50SP2FixSpecFromClassPath().spec
-        val fields = FieldsFromDelimitedString(fix, "|", "|").fields
+        val fields = FieldsFromDelimitedString(fix, "|").fields
         val annotatedFields = FieldsAnnotator(fields, fixSpec).fields
 
         tableBuilder.startNewTable(HtmlOnlyTextEffect("example-table"))

@@ -1,10 +1,10 @@
 package org.tools4j.fixgrep
 
-import org.tools4j.fix.AnnotationPositions
-import org.tools4j.fix.AnnotationSpec
-import org.tools4j.fix.Ascii1Char
-import org.tools4j.fix.Fix50SP2FixSpecFromClassPath
-import org.tools4j.fix.FixSpec
+import org.tools4j.fix.*
+import org.tools4j.fixgrep.formatting.FieldsFormatterHorizontalConsoleText
+import org.tools4j.fixgrep.formatting.FieldsFormatterHorizontalHtml
+import org.tools4j.fixgrep.formatting.FieldsFormatterVerticalConsoleText
+import org.tools4j.fixgrep.formatting.FieldsFormatterVerticalHtml
 import org.tools4j.fixgrep.highlights.Highlight
 import org.tools4j.fixgrep.highlights.HighlightParser
 import org.tools4j.properties.Config
@@ -88,5 +88,21 @@ class FormatSpec(
         val annotationPositions = AnnotationPositions.parse(tagAnnotations)
         val tagAndValuesBold = !(annotationPositions.neitherTagNorValueAnnotated || suppressBoldTagsAndValues)
         AnnotationSpec(annotationPositions, tagAndValuesBold)
+    }
+
+    val fieldsFormatter: FieldsFormatter by lazy {
+        if(verticalFormat){
+            if(formatInHtml){
+                FieldsFormatterVerticalHtml()
+            } else {
+                FieldsFormatterVerticalConsoleText()
+            }
+        } else {
+            if(formatInHtml){
+                FieldsFormatterHorizontalHtml(DelimiterImpl(outputDelimiter))
+            } else {
+                FieldsFormatterHorizontalConsoleText(DelimiterImpl(outputDelimiter))
+            }
+        }
     }
 }
