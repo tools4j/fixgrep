@@ -81,14 +81,14 @@ class FixGrep(val inputStream: InputStream?, val outputStream: OutputStream, val
         logger.info("About to read from files $arguments")
         for(obj in arguments){
             if(obj == null) continue
-            val str = obj as String
+            val str = obj as CharSequence
             if(str.isEmpty()) continue
             if(str.startsWith("-")){
                 System.err.println("Invalid option $str")
                 HelpGenerator().go(outputStream);
                 return
             }
-            val file = File(str)
+            val file = File(str.toString())
             if(!file.exists()){
                 System.err.println("File at location: [" + file.absolutePath + "] does not exist.")
                 return

@@ -14,8 +14,13 @@ import spock.lang.Specification
 class FixGrepOnSpecifiedFileTest extends Specification {
     def 'run fixgrep file test'(){
         given:
+        String pathPrefix = new File(System.getProperty('user.dir')).name == 'fixgrep-core' ? '': 'fixgrep-core/'
+
+        println '1.' + new File(System.getProperty('user.dir')).parentFile.name
+        println '2.' + (new File(System.getProperty('user.dir')).parentFile.name == 'fixgrep-core')
+
         Config testConfig = TestConfigBuilder.load().overrideWith(new ConfigImpl(["no.color": "true", "suppress.bold.tags.and.values": "true"]))
-        ConfigAndArguments configAndArguments = new ConfigAndArguments(testConfig, Arrays.asList("src/test/resources/small-log1.log"))
+        ConfigAndArguments configAndArguments = new ConfigAndArguments(testConfig, Arrays.asList("${pathPrefix}src/test/resources/small-log1.log"))
 
         when:
         final CircularBufferedReaderWriter output = new CircularBufferedReaderWriter();
@@ -30,8 +35,9 @@ class FixGrepOnSpecifiedFileTest extends Specification {
 
     def 'run fixgrep multiple file test'(){
         given:
+        String pathPrefix = new File(System.getProperty('user.dir')).name == 'fixgrep-core' ? '': 'fixgrep-core/'
         Config testConfig = TestConfigBuilder.load().overrideWith(new ConfigImpl(["no.color": "true", "suppress.bold.tags.and.values": "true"]))
-        ConfigAndArguments configAndArguments = new ConfigAndArguments(testConfig, Arrays.asList("", "src/test/resources/small-log1.log", "src/test/resources/small-log2.log"))
+        ConfigAndArguments configAndArguments = new ConfigAndArguments(testConfig, Arrays.asList("", "${pathPrefix}src/test/resources/small-log1.log", "${pathPrefix}src/test/resources/small-log2.log"))
 
         when:
         final CircularBufferedReaderWriter output = new CircularBufferedReaderWriter();
