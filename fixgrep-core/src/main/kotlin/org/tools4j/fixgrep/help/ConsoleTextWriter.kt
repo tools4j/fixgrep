@@ -2,12 +2,10 @@ package org.tools4j.fixgrep.help
 
 import org.tools4j.fix.Ansi
 import org.tools4j.fix.DelimiterImpl
-import org.tools4j.fixgrep.formatting.FieldsFormatterHorizontalConsoleText
 import org.tools4j.fixgrep.highlights.DefaultHighlightTextEffects
 import org.tools4j.fixgrep.highlights.HighlightExampleTable
 import org.tools4j.fixgrep.texteffect.Ansi16BackgroundColor
 import org.tools4j.fixgrep.texteffect.Ansi16ForegroundColor
-import org.tools4j.fixgrep.texteffect.HtmlOnlyTextEffect
 import org.tools4j.fixgrep.texteffect.MiscTextEffect
 import org.tools4j.fixgrep.texteffect.TextEffect
 import java.util.*

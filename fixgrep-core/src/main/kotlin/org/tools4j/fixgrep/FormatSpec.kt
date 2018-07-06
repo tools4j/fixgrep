@@ -1,10 +1,7 @@
 package org.tools4j.fixgrep
 
 import org.tools4j.fix.*
-import org.tools4j.fixgrep.formatting.FieldsFormatterHorizontalConsoleText
-import org.tools4j.fixgrep.formatting.FieldsFormatterHorizontalHtml
-import org.tools4j.fixgrep.formatting.FieldsFormatterVerticalConsoleText
-import org.tools4j.fixgrep.formatting.FieldsFormatterVerticalHtml
+import org.tools4j.fixgrep.formatting.*
 import org.tools4j.fixgrep.highlights.Highlight
 import org.tools4j.fixgrep.highlights.HighlightParser
 import org.tools4j.properties.Config
@@ -90,19 +87,11 @@ class FormatSpec(
         AnnotationSpec(annotationPositions, tagAndValuesBold)
     }
 
-    val fieldsFormatter: FieldsFormatter by lazy {
+    fun toFormattedFields(fields: Fields): FormattedFields {
         if(verticalFormat){
-            if(formatInHtml){
-                FieldsFormatterVerticalHtml()
-            } else {
-                FieldsFormatterVerticalConsoleText()
-            }
+            return VerticallyFormattedFields(fields)
         } else {
-            if(formatInHtml){
-                FieldsFormatterHorizontalHtml(DelimiterImpl(outputDelimiter))
-            } else {
-                FieldsFormatterHorizontalConsoleText(DelimiterImpl(outputDelimiter))
-            }
+            return HorizontallyFormattedFields(fields, outputDelimiter)
         }
     }
 }

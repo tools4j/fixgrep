@@ -3,6 +3,8 @@ package org.tools4j.fixgrep.highlights
 import org.tools4j.fix.Field
 import org.tools4j.fix.Fields
 import org.tools4j.fix.FieldsImpl
+import org.tools4j.fixgrep.formatting.FieldsFormatterHorizontalConsoleText
+import org.tools4j.fixgrep.formatting.FieldsFormatterHorizontalHtml
 import org.tools4j.fixgrep.texteffect.Ansi
 import org.tools4j.fixgrep.texteffect.Ansi16ForegroundColor
 import spock.lang.Specification
@@ -27,7 +29,7 @@ class HighlightActionTest extends Specification {
         when:
         final List<Field> matchingFields = matchingTags.stream().map{fields.getField(it)}.collect(Collectors.toList())
         final Fields outputFields = new HighlightAction(scope, Ansi16ForegroundColor.Blue).apply(fields, matchingFields)
-        final String output = outputFields.toConsoleText()
+        final String output = new FieldsFormatterHorizontalConsoleText('|').toFormattedText(outputFields)
         println output
 
         then:
@@ -50,7 +52,7 @@ class HighlightActionTest extends Specification {
         when:
         final List<Field> matchingFields = matchingTags.stream().map{fields.getField(it)}.collect(Collectors.toList())
         final Fields outputFields = new HighlightAction(scope, Ansi16ForegroundColor.Blue).apply(fields, matchingFields)
-        final String output = outputFields.toHtml()
+        final String output = new FieldsFormatterHorizontalHtml('|').toFormattedText(outputFields)
         println output
 
         then:

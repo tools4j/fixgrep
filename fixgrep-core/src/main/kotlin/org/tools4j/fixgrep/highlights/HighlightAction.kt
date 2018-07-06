@@ -7,17 +7,14 @@ import org.tools4j.fixgrep.texteffect.TextEffect
 import java.util.stream.Collectors
 
 class HighlightAction(val scope: HighlightScope, val textEffect: TextEffect) {
-    fun apply(fields: Fields, matchingTags: List<Field>): Fields {
-        var delimiter = fields.outputDelimiter
+    fun apply(fields: Fields, criteria: HighlightCriteria): Fields {
+        val matchingTags = criteria.matches(fields)
         return FieldsImpl(fields.stream().map {
-            if (scope == HighlightScope.Line){
-                delimiter = HighlightedDelimiter(delimiter.delimiter, textEffect)
-            }
-            if (scope == HighlightScope.Line || matchingTags.contains(it)) {
+            if (scope == HighlightScope.Line || matchingTags.matchingFields.contains(it)) {
                 HighlightedField(it, textEffect)
             } else {
                 it
             }
-        }.collect(Collectors.toList()), delimiter)
+        }.collect(Collectors.toList()))
     }
 }
