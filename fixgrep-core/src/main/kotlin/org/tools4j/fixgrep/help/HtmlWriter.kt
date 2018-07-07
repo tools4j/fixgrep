@@ -1,8 +1,7 @@
 package org.tools4j.fixgrep.help
 
 import org.tools4j.fix.DelimiterImpl
-import org.tools4j.fixgrep.formatting.FieldsFormatterHorizontalConsoleText
-import org.tools4j.fixgrep.formatting.FieldsFormatterHorizontalHtml
+import org.tools4j.fixgrep.formatting.HorizontallyFormattedFields
 import org.tools4j.fixgrep.highlights.DefaultHighlightTextEffects
 import org.tools4j.fixgrep.highlights.HighlightExampleTable
 import org.tools4j.fixgrep.texteffect.Ansi16BackgroundColor
@@ -102,7 +101,7 @@ open class HtmlWriter(): DocWriter {
     }
 
     override fun writeFormatExamplesTable(fix: String): HighlightExampleTable {
-        return HighlightExampleTable(fix, HtmlTableBuilder(this), Function { FieldsFormatterHorizontalHtml(DelimiterImpl("|")).toFormattedText(it)})
+        return HighlightExampleTable(fix, HtmlTableBuilder(this), Function { HorizontallyFormattedFields(it, "|").toHtml()})
     }
 
     override fun writeBoldLn(line: String): HtmlWriter {

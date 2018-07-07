@@ -20,7 +20,6 @@ interface Fields: MutableList<Field>{
     val pipeDelimitedString: String
     val msgTypeCode: String
     val msgTypeAndExecTypeKey: String
-    val outputDelimiter: Delimiter
     fun hasRepeatingTags(): Boolean
 
     fun toDelimitedString(delimiter: String): String {

@@ -1,9 +1,7 @@
 package org.tools4j.fixgrep.formatting
 
 import org.tools4j.fix.Fields
-import org.tools4j.fix.FieldsImpl
 import org.tools4j.fixgrep.highlights.*
-import java.util.stream.Collectors
 
 /**
  * User: benjw
@@ -11,8 +9,8 @@ import java.util.stream.Collectors
  * Time: 6:44 AM
  */
 class VerticallyFormattedFields(val fields: Fields): FormattedFields, Fields by fields {
-    override fun highlight(criteria: HighlightCriteria, action: HighlightAction): VerticallyFormattedFields {
-        return VerticallyFormattedFields(action.apply(fields, criteria))
+    override fun highlight(highlight: Highlight): VerticallyFormattedFields {
+        return VerticallyFormattedFields(highlight.apply(fields))
     }
 
     override fun toConsoleText(): String {

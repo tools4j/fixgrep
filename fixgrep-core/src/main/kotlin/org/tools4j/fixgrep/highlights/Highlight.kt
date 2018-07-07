@@ -1,5 +1,6 @@
 package org.tools4j.fixgrep.highlights
 
+import org.tools4j.fix.Delimiter
 import org.tools4j.fix.Fields
 
 /**
@@ -9,8 +10,12 @@ import org.tools4j.fix.Fields
  */
 interface Highlight {
     fun apply(fields: Fields): Fields;
+    fun apply(delimiter: Delimiter): Delimiter;
 
     object NO_HIGHLIGHT: Highlight{
+        override fun apply(delimiter: Delimiter): Delimiter {
+            return delimiter
+        }
         override fun apply(fields: Fields): Fields {
             return fields
         }

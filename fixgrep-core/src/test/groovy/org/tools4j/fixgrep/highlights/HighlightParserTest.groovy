@@ -2,6 +2,8 @@ package org.tools4j.fixgrep.highlights
 
 import org.tools4j.fix.Fields
 import org.tools4j.fix.FieldsImpl
+import org.tools4j.fixgrep.formatting.FormattedFields
+import org.tools4j.fixgrep.formatting.HorizontallyFormattedFields
 import org.tools4j.fixgrep.texteffect.*
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -28,9 +30,10 @@ class HighlightParserTest extends Specification {
 
         when:
         final Highlight highlight = new HighlightParser().parse(expression)
-        final Fields highlightedFields = highlight.apply(fields)
-        final String actualConsoleOutput = highlightedFields.toConsoleText()
-        final String actualHtmlOutput = highlightedFields.toHtml()
+        FormattedFields formattedFields = new HorizontallyFormattedFields(fields, '|')
+        formattedFields = formattedFields.highlight(highlight)
+        final String actualConsoleOutput = formattedFields.toConsoleText()
+        final String actualHtmlOutput = formattedFields.toHtml()
         println "Expected output: $expectedConsoleOutput"
         println "Actual output: $actualConsoleOutput"
         then:

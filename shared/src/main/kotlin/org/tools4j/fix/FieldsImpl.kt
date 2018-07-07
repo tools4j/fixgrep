@@ -7,9 +7,8 @@ import java.util.stream.Collectors
  * Date: 20/6/17
  * Time: 5:43 PM
  */
-open class FieldsImpl(val fields: List<Field>, override val outputDelimiter: Delimiter) : ArrayList<Field>(fields), Fields {
-    constructor(str: String, inputDelimiter: String) : this(FieldsFromDelimitedString(str, inputDelimiter).fields, DelimiterImpl("|"))
-    constructor(fields: List<Field>) : this(fields, DelimiterImpl("|"))
+open class FieldsImpl(val fields: List<Field>) : ArrayList<Field>(fields), Fields {
+    constructor(str: String, inputDelimiter: String) : this(FieldsFromDelimitedString(str, inputDelimiter).fields)
 
     override fun countOfField(tag: Tag): Int {
         return countOfField(tag.tag)
@@ -44,11 +43,11 @@ open class FieldsImpl(val fields: List<Field>, override val outputDelimiter: Del
         if(excludeTags.isEmpty()){
             return this
         }
-        val outputFields = FieldsImpl(ArrayList(fields), outputDelimiter)
+        val outputFields = FieldsImpl(ArrayList(fields))
         excludeTags.forEach { exclude ->
             outputFields.removeIf {it.tag.tag == exclude}
         }
-        return FieldsImpl(outputFields, outputDelimiter)
+        return FieldsImpl(outputFields)
     }
 
     override fun includeOnly(onlyIncludeTags: List<Int>): Fields {
@@ -56,7 +55,7 @@ open class FieldsImpl(val fields: List<Field>, override val outputDelimiter: Del
             return this
         }
         val newFields = fields.stream().filter { onlyIncludeTags.contains(it.tag.tag) }.collect(Collectors.toList())
-        return FieldsImpl(newFields, outputDelimiter)
+        return FieldsImpl(newFields)
     }
 
     override fun sortBy(desiredOrder: List<Int>): Fields {
@@ -83,7 +82,7 @@ open class FieldsImpl(val fields: List<Field>, override val outputDelimiter: Del
             }
         }
         outputFields.addAll(existingFields)
-        return FieldsImpl(outputFields, outputDelimiter)
+        return FieldsImpl(outputFields)
     }
 
     override fun hasRepeatingTags(): Boolean {
