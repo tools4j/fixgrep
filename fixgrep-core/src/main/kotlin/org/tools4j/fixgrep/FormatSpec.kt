@@ -80,7 +80,52 @@ class FormatSpec(
             msgColors = msgColors,
             formatInHtml = config.hasPropertyAndIsNotFalse("html"),
             debug = config.getAsBoolean("debug", false))
+    
+    fun copyWithModifications(
+        suppressColors: Boolean = this.suppressColors,
+        suppressBoldTagsAndValues: Boolean = this.suppressBoldTagsAndValues,
+        highlight: Highlight = this.highlight,
+        groupBy: GroupBy = this.groupBy,
+        inputDelimiter: String = this.inputDelimiter,
+        outputDelimiter: String = this.outputDelimiter,
+        lineFormat: String = this.lineFormat,
+        lineRegex: String = this.lineRegex,
+        lineRegexGroupForFix: Int = this.lineRegexGroupForFix,
+        sortByTags: List<Int> = this.sortByTags,
+        onlyIncludeTags: List<Int> = this.onlyIncludeTags,
+        excludeTags: List<Int> = this.excludeTags,
+        verticalFormat: Boolean = this.verticalFormat,
+        includeOnlyMessagesOfType: List<String> = this.includeOnlyMessagesOfType,
+        excludeMessagesOfType: List<String> = this.excludeMessagesOfType,
+        tagAnnotations: String = this.tagAnnotations,
+        fixSpec: FixSpec = this.fixSpec,
+        msgColors: MessageColors = this.msgColors,
+        debug: Boolean = this.debug,
+        formatInHtml: Boolean = this.formatInHtml): FormatSpec {
 
+        return FormatSpec(
+            suppressColors,
+            suppressBoldTagsAndValues,
+            highlight,
+            groupBy,
+            inputDelimiter,
+            outputDelimiter,
+            lineFormat,
+            lineRegex,
+            lineRegexGroupForFix,
+            sortByTags,
+            onlyIncludeTags,
+            excludeTags,
+            verticalFormat,
+            includeOnlyMessagesOfType,
+            excludeMessagesOfType,
+            tagAnnotations,
+            fixSpec,
+            msgColors,
+            debug,
+            formatInHtml)
+    }
+    
     val tagAnnotationSpec: AnnotationSpec by lazy {
         val annotationPositions = AnnotationPositions.parse(tagAnnotations)
         val tagAndValuesBold = !(annotationPositions.neitherTagNorValueAnnotated || suppressBoldTagsAndValues)

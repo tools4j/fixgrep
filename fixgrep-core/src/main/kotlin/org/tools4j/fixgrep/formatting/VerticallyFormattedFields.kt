@@ -10,7 +10,7 @@ import org.tools4j.fixgrep.highlights.*
  */
 class VerticallyFormattedFields(val fields: Fields): FormattedFields, Fields by fields {
     override fun highlight(highlight: Highlight): VerticallyFormattedFields {
-        return VerticallyFormattedFields(highlight.apply(fields))
+        return VerticallyFormattedFields(highlight.applyToFields(fields))
     }
 
     override fun toConsoleText(): String {

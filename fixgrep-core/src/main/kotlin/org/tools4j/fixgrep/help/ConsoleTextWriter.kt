@@ -1,8 +1,7 @@
 package org.tools4j.fixgrep.help
 
 import org.tools4j.fix.Ansi
-import org.tools4j.fix.DelimiterImpl
-import org.tools4j.fixgrep.formatting.HorizontallyFormattedFields
+import org.tools4j.fixgrep.FormatSpec
 import org.tools4j.fixgrep.highlights.DefaultHighlightTextEffects
 import org.tools4j.fixgrep.highlights.HighlightExampleTable
 import org.tools4j.fixgrep.texteffect.Ansi16BackgroundColor
@@ -10,7 +9,6 @@ import org.tools4j.fixgrep.texteffect.Ansi16ForegroundColor
 import org.tools4j.fixgrep.texteffect.MiscTextEffect
 import org.tools4j.fixgrep.texteffect.TextEffect
 import java.util.*
-import java.util.function.Function
 
 /**
  * User: ben
@@ -110,7 +108,7 @@ class ConsoleTextWriter(): DocWriter {
     }
 
     override fun writeFormatExamplesTable(fix: String): HighlightExampleTable {
-        return HighlightExampleTable(fix, addTable(), Function {HorizontallyFormattedFields(it, "|").toConsoleText()})
+        return HighlightExampleTable(fix, ConsoleTextTableBuilder(this), FormatSpec().copyWithModifications(inputDelimiter = "|", outputDelimiter = "|", lineFormat = "${'$'}{msgFix}", formatInHtml = false))
     }
 
     override fun addTable(textEffect: TextEffect): TableBuilder {

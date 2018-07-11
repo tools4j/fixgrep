@@ -118,8 +118,8 @@ class Formatter (val spec: FormatSpec){
             fields = fields.sortBy(spec.sortByTags)
             fields = fields.exclude(spec.excludeTags)
             fields = fields.includeOnly(spec.onlyIncludeTags)
-            val formattedFields = spec.toFormattedFields(fields)
-            if(!spec.suppressColors) fields = formattedFields.highlight(spec.highlight)
+            var formattedFields = spec.toFormattedFields(fields)
+            if(!spec.suppressColors) formattedFields = formattedFields.highlight(spec.highlight)
             val formattedFix = if(spec.formatInHtml) formattedFields.toHtml() else formattedFields.toConsoleText()
             formattedString = formattedString.replace("\${msgFix}", formattedFix)
         }

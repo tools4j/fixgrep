@@ -9,18 +9,18 @@ import org.tools4j.fix.Fields
  * Time: 5:55 PM
  */
 class Highlights(val highlights: List<Highlight>): Highlight{
-    override fun apply(delimiter: Delimiter): Delimiter {
+    override fun applyToDelimiter(fields: Fields, delimiter: Delimiter): Delimiter {
         var outputDelimiter = delimiter
         highlights.forEach {
-            outputDelimiter = it.apply(outputDelimiter)
+            outputDelimiter = it.applyToDelimiter(fields, outputDelimiter)
         }
         return outputDelimiter
     }
 
-    override fun apply(fields: Fields): Fields {
+    override fun applyToFields(fields: Fields): Fields {
         var outputFields = fields
         highlights.forEach {
-            outputFields = it.apply(outputFields)
+            outputFields = it.applyToFields(outputFields)
         }
         return outputFields
     }

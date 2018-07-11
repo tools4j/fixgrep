@@ -14,7 +14,7 @@ class HorizontallyFormattedFields(val fields: Fields, val delimiter: Delimiter):
     constructor(fields: Fields, delimiter: String): this(fields, DelimiterImpl(delimiter))
 
     override fun highlight(highlight: Highlight): HorizontallyFormattedFields {
-        return HorizontallyFormattedFields(highlight.apply(fields), highlight.apply(delimiter))
+        return HorizontallyFormattedFields(highlight.applyToFields(fields), highlight.applyToDelimiter(fields, delimiter))
     }
 
     override fun toConsoleText(): String {

@@ -58,6 +58,6 @@ class HighlightParser(_defaultHighlightTextEffects: DefaultHighlightTextEffects)
             TextEffectParser().parse(mutableParts.joinToString(":"))
         }
 
-        return HighlightAction(criteria, scope, textEffect)
+        return HighlightImpl(criteria, scope, textEffect)
     }
 }
