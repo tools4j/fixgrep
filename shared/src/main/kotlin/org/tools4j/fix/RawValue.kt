@@ -5,17 +5,13 @@ package org.tools4j.fix
  * Date: 14/06/2017
  * Time: 5:39 PM
  */
-open class RawValue(override val rawValue: String) : Value {
-    override fun toHtml(): String {
-        return "<span class='value rawValue'>$rawValue</span>"
-    }
-
-    override fun toConsoleText(): String {
-        return rawValue
+open class RawValue(override val valueRaw: String) : Value {
+    override fun accept(valueVisitor: ValueVisitor) {
+        valueVisitor.visit(this)
     }
 
     override fun toString(): String {
-        return rawValue
+        return valueRaw
     }
 
     override fun intValue(): Int {
@@ -66,12 +62,12 @@ open class RawValue(override val rawValue: String) : Value {
         if (this === other) return true
         if (other !is RawValue) return false
 
-        if (rawValue != other.rawValue) return false
+        if (valueRaw != other.valueRaw) return false
 
         return true
     }
 
     override fun hashCode(): Int {
-        return rawValue.hashCode()
+        return valueRaw.hashCode()
     }
 }

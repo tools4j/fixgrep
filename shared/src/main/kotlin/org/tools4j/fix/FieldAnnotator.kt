@@ -10,30 +10,24 @@ class FieldAnnotator(
         val annotationSpec: AnnotationSpec = AnnotationSpec.OUTSIDE_ANNOTATED_BOLD_TAG_VALUES){
 
     fun getField(field: Field): Field {
-        return getField(field.tag.tag, field.value.rawValue)
+        return FieldImpl(getTag(field.tag), getValue(field.tag, field.value))
     }
 
-    fun getField(tagInt: Int, valueStr: String): Field {
-        val tag = getTag(tagInt)
-        val value = getValue(tag, valueStr)
-        return AnnotatedField(tag, value, annotationSpec)
-    }
-
-    private fun getTag(tag: Int): Tag {
+    private fun getTag(tag: Tag): Tag {
         val tagDescription: String? = fixSpec.fieldsAndEnumValues[""+tag]
         return if (tagDescription != null) {
-            AnnotatedTag(tag, tagDescription, annotationSpec.annotationPositions.tagAnnotationPosition, annotationSpec.boldTagAndValue)
+            AnnotatedTag(tag.tagRaw, tagDescription)
         } else {
-            NonAnnotatedTag(tag, annotationSpec.boldTagAndValue)
+            tag
         }
     }
 
-    private fun getValue(tag: Tag, rawValue: String): Value {
-        val tagDescription = fixSpec.fieldsAndEnumValues["" + tag.tag + "." + rawValue]
+    private fun getValue(tag: Tag, value: Value): Value {
+        val tagDescription = fixSpec.fieldsAndEnumValues["" + tag.tagRaw + "." + value.valueRaw]
         return if (tagDescription != null) {
-            AnnotatedValue(rawValue, tagDescription, annotationSpec.annotationPositions.valueAnnotationPosition, annotationSpec.boldTagAndValue)
+            AnnotatedValue(value.valueRaw, tagDescription)
         } else {
-            NonAnnotatedValue(rawValue, annotationSpec.boldTagAndValue)
+            value
         }
     }
 }

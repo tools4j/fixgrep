@@ -8,6 +8,8 @@ import java.util.stream.Collectors
  * Time: 6:55 AM
  */
 class CompositeTextEffect(val textEffects: List<TextEffect>): TextEffect {
+    constructor(textEffect1: TextEffect, textEffect2: TextEffect): this(listOf(textEffect1, textEffect2))
+
     override val consoleTextAfter: String = Ansi.Reset
 
     override val name: String by lazy {
@@ -24,7 +26,7 @@ class CompositeTextEffect(val textEffects: List<TextEffect>): TextEffect {
     }
 
     override val htmlClass: String by lazy {
-        textEffects.stream().map{it.htmlClass}.collect(Collectors.toList()).joinToString(" ")
+        textEffects.stream().map{it.htmlClass}.filter{!it.isEmpty()}.collect(Collectors.toList()).joinToString(" ")
     }
 
     override fun equals(other: Any?): Boolean {

@@ -28,6 +28,7 @@ class OptionParserFactory{
             init {
                 allowsUnrecognizedOptions()
                 acceptsAll(asList("a", "tag-annotations")).withRequiredArg().ofType(String::class.java).withValuesConvertedBy(regex("(none|outsideAnnotated|insideAnnotated|ba|ab|aa|bb|b_|a_|_a|_b|__)"))
+                acceptsAll(asList("A", "align-columns", "align-vertical-columns")).withOptionalArg().ofType(Boolean::class.java)
                 //acceptsAll(asList("g", "group-by-order")).withOptionalArg().ofType(String::class.java) // <xyz> (group messages by origClOrdId)
                 acceptsAll(asList("d", "input-delimiter", "input-delim")).withRequiredArg().ofType(String::class.java) //="\u0001"
                 acceptsAll(asList("e", "exclude-tags")).withRequiredArg().ofType(Integer::class.java).withValuesSeparatedBy(",")
@@ -47,7 +48,7 @@ class OptionParserFactory{
                 acceptsAll(asList("v", "exclude-messages-of-type")).withRequiredArg().ofType(String::class.java).withValuesSeparatedBy(",")
                 acceptsAll(asList("x", "debug"))
                 acceptsAll(asList("install"))
-                //acceptsAll(asList("v", "vertical-format"))
+                acceptsAll(asList("V", "vertical-format"))
                 acceptsAll(asList("256-color-demo"))
                 acceptsAll(asList("16-color-demo"))
                 acceptsAll(asList("man"))

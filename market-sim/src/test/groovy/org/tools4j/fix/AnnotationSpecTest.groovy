@@ -25,7 +25,7 @@ class AnnotationSpecTest extends Specification {
         final Field annotatedField = new FieldAnnotator(fixSpec, new AnnotationSpec(AnnotationPositions.parse(spec), false)).getField(field)
 
         then:
-        assert annotatedField.toConsoleText() == expectedAnnotatedOutput
+        assert annotatedField.toHorizontalConsoleText() == expectedAnnotatedOutput
 
         where:
         spec               | expectedAnnotatedOutput

@@ -10,11 +10,4 @@ import org.tools4j.fixgrep.texteffect.TextEffect
  * Time: 6:02 PM
  */
 class HighlightedDelimiter(override val delimiter: String, val textEffect: TextEffect): Delimiter {
-    override fun toConsoleText(): String{
-        return textEffect.consoleTextBefore + delimiter + Ansi.Reset
-    }
-
-    override fun toHtml(): String{
-        return "<span class='delim ${textEffect.htmlClass}'>$delimiter</span>"
-    }
 }

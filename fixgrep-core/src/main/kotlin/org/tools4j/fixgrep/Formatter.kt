@@ -90,7 +90,7 @@ class Formatter (val spec: FormatSpec){
             val msgTypeCode = inputFields.msgTypeCode
             val msgTypeName: String
             if (msgTypeCode == "8") {
-                val execTypeCode = inputFields.getField(150)!!.value.rawValue
+                val execTypeCode = inputFields.getField(150)!!.value.valueRaw
                 val execTypeString = spec.fixSpec.fieldsAndEnumValues.get("150." + execTypeCode)
                 val execTypeStringAsCapitalCase = execTypeString!!.constantToCapitalCase()
                 msgTypeName = "Exec." + execTypeStringAsCapitalCase
@@ -118,9 +118,8 @@ class Formatter (val spec: FormatSpec){
             fields = fields.sortBy(spec.sortByTags)
             fields = fields.exclude(spec.excludeTags)
             fields = fields.includeOnly(spec.onlyIncludeTags)
-            var formattedFields = spec.toFormattedFields(fields)
-            if(!spec.suppressColors) formattedFields = formattedFields.highlight(spec.highlight)
-            val formattedFix = if(spec.formatInHtml) formattedFields.toHtml() else formattedFields.toConsoleText()
+            if(!spec.suppressColors) fields = spec.highlight.apply(fields)
+            val formattedFix = spec.getMsgFormatter(fields).format()
             formattedString = formattedString.replace("\${msgFix}", formattedFix)
         }
 

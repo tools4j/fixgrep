@@ -21,6 +21,7 @@ interface Fields: MutableList<Field>{
     val msgTypeCode: String
     val msgTypeAndExecTypeKey: String
     fun hasRepeatingTags(): Boolean
+    fun accept(fieldsVisitor: FieldsVisitor)
 
     fun toDelimitedString(delimiter: String): String {
         if(delimiter.length != 1) throw IllegalArgumentException("Delimiter must be one character long: [$delimiter]")

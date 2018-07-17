@@ -1,8 +1,10 @@
 package org.tools4j.fixgrep.highlights
 
+import org.tools4j.fix.AnnotationSpec
 import org.tools4j.fix.Fields
 import org.tools4j.fix.FieldsImpl
-import org.tools4j.fixgrep.formatting.HorizontallyFormattedFields
+import org.tools4j.fixgrep.formatting.HorizontalConsoleMsgFormatter
+import org.tools4j.fixgrep.formatting.HorizontalHtmlMsgFormatter
 import org.tools4j.fixgrep.texteffect.Ansi
 import org.tools4j.fixgrep.texteffect.Ansi16ForegroundColor
 import spock.lang.Specification
@@ -24,7 +26,7 @@ class HighlightActionTest extends Specification {
 
         when:
         final Highlight highlight = new HighlightParser().parse(expressions)
-        final String output = new HorizontallyFormattedFields(fields, "|").highlight(highlight).toConsoleText()
+        final String output = new HorizontalConsoleMsgFormatter(fields, AnnotationSpec.NONE, "|").highlight(highlight).toConsoleText()
         println output
 
         then:
@@ -42,11 +44,12 @@ class HighlightActionTest extends Specification {
     @Unroll
     def "html highlight #expressions #fix #expectedOutput"(final List<String> expressions, final String fix, final String expectedOutput) {
         given:
-        final Fields fields = new FieldsImpl(fix, '|')
+        Fields fields = new FieldsImpl(fix, '|')
 
         when:
         final Highlight highlight = new HighlightParser().parse(expressions)
-        final String output = new HorizontallyFormattedFields(fields, "|").highlight(highlight).toHtml()
+        fields = highlight.apply(fields)
+        final String output = new HorizontalHtmlMsgFormatter(fields, AnnotationSpec.NONE, "|").format()
         println output
 
         then:
@@ -54,10 +57,10 @@ class HighlightActionTest extends Specification {
 
         where:
         expressions                                 | fix                       | expectedOutput
-        ['35:FgBlue']                               |'35=blah|150=A|55=AUD/USD' | "<span class='fields'><span class='field FgBlue'><span class='tag rawTag'>35</span><span class='equals'>=</span><span class='value rawValue'>blah</span></span><span class='delim'>|</span><span class='field'><span class='tag rawTag'>150</span><span class='equals'>=</span><span class='value rawValue'>A</span></span><span class='delim'>|</span><span class='field'><span class='tag rawTag'>55</span><span class='equals'>=</span><span class='value rawValue'>AUD/USD</span></span></span>"
-        ['35:FgBlue','55:FgRed']                    |'35=blah|150=A|55=AUD/USD' | "<span class='fields'><span class='field FgBlue'><span class='tag rawTag'>35</span><span class='equals'>=</span><span class='value rawValue'>blah</span></span><span class='delim'>|</span><span class='field'><span class='tag rawTag'>150</span><span class='equals'>=</span><span class='value rawValue'>A</span></span><span class='delim'>|</span><span class='field FgRed'><span class='tag rawTag'>55</span><span class='equals'>=</span><span class='value rawValue'>AUD/USD</span></span></span>"
-        ['35:FgBlue','55:FgGreen','150:FgYellow']   |'35=blah|150=A|55=AUD/USD' | "<span class='fields'><span class='field FgBlue'><span class='tag rawTag'>35</span><span class='equals'>=</span><span class='value rawValue'>blah</span></span><span class='delim'>|</span><span class='field FgYellow'><span class='tag rawTag'>150</span><span class='equals'>=</span><span class='value rawValue'>A</span></span><span class='delim'>|</span><span class='field FgGreen'><span class='tag rawTag'>55</span><span class='equals'>=</span><span class='value rawValue'>AUD/USD</span></span></span>"
-        ['22:FgBlue']                               |'35=blah|150=A|55=AUD/USD' | "<span class='fields'><span class='field'><span class='tag rawTag'>35</span><span class='equals'>=</span><span class='value rawValue'>blah</span></span><span class='delim'>|</span><span class='field'><span class='tag rawTag'>150</span><span class='equals'>=</span><span class='value rawValue'>A</span></span><span class='delim'>|</span><span class='field'><span class='tag rawTag'>55</span><span class='equals'>=</span><span class='value rawValue'>AUD/USD</span></span></span>"
-        ['22:FgBlue:Line']                          |'35=blah|150=A|55=AUD/USD' | "<span class='fields'><span class='field'><span class='tag rawTag'>35</span><span class='equals'>=</span><span class='value rawValue'>blah</span></span><span class='delim'>|</span><span class='field'><span class='tag rawTag'>150</span><span class='equals'>=</span><span class='value rawValue'>A</span></span><span class='delim'>|</span><span class='field'><span class='tag rawTag'>55</span><span class='equals'>=</span><span class='value rawValue'>AUD/USD</span></span></span>"
+        ['35:FgBlue']                               |'35=blah|150=A|55=AUD/USD' | "<span class='fields'><span class='field FgBlue'><span class='tag tagRaw'>35</span><span class='equals'>=</span><span class='value valueRaw'>blah</span></span><span class='delim'>|</span><span class='field'><span class='tag tagRaw'>150</span><span class='equals'>=</span><span class='value valueRaw'>A</span></span><span class='delim'>|</span><span class='field'><span class='tag tagRaw'>55</span><span class='equals'>=</span><span class='value valueRaw'>AUD/USD</span></span></span>"
+        ['35:FgBlue','55:FgRed']                    |'35=blah|150=A|55=AUD/USD' | "<span class='fields'><span class='field FgBlue'><span class='tag tagRaw'>35</span><span class='equals'>=</span><span class='value valueRaw'>blah</span></span><span class='delim'>|</span><span class='field'><span class='tag tagRaw'>150</span><span class='equals'>=</span><span class='value valueRaw'>A</span></span><span class='delim'>|</span><span class='field FgRed'><span class='tag tagRaw'>55</span><span class='equals'>=</span><span class='value valueRaw'>AUD/USD</span></span></span>"
+        ['35:FgBlue','55:FgGreen','150:FgYellow']   |'35=blah|150=A|55=AUD/USD' | "<span class='fields'><span class='field FgBlue'><span class='tag tagRaw'>35</span><span class='equals'>=</span><span class='value valueRaw'>blah</span></span><span class='delim'>|</span><span class='field FgYellow'><span class='tag tagRaw'>150</span><span class='equals'>=</span><span class='value valueRaw'>A</span></span><span class='delim'>|</span><span class='field FgGreen'><span class='tag tagRaw'>55</span><span class='equals'>=</span><span class='value valueRaw'>AUD/USD</span></span></span>"
+        ['22:FgBlue']                               |'35=blah|150=A|55=AUD/USD' | "<span class='fields'><span class='field'><span class='tag tagRaw'>35</span><span class='equals'>=</span><span class='value valueRaw'>blah</span></span><span class='delim'>|</span><span class='field'><span class='tag tagRaw'>150</span><span class='equals'>=</span><span class='value valueRaw'>A</span></span><span class='delim'>|</span><span class='field'><span class='tag tagRaw'>55</span><span class='equals'>=</span><span class='value valueRaw'>AUD/USD</span></span></span>"
+        ['22:FgBlue:Line']                          |'35=blah|150=A|55=AUD/USD' | "<span class='fields'><span class='field'><span class='tag tagRaw'>35</span><span class='equals'>=</span><span class='value valueRaw'>blah</span></span><span class='delim'>|</span><span class='field'><span class='tag tagRaw'>150</span><span class='equals'>=</span><span class='value valueRaw'>A</span></span><span class='delim'>|</span><span class='field'><span class='tag tagRaw'>55</span><span class='equals'>=</span><span class='value valueRaw'>AUD/USD</span></span></span>"
     }
 }

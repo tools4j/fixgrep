@@ -17,7 +17,7 @@ class FieldsAnnotator(
     override val fields: Fields by lazy {
         val returnFields = ArrayList<Field>()
         for (field in this.inputFields) {
-            returnFields.add(fieldAnnotator.getField(field.tag.tag, field.value.rawValue))
+            returnFields.add(fieldAnnotator.getField(field))
         }
         FieldsImpl(returnFields)
     }

@@ -44,7 +44,7 @@ class AnnotatedFieldTest extends Specification {
                         "<span class='tag annotation'>[MsgType]</span>" +
                         "<span class='tag tagNumber bold'>35</span>" +
                         "<span class='equals bold'>=</span>" +
-                        "<span class='value rawValue bold'>D</span>" +
+                        "<span class='value valueRaw bold'>D</span>" +
                         "<span class='value annotation'>[NEWORDERSINGLE]</span>" +
                     "</span>" +
                     "<span class='delim'>|</span>" +
@@ -52,14 +52,14 @@ class AnnotatedFieldTest extends Specification {
                         "<span class='tag annotation'>[ClOrdID]</span>" +
                         "<span class='tag tagNumber bold'>11</span>" +
                         "<span class='equals bold'>=</span>" +
-                        "<span class='value rawValue bold'>ABC</span>" +
+                        "<span class='value valueRaw bold'>ABC</span>" +
                     "</span>" +
                     "<span class='delim'>|</span>" +
                     "<span class='field annotatedField'>" +
                         "<span class='tag annotation'>[Symbol]</span>" +
                         "<span class='tag tagNumber bold'>55</span>" +
                         "<span class='equals bold'>=</span>" +
-                        "<span class='value rawValue bold'>AUD/USD</span>" +
+                        "<span class='value valueRaw bold'>AUD/USD</span>" +
                     "</span>" +
                 "</span>"
     }
@@ -77,7 +77,7 @@ class AnnotatedFieldTest extends Specification {
                         "<span class='tag annotation'>[MsgType]</span>" +
                         "<span class='tag tagNumber'>35</span>" +
                         "<span class='equals'>=</span>" +
-                        "<span class='value rawValue'>D</span>" +
+                        "<span class='value valueRaw'>D</span>" +
                         "<span class='value annotation'>[NEWORDERSINGLE]</span>" +
                     "</span>" +
                     "<span class='delim'>|</span>" +
@@ -85,14 +85,14 @@ class AnnotatedFieldTest extends Specification {
                         "<span class='tag annotation'>[ClOrdID]</span>" +
                         "<span class='tag tagNumber'>11</span>" +
                         "<span class='equals'>=</span>" +
-                        "<span class='value rawValue'>ABC</span>" +
+                        "<span class='value valueRaw'>ABC</span>" +
                     "</span>" +
                     "<span class='delim'>|</span>" +
                     "<span class='field annotatedField'>" +
                         "<span class='tag annotation'>[Symbol]</span>" +
                         "<span class='tag tagNumber'>55</span>" +
                         "<span class='equals'>=</span>" +
-                        "<span class='value rawValue'>AUD/USD</span>" +
+                        "<span class='value valueRaw'>AUD/USD</span>" +
                     "</span>" +
                 "</span>"
     }
@@ -112,21 +112,21 @@ class AnnotatedFieldTest extends Specification {
                         "<span class='tag tagNumber bold'>35</span>" +
                         "<span class='equals bold'>=</span>" +
                         "<span class='value annotation'>[NEWORDERSINGLE]</span>" +
-                        "<span class='value rawValue bold'>D</span>" +
+                        "<span class='value valueRaw bold'>D</span>" +
                     "</span>" +
                     "<span class='delim'>|</span>" +
                     "<span class='field annotatedField'>" +
                         "<span class='tag annotation'>[ClOrdID]</span>" +
                         "<span class='tag tagNumber bold'>11</span>" +
                         "<span class='equals bold'>=</span>" +
-                        "<span class='value rawValue bold'>ABC</span>" +
+                        "<span class='value valueRaw bold'>ABC</span>" +
                     "</span>" +
                     "<span class='delim'>|</span>" +
                     "<span class='field annotatedField'>" +
                         "<span class='tag annotation'>[Symbol]</span>" +
                         "<span class='tag tagNumber bold'>55</span>" +
                         "<span class='equals bold'>=</span>" +
-                        "<span class='value rawValue bold'>AUD/USD</span>" +
+                        "<span class='value valueRaw bold'>AUD/USD</span>" +
                     "</span>" +
                 "</span>"
     }
@@ -147,21 +147,21 @@ class AnnotatedFieldTest extends Specification {
                         "<span class='tag tagNumber'>35</span>" +
                         "<span class='equals'>=</span>" +
                         "<span class='value annotation'>[NEWORDERSINGLE]</span>" +
-                        "<span class='value rawValue'>D</span>" +
+                        "<span class='value valueRaw'>D</span>" +
                     "</span>" +
                     "<span class='delim'>|</span>" +
                     "<span class='field annotatedField'>" +
                         "<span class='tag annotation'>[ClOrdID]</span>" +
                         "<span class='tag tagNumber'>11</span>" +
                         "<span class='equals'>=</span>" +
-                        "<span class='value rawValue'>ABC</span>" +
+                        "<span class='value valueRaw'>ABC</span>" +
                     "</span>" +
                     "<span class='delim'>|</span>" +
                     "<span class='field annotatedField'>" +
                         "<span class='tag annotation'>[Symbol]</span>" +
                         "<span class='tag tagNumber'>55</span>" +
                         "<span class='equals'>=</span>" +
-                        "<span class='value rawValue'>AUD/USD</span>" +
+                        "<span class='value valueRaw'>AUD/USD</span>" +
                     "</span>" +
                 "</span>"
     }

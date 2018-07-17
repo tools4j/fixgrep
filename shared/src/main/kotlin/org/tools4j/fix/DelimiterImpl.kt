@@ -7,11 +7,4 @@ package org.tools4j.fix
  */
 
 class DelimiterImpl(override val delimiter: String): Delimiter {
-    override fun toConsoleText(): String{
-        return delimiter
-    }
-
-    override fun toHtml(): String{
-        return "<span class='delim'>$delimiter</span>"
-    }
 }

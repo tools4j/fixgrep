@@ -7,19 +7,20 @@ import org.tools4j.fixgrep.texteffect.TextEffect
 import java.util.stream.Collectors
 
 class HighlightImpl(val criteria: HighlightCriteria, val scope: HighlightScope, val textEffect: TextEffect): Highlight {
-    override fun applyToFields(fields: Fields): Fields {
+    override fun apply(fields: Fields): Fields {
         val matchingTags = criteria.matches(fields)
-        return FieldsImpl(fields.stream().map {
-            if ((scope == HighlightScope.Line && !matchingTags.matchingFields.isEmpty()) || matchingTags.matchingFields.contains(it)) {
-                HighlightedField(it, textEffect)
-            } else {
-                it
-            }
-        }.collect(Collectors.toList()))
-    }
+        if(matchingTags.matchingFields.isEmpty()) return fields
 
-    override fun applyToDelimiter(fields: Fields, delimiter: Delimiter): Delimiter {
-        val matchingTags = criteria.matches(fields)
-        return if(!matchingTags.matchingFields.isEmpty() && scope == HighlightScope.Line) HighlightedDelimiter(delimiter.delimiter, textEffect) else delimiter
+        if(scope == HighlightScope.Line){
+            return HighlightedFields(fields, textEffect)
+        } else {
+            return FieldsImpl(fields.stream().map {
+                if (matchingTags.matchingFields.contains(it)) {
+                    HighlightedField(it, textEffect)
+                } else {
+                    it
+                }
+            }.collect(Collectors.toList()))
+        }
     }
 }

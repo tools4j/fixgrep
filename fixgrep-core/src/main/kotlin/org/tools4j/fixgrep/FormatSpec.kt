@@ -26,6 +26,7 @@ class FormatSpec(
         val onlyIncludeTags: List<Int> = Collections.emptyList(),
         val excludeTags: List<Int> = Collections.emptyList(),
         val verticalFormat: Boolean = false,
+        val alignVerticalColumns: Boolean = false,
         val includeOnlyMessagesOfType: List<String> = Collections.emptyList(),
         val excludeMessagesOfType: List<String> = Collections.emptyList(),
         val tagAnnotations: String,
@@ -47,6 +48,7 @@ class FormatSpec(
         Collections.emptyList(),
         Collections.emptyList(),
         Collections.emptyList(),
+        false,
         false,
         Collections.emptyList(),
         Collections.emptyList(),
@@ -74,6 +76,7 @@ class FormatSpec(
             excludeTags = config.getAsIntList("exclude.tags"),
             tagAnnotations = config.getAsString("tag.annotations"),
             verticalFormat = config.getAsBoolean("vertical.format"),
+            alignVerticalColumns = config.getAsBoolean("align.vertical.columns"),
             includeOnlyMessagesOfType = config.getAsStringList("include.only.messages.of.type"),
             excludeMessagesOfType = config.getAsStringList("exclude.messages.of.type"),
             fixSpec = fixSpec,
@@ -95,6 +98,7 @@ class FormatSpec(
         onlyIncludeTags: List<Int> = this.onlyIncludeTags,
         excludeTags: List<Int> = this.excludeTags,
         verticalFormat: Boolean = this.verticalFormat,
+        alignVerticalColumns: Boolean = this.alignVerticalColumns,
         includeOnlyMessagesOfType: List<String> = this.includeOnlyMessagesOfType,
         excludeMessagesOfType: List<String> = this.excludeMessagesOfType,
         tagAnnotations: String = this.tagAnnotations,
@@ -117,6 +121,7 @@ class FormatSpec(
             onlyIncludeTags,
             excludeTags,
             verticalFormat,
+            alignVerticalColumns,
             includeOnlyMessagesOfType,
             excludeMessagesOfType,
             tagAnnotations,
@@ -132,11 +137,11 @@ class FormatSpec(
         AnnotationSpec(annotationPositions, tagAndValuesBold)
     }
 
-    fun toFormattedFields(fields: Fields): FormattedFields {
-        if(verticalFormat){
-            return VerticallyFormattedFields(fields)
+    fun getMsgFormatter(fields: Fields): MsgFormatter {
+        if(formatInHtml){
+            return HorizontalHtmlMsgFormatter(fields, tagAnnotationSpec, DelimiterImpl(outputDelimiter))
         } else {
-            return HorizontallyFormattedFields(fields, outputDelimiter)
+            return HorizontalConsoleMsgFormatter(fields, tagAnnotationSpec, DelimiterImpl(outputDelimiter))
         }
     }
 }

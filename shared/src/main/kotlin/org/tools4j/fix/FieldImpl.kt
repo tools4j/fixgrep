@@ -11,16 +11,12 @@ open class FieldImpl(override val tag: Tag, override val value: Value) : Field {
 
     constructor(tag: String, value: String) : this(Integer.valueOf(tag), value) {}
 
+    override fun accept(fieldVisitor: FieldVisitor) {
+        fieldVisitor.visit(this)
+    }
+
     override fun toString(): String {
         return tag.toString() + "=" + value
-    }
-
-    override fun toConsoleText(): String {
-        return tag.toConsoleText() + "=" + value.toConsoleText()
-    }
-
-    override fun toHtml(): String{
-        return "<span class='field'>" + tag.toHtml() + "<span class='equals'>=</span>" + value.toHtml() + "</span>"
     }
 
     override fun intValue(): Int {

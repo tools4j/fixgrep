@@ -20,7 +20,7 @@ class HighlightCriteriaTagValueMatches(val tag: Int, val matchStr: String): High
                 return HighlightCriteriaMatch(field)
             }
         }
-        val matcher = matchPattern.matcher(field.value.rawValue)
+        val matcher = matchPattern.matcher(field.value.valueRaw)
         if(matcher.find()){
             return HighlightCriteriaMatch(field)
         } else {

@@ -1,6 +1,5 @@
 package org.tools4j.fixgrep.highlights;
 
-import org.tools4j.fix.Delimiter
 import org.tools4j.fix.Fields
 
 /**
@@ -9,18 +8,10 @@ import org.tools4j.fix.Fields
  * Time: 5:55 PM
  */
 class Highlights(val highlights: List<Highlight>): Highlight{
-    override fun applyToDelimiter(fields: Fields, delimiter: Delimiter): Delimiter {
-        var outputDelimiter = delimiter
-        highlights.forEach {
-            outputDelimiter = it.applyToDelimiter(fields, outputDelimiter)
-        }
-        return outputDelimiter
-    }
-
-    override fun applyToFields(fields: Fields): Fields {
+    override fun apply(fields: Fields): Fields {
         var outputFields = fields
         highlights.forEach {
-            outputFields = it.applyToFields(outputFields)
+            outputFields = it.apply(outputFields)
         }
         return outputFields
     }

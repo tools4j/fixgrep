@@ -10,6 +10,4 @@ import org.tools4j.fixgrep.highlights.Highlight
  */
 interface FormattedFields: Fields {
     fun highlight(highlight: Highlight): FormattedFields
-    fun toConsoleText(): String
-    fun toHtml(): String
 }
