@@ -10,16 +10,16 @@ import java.util.stream.Collectors
 class CompositeTextEffect(val textEffects: List<TextEffect>): TextEffect {
     constructor(textEffect1: TextEffect, textEffect2: TextEffect): this(listOf(textEffect1, textEffect2))
 
-    override val consoleTextAfter: String = Ansi.Reset
-
-    override val name: String by lazy {
-        val sb = StringBuilder()
-        for (textEffect in textEffects) {
-            if(sb.length > 0) sb.append(",")
-            sb.append(textEffect.name)
+    override fun contains(textEffect: TextEffect): Boolean {
+        textEffects.forEach {
+            if(it.contains(textEffect)){
+                return true
+            }
         }
-        sb.toString()
+        return false
     }
+
+    override val consoleTextAfter: String = Ansi.Reset
 
     override val consoleTextBefore: String by lazy {
         textEffects.stream().map{it.consoleTextBefore}.collect(Collectors.toList()).joinToString("")
@@ -30,16 +30,11 @@ class CompositeTextEffect(val textEffects: List<TextEffect>): TextEffect {
     }
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other !is CompositeTextEffect) return false
-
-        if (textEffects != other.textEffects) return false
-
-        return true
+        return TextEffect.equals(this, other)
     }
 
     override fun hashCode(): Int {
-        return textEffects.hashCode()
+        return TextEffect.hashCode(this)
     }
 
     override fun toString(): String {

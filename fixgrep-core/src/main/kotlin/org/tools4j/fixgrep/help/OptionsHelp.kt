@@ -71,7 +71,7 @@ class OptionsHelp(val docWriterFactory: DocWriterFactory) {
 e.g. '--exclude-tags 22,33' would hide tags 22 and 33 from being displayed.  Can be useful for hiding some of
 the less 'interesting' fix fields, such as BeginString, BodyLength or Checksum.  Yawn!"""))
 
-        addOptionHelp(helpByOptions, OptionHelp(listOf("f", "to-file"), "Send output to a file.", "output.txt", """Filename is optional.  If no filename is specified, then a random file-name will be generated, with the prefix 'fixgrep-'.  And an extension of '.log' if in normal console mode, or an extension of '.html' if output is in html."""))
+        addOptionHelp(helpByOptions, OptionHelp(listOf("f", "to-file"), "Send output to a file.", "output.txt", """Filename is optional.  If no filename is specified, then a random file-htmlClass will be generated, with the prefix 'fixgrep-'.  And an extension of '.log' if in normal console mode, or an extension of '.html' if output is in html."""))
 
         addOptionHelp(helpByOptions, OptionHelp(
                 listOf("h", "highlight", "highlights"), 
@@ -104,6 +104,7 @@ the less 'interesting' fix fields, such as BeginString, BodyLength or Checksum. 
                 .writeFormatExamplesTable(fix)
                 .add("35")
                 .add("35:Bold")
+                .add("35:Bold:Line")
                 .add("11")
                 .add("11:FgWhite:BgBlue")
                 .add("11:FgWhite:BgBlue:Field")
@@ -142,7 +143,7 @@ the less 'interesting' fix fields, such as BeginString, BodyLength or Checksum. 
                 .startNewRow().addCell("${'$'}{senderToTargetCompIdDirection}").addCell("will display the compIds of the current msg. e.g. ABC->DEF")
                 .startNewRow().addCell("${'$'}{msgColor}").addCell("will 'start' formatting text using the pre-defined color for the particular FIX message type.")
                 .startNewRow().addCell("${'$'}{msgReset}").addCell("stops formatting text using the pre-defined color for the FIX message.")
-                .startNewRow().addCell("${'$'}{msgTypeName}").addCell("displays the FIX msg type name & sub-type, e.g. NewOrderSingle, CancelRequest, Exec.Fill")
+                .startNewRow().addCell("${'$'}{msgTypeName}").addCell("displays the FIX msg type htmlClass & sub-type, e.g. NewOrderSingle, CancelRequest, Exec.Fill")
                 .startNewRow().addCell("${'$'}{msgFix}").addCell("displays the formatted FIX message")
                 .startNewRow().addCell("${'$'}{n}").addCell("displays the value of that fix tag.  e.g. for a NewOrderSingle ${'$'}{35} would print 'D'")
                 .startNewRow().addCell("${'$'}n").addCell("(note, no braces), will print the captured regex group 'n' from the regex specified in the parameter input-line-format (or property input.line.format).")
@@ -193,7 +194,7 @@ the less 'interesting' fix fields, such as BeginString, BodyLength or Checksum. 
                             Color256HtmlDemo(docWriterFactory).toFormattedText()))
 
         addOptionHelp(helpByOptions, OptionHelp(listOf("16-color-demo"), "Displays a list of 16 foreground colors and 16 background colors using 16 color Ansi Escape codes.", null,
-                "Most consoles support 16 colors.  To use any of these colors in your highlights, prefix the name of the colors below with 'Fg' or 'Bg' depending on whether you wish to highlight the foreground or background.  E.g. FgWhite, BgRed.  To find out whether your console supports these colors, run this demo by specifying this option." +
+                "Most consoles support 16 colors.  To use any of these colors in your highlights, prefix the htmlClass of the colors below with 'Fg' or 'Bg' depending on whether you wish to highlight the foreground or background.  E.g. FgWhite, BgRed.  To find out whether your console supports these colors, run this demo by specifying this option." +
                             Color16HtmlDemo(docWriterFactory).toFormattedText()))
 
         addOptionHelp(helpByOptions, OptionHelp(listOf("man"), "Displays man page.", null,"Running with this command will print out the man page.  You can also use 'fixgrep man' (no dashes) which will run man and pipe it into less -R which preserves ansi colors.  Or 'fixgrep man online' which will launch the gixgrep online help into your default browser."))

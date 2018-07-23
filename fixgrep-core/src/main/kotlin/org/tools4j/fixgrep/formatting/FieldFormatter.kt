@@ -29,10 +29,11 @@ abstract class FieldFormatter(): FieldVisitor, ValueVisitor, TagVisitor{
         }
         field.tag.accept(this)
         field.value.accept(this)
+        finish()
     }
 
     override fun visit(tag: Tag) {
-        tagRaw = tagRaw
+        tagRaw = tag.tagRaw
         if(tag is AnnotatedTag){
             tagAnnotation = tag.annotation
         }

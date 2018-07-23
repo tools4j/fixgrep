@@ -138,6 +138,9 @@ task createHtmlManPage(type:JavaExec) {
 }
 
 task createTextManPage(type:JavaExec) {
+    doLast {
+        println "Written man page to: $buildDir/dist/files/man.txt"
+    }
     main = "org.tools4j.fixgrep.FixGrepMain"
     classpath = sourceSets.main.runtimeClasspath
     args = ["--man", "page", "--to-file", "$buildDir/dist/files/man.txt"]
