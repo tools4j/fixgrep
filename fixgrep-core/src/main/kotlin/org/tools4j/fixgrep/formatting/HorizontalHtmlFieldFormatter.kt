@@ -2,8 +2,6 @@ package org.tools4j.fixgrep.formatting
 
 import org.tools4j.fix.AnnotationPosition
 import org.tools4j.fix.AnnotationPositions
-import org.tools4j.fix.AnnotationSpec
-import org.tools4j.fix.Ansi
 import org.tools4j.fixgrep.texteffect.TextEffect
 
 /**
@@ -11,11 +9,11 @@ import org.tools4j.fixgrep.texteffect.TextEffect
  * Date: 7/12/2018
  * Time: 6:39 AM
  */
-class HorizontalHtmlFieldFormatter(val fieldWriter: FieldWriter, val annotationSpec: AnnotationSpec): FieldFormatter() {
+class HorizontalHtmlFieldFormatter(val fieldWriter: FieldWriter, val annotationPositions: AnnotationPositions, val boldTagAndValue: Boolean): FieldFormatter() {
     override fun finish() {
         val sb = StringBuilder()
         sb.append("<span class='field")
-        if(annotationSpec.annotationPositions != AnnotationPositions.NO_ANNOTATION) sb.append(" annotatedField")
+        if(annotationPositions != AnnotationPositions.NO_ANNOTATION) sb.append(" annotatedField")
         if(fieldTextEffect != TextEffect.NONE) sb.append(" " + fieldTextEffect.htmlClass)
         sb.append("'>")
         appendTag(sb)
@@ -27,14 +25,14 @@ class HorizontalHtmlFieldFormatter(val fieldWriter: FieldWriter, val annotationS
 
     private fun appendEquals(sb: StringBuilder) {
         sb.append("<span class='equals");
-        if(annotationSpec.boldTagAndValue) sb.append(" bold")
+        if(boldTagAndValue) sb.append(" bold")
         sb.append("'>=</span>")
     }
 
     fun appendTag(sb: StringBuilder): String{
-        if(annotationSpec.annotationPositions.tagAnnotationPosition == AnnotationPosition.NONE){
+        if(annotationPositions.tagAnnotationPosition == AnnotationPosition.NONE){
             this.appendTagRaw(sb)
-        } else if(annotationSpec.annotationPositions.tagAnnotationPosition == AnnotationPosition.BEFORE){
+        } else if(annotationPositions.tagAnnotationPosition == AnnotationPosition.BEFORE){
             if(tagAnnotation != null) appendTagAnnotation(sb)
             this.appendTagRaw(sb)
         } else {
@@ -52,15 +50,15 @@ class HorizontalHtmlFieldFormatter(val fieldWriter: FieldWriter, val annotationS
     }
 
     fun appendTagRaw(sb: StringBuilder) {
-        sb.append("<span class='tag tagNumber")
-        if (annotationSpec.boldTagAndValue) sb.append(" bold")
+        sb.append("<span class='tag tagRaw")
+        if (boldTagAndValue) sb.append(" bold")
         sb.append("'>").append(tagRaw).append("</span>")
     }
 
     private fun appendValue(sb: StringBuilder) {
-        if (annotationSpec.annotationPositions.valueAnnotationPosition == AnnotationPosition.NONE) {
+        if (annotationPositions.valueAnnotationPosition == AnnotationPosition.NONE) {
             appendValueRaw(sb)
-        } else if (annotationSpec.annotationPositions.valueAnnotationPosition == AnnotationPosition.BEFORE) {
+        } else if (annotationPositions.valueAnnotationPosition == AnnotationPosition.BEFORE) {
             appendValueAnnotation(sb)
             appendValueRaw(sb)
         } else {
@@ -70,16 +68,14 @@ class HorizontalHtmlFieldFormatter(val fieldWriter: FieldWriter, val annotationS
     }
 
     fun appendValueAnnotation(sb: StringBuilder) {
-        sb.append("[").append(valueAnnotation).append("]")
-    }
-
-    fun appendAnnotation(sb: StringBuilder) {
-        sb.append("<span class='value annotation'>[").append(valueAnnotation).append("]</span>")
+        if (valueAnnotation != null){
+            sb.append("<span class='value annotation'>[").append(valueAnnotation).append("]</span>")
+        }
     }
 
     fun appendValueRaw(sb: StringBuilder) {
-        sb.append("<span class='value rawValue")
-        if (annotationSpec.boldTagAndValue) sb.append(" bold")
+        sb.append("<span class='value valueRaw")
+        if (boldTagAndValue) sb.append(" bold")
         sb.append("'>").append(valueRaw).append("</span>")
     }
 }

@@ -68,12 +68,24 @@ class Ansi256Color(val color: Int, val backgroundForeground: AnsiForegroundBackg
         }
     }
 
-
-
     override fun toString(): String {
         return "Ansi256Color(color=$color, backgroundForeground=$backgroundForeground)"
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Ansi256Color) return false
 
+        if (color != other.color) return false
+        if (backgroundForeground != other.backgroundForeground) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = color
+        result = 31 * result + backgroundForeground.hashCode()
+        return result
+    }
 }
 

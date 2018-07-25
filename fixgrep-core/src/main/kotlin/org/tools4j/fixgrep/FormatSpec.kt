@@ -131,17 +131,15 @@ class FormatSpec(
             formatInHtml)
     }
     
-    val tagAnnotationSpec: AnnotationSpec by lazy {
-        val annotationPositions = AnnotationPositions.parse(tagAnnotations)
-        val tagAndValuesBold = !(annotationPositions.neitherTagNorValueAnnotated || suppressBoldTagsAndValues)
-        AnnotationSpec(annotationPositions, tagAndValuesBold)
+    val tagAnnotationPositions: AnnotationPositions by lazy {
+        AnnotationPositions.parse(tagAnnotations)
     }
 
     fun getMsgFormatter(fields: Fields): MsgFormatter {
         if(formatInHtml){
-            return HorizontalHtmlMsgFormatter(fields, tagAnnotationSpec, DelimiterImpl(outputDelimiter))
+            return HorizontalHtmlMsgFormatter(fields, tagAnnotationPositions, !suppressBoldTagsAndValues, DelimiterImpl(outputDelimiter))
         } else {
-            return HorizontalConsoleMsgFormatter(fields, tagAnnotationSpec, DelimiterImpl(outputDelimiter))
+            return HorizontalConsoleMsgFormatter(fields, tagAnnotationPositions, !suppressBoldTagsAndValues, DelimiterImpl(outputDelimiter))
         }
     }
 }

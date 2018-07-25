@@ -53,5 +53,4 @@ class FixGrepOnLargeFileTest extends Specification {
             }
         }
     }
-
 }

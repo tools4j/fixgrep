@@ -9,5 +9,14 @@ import org.tools4j.fixgrep.texteffect.TextEffect
  * Date: 7/17/2018
  * Time: 5:50 AM
  */
-class HighlightedFields(fields: Fields, val textEffect: TextEffect): FieldsImpl(fields) {
+class HighlightedFields(val fieldsParam: Fields, val textEffectParam: TextEffect): FieldsImpl(fieldsParam) {
+    var textEffect: TextEffect
+
+    init {
+        if (fieldsParam is HighlightedFields) {
+            textEffect = fieldsParam.textEffect.compositeWith(textEffectParam)
+        } else {
+            textEffect = textEffectParam
+        }
+    }
 }

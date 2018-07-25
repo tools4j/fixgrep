@@ -42,7 +42,7 @@ class Color256HtmlDemo(val docWriterFactory: DocWriterFactory) {
     private fun getTextEffectForColor(color: Int, darkOnLight: Boolean): TextEffect {
         val backgroundEffect = Ansi256Color(color, AnsiForegroundBackground.BACKGROUND)
         val foregroundEffect = if(darkOnLight) Ansi256Color(0, AnsiForegroundBackground.FOREGROUND) else Ansi256Color(15, AnsiForegroundBackground.FOREGROUND)
-        val compositeTextEffect = CompositeTextEffect(listOf(backgroundEffect, foregroundEffect))
+        val compositeTextEffect = CompositeTextEffect(linkedSetOf(backgroundEffect, foregroundEffect))
         return compositeTextEffect
     }
 

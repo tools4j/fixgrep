@@ -9,14 +9,14 @@ import org.tools4j.fixgrep.texteffect.TextEffect
  * Date: 7/12/2018
  * Time: 6:25 AM
  */
-class HorizontalConsoleMsgFormatter(val fields: Fields, val annotationSpec: AnnotationSpec, val delimiter: Delimiter) : FieldWriter, MsgFormatter, FieldsVisitor {
-    constructor(fields: Fields, annotationSpec: AnnotationSpec, delimiter: String): this(fields, annotationSpec, DelimiterImpl(delimiter))
+class HorizontalConsoleMsgFormatter(val fields: Fields, val annotationPositions: AnnotationPositions, val boldTagAndValues: Boolean, val delimiter: Delimiter) : FieldWriter, MsgFormatter, FieldsVisitor {
+    constructor(fields: Fields, annotationPositions: AnnotationPositions, boldTagAndValues: Boolean, delimiter: String): this(fields, annotationPositions, boldTagAndValues, DelimiterImpl(delimiter))
 
     var msgTextEffect: TextEffect = TextEffect.NONE
     val sb = StringBuilder()
 
     override fun getFieldVisitor(): FieldVisitor {
-        return HorizontalConsoleFieldFormatter(this, annotationSpec)
+        return HorizontalConsoleFieldFormatter(this, annotationPositions, msgTextEffect, boldTagAndValues)
     }
 
     override fun visit(fields: Fields) {
@@ -27,12 +27,14 @@ class HorizontalConsoleMsgFormatter(val fields: Fields, val annotationSpec: Anno
 
     override fun writeField(value: String) {
         if(sb.length > 0){
-            sb.append(msgTextEffect.consoleTextBefore)
-            sb.append(delimiter.delimiter)
-            sb.append(msgTextEffect.consoleTextAfter)
+            appendDelimiter()
         }
-        sb.append(msgTextEffect.consoleTextBefore)
         sb.append(value)
+    }
+
+    private fun appendDelimiter() {
+        sb.append(msgTextEffect.consoleTextBefore)
+        sb.append(delimiter.delimiter)
         sb.append(msgTextEffect.consoleTextAfter)
     }
 

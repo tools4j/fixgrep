@@ -2,19 +2,22 @@ package org.tools4j.fixgrep.formatting
 
 import org.tools4j.fix.AnnotationPosition
 import org.tools4j.fix.AnnotationPositions
-import org.tools4j.fix.AnnotationSpec
 import org.tools4j.fix.Ansi
 import org.tools4j.fixgrep.texteffect.MiscTextEffect
+import org.tools4j.fixgrep.texteffect.TextEffect
 
 /**
  * User: benjw
  * Date: 7/12/2018
  * Time: 6:39 AM
  */
-class HorizontalConsoleFieldFormatter(val fieldWriter: FieldWriter, val annotationSpec: AnnotationSpec): FieldFormatter() {
+class HorizontalConsoleFieldFormatter(val fieldWriter: FieldWriter, val annotationPositions: AnnotationPositions, val msgTextEffect: TextEffect, val boldTagAndValue: Boolean): FieldFormatter() {
+    var independentlyMarkupTagsAndValuesAsBold: Boolean = true
 
     override fun finish() {
         val sb = StringBuilder()
+        independentlyMarkupTagsAndValuesAsBold = boldTagAndValue && !msgTextEffect.contains(MiscTextEffect.Bold) && !fieldTextEffect.contains(MiscTextEffect.Bold)
+        fieldTextEffect = msgTextEffect.compositeWith(fieldTextEffect)
         sb.append(fieldTextEffect.consoleTextBefore)
         appendTag(sb)
         appendEquals(sb)
@@ -24,16 +27,16 @@ class HorizontalConsoleFieldFormatter(val fieldWriter: FieldWriter, val annotati
     }
 
     private fun appendEquals(sb: StringBuilder) {
-        val rawTagAndValueAreEitherSideOfEqualsAndAreBold = annotationSpec.annotationPositions == AnnotationPositions.OUTSIDE_ANNOTATED && annotationSpec.boldTagAndValue
-        if (rawTagAndValueAreEitherSideOfEqualsAndAreBold && !fieldTextEffect.contains(MiscTextEffect.Bold)) sb.append(Ansi.Bold)
+        val rawTagAndValueAreEitherSideOfEqualsAndAreBold = annotationPositions == AnnotationPositions.OUTSIDE_ANNOTATED && boldTagAndValue
+        if (rawTagAndValueAreEitherSideOfEqualsAndAreBold && independentlyMarkupTagsAndValuesAsBold) sb.append(Ansi.Bold)
         sb.append("=")
-        if (rawTagAndValueAreEitherSideOfEqualsAndAreBold && !fieldTextEffect.contains(MiscTextEffect.Bold)) sb.append(Ansi.Normal)
+        if (rawTagAndValueAreEitherSideOfEqualsAndAreBold && independentlyMarkupTagsAndValuesAsBold) sb.append(Ansi.Normal)
     }
 
     fun appendTag(sb: StringBuilder): String{
-        if(annotationSpec.annotationPositions.tagAnnotationPosition == AnnotationPosition.NONE){
+        if(annotationPositions.tagAnnotationPosition == AnnotationPosition.NONE){
             appendTagRaw(sb)
-        } else if(annotationSpec.annotationPositions.tagAnnotationPosition == AnnotationPosition.BEFORE){
+        } else if(annotationPositions.tagAnnotationPosition == AnnotationPosition.BEFORE){
             appendTagAnnotation(sb)
             appendTagRaw(sb)
         } else {
@@ -44,9 +47,9 @@ class HorizontalConsoleFieldFormatter(val fieldWriter: FieldWriter, val annotati
     }
 
     fun appendTagRaw(sb: StringBuilder) {
-        if (annotationSpec.boldTagAndValue && !fieldTextEffect.contains(MiscTextEffect.Bold)) sb.append(Ansi.Bold)
+        if (independentlyMarkupTagsAndValuesAsBold) sb.append(Ansi.Bold)
         sb.append(tagRaw)
-        if (annotationSpec.boldTagAndValue && !fieldTextEffect.contains(MiscTextEffect.Bold)) sb.append(Ansi.Normal)
+        if (independentlyMarkupTagsAndValuesAsBold) sb.append(Ansi.Normal)
     }
 
     fun appendTagAnnotation(sb: StringBuilder) {
@@ -54,9 +57,9 @@ class HorizontalConsoleFieldFormatter(val fieldWriter: FieldWriter, val annotati
     }
 
     private fun appendValue(sb: StringBuilder) {
-        if (annotationSpec.annotationPositions.valueAnnotationPosition == AnnotationPosition.NONE) {
+        if (annotationPositions.valueAnnotationPosition == AnnotationPosition.NONE) {
             appendValueRaw(sb)
-        } else if (annotationSpec.annotationPositions.valueAnnotationPosition == AnnotationPosition.BEFORE) {
+        } else if (annotationPositions.valueAnnotationPosition == AnnotationPosition.BEFORE) {
             appendValueAnnotation(sb)
             appendValueRaw(sb)
         } else {
@@ -66,9 +69,13 @@ class HorizontalConsoleFieldFormatter(val fieldWriter: FieldWriter, val annotati
     }
 
     fun appendValueRaw(sb: StringBuilder) {
-        if (annotationSpec.boldTagAndValue && !fieldTextEffect.contains(MiscTextEffect.Bold)) sb.append(Ansi.Bold)
+        if (independentlyMarkupTagsAndValuesAsBold){
+            sb.append(Ansi.Bold)
+        }
         sb.append(valueRaw)
-        if (annotationSpec.boldTagAndValue && !fieldTextEffect.contains(MiscTextEffect.Bold)) sb.append(Ansi.Normal)
+        if (independentlyMarkupTagsAndValuesAsBold){
+            sb.append(Ansi.Normal)
+        }
     }
 
     fun appendValueAnnotation(sb: StringBuilder) {

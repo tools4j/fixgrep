@@ -16,7 +16,7 @@ class AnnotatedFieldTest extends Specification {
     @Unroll
     def "ToConsoleText #annotationPositions:#bold"(AnnotationPositions annotationPositions, boolean bold, String expectedConsoleText) {
         when:
-        final Fields annotatedFields = new FieldsAnnotator(fields, fixSpec, new AnnotationSpec(annotationPositions, bold)).fields
+        final Fields annotatedFields = new FieldsAnnotator(fields, fixSpec, annotationPositions).fields
         def actualConsoleText = annotatedFields.toConsoleText()
         println actualConsoleText
 
@@ -33,7 +33,7 @@ class AnnotatedFieldTest extends Specification {
 
     def "ToHtml - Outside annotations - bold=true"() {
         when:
-        final Fields annotatedFields = new FieldsAnnotator(fields, fixSpec, new AnnotationSpec(AnnotationPositions.OUTSIDE_ANNOTATED, true)).fields
+        final Fields annotatedFields = new FieldsAnnotator(fields, fixSpec, AnnotationPositions.OUTSIDE_ANNOTATED).fields
         def actualHtml = annotatedFields.toHtml()
         println actualHtml
 
@@ -66,7 +66,7 @@ class AnnotatedFieldTest extends Specification {
 
     def "ToHtml - Outside annotations - bold=false"() {
         when:
-        final Fields annotatedFields = new FieldsAnnotator(fields, fixSpec, new AnnotationSpec(AnnotationPositions.OUTSIDE_ANNOTATED, false)).fields
+        final Fields annotatedFields = new FieldsAnnotator(fields, fixSpec, AnnotationPositions.OUTSIDE_ANNOTATED).fields
         def actualHtml = annotatedFields.toHtml()
         println actualHtml
 
@@ -100,7 +100,7 @@ class AnnotatedFieldTest extends Specification {
 
     def "ToHtml - Left annotations - bold=true"() {
         when:
-        final Fields annotatedFields = new FieldsAnnotator(fields, fixSpec, new AnnotationSpec(AnnotationPositions.LEFT_ANNOTATED, true)).fields
+        final Fields annotatedFields = new FieldsAnnotator(fields, fixSpec, AnnotationPositions.LEFT_ANNOTATED).fields
         def actualHtml = annotatedFields.toHtml()
         println actualHtml
 
@@ -135,7 +135,7 @@ class AnnotatedFieldTest extends Specification {
 
     def "ToHtml - Left annotations - bold=false"() {
         when:
-        final Fields annotatedFields = new FieldsAnnotator(fields, fixSpec, new AnnotationSpec(AnnotationPositions.LEFT_ANNOTATED, false)).fields
+        final Fields annotatedFields = new FieldsAnnotator(fields, fixSpec, AnnotationPositions.LEFT_ANNOTATED).fields
         def actualHtml = annotatedFields.toHtml()
         println actualHtml
 

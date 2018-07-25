@@ -114,7 +114,7 @@ class Formatter (val spec: FormatSpec){
         }
 
         if (formattedString.contains("\${msgFix}")) {
-            var fields = FieldsAnnotator(inputFields, spec.fixSpec, spec.tagAnnotationSpec).fields
+            var fields = FieldsAnnotator(inputFields, spec.fixSpec, spec.tagAnnotationPositions).fields
             fields = fields.sortBy(spec.sortByTags)
             fields = fields.exclude(spec.excludeTags)
             fields = fields.includeOnly(spec.onlyIncludeTags)
@@ -137,8 +137,6 @@ class Formatter (val spec: FormatSpec){
 
         if(formattedString.isEmpty()){
             return null
-        } else if(spec.formatInHtml) {
-            return "<div class='line'>$formattedString</div>"
         } else if(spec.debug){
             return formattedString.replace("\u001b", "\\u001b")
         } else {

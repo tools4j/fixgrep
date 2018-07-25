@@ -1,6 +1,5 @@
 package org.tools4j.fixgrep.highlights
 
-import org.tools4j.fix.Delimiter
 import org.tools4j.fix.Fields
 import org.tools4j.fix.FieldsImpl
 import org.tools4j.fixgrep.texteffect.TextEffect
@@ -11,16 +10,20 @@ class HighlightImpl(val criteria: HighlightCriteria, val scope: HighlightScope, 
         val matchingTags = criteria.matches(fields)
         if(matchingTags.matchingFields.isEmpty()) return fields
 
-        if(scope == HighlightScope.Line){
-            return HighlightedFields(fields, textEffect)
+        val individuallyHighlightedFields = FieldsImpl(fields.stream().map {
+            if (scope == HighlightScope.Field && matchingTags.matchingFields.contains(it)) {
+                HighlightedField(it, textEffect)
+            } else {
+                it
+            }
+        }.collect(Collectors.toList()))
+
+        val previousMsgTextEffect = if(fields is HighlightedFields) fields.textEffect else TextEffect.NONE
+        val msgTextEffect = if(scope == HighlightScope.Line && !matchingTags.matchingFields.isEmpty()){
+            previousMsgTextEffect.compositeWith(textEffect)
         } else {
-            return FieldsImpl(fields.stream().map {
-                if (matchingTags.matchingFields.contains(it)) {
-                    HighlightedField(it, textEffect)
-                } else {
-                    it
-                }
-            }.collect(Collectors.toList()))
+            previousMsgTextEffect
         }
+        return HighlightedFields(individuallyHighlightedFields, msgTextEffect)
     }
 }

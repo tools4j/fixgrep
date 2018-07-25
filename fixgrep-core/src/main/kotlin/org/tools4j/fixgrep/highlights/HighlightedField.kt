@@ -8,7 +8,7 @@ import org.tools4j.fixgrep.texteffect.TextEffect
 class HighlightedField(val field: Field, textEffectParam: TextEffect): Field by field {
     val textEffect: TextEffect by lazy {
         if(field is HighlightedField){
-            CompositeTextEffect(listOf(field.textEffect, textEffectParam))
+            CompositeTextEffect(linkedSetOf(field.textEffect, textEffectParam))
         } else {
             textEffectParam
         }

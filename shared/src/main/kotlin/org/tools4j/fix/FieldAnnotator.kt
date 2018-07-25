@@ -7,7 +7,7 @@ package org.tools4j.fix
  */
 class FieldAnnotator(
         val fixSpec: FixSpec,
-        val annotationSpec: AnnotationSpec = AnnotationSpec.OUTSIDE_ANNOTATED_BOLD_TAG_VALUES){
+        val annotationPositions: AnnotationPositions = AnnotationPositions.OUTSIDE_ANNOTATED){
 
     fun getField(field: Field): Field {
         return FieldImpl(getTag(field.tag), getValue(field.tag, field.value))

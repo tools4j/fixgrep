@@ -8,6 +8,12 @@ interface TextEffect {
     val htmlClass: String
     fun contains(textEffect: TextEffect): Boolean
 
+    fun compositeWith(other: TextEffect): TextEffect {
+        return if(this == NONE) other
+                else if(other == NONE) this
+                else CompositeTextEffect(this, other)
+    }
+
     companion object {
         val NONE = TextEffectImpl("","")
 

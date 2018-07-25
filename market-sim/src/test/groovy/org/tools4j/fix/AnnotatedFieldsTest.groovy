@@ -20,7 +20,7 @@ class AnnotatedFieldsTest extends Specification {
         final Fields fields = new FieldsImpl(Arrays.asList(field1, field2))
 
         when:
-        final Fields annotatedFields = new FieldsAnnotator(fields, fixSpec, new AnnotationSpec(AnnotationPositions.parse(spec), false)).fields
+        final Fields annotatedFields = new FieldsAnnotator(fields, fixSpec, AnnotationPositions.parse(spec)).fields
 
         then:
         assert annotatedFields.toConsoleText() == expectedAnnotatedOutput

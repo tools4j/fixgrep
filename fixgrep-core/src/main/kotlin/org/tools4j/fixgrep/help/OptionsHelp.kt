@@ -65,6 +65,8 @@ class OptionsHelp(val docWriterFactory: DocWriterFactory) {
                 .endTable()
                 .toFormattedText()))
 
+        addOptionHelp(helpByOptions, OptionHelp(listOf("A", "align-columns", "align-vertical-columns"), "Aligns tags, values and annotations when viewing messages in vertical format.", null, null))
+
         addOptionHelp(helpByOptions, OptionHelp(listOf("d", "input-delimiter", "input-delim"), "Defines the FIX delimiter used in the input fix messages.  Default to control character 1, i.e. \\u0001", ":", null))
 
         addOptionHelp(helpByOptions, OptionHelp(listOf("e", "exclude-tags"), "Tags to exclude from the formatted FIX.", "22,33", """A comma separated list of tags which should not be displayed in the output 'formatted' fix.
@@ -184,6 +186,8 @@ the less 'interesting' fix fields, such as BeginString, BodyLength or Checksum. 
         addOptionHelp(helpByOptions, OptionHelp(listOf("t", "only-include-tags"), "Tags to include in the formatted fix.", "35,55,11", """A comma separated list of tags numbers to include in the output FIX.  Any other fields are discarded."""))
 
         addOptionHelp(helpByOptions, OptionHelp(listOf("v", "exclude-messages-of-type"), "Comma separated list of msgType codes.  Can be used to hide messages of certain types from being displayed.", "A,O", "e.g. To 'hide' Logon and Heartbeat messages, this parameter could be defined as 'A,0'"))
+
+        addOptionHelp(helpByOptions, OptionHelp(listOf("V", "vertical-format"), "Align columns in vertical format.  Default is false (horizontal).", null, null))
 
         addOptionHelp(helpByOptions, OptionHelp(listOf("x", "debug"), "Run in debug mode.", null, null))
 

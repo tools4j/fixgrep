@@ -22,7 +22,7 @@ class AnnotationSpecTest extends Specification {
         final Field field = new FieldImpl(new RawTag(35), new RawValue("8"))
 
         when:
-        final Field annotatedField = new FieldAnnotator(fixSpec, new AnnotationSpec(AnnotationPositions.parse(spec), false)).getField(field)
+        final Field annotatedField = new FieldAnnotator(fixSpec, AnnotationPositions.parse(spec)).getField(field)
 
         then:
         assert annotatedField.toHorizontalConsoleText() == expectedAnnotatedOutput

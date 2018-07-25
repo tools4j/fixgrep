@@ -10,9 +10,9 @@ import java.util.ArrayList
 class FieldsAnnotator(
         val inputFields: Fields,
         val fixSpec: FixSpec,
-        val annotationSpec: AnnotationSpec = AnnotationSpec.OUTSIDE_ANNOTATED_BOLD_TAG_VALUES) : FieldsSource {
+        val annotationPositions: AnnotationPositions = AnnotationPositions.OUTSIDE_ANNOTATED) : FieldsSource {
 
-    val fieldAnnotator = FieldAnnotator(fixSpec, annotationSpec)
+    val fieldAnnotator = FieldAnnotator(fixSpec, annotationPositions)
 
     override val fields: Fields by lazy {
         val returnFields = ArrayList<Field>()

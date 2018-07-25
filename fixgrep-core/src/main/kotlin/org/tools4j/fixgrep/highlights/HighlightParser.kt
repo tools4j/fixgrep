@@ -23,7 +23,7 @@ class HighlightParser(_defaultHighlightTextEffects: DefaultHighlightTextEffects)
     fun parse(expressions: List<String>): Highlight{
         defaultHighlightTextEffects.reset()
         val highlights = ArrayList<Highlight>()
-        expressions.reversed().forEach {
+        expressions.forEach {
             highlights.add(parseExpression(it))
         }
         return Highlights(highlights)
