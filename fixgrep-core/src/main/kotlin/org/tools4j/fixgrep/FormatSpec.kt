@@ -4,6 +4,7 @@ import org.tools4j.fix.*
 import org.tools4j.fixgrep.formatting.*
 import org.tools4j.fixgrep.highlights.Highlight
 import org.tools4j.fixgrep.highlights.HighlightParser
+import org.tools4j.fixgrep.utils.Constants
 import org.tools4j.properties.Config
 import java.util.*
 
@@ -13,36 +14,42 @@ import java.util.*
  * Time: 6:49 AM
  */
 class FormatSpec(
-        val suppressColors: Boolean = false,
-        val suppressBoldTagsAndValues: Boolean = false,
-        val highlight: Highlight = Highlight.NO_HIGHLIGHT,
-        val groupBy: GroupBy = GroupBy.NONE,
-        val inputDelimiter: String = Ascii1Char().toString(),
-        val outputDelimiter: String = "|",
-        val lineFormat: String = "\${senderToTargetCompIdDirection} \${msgColor}[\${msgTypeName}]\${colorReset} \${msgFix}",
-        val lineRegex: String = "^.*?(\\d+=.*?$)",
-        val lineRegexGroupForFix: Int = 1,
-        val sortByTags: List<Int> = Collections.emptyList(),
-        val onlyIncludeTags: List<Int> = Collections.emptyList(),
-        val excludeTags: List<Int> = Collections.emptyList(),
-        val verticalFormat: Boolean = false,
-        val alignVerticalColumns: Boolean = false,
-        val includeOnlyMessagesOfType: List<String> = Collections.emptyList(),
-        val excludeMessagesOfType: List<String> = Collections.emptyList(),
+        val suppressColors: Boolean,
+        val suppressBoldTagsAndValues: Boolean,
+        val highlight: Highlight,
+        val groupBy: GroupBy,
+        val inputDelimiter: String,
+        val outputDelimiter: String,
+        val outputFormatHorizontalConsole: String,
+        val outputFormatHorizontalHtml: String,
+        val outputFormatVerticalConsole: String,
+        val outputFormatVerticalHtml: String,
+        val lineRegex: String,
+        val lineRegexGroupForFix: Int,
+        val sortByTags: List<Int>,
+        val onlyIncludeTags: List<Int>,
+        val excludeTags: List<Int>,
+        val verticalFormat: Boolean,
+        val alignVerticalColumns: Boolean,
+        val includeOnlyMessagesOfType: List<String>,
+        val excludeMessagesOfType: List<String>,
         val tagAnnotations: String,
-        val fixSpec: FixSpec = Fix50SP2FixSpecFromClassPath().spec,
-        val msgColors: MessageColors = MessageColors(),
-        val debug: Boolean = false,
-        val formatInHtml: Boolean = false) {
+        val fixSpec: FixSpec,
+        val msgColors: MessageColors,
+        val debug: Boolean,
+        val formatInHtml: Boolean) {
 
     constructor(): this(
         false,
-            false,
+        false,
         Highlight.NO_HIGHLIGHT,
         GroupBy.NONE,
         Ascii1Char().toString(),
         "|",
         "\${senderToTargetCompIdDirection} \${msgColor}[\${msgTypeName}]\${colorReset} \${msgFix}",
+        "\${senderToTargetCompIdDirection} \${msgColor}[\${msgTypeName}]\${colorReset} \${msgFix}",
+        "${Constants.EQUALS_SEPARATOR}\n\${msgColor}[\${msgTypeName}]\${colorReset}\n${Constants.EQUALS_SEPARATOR}\n\${msgFix}",
+        "${Constants.EQUALS_SEPARATOR}<br/>\${msgColor}[\${msgTypeName}]\${colorReset}<br/>${Constants.EQUALS_SEPARATOR}<br/>\${msgFix}",
         "^.*?(\\d+=.*?$)",
         1,
         Collections.emptyList(),
@@ -54,58 +61,65 @@ class FormatSpec(
         Collections.emptyList(),
         "outsideAnnotated",
         Fix50SP2FixSpecFromClassPath().spec,
-        MessageColors())
+        MessageColors(),
+        false,
+        false)
 
     @JvmOverloads
     constructor(
-            config: Config,
+            config: ConfigKeyedWithOption,
             fixSpec: FixSpec = Fix50SP2FixSpecFromClassPath().spec,
             msgColors: MessageColors = MessageColors()) : this(
-
-            suppressColors = config.getAsBoolean("suppress.colors"),
-            suppressBoldTagsAndValues = config.getAsBoolean("suppress.bold.tags.and.values"),
-            highlight = HighlightParser().parse(config.getAsStringList("highlights")),
-            //groupBy = GroupByOrder(string = config.getString("group.by.order")),
-            inputDelimiter = config.getAsString("input.delimiter"),
-            outputDelimiter = config.getAsString("output.delimiter"),
-            lineFormat = config.getAsString("output.line.format"),
-            lineRegex = config.getAsString("input.line.format"),
-            lineRegexGroupForFix = config.getAsInt("line.regexgroup.for.fix"),
-            sortByTags = config.getAsIntList("sort.by.tags"),
-            onlyIncludeTags = config.getAsIntList("only.include.tags"),
-            excludeTags = config.getAsIntList("exclude.tags"),
-            tagAnnotations = config.getAsString("tag.annotations"),
-            verticalFormat = config.getAsBoolean("vertical.format"),
-            alignVerticalColumns = config.getAsBoolean("align.vertical.columns"),
-            includeOnlyMessagesOfType = config.getAsStringList("include.only.messages.of.type"),
-            excludeMessagesOfType = config.getAsStringList("exclude.messages.of.type"),
-            fixSpec = fixSpec,
-            msgColors = msgColors,
-            formatInHtml = config.hasPropertyAndIsNotFalse("html"),
-            debug = config.getAsBoolean("debug", false))
+                suppressColors = config.getAsBoolean(Option.suppress_colors),
+                suppressBoldTagsAndValues = config.getAsBoolean(Option.suppress_bold_tags_and_values),
+                highlight = HighlightParser().parse(config.getAsStringList(Option.highlights)),
+                groupBy = GroupBy.NONE,
+                inputDelimiter = config.getAsString(Option.input_delimiter),
+                outputDelimiter = config.getAsString(Option.output_delimiter),
+                outputFormatHorizontalConsole = config.getAsString(Option.output_format_horizontal_console),
+                outputFormatHorizontalHtml = config.getAsString(Option.output_format_horizontal_html),
+                outputFormatVerticalConsole = config.getAsString(Option.output_format_vertical_console),
+                outputFormatVerticalHtml = config.getAsString(Option.output_format_vertical_html),
+                lineRegex = config.getAsString(Option.input_line_format),
+                lineRegexGroupForFix = config.getAsInt(Option.line_regexgroup_for_fix),
+                sortByTags = config.getAsIntList(Option.sort_by_tags),
+                onlyIncludeTags = config.getAsIntList(Option.only_include_tags),
+                excludeTags = config.getAsIntList(Option.exclude_tags),
+                tagAnnotations = config.getAsString(Option.tag_annotations),
+                verticalFormat = config.getAsBoolean(Option.vertical_format),
+                alignVerticalColumns = config.getAsBoolean(Option.align_vertical_columns),
+                includeOnlyMessagesOfType = config.getAsStringList(Option.include_only_messages_of_type),
+                excludeMessagesOfType = config.getAsStringList(Option.exclude_messages_of_type),
+                fixSpec = fixSpec,
+                msgColors = msgColors,
+                formatInHtml = config.hasPropertyAndIsNotFalse(Option.html),
+                debug = config.getAsBoolean(Option.debug, false))
     
     fun copyWithModifications(
-        suppressColors: Boolean = this.suppressColors,
-        suppressBoldTagsAndValues: Boolean = this.suppressBoldTagsAndValues,
-        highlight: Highlight = this.highlight,
-        groupBy: GroupBy = this.groupBy,
-        inputDelimiter: String = this.inputDelimiter,
-        outputDelimiter: String = this.outputDelimiter,
-        lineFormat: String = this.lineFormat,
-        lineRegex: String = this.lineRegex,
-        lineRegexGroupForFix: Int = this.lineRegexGroupForFix,
-        sortByTags: List<Int> = this.sortByTags,
-        onlyIncludeTags: List<Int> = this.onlyIncludeTags,
-        excludeTags: List<Int> = this.excludeTags,
-        verticalFormat: Boolean = this.verticalFormat,
-        alignVerticalColumns: Boolean = this.alignVerticalColumns,
-        includeOnlyMessagesOfType: List<String> = this.includeOnlyMessagesOfType,
-        excludeMessagesOfType: List<String> = this.excludeMessagesOfType,
-        tagAnnotations: String = this.tagAnnotations,
-        fixSpec: FixSpec = this.fixSpec,
-        msgColors: MessageColors = this.msgColors,
-        debug: Boolean = this.debug,
-        formatInHtml: Boolean = this.formatInHtml): FormatSpec {
+            suppressColors: Boolean = this.suppressColors,
+            suppressBoldTagsAndValues: Boolean = this.suppressBoldTagsAndValues,
+            highlight: Highlight = this.highlight,
+            groupBy: GroupBy = this.groupBy,
+            inputDelimiter: String = this.inputDelimiter,
+            outputDelimiter: String = this.outputDelimiter,
+            outputFormatHorizontalConsole: String = this.outputFormatHorizontalConsole,
+            outputFormatHorizontalHtml: String = this.outputFormatHorizontalHtml,
+            outputFormatVerticalConsole: String = this.outputFormatVerticalConsole,
+            outputFormatVerticalHtml: String = this.outputFormatVerticalHtml,
+            lineRegex: String = this.lineRegex,
+            lineRegexGroupForFix: Int = this.lineRegexGroupForFix,
+            sortByTags: List<Int> = this.sortByTags,
+            onlyIncludeTags: List<Int> = this.onlyIncludeTags,
+            excludeTags: List<Int> = this.excludeTags,
+            verticalFormat: Boolean = this.verticalFormat,
+            alignVerticalColumns: Boolean = this.alignVerticalColumns,
+            includeOnlyMessagesOfType: List<String> = this.includeOnlyMessagesOfType,
+            excludeMessagesOfType: List<String> = this.excludeMessagesOfType,
+            tagAnnotations: String = this.tagAnnotations,
+            fixSpec: FixSpec = this.fixSpec,
+            msgColors: MessageColors = this.msgColors,
+            debug: Boolean = this.debug,
+            formatInHtml: Boolean = this.formatInHtml): FormatSpec {
 
         return FormatSpec(
             suppressColors,
@@ -114,7 +128,10 @@ class FormatSpec(
             groupBy,
             inputDelimiter,
             outputDelimiter,
-            lineFormat,
+            outputFormatHorizontalConsole,
+            outputFormatHorizontalHtml,
+            outputFormatVerticalConsole,
+            outputFormatVerticalHtml,
             lineRegex,
             lineRegexGroupForFix,
             sortByTags,
@@ -137,9 +154,33 @@ class FormatSpec(
 
     fun getMsgFormatter(fields: Fields): MsgFormatter {
         if(formatInHtml){
-            return HorizontalHtmlMsgFormatter(fields, tagAnnotationPositions, !suppressBoldTagsAndValues, DelimiterImpl(outputDelimiter))
+            if(verticalFormat) {
+                return VerticalHtmlMsgFormatter(fields, tagAnnotationPositions, !suppressBoldTagsAndValues)
+            } else {
+                return HorizontalHtmlMsgFormatter(fields, tagAnnotationPositions, !suppressBoldTagsAndValues, DelimiterImpl(outputDelimiter))
+            }
         } else {
-            return HorizontalConsoleMsgFormatter(fields, tagAnnotationPositions, !suppressBoldTagsAndValues, DelimiterImpl(outputDelimiter))
+            if(verticalFormat) {
+                throw UnsupportedOperationException()
+            } else {
+                return HorizontalConsoleMsgFormatter(fields, tagAnnotationPositions, !suppressBoldTagsAndValues, DelimiterImpl(outputDelimiter))
+            }
+        }
+    }
+    
+    fun getOutputFormat(): String{
+        if(formatInHtml) {
+            if (verticalFormat) {
+                return outputFormatVerticalHtml
+            } else {
+                return outputFormatHorizontalHtml
+            }
+        } else {
+            if (verticalFormat) {
+                return outputFormatVerticalConsole
+            } else {
+                return outputFormatHorizontalConsole
+            }
         }
     }
 }

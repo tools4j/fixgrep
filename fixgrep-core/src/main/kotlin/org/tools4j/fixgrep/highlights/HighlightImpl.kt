@@ -19,7 +19,7 @@ class HighlightImpl(val criteria: HighlightCriteria, val scope: HighlightScope, 
         }.collect(Collectors.toList()))
 
         val previousMsgTextEffect = if(fields is HighlightedFields) fields.textEffect else TextEffect.NONE
-        val msgTextEffect = if(scope == HighlightScope.Line && !matchingTags.matchingFields.isEmpty()){
+        val msgTextEffect = if(scope == HighlightScope.Msg && !matchingTags.matchingFields.isEmpty()){
             previousMsgTextEffect.compositeWith(textEffect)
         } else {
             previousMsgTextEffect

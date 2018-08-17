@@ -25,7 +25,7 @@ class FixGrepMain(val inputStream: InputStream?, val outputStream: OutputStream,
         val configAndArguments = ConfigBuilder(args).configAndArguments
 
         if(configAndArguments.arguments.size >= 2 && configAndArguments.arguments.get(0) == "man" && configAndArguments.arguments.get(1) == "online"){
-            val uri = URL(configAndArguments.config.getAsString("fixgrep.online.help.url")).toURI()
+            val uri = URL(configAndArguments.config.getAsString(Option.online_help_url)).toURI()
             if (Desktop.isDesktopSupported()) {
                 Desktop.getDesktop().browse(uri)
             } else {
@@ -36,16 +36,16 @@ class FixGrepMain(val inputStream: InputStream?, val outputStream: OutputStream,
         }
 
         val fixGrepOutputStream: OutputStream
-        val writingToFile = configAndArguments.config.hasPropertyAndIsNotFalse("to.file")
+        val writingToFile = configAndArguments.config.hasPropertyAndIsNotFalse(Option.to_file) || configAndArguments.config.hasPropertyAndIsNotFalse(Option.launch_browser)
         val outputFile: OutputFile?
 
         if(writingToFile){
-            val isHtml = configAndArguments.config.hasPropertyAndIsNotFalse("html")
-            if(configAndArguments.config.hasPropertyAndIsTrueOrNull("to.file")){
+            val isHtml = configAndArguments.config.hasPropertyAndIsNotFalse(Option.html)
+            if(configAndArguments.config.hasPropertyAndIsTrueOrNull(Option.to_file)){
                 val extension = if(isHtml) OutputFile.Extension.html else OutputFile.Extension.log
                 outputFile = OutputFile(extension)
             } else {
-                val toFile = configAndArguments.config.getAsString("to.file")
+                val toFile = configAndArguments.config.getAsString(Option.to_file)
                 outputFile = OutputFile(toFile)
             }
             fixGrepOutputStream = outputFile.outputStream
@@ -54,12 +54,12 @@ class FixGrepMain(val inputStream: InputStream?, val outputStream: OutputStream,
             outputFile = null
         }
 
-        //Run fixgrep
+        //RUN FIXGREP!!
         FixGrep(inputStream, fixGrepOutputStream, configAndArguments).go()
 
         if(writingToFile) {
             outputFile!!.finish()
-            if (configAndArguments.config.hasPropertyAndIsNotFalse("launch.browser")) {
+            if (configAndArguments.config.hasPropertyAndIsNotFalse(Option.launch_browser)) {
                 outputFile.launchInBrowser()
             }
         }

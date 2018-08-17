@@ -22,7 +22,7 @@ class OptionsHelpTest extends Specification {
                 .add("35,55,11")
                 .add("35:Bold,55")
                 .add("35=D:Fg8,55=AUD&&11=AB:BgBrightYellow")
-                .add("35=D:Fg8:Line,55=AUD:BgBrightGreen")
+                .add("35=D:Fg8:Msg,55=AUD:BgBrightGreen")
                 .endTable()
                 .toFormattedText()
 
@@ -36,7 +36,7 @@ class OptionsHelpTest extends Specification {
 | -h 35,55,11                              | \u001B[31m[MsgType]\u001B[1m35\u001B[22m\u001B[1m=\u001B[22m\u001B[1mD\u001B[22m[NEWORDERSINGLE]\u001B[0m|\u001B[33m[ClOrdID]\u001B[1m11\u001B[22m\u001B[1m=\u001B[22m\u001B[1mABC\u001B[22m\u001B[0m|\u001B[32m[Symbol]\u001B[1m55\u001B[22m\u001B[1m=\u001B[22m\u001B[1mAUD/USD\u001B[22m\u001B[0m |
 | -h 35:Bold,55                            | \u001B[1m[MsgType]35=D[NEWORDERSINGLE]\u001B[22m|[ClOrdID]\u001B[1m11\u001B[22m\u001B[1m=\u001B[22m\u001B[1mABC\u001B[22m|\u001B[31m[Symbol]\u001B[1m55\u001B[22m\u001B[1m=\u001B[22m\u001B[1mAUD/USD\u001B[22m\u001B[0m |
 | -h 35=D:Fg8,55=AUD&&11=AB:BgBrightYellow | \u001B[38;5;8m[MsgType]\u001B[1m35\u001B[22m\u001B[1m=\u001B[22m\u001B[1mD\u001B[22m[NEWORDERSINGLE]\u001B[0m|\u001B[43;1m[ClOrdID]\u001B[1m11\u001B[22m\u001B[1m=\u001B[22m\u001B[1mABC\u001B[22m\u001B[0m|\u001B[43;1m[Symbol]\u001B[1m55\u001B[22m\u001B[1m=\u001B[22m\u001B[1mAUD/USD\u001B[22m\u001B[0m |
-| -h 35=D:Fg8:Line,55=AUD:BgBrightGreen    | \u001B[38;5;8m[MsgType]\u001B[1m35\u001B[22m\u001B[1m=\u001B[22m\u001B[1mD\u001B[22m[NEWORDERSINGLE]\u001B[0m\u001B[38;5;8m|\u001B[0m\u001B[38;5;8m[ClOrdID]\u001B[1m11\u001B[22m\u001B[1m=\u001B[22m\u001B[1mABC\u001B[22m\u001B[0m\u001B[38;5;8m|\u001B[0m\u001B[42;1m\u001B[38;5;8m\u001B[42;1m[Symbol]\u001B[1m55\u001B[22m\u001B[1m=\u001B[22m\u001B[1mAUD/USD\u001B[22m\u001B[0m |
+| -h 35=D:Fg8:Msg,55=AUD:BgBrightGreen     | \u001B[38;5;8m[MsgType]\u001B[1m35\u001B[22m\u001B[1m=\u001B[22m\u001B[1mD\u001B[22m[NEWORDERSINGLE]\u001B[0m\u001B[38;5;8m|\u001B[0m\u001B[38;5;8m[ClOrdID]\u001B[1m11\u001B[22m\u001B[1m=\u001B[22m\u001B[1mABC\u001B[22m\u001B[0m\u001B[38;5;8m|\u001B[0m\u001B[42;1m\u001B[38;5;8m\u001B[42;1m[Symbol]\u001B[1m55\u001B[22m\u001B[1m=\u001B[22m\u001B[1mAUD/USD\u001B[22m\u001B[0m |
 """
     }
 
@@ -52,7 +52,7 @@ class OptionsHelpTest extends Specification {
                 .add("35,55,11")
                 .add("35:Bold,55")
                 .add("35=D:Fg8,55=AUD&&11=AB:BgBrightYellow")
-                .add("35=D:Fg8:Line,55=AUD:BgBrightGreen")
+                .add("35=D:Fg8:Msg,55=AUD:BgBrightGreen")
                 .endTable()
                 .toFormattedText()
 
@@ -67,7 +67,7 @@ class OptionsHelpTest extends Specification {
 <tr><td>-h 35,55,11</td><td class='console'><div class='fields'><span class='field annotatedField FgRed'><span class='tag annotation'>[MsgType]</span><span class='tag tagRaw bold'>35</span><span class='equals bold'>=</span><span class='value valueRaw bold'>D</span><span class='value annotation'>[NEWORDERSINGLE]</span></span><span class='delim'>|</span><span class='field annotatedField FgYellow'><span class='tag annotation'>[ClOrdID]</span><span class='tag tagRaw bold'>11</span><span class='equals bold'>=</span><span class='value valueRaw bold'>ABC</span></span><span class='delim'>|</span><span class='field annotatedField FgGreen'><span class='tag annotation'>[Symbol]</span><span class='tag tagRaw bold'>55</span><span class='equals bold'>=</span><span class='value valueRaw bold'>AUD/USD</span></span></div></td></tr>
 <tr><td>-h 35:Bold,55</td><td class='console'><div class='fields'><span class='field annotatedField bold'><span class='tag annotation'>[MsgType]</span><span class='tag tagRaw bold'>35</span><span class='equals bold'>=</span><span class='value valueRaw bold'>D</span><span class='value annotation'>[NEWORDERSINGLE]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[ClOrdID]</span><span class='tag tagRaw bold'>11</span><span class='equals bold'>=</span><span class='value valueRaw bold'>ABC</span></span><span class='delim'>|</span><span class='field annotatedField FgRed'><span class='tag annotation'>[Symbol]</span><span class='tag tagRaw bold'>55</span><span class='equals bold'>=</span><span class='value valueRaw bold'>AUD/USD</span></span></div></td></tr>
 <tr><td>-h 35=D:Fg8,55=AUD&&11=AB:BgBrightYellow</td><td class='console'><div class='fields'><span class='field annotatedField Fg8'><span class='tag annotation'>[MsgType]</span><span class='tag tagRaw bold'>35</span><span class='equals bold'>=</span><span class='value valueRaw bold'>D</span><span class='value annotation'>[NEWORDERSINGLE]</span></span><span class='delim'>|</span><span class='field annotatedField BgBrightYellow'><span class='tag annotation'>[ClOrdID]</span><span class='tag tagRaw bold'>11</span><span class='equals bold'>=</span><span class='value valueRaw bold'>ABC</span></span><span class='delim'>|</span><span class='field annotatedField BgBrightYellow'><span class='tag annotation'>[Symbol]</span><span class='tag tagRaw bold'>55</span><span class='equals bold'>=</span><span class='value valueRaw bold'>AUD/USD</span></span></div></td></tr>
-<tr><td>-h 35=D:Fg8:Line,55=AUD:BgBrightGreen</td><td class='console'><div class='fields Fg8'><span class='field annotatedField'><span class='tag annotation'>[MsgType]</span><span class='tag tagRaw bold'>35</span><span class='equals bold'>=</span><span class='value valueRaw bold'>D</span><span class='value annotation'>[NEWORDERSINGLE]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[ClOrdID]</span><span class='tag tagRaw bold'>11</span><span class='equals bold'>=</span><span class='value valueRaw bold'>ABC</span></span><span class='delim'>|</span><span class='field annotatedField BgBrightGreen'><span class='tag annotation'>[Symbol]</span><span class='tag tagRaw bold'>55</span><span class='equals bold'>=</span><span class='value valueRaw bold'>AUD/USD</span></span></div></td></tr>
+<tr><td>-h 35=D:Fg8:Msg,55=AUD:BgBrightGreen</td><td class='console'><div class='fields Fg8'><span class='field annotatedField'><span class='tag annotation'>[MsgType]</span><span class='tag tagRaw bold'>35</span><span class='equals bold'>=</span><span class='value valueRaw bold'>D</span><span class='value annotation'>[NEWORDERSINGLE]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[ClOrdID]</span><span class='tag tagRaw bold'>11</span><span class='equals bold'>=</span><span class='value valueRaw bold'>ABC</span></span><span class='delim'>|</span><span class='field annotatedField BgBrightGreen'><span class='tag annotation'>[Symbol]</span><span class='tag tagRaw bold'>55</span><span class='equals bold'>=</span><span class='value valueRaw bold'>AUD/USD</span></span></div></td></tr>
 </table>
 """
     }

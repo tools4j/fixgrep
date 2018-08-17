@@ -16,8 +16,8 @@ public class CircularLineWriter {
     private final BufferedWriter writer;
     private final BufferedReader reader;
 
-    public CircularLineWriter() throws IOException {
-        cs = new CircularReaderWriter();
+    public CircularLineWriter(final int bufferSize) throws IOException {
+        cs = new CircularReaderWriter(bufferSize);
         writer = new BufferedWriter(cs.getWriter());
         reader = new BufferedReader(cs.getReader());
     }

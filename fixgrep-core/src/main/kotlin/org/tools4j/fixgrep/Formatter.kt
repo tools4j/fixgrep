@@ -51,7 +51,7 @@ class Formatter (val spec: FormatSpec){
     }
 
     fun format(inputFields: Fields, matcher: Matcher): String? {
-        var formattedString = spec.lineFormat
+        var formattedString = spec.getOutputFormat()
         if (formattedString.contains("\${msgTypeName}")) {
             val msgTypeName = spec.fixSpec.msgTypeAndExecTypeName(inputFields)
             formattedString = formattedString.replace("\${msgTypeName}", msgTypeName)

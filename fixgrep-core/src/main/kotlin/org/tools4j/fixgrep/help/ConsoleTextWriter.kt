@@ -108,7 +108,7 @@ class ConsoleTextWriter(): DocWriter {
     }
 
     override fun writeFormatExamplesTable(fix: String): HighlightExampleTable {
-        return HighlightExampleTable(fix, ConsoleTextTableBuilder(this), FormatSpec().copyWithModifications(inputDelimiter = "|", outputDelimiter = "|", lineFormat = "${'$'}{msgFix}", formatInHtml = false))
+        return HighlightExampleTable(fix, ConsoleTextTableBuilder(this), FormatSpec().copyWithModifications(inputDelimiter = "|", outputDelimiter = "|", outputFormatHorizontalConsole = "${'$'}{msgFix}", formatInHtml = false))
     }
 
     override fun addTable(textEffect: TextEffect): TableBuilder {

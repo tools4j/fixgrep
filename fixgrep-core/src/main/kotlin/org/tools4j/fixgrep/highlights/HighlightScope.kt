@@ -1,7 +1,7 @@
 package org.tools4j.fixgrep.highlights
 
 enum class  HighlightScope {
-    Line,
+    Msg,
     Field;
 
     companion object {

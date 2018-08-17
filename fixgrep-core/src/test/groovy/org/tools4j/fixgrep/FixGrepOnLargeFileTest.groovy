@@ -2,7 +2,6 @@ package org.tools4j.fixgrep
 
 import org.tools4j.fix.ClasspathResource
 import org.tools4j.properties.Config
-import org.tools4j.properties.ConfigAndArguments
 import org.tools4j.properties.ConfigImpl
 import spock.lang.Specification
 
@@ -15,7 +14,7 @@ class FixGrepOnLargeFileTest extends Specification {
     def 'run fixgrep file test'(){
         given:
         Config testSpecificConfig = new ConfigImpl(['input.line.format': '^(\\d{4}-[01]\\d-[0-3]\\d[T\\s][0-2]\\d:[0-5]\\d:[0-5]\\d[\\.,]\\d+)?.*?RawFix:(\\d+=.*$)',
-                                                    'output.line.format': '$1 ${senderToTargetCompIdDirection} ${msgColor}[${msgTypeName}]${colorReset} ${msgFix}',
+                                                    'output.format.horizontal.console': '$1 ${senderToTargetCompIdDirection} ${msgColor}[${msgTypeName}]${colorReset} ${msgFix}',
                                                     'piped.input': 'true'])
 
         Config config = TestConfigBuilder.load().overrideWith(testSpecificConfig)

@@ -1,10 +1,9 @@
 package org.tools4j.fixgrep.help
 
-import org.tools4j.extensions.containsAny
-import org.tools4j.fixgrep.OptionParserFactory
+import org.tools4j.fixgrep.Option
 import org.tools4j.fixgrep.texteffect.HtmlOnlyTextEffect
 import org.tools4j.fixgrep.texteffect.MiscTextEffect
-import org.tools4j.properties.ConfigAndArguments
+import org.tools4j.fixgrep.ConfigAndArguments
 
 /**
  * User: ben
@@ -63,8 +62,8 @@ class ManGenerator(val docWriterFactory: DocWriterFactory, val configAndArgument
     }
 
     private fun howToGet(): String {
-        val fixgrepDownloadUrl = configAndArguments.config.getAsString("fixgrep.download.url")
-        val fixgrepVcsUrl = configAndArguments.config.getAsString("fixgrep.vcs.home.url")
+        val fixgrepDownloadUrl = configAndArguments.config.getAsString(Option.download_url)
+        val fixgrepVcsUrl = configAndArguments.config.getAsString(Option.vcs_home_url)
 
         return docWriterFactory.createNew().writeHeading(1, "How to get")
                 .write("Download the latest version from ")
@@ -77,7 +76,7 @@ class ManGenerator(val docWriterFactory: DocWriterFactory, val configAndArgument
     }
 
     private fun howToGetHelp(): String {
-        val fixgrepHelpUrl = configAndArguments.config.getAsString("fixgrep.online.help.url")
+        val fixgrepHelpUrl = configAndArguments.config.getAsString(Option.online_help_url)
 
         return docWriterFactory.createNew().writeHeading(1, "How to get help")
                 .startList()
@@ -115,7 +114,6 @@ class ManGenerator(val docWriterFactory: DocWriterFactory, val configAndArgument
     }
 
     private fun howToConfigure(): String {
-        val options = OptionParserFactory().optionParser.recognizedOptions()
         val writer = docWriterFactory.createNew()
         writer.writeHeading(1, "Ways to configure fixgrep")
                 .writeHeading(2, "Fixgrep can be configured via three methods.")
@@ -127,11 +125,9 @@ class ManGenerator(val docWriterFactory: DocWriterFactory, val configAndArgument
                 .writeLn("Command-line options (usually) provide at least two different options which configure the same parameter.  Usually a short single character option, and a more descriptive option.  e.g. -o, --output-delimiter both configure the output delimiter.  However when configuring via the properties file only one option is available to use.  That is the longest command-line option, with dashes replaced with dots.  e.g. to configure the output delimiter in the properties file, you would need to use output.delimiter option.  e.g. output.delimiter=|  Below is a table listing the command line options, and on the right the equivalent properties to use in properties file configuration.")
         val tableBuilder = writer.addTable()
         tableBuilder.startNewTable(HtmlOnlyTextEffect("options-to-properties-table"))
-        tableBuilder.startNewRow().addTableHeaderCell("option variations").addTableHeaderCell("equivalient properties key")
-        for (desc in options.values.distinct().sortedBy { it.options().first() }) {
-            if (OptionParserFactory.optionsThatShouldNotHaveEquivalentProperties.containsAny(desc.options())) continue
-            val optionVariations = OptionsHelp.OptionVariations(desc.options())
-            tableBuilder.startNewRow().addCell(optionVariations.toString()).addCell(optionVariations.longestAsPropertyKey)
+        tableBuilder.startNewRow().addTableHeaderCell("option variations").addTableHeaderCell("equivalent properties key")
+        for (option in Option.values().filter{it.canHaveEquivalentPropertyInPropertiesFile}.sortedBy { it.optionVariationsAsCommaDelimitedString }) {
+            tableBuilder.startNewRow().addCell(option.optionVariationsAsCommaDelimitedString).addCell(option.key)
         }
         tableBuilder.endTable()
         return writer.toFormattedText()
