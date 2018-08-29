@@ -34,7 +34,7 @@ class ExamplesList (val fixLines: List<String>, val docWriter: DocWriter) {
         val configOverrides: MutableMap<String, String> = LinkedHashMap()
         configOverrides.put("html", ""+docWriter.isHtml())
         configOverrides.put("input.delimiter", "|")
-        configOverrides.put("output.line.format", "${'$'}{msgFix}")
+        configOverrides.put("output.format.horizontal.console", "${'$'}{msgFix}")
 
         val configAndArguments = ConfigBuilder(example.args, ConfigImpl(configOverrides)).configAndArguments
 

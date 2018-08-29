@@ -2,7 +2,6 @@ package org.tools4j.fixgrep.formatting
 
 import org.tools4j.fix.*
 import org.tools4j.fixgrep.highlights.HighlightedFields
-import org.tools4j.fixgrep.texteffect.MiscTextEffect
 import org.tools4j.fixgrep.texteffect.TextEffect
 
 /**
@@ -10,13 +9,13 @@ import org.tools4j.fixgrep.texteffect.TextEffect
  * Date: 7/12/2018
  * Time: 6:25 AM
  */
-class VerticalHtmlMsgFormatter(val fields: Fields, val annotationPositions: AnnotationPositions, val boldTagAndValues: Boolean) : FieldWriter, MsgFormatter, FieldsVisitor {
+class VerticalAlignedHtmlMsgFormatter(val fields: Fields, val annotationPositions: AnnotationPositions, val boldTagAndValues: Boolean) : FieldWriter, MsgFormatter, FieldsVisitor {
     var msgTextEffect: TextEffect = TextEffect.NONE
     val sb = StringBuilder()
     var writtenAtLeastOneField = false
 
     override fun getFieldVisitor(): FieldVisitor {
-        return VerticalHtmlFieldFormatter(this, annotationPositions, boldTagAndValues)
+        return VerticalAlignedHtmlFieldFormatter(this, annotationPositions, boldTagAndValues)
     }
 
     override fun visit(fields: Fields) {

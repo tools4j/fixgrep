@@ -5,7 +5,6 @@ import org.tools4j.fixgrep.formatting.*
 import org.tools4j.fixgrep.highlights.Highlight
 import org.tools4j.fixgrep.highlights.HighlightParser
 import org.tools4j.fixgrep.utils.Constants
-import org.tools4j.properties.Config
 import java.util.*
 
 /**
@@ -155,7 +154,11 @@ class FormatSpec(
     fun getMsgFormatter(fields: Fields): MsgFormatter {
         if(formatInHtml){
             if(verticalFormat) {
-                return VerticalHtmlMsgFormatter(fields, tagAnnotationPositions, !suppressBoldTagsAndValues)
+                if(alignVerticalColumns) {
+                    return VerticalAlignedHtmlMsgFormatter(fields, tagAnnotationPositions, !suppressBoldTagsAndValues)
+                } else {
+                    return VerticalNonAlignedHtmlMsgFormatter(fields, tagAnnotationPositions, !suppressBoldTagsAndValues)
+                }
             } else {
                 return HorizontalHtmlMsgFormatter(fields, tagAnnotationPositions, !suppressBoldTagsAndValues, DelimiterImpl(outputDelimiter))
             }

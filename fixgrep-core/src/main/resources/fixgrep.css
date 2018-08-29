@@ -70,6 +70,7 @@ div.console {
 
 table {
     font-size: 1em;
+    color: inherit;
 }
 
 table.doc-table td, table.doc-table th {
@@ -121,68 +122,51 @@ div.fixMsg span {
     color: #34302d;
 }
 
-h1 {
-    border-top: 4px solid #6db63f;
-}
-
-h1 a {
+h1, h1 a {
     font-family: Montserrat,sans-serif;
     color: #34302d;
     text-rendering: optimizelegibility;
-    font-size: 36px;
     font-weight: 400;
     text-decoration: none;
     display: block;
+}
+
+h1 {
+    border-top: 4px solid #6db63f;
+    font-size: 2.5em;
     padding-top: 0.4em;
 }
 
-
-h2 {
+h2, h2 a {
     font-family: Montserrat,sans-serif;
     color: #34302d;
     font-weight: 700;
     line-height: 1.5em;
-    text-transform: uppercase;
-    font-size: 17.5px;
     text-rendering: optimizelegibility;
     text-decoration: none;
+    margin: 0;
+}
+
+h2 {
+    font-size: 1.75em;
     padding-bottom: 0;
     margin-bottom: 0.2em;
 }
 
-h2 a {
+h3, h3 a {
     font-family: Montserrat,sans-serif;
     color: #34302d;
     font-weight: 700;
     line-height: 1.5em;
-    text-transform: uppercase;
-    font-size: 17.5px;
     text-rendering: optimizelegibility;
     text-decoration: none;
     margin: 0;
 }
 
 h3 {
-    font-family: Montserrat,sans-serif;
-    color: #34302d;
-    font-weight: 700;
-    line-height: 1.5em;
-    font-size: 15px;
-    text-rendering: optimizelegibility;
-    text-decoration: none;
+    font-size: 1.5em;
     padding-bottom: 0;
     margin-bottom: 0.2em;
-}
-
-h3 a {
-    font-family: Montserrat,sans-serif;
-    color: #34302d;
-    font-weight: 700;
-    line-height: 1.5em;
-    font-size: 17px;
-    text-rendering: optimizelegibility;
-    text-decoration: none;
-    margin: 0;
 }
 
 div.example-description {

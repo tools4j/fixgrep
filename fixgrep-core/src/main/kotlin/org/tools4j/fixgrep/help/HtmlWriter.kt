@@ -98,7 +98,7 @@ open class HtmlWriter(): DocWriter {
     }
 
     override fun writeFormatExamplesTable(fix: String): HighlightExampleTable {
-        return HighlightExampleTable(fix, HtmlTableBuilder(this), FormatSpec().copyWithModifications(inputDelimiter = "|", outputDelimiter = "|", outputFormatHorizontalConsole = "${'$'}{msgFix}", formatInHtml = true))
+        return HighlightExampleTable(fix, HtmlTableBuilder(this), FormatSpec().copyWithModifications(inputDelimiter = "|", outputDelimiter = "|", outputFormatHorizontalHtml = "${'$'}{msgFix}", formatInHtml = true))
     }
 
     override fun writeBoldLn(line: String): HtmlWriter {

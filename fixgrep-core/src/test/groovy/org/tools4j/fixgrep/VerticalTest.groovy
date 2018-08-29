@@ -12,7 +12,7 @@ import spock.lang.Unroll
  * Date: 12/03/2018
  * Time: 6:55 AM
  */
-class VerticalConsoleFixGrepTest extends Specification {
+class VerticalTest extends Specification {
     @Shared private final static String a = new Ascii1Char().toString()
     @Shared private String testOverrides;
 
@@ -130,10 +130,10 @@ class VerticalConsoleFixGrepTest extends Specification {
     }
 
     @Unroll
-    def 'single line test'(){
+    def 'test vertical aligned format'(){
         when:
         final String fix = "35=D${a}11=ABC${a}55=AUD/USD\n35=8${a}150=F${a}55=AUD/USD"
-        def lines = parseToLines('', fix)
+        def lines = parseToLines('-A', fix)
 
         then:
         assert lines == """<div class='msg-header'>
@@ -162,77 +162,74 @@ class VerticalConsoleFixGrepTest extends Specification {
 <br/>"""
     }
 
-    @Unroll
-    def 'test line regex #args'(final String args, final String expectedOutput){
-        given:
-        final String fix = "2018-04-23 [6] 35=D${a}11=ABC${a}55=AUD/USD\n2018-04-23 [6] 35=8${a}150=F${a}55=AUD/USD"
-
-        when:
-        println "\033[31mnormal\033[1mbold\033[22mnormal"
-        def lines = parseToLines(args, fix)
-
-        then:
-        assert lines == expectedOutput
-
-        where:
-        args                                                                                        | expectedOutput
-        '--input-line-format "\\d\\d\\d\\d-\\d\\d-\\d\\d \\[\\d\\] (\\d+=.*)" --line-regexgroup-for-fix 1 '| '[MsgType]\u001B[1m35\u001B[22m\u001B[1m=\u001B[22m\u001B[1mD\u001B[22m[NEWORDERSINGLE]|[ClOrdID]\u001B[1m11\u001B[22m\u001B[1m=\u001B[22m\u001B[1mABC\u001B[22m|[Symbol]\u001B[1m55\u001B[22m\u001B[1m=\u001B[22m\u001B[1mAUD/USD\u001B[22m\n' + '[MsgType]\u001B[1m35\u001B[22m\u001B[1m=\u001B[22m\u001B[1m8\u001B[22m[EXECUTIONREPORT]|[ExecType]\u001B[1m150\u001B[22m\u001B[1m=\u001B[22m\u001B[1mF\u001B[22m[TRADE_PARTIAL_FILL_OR_FILL]|[Symbol]\u001B[1m55\u001B[22m\u001B[1m=\u001B[22m\u001B[1mAUD/USD\u001B[22m'
-    }
-
-    def 'test line regex with different line format'(){
-        given:
-        final String fix = "2018-04-23 [6] 35=D${a}11=ABC${a}55=AUD/USD\n2018-04-23 [7] 35=8${a}150=F${a}55=AUD/USD"
-
-        when:
-        def args = '--input-line-format "\\d\\d\\d\\d-\\d\\d-\\d\\d \\[(\\d)\\] (\\d+=.*)"' +
-                ' --line-regexgroup-for-fix 2' +
-                ' --output-line-format "Thread:$1 ${msgFix}"'
-
-        def expectedOutput = 'Thread:6 [MsgType]\u001B[1m35\u001B[22m\u001B[1m=\u001B[22m\u001B[1mD\u001B[22m[NEWORDERSINGLE]|[ClOrdID]\u001B[1m11\u001B[22m\u001B[1m=\u001B[22m\u001B[1mABC\u001B[22m|[Symbol]\u001B[1m55\u001B[22m\u001B[1m=\u001B[22m\u001B[1mAUD/USD\u001B[22m\n' +
-                'Thread:7 [MsgType]\u001B[1m35\u001B[22m\u001B[1m=\u001B[22m\u001B[1m8\u001B[22m[EXECUTIONREPORT]|[ExecType]\u001B[1m150\u001B[22m\u001B[1m=\u001B[22m\u001B[1mF\u001B[22m[TRADE_PARTIAL_FILL_OR_FILL]|[Symbol]\u001B[1m55\u001B[22m\u001B[1m=\u001B[22m\u001B[1mAUD/USD\u001B[22m'
-
-
-        def lines = parseToLines(args, fix)
-
-        then:
-        assert lines == expectedOutput
-    }
-
-    def 'test line regex with different line format, abbreviated options'(){
-        given:
-        final String fix = "2018-04-23 [6] 35=D${a}11=ABC${a}55=AUD/USD\n2018-04-23 [7] 35=8${a}150=F${a}55=AUD/USD"
-
-        when:
-        def args = '-R "\\d\\d\\d\\d-\\d\\d-\\d\\d \\[(\\d)\\] (\\d+=.*)"' +
-                ' -G 2' +
-                ' -F "Thread:$1 ${msgFix}"'
-
-        def expectedOutput = 'Thread:6 [MsgType]\u001B[1m35\u001B[22m\u001B[1m=\u001B[22m\u001B[1mD\u001B[22m[NEWORDERSINGLE]|[ClOrdID]\u001B[1m11\u001B[22m\u001B[1m=\u001B[22m\u001B[1mABC\u001B[22m|[Symbol]\u001B[1m55\u001B[22m\u001B[1m=\u001B[22m\u001B[1mAUD/USD\u001B[22m\n' +
-                'Thread:7 [MsgType]\u001B[1m35\u001B[22m\u001B[1m=\u001B[22m\u001B[1m8\u001B[22m[EXECUTIONREPORT]|[ExecType]\u001B[1m150\u001B[22m\u001B[1m=\u001B[22m\u001B[1mF\u001B[22m[TRADE_PARTIAL_FILL_OR_FILL]|[Symbol]\u001B[1m55\u001B[22m\u001B[1m=\u001B[22m\u001B[1mAUD/USD\u001B[22m'
-
-        def lines = parseToLines(args, fix)
-
-        then:
-        assert lines == expectedOutput
-    }
 
     @Unroll
-    def 'test input delimiter #args'(final String args, final String expectedOutput){
-        given:
-        final String fix = "35=D:11=ABC:55=AUD/USD\n35=8:150=F:55=AUD/USD"
-
+    def 'test vertical non-aligned format'(){
         when:
-        def lines = parseToLines(args, fix)
+        final String fix = "35=D${a}11=ABC${a}55=AUD/USD\n35=8${a}150=F${a}55=AUD/USD"
+        def lines = parseToLines('', fix)
 
         then:
-        assert lines == expectedOutput
+        assert lines == """<div class='msg-header'>
+================================================================================</br>
+<span class='FgCyan'>NewOrderSingle</span><br/>
+================================================================================
+</div>
+<div class='fields'>
+<div class='field annotatedField'><span class='tag-annotation'>[MsgType]</span><span class='tag-raw bold'>35</span><span class='equals bold'>=</span><span class='value-raw bold'>D</span><span class='value-annotation'>[NEWORDERSINGLE]</span></div>
+<div class='field annotatedField'><span class='tag-annotation'>[ClOrdID]</span><span class='tag-raw bold'>11</span><span class='equals bold'>=</span><span class='value-raw bold'>ABC</span></div>
+<div class='field annotatedField'><span class='tag-annotation'>[Symbol]</span><span class='tag-raw bold'>55</span><span class='equals bold'>=</span><span class='value-raw bold'>AUD/USD</span></div>
+</div>
 
-        where:
-        args                            | expectedOutput
-        '--input-delimiter :'              | '[MsgType]\u001B[1m35\u001B[22m\u001B[1m=\u001B[22m\u001B[1mD\u001B[22m[NEWORDERSINGLE]|[ClOrdID]\u001B[1m11\u001B[22m\u001B[1m=\u001B[22m\u001B[1mABC\u001B[22m|[Symbol]\u001B[1m55\u001B[22m\u001B[1m=\u001B[22m\u001B[1mAUD/USD\u001B[22m\n' + '[MsgType]\u001B[1m35\u001B[22m\u001B[1m=\u001B[22m\u001B[1m8\u001B[22m[EXECUTIONREPORT]|[ExecType]\u001B[1m150\u001B[22m\u001B[1m=\u001B[22m\u001B[1mF\u001B[22m[TRADE_PARTIAL_FILL_OR_FILL]|[Symbol]\u001B[1m55\u001B[22m\u001B[1m=\u001B[22m\u001B[1mAUD/USD\u001B[22m'
-        '-d :'                             | '[MsgType]\u001B[1m35\u001B[22m\u001B[1m=\u001B[22m\u001B[1mD\u001B[22m[NEWORDERSINGLE]|[ClOrdID]\u001B[1m11\u001B[22m\u001B[1m=\u001B[22m\u001B[1mABC\u001B[22m|[Symbol]\u001B[1m55\u001B[22m\u001B[1m=\u001B[22m\u001B[1mAUD/USD\u001B[22m\n' + '[MsgType]\u001B[1m35\u001B[22m\u001B[1m=\u001B[22m\u001B[1m8\u001B[22m[EXECUTIONREPORT]|[ExecType]\u001B[1m150\u001B[22m\u001B[1m=\u001B[22m\u001B[1mF\u001B[22m[TRADE_PARTIAL_FILL_OR_FILL]|[Symbol]\u001B[1m55\u001B[22m\u001B[1m=\u001B[22m\u001B[1mAUD/USD\u001B[22m'
+<br/>
+<div class='msg-header'>
+================================================================================</br>
+<span class='FgGreen'>Exec.Trade</span><br/>
+================================================================================
+</div>
+<div class='fields'>
+<div class='field annotatedField'><span class='tag-annotation'>[MsgType]</span><span class='tag-raw bold'>35</span><span class='equals bold'>=</span><span class='value-raw bold'>8</span><span class='value-annotation'>[EXECUTIONREPORT]</span></div>
+<div class='field annotatedField'><span class='tag-annotation'>[ExecType]</span><span class='tag-raw bold'>150</span><span class='equals bold'>=</span><span class='value-raw bold'>F</span><span class='value-annotation'>[TRADE_PARTIAL_FILL_OR_FILL]</span></div>
+<div class='field annotatedField'><span class='tag-annotation'>[Symbol]</span><span class='tag-raw bold'>55</span><span class='equals bold'>=</span><span class='value-raw bold'>AUD/USD</span></div>
+</div>
+
+<br/>"""
     }
 
+
+    @Unroll
+    def 'test vertical non-aligned format - prices'(){
+        when:
+        final String fix = "35=V${a}262=request123${a}263=0${a}264=20${a}267=2${a}269=0${a}269=1${a}146=1${a}55=AUD/USD\n35=X${a}262=ABCD${a}268=4${a}279=0${a}269=0${a}55=AUD/USD${a}270=1.12345${a}279=0${a}269=1${a}55=AUD/USD${a}270=1.12355${a}279=0${a}269=0${a}55=AUD/USD${a}270=1.12335${a}279=0${a}269=1${a}55=AUD/USD${a}270=1.12365";
+
+        def lines = parseToLines('', fix)
+
+        then:
+        assert lines == """<div class='msg-header'>
+================================================================================</br>
+<span class='FgCyan'>NewOrderSingle</span><br/>
+================================================================================
+</div>
+<div class='fields'>
+<div class='field annotatedField'><span class='tag-annotation'>[MsgType]</span><span class='tag-raw bold'>35</span><span class='equals bold'>=</span><span class='value-raw bold'>D</span><span class='value-annotation'>[NEWORDERSINGLE]</span></div>
+<div class='field annotatedField'><span class='tag-annotation'>[ClOrdID]</span><span class='tag-raw bold'>11</span><span class='equals bold'>=</span><span class='value-raw bold'>ABC</span></div>
+<div class='field annotatedField'><span class='tag-annotation'>[Symbol]</span><span class='tag-raw bold'>55</span><span class='equals bold'>=</span><span class='value-raw bold'>AUD/USD</span></div>
+</div>
+
+<br/>
+<div class='msg-header'>
+================================================================================</br>
+<span class='FgGreen'>Exec.Trade</span><br/>
+================================================================================
+</div>
+<div class='fields'>
+<div class='field annotatedField'><span class='tag-annotation'>[MsgType]</span><span class='tag-raw bold'>35</span><span class='equals bold'>=</span><span class='value-raw bold'>8</span><span class='value-annotation'>[EXECUTIONREPORT]</span></div>
+<div class='field annotatedField'><span class='tag-annotation'>[ExecType]</span><span class='tag-raw bold'>150</span><span class='equals bold'>=</span><span class='value-raw bold'>F</span><span class='value-annotation'>[TRADE_PARTIAL_FILL_OR_FILL]</span></div>
+<div class='field annotatedField'><span class='tag-annotation'>[Symbol]</span><span class='tag-raw bold'>55</span><span class='equals bold'>=</span><span class='value-raw bold'>AUD/USD</span></div>
+</div>
+
+<br/>"""
+    }
 
 
     private String parseToLines(String args, final String fix){

@@ -9,7 +9,7 @@ import org.tools4j.fixgrep.texteffect.TextEffect
  * Date: 7/12/2018
  * Time: 6:39 AM
  */
-class VerticalHtmlFieldFormatter(val fieldWriter: FieldWriter, val annotationPositions: AnnotationPositions, val boldTagAndValue: Boolean): FieldFormatter() {
+class VerticalAlignedHtmlFieldFormatter(val fieldWriter: FieldWriter, val annotationPositions: AnnotationPositions, val boldTagAndValue: Boolean): FieldFormatter() {
     override fun finish() {
         val sb = StringBuilder()
         sb.append("<tr class='field")

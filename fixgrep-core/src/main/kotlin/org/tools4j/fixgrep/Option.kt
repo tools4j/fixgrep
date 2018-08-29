@@ -12,7 +12,7 @@ import joptsimple.util.RegexMatcher
 enum class Option(val abbreviation: String?, val longForm: String, val otherForm: String? = null, val canHaveEquivalentPropertyInPropertiesFile: Boolean, val canBePassedAsCommandLineOption: Boolean, val commandLineOptionConfig: ((OptionSpecBuilder) -> Any)?){
     tag_annotations("a", "tag-annotations", null, true, true, {it.withRequiredArg().ofType(String::class.java).withValuesConvertedBy(RegexMatcher.regex("(none|outsideAnnotated|insideAnnotated|ba|ab|aa|bb|b_|a_|_a|_b|__)"))}),
     align_vertical_columns("A", "align-vertical-columns", "align", true, true, {}),
-    group_by_order("g", "group-by-order", null, true, true, {it.withOptionalArg().ofType(String::class.java)}),
+//    group_by_order("g", "group-by-order", null, true, true, {it.withOptionalArg().ofType(String::class.java)}),
     input_delimiter("d", "input-delimiter", "input-delim", true, true, {it.withRequiredArg().ofType(String::class.java)}),
     exclude_tags("e", "exclude-tags", null, true, true, {it.withRequiredArg().ofType(Integer::class.java).withValuesSeparatedBy(",")}),
     to_file("f", "to-file", null, false, true, {it.withOptionalArg().ofType(String::class.java)}),
@@ -46,8 +46,8 @@ enum class Option(val abbreviation: String?, val longForm: String, val otherForm
     vcs_home_url(null, "vcs-home-url", null, true, false, null);
 
     init {
-        if(otherForm != null && otherForm.length > longForm.length){
-            throw IllegalArgumentException("Other form [$otherForm] is longer than long form [$longForm]")
+        if(otherForm != null && otherForm.length >= longForm.length){
+            throw IllegalArgumentException("Other form [$otherForm] is longer than or equal to length of long form [$longForm]")
         }
         if(canBePassedAsCommandLineOption && commandLineOptionConfig == null){
             throw IllegalArgumentException("Option $name is configured with canBePassedAsCommandLineOption==true.  Therefore commandLineOptionConfig must not be null.  If commandLineOptionConfig does not need to be specified, then a blank lambda {} can be passed." )
@@ -67,6 +67,10 @@ enum class Option(val abbreviation: String?, val longForm: String, val otherForm
 
     val optionVariationsAsCommaDelimitedString: String by lazy {
         optionVariations.joinToString(",")
+    }
+
+    val optionVariationsWithDashPrefixesAsCommaDelimitedString: String by lazy {
+        optionVariations.map{if(it.length == 1) "-$it" else "--$it"}.joinToString(",")
     }
 
     val key: String by lazy {
