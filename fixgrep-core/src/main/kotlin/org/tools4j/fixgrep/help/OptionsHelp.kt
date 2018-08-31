@@ -212,6 +212,8 @@ the less 'interesting' fix fields, such as BeginString, BodyLength or Checksum. 
 
         optionsHelp.add(OptionHelp(Option.gimme_css, "Downloads a copy of the default fixgrep.css file to use with any fixgrep output formatted in HTML.", null,null))
 
+        optionsHelp.add(OptionHelp(Option.fix_spec_path, "Specifies an alternative fixspec definition to use.  Spec must be in the format used by quickfix.  Default spec is 5.0-SP2.", "FIX40_modified.xml","FixGrep first looks for the file relative to the current working directory.  If it is not found there, then FixGrep will look on the classpath.  Examples:\nmy-fix-spec.xml\npath/to/my-fix-spec.xml\n/package/path/to/my-fix-spec.xml"))
+
         //Verify we have all the options
         val optionsThatHaveHelpDefined = optionsHelp.map { it.option }
         val optionsThatWeDontHaveHelpYetDefined = ArrayList<Option>()

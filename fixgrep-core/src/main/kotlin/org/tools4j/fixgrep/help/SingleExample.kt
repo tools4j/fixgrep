@@ -15,8 +15,6 @@ import org.tools4j.properties.ConfigImpl
  * Time: 5:25 PM
  */
 class SingleExample (val fixLines: List<String>, val args: List<String>, val docWriterFactory: DocWriterFactory) {
-    val fixSpec = Fix50SP2FixSpecFromClassPath().spec
-
     fun toFormattedString(vertical: Boolean, verticallyAligned: Boolean): String {
         val docWriter = docWriterFactory.createNew()
         val configOverrides: MutableMap<String, String> = LinkedHashMap()
@@ -26,7 +24,7 @@ class SingleExample (val fixLines: List<String>, val args: List<String>, val doc
         if(vertical) configOverrides.put(Option.vertical_format.key, "true")
         if(verticallyAligned) configOverrides.put(Option.align_vertical_columns.key, "true")
         val configAndArguments = ConfigBuilder(args, ConfigImpl(configOverrides)).configAndArguments
-        val spec = FormatSpec(config = configAndArguments.config, fixSpec = fixSpec)
+        val spec = FormatSpec(config = configAndArguments.config)
         val formatter = Formatter(spec)
         docWriter.startSection(MiscTextEffect.Console)
         for(line in fixLines){

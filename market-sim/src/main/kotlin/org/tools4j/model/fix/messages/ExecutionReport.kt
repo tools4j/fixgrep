@@ -1,17 +1,7 @@
 package org.tools4j.model.fix.messages
 
-import org.tools4j.fix.ExecType
-import org.tools4j.fix.Fields
-import org.tools4j.fix.FieldsFromDelimitedString
-import org.tools4j.fix.FieldsSource
-import org.tools4j.fix.FixFieldTypes
-import org.tools4j.fix.FixMessageType
-import org.tools4j.fix.FixSpec
-import org.tools4j.fix.Id
-import org.tools4j.fix.OrdStatus
-import org.tools4j.fix.Price
-import org.tools4j.fix.Side
-import org.tools4j.fix.SimpleId
+import org.tools4j.fix.*
+import org.tools4j.fix.spec.FixSpecDefinition
 import org.tools4j.model.FieldsBuilder
 import org.tools4j.model.OrderVersion
 import org.tools4j.utils.FormatUtils
@@ -38,7 +28,7 @@ class ExecutionReport(
         override val origClOrderId: Id,
         val price: Price,
         val text: String?,
-        fixSpec: FixSpec) : FixMessage(fixSpec) {
+        fixSpec: FixSpecDefinition) : FixMessage(fixSpec) {
 
     override val fields: Fields by lazy {
         FieldsBuilder()
@@ -62,9 +52,9 @@ class ExecutionReport(
                 .fields
     }
 
-    constructor(fixSpec: FixSpec, fieldsSource: FieldsSource) : this(fixSpec, fieldsSource.fields)
+    constructor(fixSpec: FixSpecDefinition, fieldsSource: FieldsSource) : this(fixSpec, fieldsSource.fields)
 
-    constructor(fixSpec: FixSpec, fields: Fields) : this(
+    constructor(fixSpec: FixSpecDefinition, fields: Fields) : this(
             senderCompId = fields.getField(FixFieldTypes.SenderCompID)!!.stringValue(),
             targetCompId = fields.getField(FixFieldTypes.TargetCompID)!!.stringValue(),
             orderId = fields.getField(FixFieldTypes.OrderID)!!.idValue(),
@@ -116,7 +106,7 @@ class ExecutionReport(
         return OrderVersion(clOrdId, cumQty, price, transactTime)
     }
 
-    class Decoder(val fixSpec: FixSpec) : FixMessageDecoder<ExecutionReport> {
+    class Decoder(val fixSpec: FixSpecDefinition) : FixMessageDecoder<ExecutionReport> {
         override val msgType: String
             get() = MSG_TYPE
 
@@ -151,7 +141,7 @@ class ExecutionReport(
         private var origClOrderId: Id? = null
         private var price: Price? = null
         private var text: String? = null
-        private var fixSpec: FixSpec? = null
+        private var fixSpec: FixSpecDefinition? = null
 
         fun build(): ExecutionReport {
             return ExecutionReport(
@@ -230,7 +220,7 @@ class ExecutionReport(
             return this
         }
 
-        fun withFixSpec(fixSpec: FixSpec): Builder {
+        fun withFixSpec(fixSpec: FixSpecDefinition): Builder {
             this.fixSpec = fixSpec
             return this
         }

@@ -14,8 +14,6 @@ import org.tools4j.properties.ConfigImpl
  * Time: 5:25 PM
  */
 class ExamplesList (val fixLines: List<String>, val docWriter: DocWriter) {
-    val fixSpec = Fix50SP2FixSpecFromClassPath().spec
-
     init {
         docWriter.startSection(HtmlOnlyTextEffect("example-list"))
     }
@@ -38,7 +36,7 @@ class ExamplesList (val fixLines: List<String>, val docWriter: DocWriter) {
 
         val configAndArguments = ConfigBuilder(example.args, ConfigImpl(configOverrides)).configAndArguments
 
-        val spec = FormatSpec(config = configAndArguments.config, fixSpec = fixSpec)
+        val spec = FormatSpec(config = configAndArguments.config)
         val formatter = Formatter(spec)
         docWriter.startSection(MiscTextEffect.Console)
         for(line in fixLines){

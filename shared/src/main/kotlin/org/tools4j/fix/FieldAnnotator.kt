@@ -1,12 +1,14 @@
 package org.tools4j.fix
 
+import org.tools4j.fix.spec.FixSpecDefinition
+
 /**
  * User: ben
  * Date: 11/7/17
  * Time: 5:19 PM
  */
 class FieldAnnotator(
-        val fixSpec: FixSpec,
+        val fixSpec: FixSpecDefinition,
         val annotationPositions: AnnotationPositions = AnnotationPositions.OUTSIDE_ANNOTATED){
 
     fun getField(field: Field): Field {
@@ -14,18 +16,18 @@ class FieldAnnotator(
     }
 
     private fun getTag(tag: Tag): Tag {
-        val tagDescription: String? = fixSpec.fieldsAndEnumValues[""+tag]
-        return if (tagDescription != null) {
-            AnnotatedTag(tag.tagRaw, tagDescription)
+        val fieldName: String? = fixSpec.fieldsByNumber[tag.number]!!.name
+        return if (fieldName != null) {
+            AnnotatedTag(tag.number, fieldName)
         } else {
             tag
         }
     }
 
     private fun getValue(tag: Tag, value: Value): Value {
-        val tagDescription = fixSpec.fieldsAndEnumValues["" + tag.tagRaw + "." + value.valueRaw]
-        return if (tagDescription != null) {
-            AnnotatedValue(value.valueRaw, tagDescription)
+        val fieldName = fixSpec.fieldsByNumber.get(tag.number)?.enumsByCode?.get(value.valueRaw)
+        return if (fieldName != null) {
+            AnnotatedValue(value.valueRaw, fieldName)
         } else {
             value
         }

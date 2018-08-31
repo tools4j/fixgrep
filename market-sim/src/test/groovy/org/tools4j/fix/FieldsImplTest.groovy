@@ -191,19 +191,19 @@ class FieldsImplTest extends Specification {
         assert fields.toHtml() ==
             "<span class='fields'>" +
                 "<span class='field'>" +
-                    "<span class='tag tagRaw'>35</span>" +
+                    "<span class='tag number'>35</span>" +
                     "<span class='equals'>=</span>" +
                     "<span class='value valueRaw'>D</span>" +
                 "</span>" +
                 "<span class='delim'>|</span>" +
                 "<span class='field'>" +
-                    "<span class='tag tagRaw'>11</span>" +
+                    "<span class='tag number'>11</span>" +
                     "<span class='equals'>=</span>" +
                     "<span class='value valueRaw'>ABC</span>" +
                 "</span>" +
                 "<span class='delim'>|</span>" +
                 "<span class='field'>" +
-                    "<span class='tag tagRaw'>55</span>" +
+                    "<span class='tag number'>55</span>" +
                     "<span class='equals'>=</span>" +
                     "<span class='value valueRaw'>AUD/USD</span>" +
                 "</span>" +
@@ -212,25 +212,25 @@ class FieldsImplTest extends Specification {
         assert fieldsWithDupTag.toHtml() ==
             "<span class='fields'>" +
                 "<span class='field'>" +
-                    "<span class='tag tagRaw'>35</span>" +
+                    "<span class='tag number'>35</span>" +
                     "<span class='equals'>=</span>" +
                     "<span class='value valueRaw'>D</span>" +
                 "</span>" +
                 "<span class='delim'>|</span>" +
                 "<span class='field'>" +
-                    "<span class='tag tagRaw'>11</span>" +
+                    "<span class='tag number'>11</span>" +
                     "<span class='equals'>=</span>" +
                     "<span class='value valueRaw'>ABC</span>" +
                 "</span>" +
                 "<span class='delim'>|</span>" +
                 "<span class='field'>" +
-                    "<span class='tag tagRaw'>55</span>" +
+                    "<span class='tag number'>55</span>" +
                     "<span class='equals'>=</span>" +
                     "<span class='value valueRaw'>AUD/USD</span>" +
                 "</span>" +
                 "<span class='delim'>|</span>" +
                 "<span class='field'>" +
-                    "<span class='tag tagRaw'>55</span>" +
+                    "<span class='tag number'>55</span>" +
                     "<span class='equals'>=</span>" +
                     "<span class='value valueRaw'>ABC/DEF</span>" +
                 "</span>" +

@@ -1,6 +1,7 @@
 package org.tools4j.model.state.client
 
 import org.tools4j.fix.FixSpec
+import org.tools4j.fix.spec.FixSpecDefinition
 import org.tools4j.model.ClientOrder
 import org.tools4j.model.DateTimeService
 import org.tools4j.model.fix.messages.MessageHandler
@@ -18,4 +19,4 @@ class StateContext(
         val messageHandler: MessageHandler,
         val dateTimeService: DateTimeService,
         val stateMessageListeners: Collection<StateMessageListener>,
-        val fixSpec: FixSpec)
+        val fixSpec: FixSpecDefinition)

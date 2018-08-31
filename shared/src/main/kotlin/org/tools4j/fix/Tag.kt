@@ -6,6 +6,6 @@ package org.tools4j.fix
  * Time: 5:26 PM
  */
 interface Tag {
-    val tagRaw: Int
+    val number: Int
     fun accept(tagVisitor: TagVisitor)
 }

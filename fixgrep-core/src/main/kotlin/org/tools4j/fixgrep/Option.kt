@@ -43,7 +43,8 @@ enum class Option(val abbreviation: String?, val longForm: String, val otherForm
     help("?", "help", null, false, true, {}),
     online_help_url(null, "online-help-url", null, true, false, null),
     download_url(null, "download-url", null, true, false, null),
-    vcs_home_url(null, "vcs-home-url", null, true, false, null);
+    vcs_home_url(null, "vcs-home-url", null, true, false, null),
+    fix_spec_path(null, "fix-spec-path", "fix-spec", true, true, {it.withRequiredArg().ofType(String::class.java)});
 
     init {
         if(otherForm != null && otherForm.length >= longForm.length){

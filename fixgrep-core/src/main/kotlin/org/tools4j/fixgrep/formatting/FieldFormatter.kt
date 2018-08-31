@@ -33,7 +33,7 @@ abstract class FieldFormatter(): FieldVisitor, ValueVisitor, TagVisitor{
     }
 
     override fun visit(tag: Tag) {
-        tagRaw = tag.tagRaw
+        tagRaw = tag.number
         if(tag is AnnotatedTag){
             tagAnnotation = tag.annotation
         }

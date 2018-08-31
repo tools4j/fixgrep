@@ -1,10 +1,7 @@
 package org.tools4j.fixgrep
 
 import org.tools4j.extensions.constantToCapitalCase
-import org.tools4j.fix.Fields
-import org.tools4j.fix.FieldsAnnotator
-import org.tools4j.fix.FieldsFromDelimitedString
-import org.tools4j.fix.FixFieldTypes
+import org.tools4j.fix.*
 import org.tools4j.fixgrep.texteffect.Ansi
 import org.tools4j.fixgrep.utils.Constants.Companion.DOLLAR
 import java.util.regex.Matcher
@@ -53,7 +50,7 @@ class Formatter (val spec: FormatSpec){
     fun format(inputFields: Fields, matcher: Matcher): String? {
         var formattedString = spec.getOutputFormat()
         if (formattedString.contains("\${msgTypeName}")) {
-            val msgTypeName = spec.fixSpec.msgTypeAndExecTypeName(inputFields)
+            val msgTypeName = msgTypeAndExecTypeName(inputFields)
             formattedString = formattedString.replace("\${msgTypeName}", msgTypeName)
         }
 
@@ -91,11 +88,11 @@ class Formatter (val spec: FormatSpec){
             val msgTypeName: String
             if (msgTypeCode == "8") {
                 val execTypeCode = inputFields.getField(150)!!.value.valueRaw
-                val execTypeString = spec.fixSpec.fieldsAndEnumValues.get("150." + execTypeCode)
+                val execTypeString = spec.fixSpec.fieldsByNumber[150]!!.enumsByCode[execTypeCode]
                 val execTypeStringAsCapitalCase = execTypeString!!.constantToCapitalCase()
                 msgTypeName = "Exec." + execTypeStringAsCapitalCase
             } else {
-                msgTypeName = spec.fixSpec.getMsgTypeNameGivenCode(msgTypeCode)!!
+                msgTypeName = spec.fixSpec.messagesByMsgType[msgTypeCode]!!.name
             }
             formattedString = formattedString.replace("\${msgTypeName}", msgTypeName)
         }
@@ -141,6 +138,23 @@ class Formatter (val spec: FormatSpec){
             return formattedString.replace("\u001b", "\\u001b")
         } else {
             return formattedString
+        }
+    }
+
+
+    fun msgTypeAndExecTypeName(fields: Fields): String {
+        if(fields.msgTypeCode != "8"){
+            val msg = spec.fixSpec.messagesByMsgType.get(fields.msgTypeCode)
+            if(msg == null) {
+                FixSpec.logger.debug { "Could not find message type for msgTypeCode: $fields.msgTypeCode returning 'Unknown'" }
+                return "Unknown"
+            } else {
+                return msg.name
+            }
+        } else if(fields.getField(150) != null){
+            return "Exec." + ExecType.forCode(fields.getField(150)!!.value.valueRaw).name
+        } else {
+            return "ExecutionReport"
         }
     }
 }

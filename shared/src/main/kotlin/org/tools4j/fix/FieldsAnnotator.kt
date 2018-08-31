@@ -1,5 +1,6 @@
 package org.tools4j.fix
 
+import org.tools4j.fix.spec.FixSpecDefinition
 import java.util.ArrayList
 
 /**
@@ -9,7 +10,7 @@ import java.util.ArrayList
  */
 class FieldsAnnotator(
         val inputFields: Fields,
-        val fixSpec: FixSpec,
+        val fixSpec: FixSpecDefinition,
         val annotationPositions: AnnotationPositions = AnnotationPositions.OUTSIDE_ANNOTATED) : FieldsSource {
 
     val fieldAnnotator = FieldAnnotator(fixSpec, annotationPositions)

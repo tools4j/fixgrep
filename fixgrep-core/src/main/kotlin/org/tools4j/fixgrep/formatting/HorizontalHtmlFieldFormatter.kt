@@ -50,7 +50,7 @@ class HorizontalHtmlFieldFormatter(val fieldWriter: FieldWriter, val annotationP
     }
 
     fun appendTagRaw(sb: StringBuilder) {
-        sb.append("<span class='tag tagRaw")
+        sb.append("<span class='tag number")
         if (boldTagAndValue) sb.append(" bold")
         sb.append("'>").append(tagRaw).append("</span>")
     }

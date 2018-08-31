@@ -1,6 +1,8 @@
 package org.tools4j.fixgrep
 
 import org.tools4j.fix.*
+import org.tools4j.fix.spec.FixSpecDefinition
+import org.tools4j.fix.spec.FixSpecParser
 import org.tools4j.fixgrep.formatting.*
 import org.tools4j.fixgrep.highlights.Highlight
 import org.tools4j.fixgrep.highlights.HighlightParser
@@ -33,7 +35,7 @@ class FormatSpec(
         val includeOnlyMessagesOfType: List<String>,
         val excludeMessagesOfType: List<String>,
         val tagAnnotations: String,
-        val fixSpec: FixSpec,
+        val fixSpec: FixSpecDefinition,
         val msgColors: MessageColors,
         val debug: Boolean,
         val formatInHtml: Boolean) {
@@ -59,7 +61,7 @@ class FormatSpec(
         Collections.emptyList(),
         Collections.emptyList(),
         "outsideAnnotated",
-        Fix50SP2FixSpecFromClassPath().spec,
+        FixSpecParser("FIX50SP2.xml").parseSpec(),
         MessageColors(),
         false,
         false)
@@ -67,7 +69,6 @@ class FormatSpec(
     @JvmOverloads
     constructor(
             config: ConfigKeyedWithOption,
-            fixSpec: FixSpec = Fix50SP2FixSpecFromClassPath().spec,
             msgColors: MessageColors = MessageColors()) : this(
                 suppressColors = config.getAsBoolean(Option.suppress_colors),
                 suppressBoldTagsAndValues = config.getAsBoolean(Option.suppress_bold_tags_and_values),
@@ -89,7 +90,7 @@ class FormatSpec(
                 alignVerticalColumns = config.getAsBoolean(Option.align_vertical_columns),
                 includeOnlyMessagesOfType = config.getAsStringList(Option.include_only_messages_of_type),
                 excludeMessagesOfType = config.getAsStringList(Option.exclude_messages_of_type),
-                fixSpec = fixSpec,
+                fixSpec = FixSpecParser(config.getAsString(Option.fix_spec_path)).parseSpec(),
                 msgColors = msgColors,
                 formatInHtml = config.hasPropertyAndIsNotFalse(Option.html),
                 debug = config.getAsBoolean(Option.debug, false))
@@ -115,7 +116,7 @@ class FormatSpec(
             includeOnlyMessagesOfType: List<String> = this.includeOnlyMessagesOfType,
             excludeMessagesOfType: List<String> = this.excludeMessagesOfType,
             tagAnnotations: String = this.tagAnnotations,
-            fixSpec: FixSpec = this.fixSpec,
+            fixSpec: FixSpecDefinition = this.fixSpec,
             msgColors: MessageColors = this.msgColors,
             debug: Boolean = this.debug,
             formatInHtml: Boolean = this.formatInHtml): FormatSpec {

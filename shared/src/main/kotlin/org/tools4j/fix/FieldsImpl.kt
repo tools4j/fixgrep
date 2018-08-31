@@ -18,20 +18,20 @@ open class FieldsImpl(val fields: List<Field>) : ArrayList<Field>(fields), Field
     }
 
     override fun countOfField(tag: Tag): Int {
-        return countOfField(tag.tagRaw)
+        return countOfField(tag.number)
     }
 
     override fun getField(tag: Tag): Field? {
-        return getField(tag.tagRaw)
+        return getField(tag.number)
     }
 
     override fun countOfField(tag: Int): Int {
-        return fields.count { it.tag.tagRaw == tag }
+        return fields.count { it.tag.number == tag }
     }
 
     override fun getField(tag: Int): Field? {
         if(countOfField(tag) > 1) throw IllegalArgumentException("More than one tag [$tag] exists in fields: $fields")
-        return fields.firstOrNull { it.tag.tagRaw == tag }
+        return fields.firstOrNull { it.tag.number == tag }
     }
 
     override fun exists(tag: Tag): Boolean {
@@ -52,7 +52,7 @@ open class FieldsImpl(val fields: List<Field>) : ArrayList<Field>(fields), Field
         }
         val outputFields = FieldsImpl(ArrayList(fields))
         excludeTags.forEach { exclude ->
-            outputFields.removeIf {it.tag.tagRaw == exclude}
+            outputFields.removeIf {it.tag.number == exclude}
         }
         return FieldsImpl(outputFields)
     }
@@ -61,7 +61,7 @@ open class FieldsImpl(val fields: List<Field>) : ArrayList<Field>(fields), Field
         if(onlyIncludeTags.isEmpty()){
             return this
         }
-        val newFields = fields.stream().filter { onlyIncludeTags.contains(it.tag.tagRaw) }.collect(Collectors.toList())
+        val newFields = fields.stream().filter { onlyIncludeTags.contains(it.tag.number) }.collect(Collectors.toList())
         return FieldsImpl(newFields)
     }
 
@@ -74,7 +74,7 @@ open class FieldsImpl(val fields: List<Field>) : ArrayList<Field>(fields), Field
         for(tag in desiredOrder){
             var foundAtIndex: Int? = null
             for(i in existingFields.indices){
-                if(existingFields[i].tag.tagRaw == tag){
+                if(existingFields[i].tag.number == tag){
                     if(foundAtIndex != null){
                         //We have already found this tag, this means it's probably part of a repeating group.  For now
                         //sorting of members inside a repeating group is not supported.
@@ -93,14 +93,14 @@ open class FieldsImpl(val fields: List<Field>) : ArrayList<Field>(fields), Field
     }
 
     override fun hasRepeatingTags(): Boolean {
-        return HashSet(fields.map { it.tag.tagRaw }).size < fields.size
+        return HashSet(fields.map { it.tag.number }).size < fields.size
     }
 
     override fun toIntToStringMap(): Map<Int, String> {
         if(hasRepeatingTags()){
             throw UnsupportedOperationException("Repeating tags have been detected in these fields, therefore it is not possible to return an intToStringMap")
         }
-        return fields.map { it.tag.tagRaw to it.value.toString() }.toMap()
+        return fields.map { it.tag.number to it.value.toString() }.toMap()
     }
 
     override fun toDelimitedString(delimiter: Char): String {

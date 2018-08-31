@@ -1,6 +1,7 @@
 package org.tools4j.model.state.market
 
 import org.tools4j.fix.FixSpec
+import org.tools4j.fix.spec.FixSpecDefinition
 import org.tools4j.model.DateTimeService
 import org.tools4j.model.IdGenerator
 import org.tools4j.model.MarketOrder
@@ -19,5 +20,5 @@ class StateContext(
         val messageHandler: MessageHandler,
         val dateTimeService: DateTimeService,
         val stateMessageListeners: Collection<StateMessageListener>,
-        val fixSpec: FixSpec,
+        val fixSpec: FixSpecDefinition,
         val execIDGenerator: IdGenerator)
