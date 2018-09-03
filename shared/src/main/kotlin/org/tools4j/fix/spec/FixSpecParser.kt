@@ -23,7 +23,7 @@ class FixSpecParser(private val specInputStream: InputStream) {
             val before = System.currentTimeMillis()
             val fixSpec = FixSpecParser("FIX50SP2.xml").parseSpec();
             val after = System.currentTimeMillis()
-            println(after - before)
+            //println(after - before)
         }
         val INDENT = "    "
     }
@@ -31,9 +31,9 @@ class FixSpecParser(private val specInputStream: InputStream) {
     fun parseSpec(): FixSpecDefinition{
         val timeMsStart = System.currentTimeMillis()
         val xmlDoc: Document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(specInputStream)
-        println("After initial xml parse: " + (System.currentTimeMillis() - timeMsStart))
+        //println("After initial xml parse: " + (System.currentTimeMillis() - timeMsStart))
         xmlDoc.documentElement.normalize()
-        println("After normalize: " + (System.currentTimeMillis() - timeMsStart))
+        //println("After normalize: " + (System.currentTimeMillis() - timeMsStart))
 
         //FIELDS
         val fieldList: NodeList = xmlDoc.getElementsByTagName("fields").item(0).childNodes
@@ -90,7 +90,7 @@ class FixSpecParser(private val specInputStream: InputStream) {
             val componentName = componentElement.getAttribute("name")
             rawComponentsByName.put(componentName, RawComponent(componentName, constituents))
         }
-        println("After component parsing: " + (System.currentTimeMillis() - timeMsStart))
+        //println("After component parsing: " + (System.currentTimeMillis() - timeMsStart))
 
         //MESSAGES
         val messagesNodes = xmlDoc.getElementsByTagName("messages")
@@ -104,11 +104,11 @@ class FixSpecParser(private val specInputStream: InputStream) {
             val constituents = extractConstituents(messageElement, fieldsByName)
             rawMessagesByName.put(messageElement.getAttribute("name"), RawMessage(messageElement.getAttribute("name"), messageElement.getAttribute("msgtype"), constituents))
         }
-        println("After message parsing: " + (System.currentTimeMillis() - timeMsStart))
+        //println("After message parsing: " + (System.currentTimeMillis() - timeMsStart))
 
         //EXPAND CONSTITUENTS
         val fixSpec = ConstituentExpander(fieldsByName, header, trailer, rawComponentsByName, rawMessagesByName).expand()
-        println("After expanding: " + (System.currentTimeMillis() - timeMsStart))
+        //println("After expanding: " + (System.currentTimeMillis() - timeMsStart))
         return fixSpec
     }
 

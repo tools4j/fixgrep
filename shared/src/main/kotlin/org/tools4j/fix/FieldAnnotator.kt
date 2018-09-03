@@ -16,7 +16,7 @@ class FieldAnnotator(
     }
 
     private fun getTag(tag: Tag): Tag {
-        val fieldName: String? = fixSpec.fieldsByNumber[tag.number]!!.name
+        val fieldName: String? = fixSpec.fieldsByNumber[tag.number]?.name
         return if (fieldName != null) {
             AnnotatedTag(tag.number, fieldName)
         } else {

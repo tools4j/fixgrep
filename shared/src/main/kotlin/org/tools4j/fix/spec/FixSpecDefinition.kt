@@ -7,9 +7,7 @@ data class FixSpecDefinition(val fieldsByName: Map<String, Field>,
                              val messagesByName: Map<String, Message>){
 
     val fieldsByNumber: Map<Int, Field> by lazy {
-        val map = LinkedHashMap<Int, Field>()
-        fieldsByName.map { it.value.number to it }
-        map
+        fieldsByName.map { it.value.number to it.value }.toMap()
     }
 
     val messagesByMsgType: Map<String, Message> by lazy {
