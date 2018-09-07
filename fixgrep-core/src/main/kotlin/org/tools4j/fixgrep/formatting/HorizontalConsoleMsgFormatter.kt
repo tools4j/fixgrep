@@ -1,28 +1,19 @@
 package org.tools4j.fixgrep.formatting
 
 import org.tools4j.fix.*
-import org.tools4j.fixgrep.highlights.HighlightedFields
-import org.tools4j.fixgrep.texteffect.TextEffect
 
 /**
  * User: benjw
  * Date: 7/12/2018
  * Time: 6:25 AM
  */
-class HorizontalConsoleMsgFormatter(val fields: Fields, val annotationPositions: AnnotationPositions, val boldTagAndValues: Boolean, val delimiter: Delimiter) : FieldWriter, MsgFormatter, FieldsVisitor {
-    constructor(fields: Fields, annotationPositions: AnnotationPositions, boldTagAndValues: Boolean, delimiter: String): this(fields, annotationPositions, boldTagAndValues, DelimiterImpl(delimiter))
+class HorizontalConsoleMsgFormatter(val context: FormattingContext, val delimiter: Delimiter) : FieldWriter, MsgFormatter() {
+    constructor(formattingContext: FormattingContext, delimiter: String): this(formattingContext, DelimiterImpl(delimiter))
 
-    var msgTextEffect: TextEffect = TextEffect.NONE
     val sb = StringBuilder()
 
     override fun getFieldVisitor(): FieldVisitor {
-        return HorizontalConsoleFieldFormatter(this, annotationPositions, msgTextEffect, boldTagAndValues)
-    }
-
-    override fun visit(fields: Fields) {
-        if(fields is HighlightedFields){
-            msgTextEffect = fields.textEffect
-        }
+        return HorizontalConsoleFieldFormatter(this, context, msgTextEffect)
     }
 
     override fun writeField(value: String) {
@@ -39,7 +30,7 @@ class HorizontalConsoleMsgFormatter(val fields: Fields, val annotationPositions:
     }
 
     override fun format(): String{
-        fields.accept(this)
+        context.fields.accept(this)
         return sb.toString()
     }
 }

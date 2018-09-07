@@ -3,20 +3,23 @@ package org.tools4j.fixgrep.formatting
 import org.tools4j.fix.AnnotationPosition
 import org.tools4j.fix.AnnotationPositions
 import org.tools4j.fix.Ansi
+import org.tools4j.fix.spec.FixSpecDefinition
+import org.tools4j.fix.spec.MessageSpec
 import org.tools4j.fixgrep.texteffect.MiscTextEffect
 import org.tools4j.fixgrep.texteffect.TextEffect
+import java.util.Stack;
 
 /**
  * User: benjw
  * Date: 7/12/2018
  * Time: 6:39 AM
  */
-class HorizontalConsoleFieldFormatter(val fieldWriter: FieldWriter, val annotationPositions: AnnotationPositions, val msgTextEffect: TextEffect, val boldTagAndValue: Boolean): FieldFormatter() {
+class HorizontalConsoleFieldFormatter(val fieldWriter: FieldWriter, val formattingContext: FormattingContext, val msgTextEffect: TextEffect): FieldFormatter(formattingContext) {
     var independentlyMarkupTagsAndValuesAsBold: Boolean = true
 
     override fun finish() {
         val sb = StringBuilder()
-        independentlyMarkupTagsAndValuesAsBold = boldTagAndValue && !msgTextEffect.contains(MiscTextEffect.Bold) && !fieldTextEffect.contains(MiscTextEffect.Bold)
+        independentlyMarkupTagsAndValuesAsBold = context.boldTagAndValue && !msgTextEffect.contains(MiscTextEffect.Bold) && !fieldTextEffect.contains(MiscTextEffect.Bold)
         fieldTextEffect = msgTextEffect.compositeWith(fieldTextEffect)
         sb.append(fieldTextEffect.consoleTextBefore)
         appendTag(sb)
@@ -27,16 +30,16 @@ class HorizontalConsoleFieldFormatter(val fieldWriter: FieldWriter, val annotati
     }
 
     private fun appendEquals(sb: StringBuilder) {
-        val rawTagAndValueAreEitherSideOfEqualsAndAreBold = annotationPositions == AnnotationPositions.OUTSIDE_ANNOTATED && boldTagAndValue
+        val rawTagAndValueAreEitherSideOfEqualsAndAreBold = context.annotationPositions == AnnotationPositions.OUTSIDE_ANNOTATED && context.boldTagAndValue
         if (rawTagAndValueAreEitherSideOfEqualsAndAreBold && independentlyMarkupTagsAndValuesAsBold) sb.append(Ansi.Bold)
         sb.append("=")
         if (rawTagAndValueAreEitherSideOfEqualsAndAreBold && independentlyMarkupTagsAndValuesAsBold) sb.append(Ansi.Normal)
     }
 
     fun appendTag(sb: StringBuilder): String{
-        if(annotationPositions.tagAnnotationPosition == AnnotationPosition.NONE){
+        if(context.annotationPositions.tagAnnotationPosition == AnnotationPosition.NONE){
             appendTagRaw(sb)
-        } else if(annotationPositions.tagAnnotationPosition == AnnotationPosition.BEFORE){
+        } else if(context.annotationPositions.tagAnnotationPosition == AnnotationPosition.BEFORE){
             appendTagAnnotation(sb)
             appendTagRaw(sb)
         } else {
@@ -57,9 +60,9 @@ class HorizontalConsoleFieldFormatter(val fieldWriter: FieldWriter, val annotati
     }
 
     private fun appendValue(sb: StringBuilder) {
-        if (annotationPositions.valueAnnotationPosition == AnnotationPosition.NONE) {
+        if (context.annotationPositions.valueAnnotationPosition == AnnotationPosition.NONE) {
             appendValueRaw(sb)
-        } else if (annotationPositions.valueAnnotationPosition == AnnotationPosition.BEFORE) {
+        } else if (context.annotationPositions.valueAnnotationPosition == AnnotationPosition.BEFORE) {
             appendValueAnnotation(sb)
             appendValueRaw(sb)
         } else {

@@ -3,6 +3,8 @@ package org.tools4j.fixgrep.highlights
 import org.tools4j.fix.AnnotationPositions
 import org.tools4j.fix.Fields
 import org.tools4j.fix.FieldsImpl
+import org.tools4j.fix.spec.FixSpecParser
+import org.tools4j.fixgrep.formatting.FormattingContext
 import org.tools4j.fixgrep.formatting.HorizontalConsoleMsgFormatter
 import org.tools4j.fixgrep.formatting.HorizontalHtmlMsgFormatter
 import org.tools4j.fixgrep.texteffect.Ansi
@@ -26,7 +28,7 @@ class HighlightActionTest extends Specification {
 
         when:
         final Highlight highlight = new HighlightParser().parse(expressions)
-        final String output = new HorizontalConsoleMsgFormatter(highlight.apply(fields), AnnotationPositions.NO_ANNOTATION, false, "|").format()
+        final String output = new HorizontalConsoleMsgFormatter(new FormattingContext(highlight.apply(fields), AnnotationPositions.NO_ANNOTATION, false, new FixSpecParser().parseSpec()), "|").format()
         println output
 
         then:
@@ -48,7 +50,7 @@ class HighlightActionTest extends Specification {
 
         when:
         final Highlight highlight = new HighlightParser().parse(expressions)
-        final String output = new HorizontalHtmlMsgFormatter(highlight.apply(fields), AnnotationPositions.NO_ANNOTATION, false, "|").format()
+        final String output = new HorizontalHtmlMsgFormatter(new FormattingContext(highlight.apply(fields), AnnotationPositions.NO_ANNOTATION, false, new FixSpecParser().parseSpec()), "|").format()
         println output
 
         then:
@@ -60,6 +62,6 @@ class HighlightActionTest extends Specification {
         ['35:FgBlue','55:FgRed']                    |'35=blah|150=A|55=AUD/USD' | "<div class='fields'><span class='field FgBlue'><span class='tag number'>35</span><span class='equals'>=</span><span class='value valueRaw'>blah</span></span><span class='delim'>|</span><span class='field'><span class='tag number'>150</span><span class='equals'>=</span><span class='value valueRaw'>A</span></span><span class='delim'>|</span><span class='field FgRed'><span class='tag number'>55</span><span class='equals'>=</span><span class='value valueRaw'>AUD/USD</span></span></div>"
         ['35:FgBlue','55:FgGreen','150:FgYellow']   |'35=blah|150=A|55=AUD/USD' | "<div class='fields'><span class='field FgBlue'><span class='tag number'>35</span><span class='equals'>=</span><span class='value valueRaw'>blah</span></span><span class='delim'>|</span><span class='field FgYellow'><span class='tag number'>150</span><span class='equals'>=</span><span class='value valueRaw'>A</span></span><span class='delim'>|</span><span class='field FgGreen'><span class='tag number'>55</span><span class='equals'>=</span><span class='value valueRaw'>AUD/USD</span></span></div>"
         ['22:FgBlue']                               |'35=blah|150=A|55=AUD/USD' | "<div class='fields'><span class='field'><span class='tag number'>35</span><span class='equals'>=</span><span class='value valueRaw'>blah</span></span><span class='delim'>|</span><span class='field'><span class='tag number'>150</span><span class='equals'>=</span><span class='value valueRaw'>A</span></span><span class='delim'>|</span><span class='field'><span class='tag number'>55</span><span class='equals'>=</span><span class='value valueRaw'>AUD/USD</span></span></div>"
-        ['22:FgBlue:Msg']                          |'35=blah|150=A|55=AUD/USD' | "<div class='fields'><span class='field'><span class='tag number'>35</span><span class='equals'>=</span><span class='value valueRaw'>blah</span></span><span class='delim'>|</span><span class='field'><span class='tag number'>150</span><span class='equals'>=</span><span class='value valueRaw'>A</span></span><span class='delim'>|</span><span class='field'><span class='tag number'>55</span><span class='equals'>=</span><span class='value valueRaw'>AUD/USD</span></span></div>"
+        ['22:FgBlue:Msg']                           |'35=blah|150=A|55=AUD/USD' | "<div class='fields'><span class='field'><span class='tag number'>35</span><span class='equals'>=</span><span class='value valueRaw'>blah</span></span><span class='delim'>|</span><span class='field'><span class='tag number'>150</span><span class='equals'>=</span><span class='value valueRaw'>A</span></span><span class='delim'>|</span><span class='field'><span class='tag number'>55</span><span class='equals'>=</span><span class='value valueRaw'>AUD/USD</span></span></div>"
     }
 }

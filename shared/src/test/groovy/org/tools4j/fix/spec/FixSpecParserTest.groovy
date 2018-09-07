@@ -1,7 +1,6 @@
 package org.tools4j.fix.spec
 
 import spock.lang.Specification
-import org.tools4j.fix.spec.FixSpecDefinition.Message
 
 /**
  * User: benjw
@@ -19,7 +18,7 @@ class FixSpecParserTest extends Specification {
         assert fixSpec.messagesByName.size() == 92
 
         then:
-        final Message nos = fixSpec.messagesByMsgType.get("D")
+        final MessageSpec nos = fixSpec.messagesByMsgType.get("D")
         assert nos.fields.size() == 149
     }
 
@@ -33,7 +32,7 @@ class FixSpecParserTest extends Specification {
         assert fixSpec.messagesByName.size() == 117
 
         then:
-        final Message nos = fixSpec.messagesByMsgType.get("D")
+        final MessageSpec nos = fixSpec.messagesByMsgType.get("D")
         assert nos.fields.size() == 232
     }
 
@@ -47,7 +46,7 @@ class FixSpecParserTest extends Specification {
         assert fixSpec.messagesByName.size() == 117
 
         then:
-        final Message nos = fixSpec.messagesByMsgType.get("D")
+        final MessageSpec nos = fixSpec.messagesByMsgType.get("D")
         assert nos.fields.size() == 232
     }
 }

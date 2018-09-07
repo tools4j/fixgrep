@@ -207,25 +207,47 @@ class VerticalTest extends Specification {
         then:
         assert lines == """<div class='msg-header'>
 ================================================================================</br>
-<span class='FgCyan'>NewOrderSingle</span><br/>
+<span class='FgYellow'>MarketDataRequest</span><br/>
 ================================================================================
 </div>
 <div class='fields'>
-<div class='field annotatedField'><span class='tag-annotation'>[MsgType]</span><span class='tag-raw bold'>35</span><span class='equals bold'>=</span><span class='value-raw bold'>D</span><span class='value-annotation'>[NEWORDERSINGLE]</span></div>
-<div class='field annotatedField'><span class='tag-annotation'>[ClOrdID]</span><span class='tag-raw bold'>11</span><span class='equals bold'>=</span><span class='value-raw bold'>ABC</span></div>
+<div class='field annotatedField'><span class='tag-annotation'>[MsgType]</span><span class='tag-raw bold'>35</span><span class='equals bold'>=</span><span class='value-raw bold'>V</span><span class='value-annotation'>[MARKETDATAREQUEST]</span></div>
+<div class='field annotatedField'><span class='tag-annotation'>[MDReqID]</span><span class='tag-raw bold'>262</span><span class='equals bold'>=</span><span class='value-raw bold'>request123</span></div>
+<div class='field annotatedField'><span class='tag-annotation'>[SubscriptionRequestType]</span><span class='tag-raw bold'>263</span><span class='equals bold'>=</span><span class='value-raw bold'>0</span><span class='value-annotation'>[SNAPSHOT]</span></div>
+<div class='field annotatedField'><span class='tag-annotation'>[MarketDepth]</span><span class='tag-raw bold'>264</span><span class='equals bold'>=</span><span class='value-raw bold'>20</span></div>
+<div class='field annotatedField'><span class='tag-annotation'>[NoMDEntryTypes]</span><span class='tag-raw bold'>267</span><span class='equals bold'>=</span><span class='value-raw bold'>2</span></div>
+<div class='field annotatedField'><span class='tag-annotation'>[MDEntryType]</span><span class='tag-raw bold'>269</span><span class='equals bold'>=</span><span class='value-raw bold'>0</span><span class='value-annotation'>[BID]</span></div>
+<div class='field annotatedField'><span class='tag-annotation'>[MDEntryType]</span><span class='tag-raw bold'>269</span><span class='equals bold'>=</span><span class='value-raw bold'>1</span><span class='value-annotation'>[OFFER]</span></div>
+<div class='field annotatedField'><span class='tag-annotation'>[NoRelatedSym]</span><span class='tag-raw bold'>146</span><span class='equals bold'>=</span><span class='value-raw bold'>1</span></div>
 <div class='field annotatedField'><span class='tag-annotation'>[Symbol]</span><span class='tag-raw bold'>55</span><span class='equals bold'>=</span><span class='value-raw bold'>AUD/USD</span></div>
 </div>
 
 <br/>
 <div class='msg-header'>
 ================================================================================</br>
-<span class='FgGreen'>Exec.Trade</span><br/>
+<span class='FgYellow'>MarketDataIncrementalRefresh</span><br/>
 ================================================================================
 </div>
 <div class='fields'>
-<div class='field annotatedField'><span class='tag-annotation'>[MsgType]</span><span class='tag-raw bold'>35</span><span class='equals bold'>=</span><span class='value-raw bold'>8</span><span class='value-annotation'>[EXECUTIONREPORT]</span></div>
-<div class='field annotatedField'><span class='tag-annotation'>[ExecType]</span><span class='tag-raw bold'>150</span><span class='equals bold'>=</span><span class='value-raw bold'>F</span><span class='value-annotation'>[TRADE_PARTIAL_FILL_OR_FILL]</span></div>
+<div class='field annotatedField'><span class='tag-annotation'>[MsgType]</span><span class='tag-raw bold'>35</span><span class='equals bold'>=</span><span class='value-raw bold'>X</span><span class='value-annotation'>[MARKETDATAINCREMENTALREFRESH]</span></div>
+<div class='field annotatedField'><span class='tag-annotation'>[MDReqID]</span><span class='tag-raw bold'>262</span><span class='equals bold'>=</span><span class='value-raw bold'>ABCD</span></div>
+<div class='field annotatedField'><span class='tag-annotation'>[NoMDEntries]</span><span class='tag-raw bold'>268</span><span class='equals bold'>=</span><span class='value-raw bold'>4</span></div>
+<div class='field annotatedField'><span class='tag-annotation'>[MDUpdateAction]</span><span class='tag-raw bold'>279</span><span class='equals bold'>=</span><span class='value-raw bold'>0</span><span class='value-annotation'>[NEW]</span></div>
+<div class='field annotatedField'><span class='tag-annotation'>[MDEntryType]</span><span class='tag-raw bold'>269</span><span class='equals bold'>=</span><span class='value-raw bold'>0</span><span class='value-annotation'>[BID]</span></div>
 <div class='field annotatedField'><span class='tag-annotation'>[Symbol]</span><span class='tag-raw bold'>55</span><span class='equals bold'>=</span><span class='value-raw bold'>AUD/USD</span></div>
+<div class='field annotatedField'><span class='tag-annotation'>[MDEntryPx]</span><span class='tag-raw bold'>270</span><span class='equals bold'>=</span><span class='value-raw bold'>1.12345</span></div>
+<div class='field annotatedField'><span class='tag-annotation'>[MDUpdateAction]</span><span class='tag-raw bold'>279</span><span class='equals bold'>=</span><span class='value-raw bold'>0</span><span class='value-annotation'>[NEW]</span></div>
+<div class='field annotatedField'><span class='tag-annotation'>[MDEntryType]</span><span class='tag-raw bold'>269</span><span class='equals bold'>=</span><span class='value-raw bold'>1</span><span class='value-annotation'>[OFFER]</span></div>
+<div class='field annotatedField'><span class='tag-annotation'>[Symbol]</span><span class='tag-raw bold'>55</span><span class='equals bold'>=</span><span class='value-raw bold'>AUD/USD</span></div>
+<div class='field annotatedField'><span class='tag-annotation'>[MDEntryPx]</span><span class='tag-raw bold'>270</span><span class='equals bold'>=</span><span class='value-raw bold'>1.12355</span></div>
+<div class='field annotatedField'><span class='tag-annotation'>[MDUpdateAction]</span><span class='tag-raw bold'>279</span><span class='equals bold'>=</span><span class='value-raw bold'>0</span><span class='value-annotation'>[NEW]</span></div>
+<div class='field annotatedField'><span class='tag-annotation'>[MDEntryType]</span><span class='tag-raw bold'>269</span><span class='equals bold'>=</span><span class='value-raw bold'>0</span><span class='value-annotation'>[BID]</span></div>
+<div class='field annotatedField'><span class='tag-annotation'>[Symbol]</span><span class='tag-raw bold'>55</span><span class='equals bold'>=</span><span class='value-raw bold'>AUD/USD</span></div>
+<div class='field annotatedField'><span class='tag-annotation'>[MDEntryPx]</span><span class='tag-raw bold'>270</span><span class='equals bold'>=</span><span class='value-raw bold'>1.12335</span></div>
+<div class='field annotatedField'><span class='tag-annotation'>[MDUpdateAction]</span><span class='tag-raw bold'>279</span><span class='equals bold'>=</span><span class='value-raw bold'>0</span><span class='value-annotation'>[NEW]</span></div>
+<div class='field annotatedField'><span class='tag-annotation'>[MDEntryType]</span><span class='tag-raw bold'>269</span><span class='equals bold'>=</span><span class='value-raw bold'>1</span><span class='value-annotation'>[OFFER]</span></div>
+<div class='field annotatedField'><span class='tag-annotation'>[Symbol]</span><span class='tag-raw bold'>55</span><span class='equals bold'>=</span><span class='value-raw bold'>AUD/USD</span></div>
+<div class='field annotatedField'><span class='tag-annotation'>[MDEntryPx]</span><span class='tag-raw bold'>270</span><span class='equals bold'>=</span><span class='value-raw bold'>1.12365</span></div>
 </div>
 
 <br/>"""

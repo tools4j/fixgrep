@@ -153,21 +153,22 @@ class FormatSpec(
     }
 
     fun getMsgFormatter(fields: Fields): MsgFormatter {
+        val formattingContext = FormattingContext(fields, tagAnnotationPositions, !suppressBoldTagsAndValues, fixSpec)
         if(formatInHtml){
             if(verticalFormat) {
                 if(alignVerticalColumns) {
-                    return VerticalAlignedHtmlMsgFormatter(fields, tagAnnotationPositions, !suppressBoldTagsAndValues)
+                    return VerticalAlignedHtmlMsgFormatter(formattingContext)
                 } else {
-                    return VerticalNonAlignedHtmlMsgFormatter(fields, tagAnnotationPositions, !suppressBoldTagsAndValues)
+                    return VerticalNonAlignedHtmlMsgFormatter(formattingContext)
                 }
             } else {
-                return HorizontalHtmlMsgFormatter(fields, tagAnnotationPositions, !suppressBoldTagsAndValues, DelimiterImpl(outputDelimiter))
+                return HorizontalHtmlMsgFormatter(formattingContext, DelimiterImpl(outputDelimiter))
             }
         } else {
             if(verticalFormat) {
                 throw UnsupportedOperationException()
             } else {
-                return HorizontalConsoleMsgFormatter(fields, tagAnnotationPositions, !suppressBoldTagsAndValues, DelimiterImpl(outputDelimiter))
+                return HorizontalConsoleMsgFormatter(formattingContext, DelimiterImpl(outputDelimiter))
             }
         }
     }

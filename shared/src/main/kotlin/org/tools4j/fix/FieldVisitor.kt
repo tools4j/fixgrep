@@ -1,5 +1,8 @@
 package org.tools4j.fix
 
+import org.tools4j.fix.spec.FixSpecDefinition
+import java.util.*
+
 /**
  * User: benjw
  * Date: 7/16/2018

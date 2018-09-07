@@ -23,9 +23,27 @@ class FixSpecParser(private val specInputStream: InputStream) {
             val before = System.currentTimeMillis()
             val fixSpec = FixSpecParser("FIX50SP2.xml").parseSpec()
             val after = System.currentTimeMillis()
-            //println(after - before)
+            println(after - before)
+            println(fixSpec.printMessagesAndGroups())
+
+
+//            for(field in fixSpec.fieldsByName.values){
+//                val inGroups = ArrayList<SpecGroup>()
+//                val inMessages = ArrayList<SpecMessage>()
+//                for(group in fixSpec.groupsByName.values){
+//                    if(group.fields.contains(field)){
+//                        inGroups.add(group)
+//                    }
+//                }
+//                for(message in fixSpec.messagesByName.values){
+//                    if(message.fields.contains(field)){
+//                        inMessages.add(message)
+//                    }
+//                }
+//                if(inGroups.size > 2) println("Field ${field.name} in multiple groups: " + inGroups.map { it.name }.joinToString(","))
+//                if(inGroups.size == 1 && !inMessages.isEmpty()) println("Field ${field.name} in group: " + inGroups.map { it.name }.joinToString(",") + ", and in messages: " + inMessages.map { it.name }.joinToString(","))
+//            }
         }
-        val INDENT = "    "
     }
 
     fun parseSpec(): FixSpecDefinition{
@@ -37,24 +55,24 @@ class FixSpecParser(private val specInputStream: InputStream) {
 
         //FIELDS
         val fieldList: NodeList = xmlDoc.getElementsByTagName("fields").item(0).childNodes
-        val fieldsByName = LinkedHashMap<String, FixSpecDefinition.Field>()
-        fun extractFields(localFieldList: NodeList): Map<String, FixSpecDefinition.Field> {
-            val localFieldsByName = LinkedHashMap<String, FixSpecDefinition.Field>()
+        val fieldsByName = LinkedHashMap<String, FieldSpec>()
+        fun extractFields(localFieldList: NodeList): Map<String, FieldSpec> {
+            val localFieldsByName = LinkedHashMap<String, FieldSpec>()
             for (i in 0 until localFieldList.length) {
                 val fieldNode: Node = localFieldList.item(i)
                 if (fieldNode.nodeType != Node.ELEMENT_NODE) continue
                 val fieldElement = fieldNode as Element
 
-                val enums = LinkedHashSet<FixSpecDefinition.FieldEnum>()
+                val enums = LinkedHashSet<FieldEnum>()
                 for (j in 0 until fieldElement.childNodes.length) {
                     val enumNode: Node = fieldElement.childNodes.item(j)
                     if (enumNode.nodeType != Node.ELEMENT_NODE) continue
                     val enumElement = enumNode as Element
                     if (enumElement.tagName != "value") continue
-                    enums.add(FixSpecDefinition.FieldEnum(enumElement.getAttribute("enum"), enumElement.getAttribute("description")))
+                    enums.add(FieldEnum(enumElement.getAttribute("enum"), enumElement.getAttribute("description")))
                 }
                 try {
-                    val field = FixSpecDefinition.Field(fieldElement.getAttribute("name"), fieldElement.getAttribute("number").toInt(), fieldElement.getAttribute("type"), enums)
+                    val field = FieldSpec(fieldElement.getAttribute("name"), fieldElement.getAttribute("number").toInt(), fieldElement.getAttribute("type"), enums)
                     localFieldsByName.put(field.name, field)
                 } catch(e: Exception) {
                     println("Error parsing field: " + fieldElement.getAttribute("name"))
@@ -88,6 +106,7 @@ class FixSpecParser(private val specInputStream: InputStream) {
             val componentElement = componentNode as Element
             val constituents = extractConstituents(componentElement, fieldsByName)
             val componentName = componentElement.getAttribute("name")
+            if(rawComponentsByName[componentName] != null) println("Duplicate component found!: " + componentName)
             rawComponentsByName.put(componentName, RawComponent(componentName, constituents))
         }
         //println("After component parsing: " + (System.currentTimeMillis() - timeMsStart))
@@ -112,56 +131,64 @@ class FixSpecParser(private val specInputStream: InputStream) {
         return fixSpec
     }
 
-    class ConstituentExpander(val fieldsByName: MutableMap<String, FixSpecDefinition.Field>,
+    class ConstituentExpander(val fieldsByName: MutableMap<String, FieldSpec>,
                               val rawHeader: ArrayList<Any>,
                               val rawTrailer: ArrayList<Any>,
                               val rawComponentsByName: LinkedHashMap<String, RawComponent>,
                               val rawMessagesByName: LinkedHashMap<String, RawMessage>){
 
-        val groupsByName = LinkedHashMap<String, FixSpecDefinition.Group>()
-        val messagesByName = LinkedHashMap<String, FixSpecDefinition.Message>()
-        val componentsByName = LinkedHashMap<String, FixSpecDefinition.Component>()
+        //val groupsByName = LinkedHashMap<String, SpecGroup>()
+        val messagesByName = LinkedHashMap<String, MessageSpec>()
+        val componentsByName = LinkedHashMap<String, ComponentSpec>()
 
         fun expand(): FixSpecDefinition {
             for(rawMessage in rawMessagesByName.values){
-                messagesByName.put(rawMessage.name, FixSpecDefinition.Message(rawMessage.name, rawMessage.msgType, expandConstituents(rawMessage.constituents)))
+                messagesByName.put(rawMessage.name, MessageSpec(rawMessage.name, rawMessage.msgType, expandConstituents(rawMessage.constituents)))
             }
-            return FixSpecDefinition(fieldsByName, expandConstituents(rawHeader), expandConstituents(rawTrailer), groupsByName, messagesByName)
+            return FixSpecDefinition(fieldsByName, expandConstituents(rawHeader), expandConstituents(rawTrailer), messagesByName)
         }
 
-        private fun expandConstituents(constituents: Collection<Any>): FixSpecDefinition.FieldsAndGroups {
-            val fieldsGroupsAndComponents = FixSpecDefinition.FieldsAndGroups()
+        private fun expandConstituents(constituents: Collection<Any>): FieldsAndGroupsImpl {
+            val fields = LinkedHashSet<FieldSpec>()
+            val groups = LinkedHashSet<GroupSpec>()
+            val components = LinkedHashSet<ComponentSpec>()
+
+            val groupsByName = LinkedHashMap<String, GroupSpec>()
+
             for (constituent in constituents) {
-                if (constituent is FixSpecDefinition.Field) {
-                    fieldsGroupsAndComponents.addField(fieldsByName.get(constituent.name)!!)
+                if (constituent is FieldSpec) {
+                    fields.add(fieldsByName.get(constituent.name)!!)
 
                 } else if (constituent is RawGroup) {
                     var group = groupsByName.get(constituent.name)
                     if (group == null) {
-                        group = FixSpecDefinition.Group(constituent.name, expandConstituents(constituent.constituents))
+                        val leadingField = fieldsByName[constituent.name]!!
+                        group = GroupSpec(leadingField, expandConstituents(constituent.constituents))
                         groupsByName.put(group.name, group)
+                    } else {
+                        println("Duplicate group found!:" + group.name)
                     }
-                    fieldsGroupsAndComponents.addGroup(group)
+                    groups.add(group)
 
                 } else if (constituent is ComponentReference) {
                     var component = componentsByName.get(constituent.name)
                     if (component == null) {
                         val rawComponent = rawComponentsByName.get(constituent.name)
                         if(rawComponent == null) throw IllegalStateException("Cannot find Component, or RawComponent with name [${constituent.name}]")
-                        component = FixSpecDefinition.Component(constituent.name, expandConstituents(rawComponent.constituents))
+                        component = ComponentSpec(constituent.name, expandConstituents(rawComponent.constituents))
                         componentsByName.put(component.name, component)
                     }
-                    fieldsGroupsAndComponents.addComponent(component)
+                    components.add(component)
 
                 } else if (constituent is RawMessage) {
                     throw IllegalArgumentException("constituent cannot be a message: $constituent")
                 }
             }
-            return fieldsGroupsAndComponents
+            return FieldsAndGroupsImpl(fields, groups, components)
         }
     }
 
-    fun extractConstituents(parentElement: Element, fieldsMap: LinkedHashMap<String, FixSpecDefinition.Field>): ArrayList<Any> {
+    fun extractConstituents(parentElement: Element, fieldsMap: LinkedHashMap<String, FieldSpec>): ArrayList<Any> {
         val constituents = ArrayList<Any>()
         for (j in 0 until parentElement.childNodes.length) {
             val childNode: Node = parentElement.childNodes.item(j)

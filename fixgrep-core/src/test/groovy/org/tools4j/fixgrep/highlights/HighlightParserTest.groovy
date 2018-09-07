@@ -3,6 +3,8 @@ package org.tools4j.fixgrep.highlights
 import org.tools4j.fix.AnnotationPositions
 import org.tools4j.fix.Fields
 import org.tools4j.fix.FieldsImpl
+import org.tools4j.fix.spec.FixSpecParser
+import org.tools4j.fixgrep.formatting.FormattingContext
 import org.tools4j.fixgrep.formatting.HorizontalConsoleMsgFormatter
 import org.tools4j.fixgrep.formatting.HorizontalHtmlMsgFormatter
 import org.tools4j.fixgrep.texteffect.*
@@ -32,8 +34,8 @@ class HighlightParserTest extends Specification {
         when:
         final Highlight highlight = new HighlightParser().parse(expression)
         fields = highlight.apply(fields)
-        final String actualConsoleOutput = new HorizontalConsoleMsgFormatter(fields, AnnotationPositions.OUTSIDE_ANNOTATED, true, '|').format()
-        final String actualHtmlOutput = new HorizontalHtmlMsgFormatter(fields, AnnotationPositions.OUTSIDE_ANNOTATED, true, '|').format()
+        final String actualConsoleOutput = new HorizontalConsoleMsgFormatter(new FormattingContext(fields), '|').format()
+        final String actualHtmlOutput = new HorizontalHtmlMsgFormatter(new FormattingContext(fields), '|').format()
         println "Expected output: $expectedConsoleOutput"
         println "Actual output: $actualConsoleOutput"
         then:
