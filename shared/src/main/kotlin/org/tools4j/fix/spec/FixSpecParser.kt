@@ -142,10 +142,12 @@ class FixSpecParser(private val specInputStream: InputStream) {
         val componentsByName = LinkedHashMap<String, ComponentSpec>()
 
         fun expand(): FixSpecDefinition {
+            val headerFieldsAndGroups = expandConstituents(rawHeader)
+            val trailerFieldsAndGroups = expandConstituents(rawTrailer)
             for(rawMessage in rawMessagesByName.values){
-                messagesByName.put(rawMessage.name, MessageSpec(rawMessage.name, rawMessage.msgType, expandConstituents(rawMessage.constituents)))
+                messagesByName.put(rawMessage.name, MessageSpec(rawMessage.name, rawMessage.msgType, expandConstituents(rawMessage.constituents), headerFieldsAndGroups, trailerFieldsAndGroups))
             }
-            return FixSpecDefinition(fieldsByName, expandConstituents(rawHeader), expandConstituents(rawTrailer), messagesByName)
+            return FixSpecDefinition(fieldsByName, headerFieldsAndGroups, trailerFieldsAndGroups, messagesByName)
         }
 
         private fun expandConstituents(constituents: Collection<Any>): FieldsAndGroupsImpl {

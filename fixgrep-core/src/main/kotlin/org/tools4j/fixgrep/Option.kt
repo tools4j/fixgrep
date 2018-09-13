@@ -21,6 +21,7 @@ enum class Option(val abbreviation: String?, val longForm: String, val otherForm
     output_format_vertical_console(null, "output-format-vertical-console", null, true, true, {it.withRequiredArg().ofType(String::class.java)}),
     output_format_vertical_html(null, "output-format-vertical-html", null, true, true, {it.withRequiredArg().ofType(String::class.java)}),
     line_regexgroup_for_fix("g", "line-regexgroup-for-fix", null, true, true, {it.withRequiredArg().ofType(Integer::class.java)}),
+    indent_group_repeats("G", "indent-group-repeats", null, true, true, {it.withRequiredArg().ofType(Boolean::class.java)}),
     highlights("h", "highlights", "highlight", true, true, {it.withRequiredArg().ofType(String::class.java).withValuesSeparatedBy(",")}),
     launch_browser("l", "launch-browser", null, false, true, {}),
     include_only_messages_of_type("m", "include-only-messages-of-type", null, true, true, {it.withRequiredArg().ofType(String::class.java).withValuesSeparatedBy(",")}),

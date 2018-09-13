@@ -15,13 +15,18 @@ class FormattingContext(
         val fields: Fields,
         val annotationPositions: AnnotationPositions,
         val boldTagAndValue: Boolean,
+        val indentGroupRepeats: Boolean,
         val fixSpec: FixSpecDefinition){
 
-    constructor(fields: Fields): this(fields, AnnotationPositions.OUTSIDE_ANNOTATED, true, FixSpecParser().parseSpec())
+    constructor(fields: Fields): this(fields, AnnotationPositions.OUTSIDE_ANNOTATED, true, true, FixSpecParser().parseSpec())
+    constructor(fields: Fields, annotationPositions: AnnotationPositions, boldTagAndValue: Boolean, fixSpec: FixSpecDefinition): this(fields, annotationPositions, boldTagAndValue, true, fixSpec)
 
-    val groupStack = GroupStack()
+    val groupStack: GroupStack by lazy {
+        GroupStack(messageSpec)
+    }
 
     val messageSpec: MessageSpec? by lazy {
-        fixSpec.messagesByMsgType[fields.getField(35)?.stringValue()]
+        val messageTypeCode = fields.getField(35)?.value?.valueRaw
+        if(messageTypeCode == null) null else fixSpec.messagesByMsgType[messageTypeCode]
     }
 }

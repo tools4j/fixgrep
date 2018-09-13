@@ -19,6 +19,7 @@ class FormatSpec(
         val suppressBoldTagsAndValues: Boolean,
         val highlight: Highlight,
         val groupBy: GroupBy,
+        val indentGroupRepeats: Boolean,
         val inputDelimiter: String,
         val outputDelimiter: String,
         val outputFormatHorizontalConsole: String,
@@ -45,6 +46,7 @@ class FormatSpec(
         false,
         Highlight.NO_HIGHLIGHT,
         GroupBy.NONE,
+        true,
         Ascii1Char().toString(),
         "|",
         "\${senderToTargetCompIdDirection} \${msgColor}[\${msgTypeName}]\${colorReset} \${msgFix}",
@@ -74,6 +76,7 @@ class FormatSpec(
                 suppressBoldTagsAndValues = config.getAsBoolean(Option.suppress_bold_tags_and_values),
                 highlight = HighlightParser().parse(config.getAsStringList(Option.highlights)),
                 groupBy = GroupBy.NONE,
+                indentGroupRepeats = config.getAsBoolean(Option.indent_group_repeats),
                 inputDelimiter = config.getAsString(Option.input_delimiter),
                 outputDelimiter = config.getAsString(Option.output_delimiter),
                 outputFormatHorizontalConsole = config.getAsString(Option.output_format_horizontal_console),
@@ -100,6 +103,7 @@ class FormatSpec(
             suppressBoldTagsAndValues: Boolean = this.suppressBoldTagsAndValues,
             highlight: Highlight = this.highlight,
             groupBy: GroupBy = this.groupBy,
+            indentGroupRepeats: Boolean = this.indentGroupRepeats,
             inputDelimiter: String = this.inputDelimiter,
             outputDelimiter: String = this.outputDelimiter,
             outputFormatHorizontalConsole: String = this.outputFormatHorizontalConsole,
@@ -126,6 +130,7 @@ class FormatSpec(
             suppressBoldTagsAndValues,
             highlight,
             groupBy,
+            indentGroupRepeats,
             inputDelimiter,
             outputDelimiter,
             outputFormatHorizontalConsole,
@@ -153,7 +158,7 @@ class FormatSpec(
     }
 
     fun getMsgFormatter(fields: Fields): MsgFormatter {
-        val formattingContext = FormattingContext(fields, tagAnnotationPositions, !suppressBoldTagsAndValues, fixSpec)
+        val formattingContext = FormattingContext(fields, tagAnnotationPositions, !suppressBoldTagsAndValues, indentGroupRepeats, fixSpec)
         if(formatInHtml){
             if(verticalFormat) {
                 if(alignVerticalColumns) {

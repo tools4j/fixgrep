@@ -218,6 +218,15 @@ td.tag {
     text-align: right;
 }
 
+div.group-repeat-number {
+    float: left;
+    margin-left: -2em;
+}
+
+div.group-repeats {
+    padding-left: 4em;
+}
+
 .FgBlack{ color: black; }
 .FgRed{ color: #FF4444; }
 .FgGreen{ color: #00ff87; }

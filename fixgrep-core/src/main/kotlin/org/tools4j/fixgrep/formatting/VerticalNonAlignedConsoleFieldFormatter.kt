@@ -9,7 +9,7 @@ import org.tools4j.fixgrep.texteffect.TextEffect
  * Date: 7/12/2018
  * Time: 6:39 AM
  */
-class VerticalNonAlignedHtmlFieldFormatter(val fieldWriter: FieldWriter, formattingContext: FormattingContext): FieldFormatter(formattingContext) {
+class VerticalNonAlignedConsoleFieldFormatter(val fieldWriter: FieldWriter, formattingContext: FormattingContext): FieldFormatter(formattingContext) {
     val sb = StringBuilder()
 
     override fun onFieldBody() {

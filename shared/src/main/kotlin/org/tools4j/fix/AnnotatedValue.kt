@@ -11,6 +11,8 @@ class AnnotatedValue(override val valueRaw: String, val annotation: String) : Va
         valueVisitor.visit(this)
     }
 
+
+
     override fun intValue(): Int {
         throw UnsupportedOperationException()
     }
@@ -69,5 +71,9 @@ class AnnotatedValue(override val valueRaw: String, val annotation: String) : Va
         var result = valueRaw.hashCode()
         result = 31 * result + annotation.hashCode()
         return result
+    }
+
+    override fun toString(): String {
+        return "$valueRaw[$annotation]"
     }
 }

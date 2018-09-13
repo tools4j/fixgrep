@@ -1,9 +1,6 @@
 package org.tools4j.fixgrep.formatting
 
 import org.tools4j.fix.*
-import org.tools4j.fix.spec.FixSpecDefinition
-import org.tools4j.fix.spec.GroupSpec
-import org.tools4j.fix.spec.MessageSpec
 import org.tools4j.fixgrep.highlights.HighlightedField
 import org.tools4j.fixgrep.texteffect.CompositeTextEffect
 import org.tools4j.fixgrep.texteffect.TextEffect
@@ -26,40 +23,92 @@ abstract class FieldFormatter(val context: FormattingContext): FieldVisitor, Val
             field = CompositeTextEffect(field, value)
         }
 
-    var currentGroupAndRepeatNumber: GroupSpec? = null
-    var groupLevel: Int = 0
+    private val doFirsts = ArrayList<() -> (Any)>()
+    private val doLasts = ArrayList<() -> (Any)>()
 
     override fun visit(field: Field) {
-        val specField = context.fixSpec.fieldsByNumber[field.tag.number]
-
         //TEXT EFFECTS
         if(field is HighlightedField){
             fieldTextEffect = field.textEffect
         }
 
-        //GROUPS
-        //Check whether we are entering a new repeating group type
-        val enteringNewGroup = context.messageSpec?.getGroupByLeadingFieldNumber(field.tag.number)
-        if(enteringNewGroup != null){
-            context.groupStack.push(enteringNewGroup)
-
-        } else if(!context.groupStack.empty()){
-            //Check whether we are exiting group(s)
-            while(!context.groupStack.empty() && !context.groupStack.peek().fields.contains(specField)){
-                context.groupStack.pop()
-            }
-            //Check whether we are entering a new repeat
-            if(!context.groupStack.empty() && field.tag.number == context.groupStack.peek().firstField?.number) {
-                context.groupStack.incrementRepeatNumber()
-            }
-        }
-        currentGroupAndRepeatNumber = if(context.groupStack.empty()) null else context.groupStack.peek()
-        groupLevel = context.groupStack.size()
-
         //FIELD DETAILS
         field.tag.accept(this)
         field.value.accept(this)
+
+        detectGroupPositioning(field)
+
+        doFirsts.forEach { it.invoke() }
+        onFieldBody()
+        doLasts.forEach { it.invoke() }
         finish()
+    }
+
+    private fun detectGroupPositioning(field: Field) {
+        if(context.groupStack.getCurrentMessageOrGroupContext() == null) return
+        val fieldSpec = context.fixSpec.fieldsByNumber[field.tag.number]
+
+        //Check whether we are exiting group(s)
+        while (!context.groupStack.getCurrentMessageOrGroupContext()!!.fields.contains(fieldSpec)) {
+            //Check whether we are entering a new group repeat
+            val enteringNewGroupAfterGroupExit = context.groupStack.getCurrentMessageOrGroupContext()?.getGroupByLeadingFieldNumber(field.tag.number)
+            if (enteringNewGroupAfterGroupExit != null) {
+                context.groupStack.push(enteringNewGroupAfterGroupExit)
+                onGroupEnter()
+                return
+            }
+
+            //Check whether we are exiting a group
+            if(!context.groupStack.empty() && fieldSpec != null && !context.groupStack.peek().fields.contains(fieldSpec)) {
+                val repeatNumberBeforeExitingGroup = context.groupStack.getCurrentRepeatNumber()
+                context.groupStack.pop()
+                if (repeatNumberBeforeExitingGroup > 0) onGroupRepeatExit()
+                onGroupExit()
+            } else {
+                break
+            }
+        }
+
+        //Check whether we are entering a new repeat
+        if (!context.groupStack.empty() && field.tag.number == context.groupStack.peek().firstField?.number) {
+            val newRepeatNumber = context.groupStack.incrementRepeatNumber()
+            if (newRepeatNumber > 1) onGroupRepeatExit()
+            onGroupRepeatEnter()
+
+        //Otherwise, assume this is a subsequent field in the current repeat
+        } else if(!context.groupStack.empty()){
+            onSubsequentFieldInGroupRepeat()
+        }
+    }
+
+    abstract fun finish()
+
+    fun doFirst(task: () -> Any){
+        doFirsts.add(task)
+    }
+
+    fun doLast(task: () -> Any){
+        doLasts.add(task)
+    }
+
+    open fun onGroupRepeatExit() {
+        //no-op
+    }
+
+    open fun onGroupExit() {
+        //no-op
+    }
+
+    open fun onGroupRepeatEnter() {
+        //no-op
+    }
+
+    open fun onSubsequentFieldInGroupRepeat(){
+        //no-op
+    }
+
+    open fun onGroupEnter() {
+        //no-op
     }
 
     override fun visit(tag: Tag) {
@@ -76,5 +125,7 @@ abstract class FieldFormatter(val context: FormattingContext): FieldVisitor, Val
         }
     }
 
-    abstract fun finish();
+    open fun onFieldBody(){
+        //no-op
+    }
 }

@@ -26,8 +26,7 @@ class HorizontalConsoleFieldFormatter(val fieldWriter: FieldWriter, val formatti
         appendEquals(sb)
         appendValue(sb)
         sb.append(fieldTextEffect.consoleTextAfter)
-        fieldWriter.writeField(sb.toString())
-    }
+        fieldWriter.writeField(sb.toString())    }
 
     private fun appendEquals(sb: StringBuilder) {
         val rawTagAndValueAreEitherSideOfEqualsAndAreBold = context.annotationPositions == AnnotationPositions.OUTSIDE_ANNOTATED && context.boldTagAndValue

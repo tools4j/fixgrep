@@ -192,7 +192,10 @@ the less 'interesting' fix fields, such as BeginString, BodyLength or Checksum. 
 
         optionsHelp.add(OptionHelp(Option.exclude_messages_of_type, "Comma separated list of msgType codes.  Can be used to hide messages of certain types from being displayed.", "A,O", "e.g. To 'hide' Logon and Heartbeat messages, this parameter could be defined as 'A,0'"))
 
-        optionsHelp.add(OptionHelp(Option.vertical_format, "Align columns in vertical format.  Default is false (horizontal).", null, null))
+        optionsHelp.add(OptionHelp(Option.vertical_format, "View messages in vertical format.  Default is false (horizontal).", null, null))
+
+        optionsHelp.add(OptionHelp(Option.indent_group_repeats, "Indent group repeats when viewing messages in vertical format.", "true",
+                """Often when viewing messages which have a lot of repeating groups e.g. prices, it is useful to see the repeating groups indented.  Default is true. Has no effect when viewing messages in the default horizontal format."""))
 
         optionsHelp.add(OptionHelp(Option.debug, "Run in debug mode.", null, null))
 

@@ -16,7 +16,7 @@ open class FieldImpl(override val tag: Tag, override val value: Value) : Field {
     }
 
     override fun toString(): String {
-        return tag.toString() + "=" + value
+        return tag.toString() + "=" + value.toString()
     }
 
     override fun intValue(): Int {

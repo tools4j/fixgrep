@@ -19,6 +19,7 @@ class FieldsFromDelimitedString(private val str: String, private val inputDelimi
             val fieldStrings = split.iterator()
             while (fieldStrings.hasNext()) {
                 val fieldStr = fieldStrings.next()
+                if(fieldStr.isEmpty()) continue;
                 val tagAndValue = SplitableByCharString(fieldStr, '=').splitAtFirst().values()
                 val field = FieldImpl(tagAndValue!![0], tagAndValue[1])
                 fields.add(field)

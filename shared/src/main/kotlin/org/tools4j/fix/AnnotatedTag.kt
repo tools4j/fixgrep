@@ -27,4 +27,8 @@ class AnnotatedTag(override val number: Int, val annotation: String) : Tag {
         result = 31 * result + annotation.hashCode()
         return result
     }
+
+    override fun toString(): String {
+        return "[$annotation]$number"
+    }
 }
