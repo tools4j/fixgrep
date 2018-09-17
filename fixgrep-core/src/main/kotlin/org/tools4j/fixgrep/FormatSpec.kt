@@ -171,7 +171,11 @@ class FormatSpec(
             }
         } else {
             if(verticalFormat) {
-                throw UnsupportedOperationException()
+                if(alignVerticalColumns) {
+                    return VerticalAlignedConsoleMsgFormatter(formattingContext)
+                } else {
+                    return VerticalNonAlignedConsoleMsgFormatter(formattingContext)
+                }
             } else {
                 return HorizontalConsoleMsgFormatter(formattingContext, DelimiterImpl(outputDelimiter))
             }

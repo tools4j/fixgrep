@@ -1,6 +1,5 @@
 package org.tools4j.fixgrep.help
 
-import org.tools4j.fix.FixFieldTypes.MsgType
 import org.tools4j.fixgrep.Option
 import org.tools4j.fixgrep.texteffect.HtmlOnlyTextEffect
 import org.tools4j.fixgrep.texteffect.MiscTextEffect
@@ -32,24 +31,32 @@ class ManGenerator(val docWriterFactory: DocWriterFactory, val configAndArgument
     }
 
     private fun whatIsFixgrep(): String {
-        val lines = listOf(
+        val horizontalFormatLines = listOf(
                 "8=FIX.5.2^A9=232^A35=D^A11=C28^A55=AUD/USD^A54=2^A38=1464820^A44=100.026",
                 "8=FIX.5.2^A9=54^A35=8^A11=C28^A150=0^A151=1464820^A14=0^A44=100.02",
                 "8=FIX.5.2^A9=67^A35=G^A9=232^A11=C32^A38=1465320^A40=2^A44=100.12",
                 "8=FIX.5.2^A9=23^A35=8^A11=C32^A150=5^A151=1465320^A14=0^A44=100.12",
                 "8=FIX.5.2^A9=56^A35=8^A11=C32^A150=2^A151=1072490^A14=392830^A44=100.00")
 
+        val verticalNonAlignedFormatLines = listOf(
+                "8=FIX.5.2^A9=232^A35=D^A11=C28^A55=AUD/USD^A54=2^A38=1464820^A44=100.026",
+                "8=FIX.5.2^A9=54^A35=8^A11=C28^A150=0^A151=1464820^A14=0^A44=100.02")
+
         val writer = docWriterFactory.createNew()
-        val formattedExample = SingleExample(lines, listOf("-e", "8,9,35"), docWriterFactory).toFormattedString(false, false)
+        val horizontalFormatExample = SingleExample(horizontalFormatLines, listOf("-e", "8,9,35"), docWriterFactory).toFormattedString(false, false)
+        val verticalAlignedFormatExample = SingleExample(verticalNonAlignedFormatLines, listOf("-e", "8,9,35", "-V", "-A"), docWriterFactory).toFormattedString(false, false)
+        val verticalNonAlignedFormatExample = SingleExample(verticalNonAlignedFormatLines, listOf("-e", "8,9,35", "-V"), docWriterFactory).toFormattedString(false, false)
+
         with(writer) {
             writeHeading(1, "What is fixgrep")
             writeLn("fixgrep is a command line utility for making FIX protocol messages more readable.")
-            writeLn("fixgrep can turn this:")
-            startSection(MiscTextEffect.Console)
-            lines.forEach { writer.writeLn(it) }
-            endSection()
-            writeLn("into this:")
-            write(formattedExample)
+            writeLn("Some brief examples:")
+            writeHeading(2, "Horizontal format:")
+            write(horizontalFormatExample)
+            writeHeading(2, "Vertical format (aligned):")
+            write(verticalAlignedFormatExample)
+            writeHeading(2, "Vertical format (non-aligned, with group indentation):")
+            write(verticalNonAlignedFormatExample)
             writeHeading(2, "fixgrep features:")
             startList()
             listItem("Annotated fix tags and values.")

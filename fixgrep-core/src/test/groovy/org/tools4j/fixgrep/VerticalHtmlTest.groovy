@@ -20,7 +20,7 @@ class VerticalHtmlTest extends Specification {
     private static File resultsFile = new File("results.txt")
     private static boolean logResultsToFile = true;
     private static boolean logNewAssertionsToFile = true;
-    private static boolean launchResultInBrowser = true
+    private static boolean launchResultInBrowser = false
 
     def setupSpec() {
         if(logNewAssertionsToFile) deleteAndCreateNewFile(newAssertionsFile)

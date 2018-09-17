@@ -13,25 +13,23 @@ import java.util.*
  */
 class VerticalNonAlignedConsoleMsgFormatter(val context: FormattingContext) : MsgFormatter(), FieldWriter {
     val sb = StringBuilder()
-    var writtenAtLeastOneField = false
+    var atLeastOneFieldWritten = false
 
     override fun getFieldVisitor(): FieldVisitor {
-        return VerticalNonAlignedHtmlFieldFormatter(this, context)
+        return VerticalNonAlignedConsoleFieldFormatter(this, context, msgTextEffect)
     }
 
     override fun writeField(value: String) {
-        if(!writtenAtLeastOneField){
-            sb.append("<div class='fields")
-            if(msgTextEffect != TextEffect.NONE) sb.append(" ${msgTextEffect.htmlClass}")
-            sb.append("'>\n")
+        if(atLeastOneFieldWritten){
+            sb.append("\n")
         }
+        atLeastOneFieldWritten = true
         sb.append(value)
-        writtenAtLeastOneField = true
     }
 
     override fun format(): String{
         context.fields.accept(this)
-        sb.append("</div>\n")
+        sb.append("\n")
         return sb.toString()
     }
 }

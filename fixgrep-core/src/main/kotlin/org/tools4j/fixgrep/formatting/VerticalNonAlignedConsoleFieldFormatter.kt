@@ -1,7 +1,9 @@
 package org.tools4j.fixgrep.formatting
 
+import com.google.common.base.Strings.padEnd
 import org.tools4j.fix.AnnotationPosition
 import org.tools4j.fix.AnnotationPositions
+import org.tools4j.fixgrep.texteffect.MiscTextEffect
 import org.tools4j.fixgrep.texteffect.TextEffect
 
 /**
@@ -9,115 +11,57 @@ import org.tools4j.fixgrep.texteffect.TextEffect
  * Date: 7/12/2018
  * Time: 6:39 AM
  */
-class VerticalNonAlignedConsoleFieldFormatter(val fieldWriter: FieldWriter, formattingContext: FormattingContext): FieldFormatter(formattingContext) {
-    val sb = StringBuilder()
-
-    override fun onFieldBody() {
-        sb.append("<div class='field")
-        if(context.annotationPositions != AnnotationPositions.NO_ANNOTATION) sb.append(" annotatedField")
-        if(fieldTextEffect != TextEffect.NONE) sb.append(" " + fieldTextEffect.htmlClass)
-        sb.append("'>")
-        appendTag(sb)
-        appendEquals(sb)
-        appendValue(sb)
-        sb.append("</div>\n")
+class VerticalNonAlignedConsoleFieldFormatter(val fieldWriter: FieldWriter, formattingContext: FormattingContext, msgTextEffect: TextEffect): AbstractConsoleFieldFormatter(formattingContext , msgTextEffect) {
+    companion object {
+        val INDENT_CHAR_COUNT = 8
     }
+    val sb = StringBuilder()
 
     override fun finish() {
         fieldWriter.writeField(sb.toString())
     }
 
+    val indent: String by lazy {
+        " ".repeat(INDENT_CHAR_COUNT)
+    }
+
+    override fun onFieldBody() {
+        independentlyMarkupTagsAndValuesAsBold = context.boldTagAndValue && !msgTextEffect.contains(MiscTextEffect.Bold) && !fieldTextEffect.contains(MiscTextEffect.Bold)
+        fieldTextEffect = msgTextEffect.compositeWith(fieldTextEffect)
+        sb.append(fieldTextEffect.consoleTextBefore)
+        appendTag(sb)
+        appendEquals(sb)
+        appendValue(sb)
+        sb.append(fieldTextEffect.consoleTextAfter)
+    }
+
     override fun onGroupEnter() {
         if(!context.indentGroupRepeats) return
         doFirst {
-            sb.append("<div class='group'>\n")
-        }
-        doLast {
-            sb.append("<div class='group-repeats'>\n")
+            sb.append(indent.repeat(context.groupStack.size() - 1))
         }
     }
 
     override fun onGroupRepeatEnter() {
         if(!context.indentGroupRepeats) return
         doFirst {
-            sb.append("<div class='group-repeat'>\n")
-            sb.append("<div class='group-repeat-number'>${context.groupStack.getCurrentRepeatNumber()}.</div>\n")
+            sb.append(indent.repeat(context.groupStack.size() - 1))
+            sb.append(" ".repeat(INDENT_CHAR_COUNT/2)).append("${context.groupStack.getCurrentRepeatNumber()}.".padEnd(INDENT_CHAR_COUNT/2, ' '))
         }
     }
 
     override fun onGroupRepeatExit() {
-        if(!context.indentGroupRepeats) return
-        doFirst {
-            sb.append("</div><!--group repeat exit-->\n")
-        }
+        //noop
     }
 
     override fun onGroupExit() {
+        //noop
+    }
+
+    override fun onSubsequentFieldInGroupRepeat() {
         if(!context.indentGroupRepeats) return
         doFirst {
-            sb.append("</div><!--group repeats exit-->\n")
-            sb.append("</div><!--group exit-->\n")
+            sb.append(indent.repeat(context.groupStack.size()))
         }
-    }
-
-    private fun appendEquals(sb: StringBuilder) {
-        sb.append("<span class='equals");
-        if(context.boldTagAndValue) sb.append(" bold")
-        sb.append("'>=</span>")
-    }
-
-    fun appendTag(sb: StringBuilder): String{
-        if(context.annotationPositions.tagAnnotationPosition == AnnotationPosition.NONE){
-            this.appendTagRaw(sb)
-        } else if(context.annotationPositions.tagAnnotationPosition == AnnotationPosition.BEFORE){
-            if(tagAnnotation != null) appendTagAnnotation(sb)
-            this.appendTagRaw(sb)
-        } else {
-            this.appendTagRaw(sb)
-            if(tagAnnotation != null) appendTagAnnotation(sb)
-        }
-        return sb.toString()
-    }
-
-    fun appendTagAnnotation(sb: StringBuilder) {
-        sb.append("<span class='tag-annotation")
-        sb.append("'>[")
-        sb.append(tagAnnotation)
-        sb.append("]</span>")
-    }
-
-    fun appendTagRaw(sb: StringBuilder) {
-        sb.append("<span class='tag-raw")
-        if (context.boldTagAndValue) sb.append(" bold")
-        sb.append("'>").append(tagRaw).append("</span>")
-    }
-
-    private fun appendValue(sb: StringBuilder) {
-        if (context.annotationPositions.valueAnnotationPosition == AnnotationPosition.NONE) {
-            appendValueRaw(sb)
-        } else if (context.annotationPositions.valueAnnotationPosition == AnnotationPosition.BEFORE) {
-            appendValueAnnotation(sb)
-            appendValueRaw(sb)
-        } else {
-            appendValueRaw(sb)
-            appendValueAnnotation(sb)
-        }
-    }
-
-    fun appendValueAnnotation(sb: StringBuilder) {
-        if (valueAnnotation != null){
-            sb.append("<span class='value-annotation'>[").append(valueAnnotation).append("]</span>")
-        }
-    }
-
-    fun appendValueRaw(sb: StringBuilder) {
-        sb.append("<span class='value-raw")
-        if (context.boldTagAndValue) sb.append(" bold")
-        sb.append("'")
-        sb.append(">").append(valueRaw).append("</span>")
-    }
-
-    companion object {
-        val INDENT_CHAR_COUNT = 4
     }
 }

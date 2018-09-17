@@ -61,6 +61,34 @@ object AnsiHelper{
 
 }
 
+public fun String.padStart(length: Int, lengthOfString: Int, padChar: Char = ' '): String{
+    //append padding
+    val sb = StringBuilder()
+    val padding = length - lengthOfString
+    if(padding < 1) return this
+    for(i in 1 .. padding){
+        sb.append(padChar)
+    }
+
+    //append actual string
+    sb.append(this)
+    return sb.toString()
+}
+
+public fun String.padEnd(length: Int, lengthOfString: Int, padChar: Char = ' '): String{
+    //append actual string
+    val sb = StringBuilder()
+    sb.append(this)
+
+    //append padding
+    val padding = length - lengthOfString
+    if(padding < 1) return this
+    for(i in 1 .. padding){
+        sb.append(padChar)
+    }
+    return sb.toString()
+}
+
 public fun String.padStringContainingAnsiCodesEnd(length: Int, padChar: Char = ' '): String
         = (this as CharSequence).padStringContainingAnsiCodesEnd(length, padChar).toString()
 

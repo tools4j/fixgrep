@@ -1,0 +1,57 @@
+package org.tools4j.fixgrep.formatting
+
+import org.tools4j.fixgrep.texteffect.MiscTextEffect
+import org.tools4j.fixgrep.texteffect.TextEffect
+
+/**
+ * User: benjw
+ * Date: 7/12/2018
+ * Time: 6:39 AM
+ */
+class VerticalAlignedConsoleFieldFormatter(val msgFormatter: VerticalAlignedConsoleMsgFormatter, formattingContext: FormattingContext, msgTextEffect: TextEffect): AbstractConsoleFieldFormatter(formattingContext , msgTextEffect) {
+    var fieldDetails: VerticalAlignedConsoleMsgFormatter.FieldDetails? = null
+
+    override fun finish() {
+        msgFormatter.writeFieldDetails(fieldDetails!!)
+    }
+
+    override fun onFieldBody() {
+        //Run first without any bold effects, so that we can gather the widths of the fields
+        val tagWithoutTextEffectsSb = StringBuilder()
+        appendTag(tagWithoutTextEffectsSb)
+
+        val equalsWithoutTextEffectsSb = StringBuilder()
+        appendEquals(equalsWithoutTextEffectsSb)
+
+        val valueWithoutTextEffectsSb = StringBuilder()
+        appendValue(valueWithoutTextEffectsSb)
+
+        //Now set bold property if required
+        independentlyMarkupTagsAndValuesAsBold = context.boldTagAndValue && !msgTextEffect.contains(MiscTextEffect.Bold) && !fieldTextEffect.contains(MiscTextEffect.Bold)
+        fieldTextEffect = msgTextEffect.compositeWith(fieldTextEffect)
+
+        //Second run WITH bold effects (if configured that way)
+        fieldTextEffect.consoleTextBefore
+        val tagWithTextEffectsSb = StringBuilder()
+        appendTag(tagWithTextEffectsSb)
+
+        val equalsWithTextEffectsSb = StringBuilder()
+        appendEquals(equalsWithTextEffectsSb)
+
+        val valueWithTextEffectsSb = StringBuilder()
+        appendValue(valueWithTextEffectsSb)
+
+        fieldTextEffect.consoleTextAfter
+
+        fieldDetails = VerticalAlignedConsoleMsgFormatter.FieldDetails(
+            tagWithoutTextEffectsSb.toString(),
+            equalsWithoutTextEffectsSb.toString(),
+            valueWithoutTextEffectsSb.toString(),
+            tagWithTextEffectsSb.toString(),
+            equalsWithTextEffectsSb.toString(),
+            valueWithTextEffectsSb.toString(),
+            fieldTextEffect.consoleTextBefore,
+            fieldTextEffect.consoleTextAfter
+        )
+    }
+}
