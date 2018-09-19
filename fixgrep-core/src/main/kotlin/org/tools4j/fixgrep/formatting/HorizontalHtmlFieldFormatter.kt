@@ -11,16 +11,18 @@ import org.tools4j.fixgrep.texteffect.TextEffect
  */
 class HorizontalHtmlFieldFormatter(val fieldWriter: FieldWriter, context: FormattingContext): FieldFormatter(context) {
     override fun finish() {
-        val sb = StringBuilder()
-        sb.append("<span class='field")
-        if(context.annotationPositions != AnnotationPositions.NO_ANNOTATION) sb.append(" annotatedField")
-        if(fieldTextEffect != TextEffect.NONE) sb.append(" " + fieldTextEffect.htmlClass)
-        sb.append("'>")
-        appendTag(sb)
-        appendEquals(sb)
-        appendValue(sb)
-        sb.append("</span>")
-        fieldWriter.writeField(sb.toString())
+        if(context.displayTag(tagRaw!!)) {
+            val sb = StringBuilder()
+            sb.append("<span class='field")
+            if (context.annotationPositions != AnnotationPositions.NO_ANNOTATION) sb.append(" annotatedField")
+            if (fieldTextEffect != TextEffect.NONE) sb.append(" " + fieldTextEffect.htmlClass)
+            sb.append("'>")
+            appendTag(sb)
+            appendEquals(sb)
+            appendValue(sb)
+            sb.append("</span>")
+            fieldWriter.writeField(sb.toString())
+        }
     }
 
     private fun appendEquals(sb: StringBuilder) {

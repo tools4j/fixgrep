@@ -125,57 +125,7 @@ class VerticalConsoleTest extends Specification {
 
     def 'test vertical non-aligned format - indentGroupRepeats - prices'(){
         when:
-        final String fix =
-            "35=X${a}" +
-            "262=ABCD${a}" +
-            "268=4${a}" +
-            "279=0${a}" +
-            "269=0${a}" +
-            "9999=unknownField${a}" +
-            "55=AUD/USD${a}" +
-            "270=1.12345${a}" +
-            "453=2${a}" +
-            "448=Ben${a}" +
-            "9999=unknownField${a}" +
-            "447=A${a}" +
-            "448=Andy${a}" +
-            "279=0${a}" +
-            "269=1${a}" +
-            "453=2${a}" +
-            "448=Amy${a}" +
-            "447=A${a}" +
-            "448=Milly${a}" +
-            "55=AUD/USD${a}" +
-            "270=1.12355${a}" +
-            "279=0${a}" +
-            "269=1${a}" +
-            "453=2${a}" +
-            "448=Amy${a}" +
-            "447=A${a}" +
-            "448=Milly${a}" +
-            "9999=unknownField${a}" +
-            "55=AUD/USD${a}" +
-            "270=1.12355${a}" +
-            "279=0${a}" +
-            "269=0${a}" +
-            "55=AUD/USD${a}" +
-            "270=1.12335${a}" +
-            "453=2${a}" +
-            "448=Amy${a}" +
-            "447=A${a}" +
-            "448=Milly${a}" +
-            "215=2${a}" + //NoRoutingIDs
-            "216=3${a}" + //RoutingType
-            "217=routingId1${a}" + //RoutingID
-            "216=2${a}" + //RoutingType
-            "217=routingId2${a}" + //RoutingID
-            "1022=asdf${a}\n" +
-
-            "35=D${a}" +
-            "11=ABC${a}" +
-            "55=AUD/USD"
-
-        def lines = parseToLines('', fix)
+        def lines = parseToLines('', VerticalTestUtil.PRICES_FIX)
 
         then:
         assert lines == """================================================================================
@@ -225,65 +175,94 @@ class VerticalConsoleTest extends Specification {
     2.  [RoutingType]\u001B[1m216\u001B[22m\u001B[1m=\u001B[22m\u001B[1m2\u001B[22m[TARGET_LIST]
         [RoutingID]\u001B[1m217\u001B[22m\u001B[1m=\u001B[22m\u001B[1mroutingId2\u001B[22m
 [MDFeedType]\u001B[1m1022\u001B[22m\u001B[1m=\u001B[22m\u001B[1masdf\u001B[22m
+"""
+    }
 
+
+    def 'test vertical non-aligned format - indentGroupRepeats - prices - excluding some fields'(){
+        when:
+        def lines = parseToLines('-e 268,448,55,215,217,270', VerticalTestUtil.PRICES_FIX)
+
+        then:
+        assert lines == """================================================================================
+\u001B[33mMarketDataIncrementalRefresh\u001B[0m
 ================================================================================
-\u001B[36mNewOrderSingle\u001B[0m
+[MsgType]\u001B[1m35\u001B[22m\u001B[1m=\u001B[22m\u001B[1mX\u001B[22m[MARKETDATAINCREMENTALREFRESH]
+[MDReqID]\u001B[1m262\u001B[22m\u001B[1m=\u001B[22m\u001B[1mABCD\u001B[22m
+    1.  [MDUpdateAction]\u001B[1m279\u001B[22m\u001B[1m=\u001B[22m\u001B[1m0\u001B[22m[NEW]
+        [MDEntryType]\u001B[1m269\u001B[22m\u001B[1m=\u001B[22m\u001B[1m0\u001B[22m[BID]
+        \u001B[1m9999\u001B[22m\u001B[1m=\u001B[22m\u001B[1munknownField\u001B[22m
+        [NoPartyIDs]\u001B[1m453\u001B[22m\u001B[1m=\u001B[22m\u001B[1m2\u001B[22m
+            1.  \u001B[1m9999\u001B[22m\u001B[1m=\u001B[22m\u001B[1munknownField\u001B[22m
+                [PartyIDSource]\u001B[1m447\u001B[22m\u001B[1m=\u001B[22m\u001B[1mA\u001B[22m[AUSTRALIAN_TAX_FILE_NUMBER]
+    2.  [MDUpdateAction]\u001B[1m279\u001B[22m\u001B[1m=\u001B[22m\u001B[1m0\u001B[22m[NEW]
+        [MDEntryType]\u001B[1m269\u001B[22m\u001B[1m=\u001B[22m\u001B[1m1\u001B[22m[OFFER]
+        [NoPartyIDs]\u001B[1m453\u001B[22m\u001B[1m=\u001B[22m\u001B[1m2\u001B[22m
+            1.  [PartyIDSource]\u001B[1m447\u001B[22m\u001B[1m=\u001B[22m\u001B[1mA\u001B[22m[AUSTRALIAN_TAX_FILE_NUMBER]
+    3.  [MDUpdateAction]\u001B[1m279\u001B[22m\u001B[1m=\u001B[22m\u001B[1m0\u001B[22m[NEW]
+        [MDEntryType]\u001B[1m269\u001B[22m\u001B[1m=\u001B[22m\u001B[1m1\u001B[22m[OFFER]
+        [NoPartyIDs]\u001B[1m453\u001B[22m\u001B[1m=\u001B[22m\u001B[1m2\u001B[22m
+            1.  [PartyIDSource]\u001B[1m447\u001B[22m\u001B[1m=\u001B[22m\u001B[1mA\u001B[22m[AUSTRALIAN_TAX_FILE_NUMBER]
+            2.  \u001B[1m9999\u001B[22m\u001B[1m=\u001B[22m\u001B[1munknownField\u001B[22m
+    4.  [MDUpdateAction]\u001B[1m279\u001B[22m\u001B[1m=\u001B[22m\u001B[1m0\u001B[22m[NEW]
+        [MDEntryType]\u001B[1m269\u001B[22m\u001B[1m=\u001B[22m\u001B[1m0\u001B[22m[BID]
+        [NoPartyIDs]\u001B[1m453\u001B[22m\u001B[1m=\u001B[22m\u001B[1m2\u001B[22m
+            1.  [PartyIDSource]\u001B[1m447\u001B[22m\u001B[1m=\u001B[22m\u001B[1mA\u001B[22m[AUSTRALIAN_TAX_FILE_NUMBER]
+    1.  [RoutingType]\u001B[1m216\u001B[22m\u001B[1m=\u001B[22m\u001B[1m3\u001B[22m[BLOCK_FIRM]
+    2.  [RoutingType]\u001B[1m216\u001B[22m\u001B[1m=\u001B[22m\u001B[1m2\u001B[22m[TARGET_LIST]
+[MDFeedType]\u001B[1m1022\u001B[22m\u001B[1m=\u001B[22m\u001B[1masdf\u001B[22m
+"""
+    }
+    
+
+    def 'test vertical non-aligned format - indentGroupRepeats - simple prices'(){
+        when:
+        final String fix =
+                "35=X${a}" +
+                "262=ABCD${a}" +
+                "268=3${a}" +
+                "279=0${a}" +
+                "269=0${a}" +
+                "55=AUD/USD${a}" +
+                "270=1.12345${a}" +
+                "279=0${a}" +
+                "269=1${a}" +
+                "55=AUD/USD${a}" +
+                "270=1.12355${a}" +
+                "279=0${a}" +
+                "269=1${a}" +
+                "55=AUD/USD${a}" +
+                "270=1.12355${a}" +
+                "1022=FeedA${a}"
+
+        def lines = parseToLines('', fix)
+
+        then:
+        assert lines == """================================================================================
+\u001B[33mMarketDataIncrementalRefresh\u001B[0m
 ================================================================================
-[MsgType]\u001B[1m35\u001B[22m\u001B[1m=\u001B[22m\u001B[1mD\u001B[22m[NEWORDERSINGLE]
-[ClOrdID]\u001B[1m11\u001B[22m\u001B[1m=\u001B[22m\u001B[1mABC\u001B[22m
-[Symbol]\u001B[1m55\u001B[22m\u001B[1m=\u001B[22m\u001B[1mAUD/USD\u001B[22m
+[MsgType]\u001B[1m35\u001B[22m\u001B[1m=\u001B[22m\u001B[1mX\u001B[22m[MARKETDATAINCREMENTALREFRESH]
+[MDReqID]\u001B[1m262\u001B[22m\u001B[1m=\u001B[22m\u001B[1mABCD\u001B[22m
+[NoMDEntries]\u001B[1m268\u001B[22m\u001B[1m=\u001B[22m\u001B[1m3\u001B[22m
+    1.  [MDUpdateAction]\u001B[1m279\u001B[22m\u001B[1m=\u001B[22m\u001B[1m0\u001B[22m[NEW]
+        [MDEntryType]\u001B[1m269\u001B[22m\u001B[1m=\u001B[22m\u001B[1m0\u001B[22m[BID]
+        [Symbol]\u001B[1m55\u001B[22m\u001B[1m=\u001B[22m\u001B[1mAUD/USD\u001B[22m
+        [MDEntryPx]\u001B[1m270\u001B[22m\u001B[1m=\u001B[22m\u001B[1m1.12345\u001B[22m
+    2.  [MDUpdateAction]\u001B[1m279\u001B[22m\u001B[1m=\u001B[22m\u001B[1m0\u001B[22m[NEW]
+        [MDEntryType]\u001B[1m269\u001B[22m\u001B[1m=\u001B[22m\u001B[1m1\u001B[22m[OFFER]
+        [Symbol]\u001B[1m55\u001B[22m\u001B[1m=\u001B[22m\u001B[1mAUD/USD\u001B[22m
+        [MDEntryPx]\u001B[1m270\u001B[22m\u001B[1m=\u001B[22m\u001B[1m1.12355\u001B[22m
+    3.  [MDUpdateAction]\u001B[1m279\u001B[22m\u001B[1m=\u001B[22m\u001B[1m0\u001B[22m[NEW]
+        [MDEntryType]\u001B[1m269\u001B[22m\u001B[1m=\u001B[22m\u001B[1m1\u001B[22m[OFFER]
+        [Symbol]\u001B[1m55\u001B[22m\u001B[1m=\u001B[22m\u001B[1mAUD/USD\u001B[22m
+        [MDEntryPx]\u001B[1m270\u001B[22m\u001B[1m=\u001B[22m\u001B[1m1.12355\u001B[22m
+[MDFeedType]\u001B[1m1022\u001B[22m\u001B[1m=\u001B[22m\u001B[1mFeedA\u001B[22m
 """
     }
 
     def 'test vertical non-aligned format - DO NOT indentGroupRepeats - prices'(){
         when:
-        final String fix =
-                "35=X${a}" +
-                        "262=ABCD${a}" +
-                        "268=4${a}" +
-                        "279=0${a}" +
-                        "269=0${a}" +
-                        "9999=unknownField${a}" +
-                        "55=AUD/USD${a}" +
-                        "270=1.12345${a}" +
-                        "453=2${a}" +
-                        "448=Ben${a}" +
-                        "9999=unknownField${a}" +
-                        "447=A${a}" +
-                        "448=Andy${a}" +
-                        "279=0${a}" +
-                        "269=1${a}" +
-                        "453=2${a}" +
-                        "448=Amy${a}" +
-                        "447=A${a}" +
-                        "448=Milly${a}" +
-                        "55=AUD/USD${a}" +
-                        "270=1.12355${a}" +
-                        "279=0${a}" +
-                        "269=1${a}" +
-                        "453=2${a}" +
-                        "448=Amy${a}" +
-                        "447=A${a}" +
-                        "448=Milly${a}" +
-                        "9999=unknownField${a}" +
-                        "55=AUD/USD${a}" +
-                        "270=1.12355${a}" +
-                        "279=0${a}" +
-                        "269=0${a}" +
-                        "55=AUD/USD${a}" +
-                        "270=1.12335${a}" +
-                        "453=2${a}" +
-                        "448=Amy${a}" +
-                        "447=A${a}" +
-                        "448=Milly${a}" +
-                        "215=2${a}" + //NoRoutingIDs
-                        "216=3${a}" + //RoutingType
-                        "217=routingId1${a}" + //RoutingID
-                        "216=2${a}" + //RoutingType
-                        "217=routingId2${a}" + //RoutingID
-                        "1022=asdf"; //MDFeedType
-
-        def lines = parseToLines('--indent-group-repeats=false', fix)
+        def lines = parseToLines('--indent-group-repeats=false', VerticalTestUtil.PRICES_FIX)
 
         then:
         assert lines == """================================================================================

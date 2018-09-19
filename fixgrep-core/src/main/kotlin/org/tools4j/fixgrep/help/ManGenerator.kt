@@ -37,15 +37,19 @@ class ManGenerator(val docWriterFactory: DocWriterFactory, val configAndArgument
                 "8=FIX.5.2^A9=67^A35=G^A9=232^A11=C32^A38=1465320^A40=2^A44=100.12",
                 "8=FIX.5.2^A9=23^A35=8^A11=C32^A150=5^A151=1465320^A14=0^A44=100.12",
                 "8=FIX.5.2^A9=56^A35=8^A11=C32^A150=2^A151=1072490^A14=392830^A44=100.00")
+        val horizontalFormatExample = SingleExample(horizontalFormatLines, listOf("-e", "8,9,35"), docWriterFactory).toFormattedString()
 
-        val verticalNonAlignedFormatLines = listOf(
+        val verticalAlignedLines = listOf(
                 "8=FIX.5.2^A9=232^A35=D^A11=C28^A55=AUD/USD^A54=2^A38=1464820^A44=100.026",
                 "8=FIX.5.2^A9=54^A35=8^A11=C28^A150=0^A151=1464820^A14=0^A44=100.02")
+        val verticalAlignedFormatExample = SingleExample(verticalAlignedLines, listOf("-e", "8,9,35", "-V", "-A"), docWriterFactory).toFormattedString()
+
+        val verticalNonAlignedLines = listOf(
+                "35=X^A262=ABCD^A268=3^A279=0^A269=0^A55=AUD/USD^A270=1.12345^A279=0^A269=1^A55=AUD/USD^A270=1.12355^A279=0^A269=1^A55=AUD/USD^A270=1.12355^A1022=FeedA^A"
+        )
+        val verticalNonAlignedFormatExample = SingleExample(verticalNonAlignedLines, listOf("-e", "8,9,35", "-V"), docWriterFactory).toFormattedString()
 
         val writer = docWriterFactory.createNew()
-        val horizontalFormatExample = SingleExample(horizontalFormatLines, listOf("-e", "8,9,35"), docWriterFactory).toFormattedString(false, false)
-        val verticalAlignedFormatExample = SingleExample(verticalNonAlignedFormatLines, listOf("-e", "8,9,35", "-V", "-A"), docWriterFactory).toFormattedString(false, false)
-        val verticalNonAlignedFormatExample = SingleExample(verticalNonAlignedFormatLines, listOf("-e", "8,9,35", "-V"), docWriterFactory).toFormattedString(false, false)
 
         with(writer) {
             writeHeading(1, "What is fixgrep")
@@ -55,7 +59,7 @@ class ManGenerator(val docWriterFactory: DocWriterFactory, val configAndArgument
             write(horizontalFormatExample)
             writeHeading(2, "Vertical format (aligned):")
             write(verticalAlignedFormatExample)
-            writeHeading(2, "Vertical format (non-aligned, with group indentation):")
+            writeHeading(2, "Vertical format (non-aligned):")
             write(verticalNonAlignedFormatExample)
             writeHeading(2, "fixgrep features:")
             startList()
@@ -144,11 +148,11 @@ class ManGenerator(val docWriterFactory: DocWriterFactory, val configAndArgument
             endSection()
             writeHeading(2, "Output 'modes'")
             writeHeading(3, "Horizontal format, e.g:")
-            write(example.toFormattedString(false, false))
+            write(example.toFormattedString())
             writeHeading(3, "Vertical format (non-aligned), e.g:")
-            write(example.toFormattedString(true, false))
+            write(example.toFormattedString())
             writeHeading(3, "Vertical format (aligned), e.g:")
-            write(example.toFormattedString(true, true))
+            write(example.toFormattedString())
             writeLn("There are four different properties that can be used to define how output fix is formatted.")
             startList()
             listItem(Option.output_format_horizontal_console.key)

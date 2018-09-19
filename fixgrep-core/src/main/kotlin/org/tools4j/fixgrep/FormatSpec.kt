@@ -158,7 +158,8 @@ class FormatSpec(
     }
 
     fun getMsgFormatter(fields: Fields): MsgFormatter {
-        val formattingContext = FormattingContext(fields, tagAnnotationPositions, !suppressBoldTagsAndValues, indentGroupRepeats, fixSpec)
+        val indentGroupRepeatsForThisMessage = indentGroupRepeats && sortByTags.isEmpty()
+        val formattingContext = FormattingContext(fields, tagAnnotationPositions, !suppressBoldTagsAndValues, indentGroupRepeatsForThisMessage, onlyIncludeTags, excludeTags, fixSpec)
         if(formatInHtml){
             if(verticalFormat) {
                 if(alignVerticalColumns) {

@@ -46,7 +46,7 @@ abstract class AbstractConsoleFieldFormatter(val formattingContext: FormattingCo
         if(tagAnnotation != null) sb.append("[").append(tagAnnotation).append("]")
     }
 
-    internal fun  appendValue(sb: StringBuilder) {
+    internal fun appendValue(sb: StringBuilder) {
         if (context.annotationPositions.valueAnnotationPosition == AnnotationPosition.NONE) {
             appendValueRaw(sb)
         } else if (context.annotationPositions.valueAnnotationPosition == AnnotationPosition.BEFORE) {

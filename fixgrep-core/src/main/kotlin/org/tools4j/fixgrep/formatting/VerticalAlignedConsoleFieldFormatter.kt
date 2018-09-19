@@ -12,46 +12,50 @@ class VerticalAlignedConsoleFieldFormatter(val msgFormatter: VerticalAlignedCons
     var fieldDetails: VerticalAlignedConsoleMsgFormatter.FieldDetails? = null
 
     override fun finish() {
-        msgFormatter.writeFieldDetails(fieldDetails!!)
+        if(context.displayTag(tagRaw!!)) {
+            msgFormatter.writeFieldDetails(fieldDetails!!)
+        }
     }
 
     override fun onFieldBody() {
-        //Run first without any bold effects, so that we can gather the widths of the fields
-        val tagWithoutTextEffectsSb = StringBuilder()
-        appendTag(tagWithoutTextEffectsSb)
+        if(context.displayTag(tagRaw!!)) {
+            //Run first without any bold effects, so that we can gather the 'true' widths of the fields
+            val tagWithoutTextEffectsSb = StringBuilder()
+            appendTag(tagWithoutTextEffectsSb)
 
-        val equalsWithoutTextEffectsSb = StringBuilder()
-        appendEquals(equalsWithoutTextEffectsSb)
+            val equalsWithoutTextEffectsSb = StringBuilder()
+            appendEquals(equalsWithoutTextEffectsSb)
 
-        val valueWithoutTextEffectsSb = StringBuilder()
-        appendValue(valueWithoutTextEffectsSb)
+            val valueWithoutTextEffectsSb = StringBuilder()
+            appendValue(valueWithoutTextEffectsSb)
 
-        //Now set bold property if required
-        independentlyMarkupTagsAndValuesAsBold = context.boldTagAndValue && !msgTextEffect.contains(MiscTextEffect.Bold) && !fieldTextEffect.contains(MiscTextEffect.Bold)
-        fieldTextEffect = msgTextEffect.compositeWith(fieldTextEffect)
+            //Now the 'normal' run, setting bold property if required
+            independentlyMarkupTagsAndValuesAsBold = context.boldTagAndValue && !msgTextEffect.contains(MiscTextEffect.Bold) && !fieldTextEffect.contains(MiscTextEffect.Bold)
+            fieldTextEffect = msgTextEffect.compositeWith(fieldTextEffect)
 
-        //Second run WITH bold effects (if configured that way)
-        fieldTextEffect.consoleTextBefore
-        val tagWithTextEffectsSb = StringBuilder()
-        appendTag(tagWithTextEffectsSb)
+            //Second run WITH bold effects (if configured that way)
+            fieldTextEffect.consoleTextBefore
+            val tagWithTextEffectsSb = StringBuilder()
+            appendTag(tagWithTextEffectsSb)
 
-        val equalsWithTextEffectsSb = StringBuilder()
-        appendEquals(equalsWithTextEffectsSb)
+            val equalsWithTextEffectsSb = StringBuilder()
+            appendEquals(equalsWithTextEffectsSb)
 
-        val valueWithTextEffectsSb = StringBuilder()
-        appendValue(valueWithTextEffectsSb)
+            val valueWithTextEffectsSb = StringBuilder()
+            appendValue(valueWithTextEffectsSb)
 
-        fieldTextEffect.consoleTextAfter
-
-        fieldDetails = VerticalAlignedConsoleMsgFormatter.FieldDetails(
-            tagWithoutTextEffectsSb.toString(),
-            equalsWithoutTextEffectsSb.toString(),
-            valueWithoutTextEffectsSb.toString(),
-            tagWithTextEffectsSb.toString(),
-            equalsWithTextEffectsSb.toString(),
-            valueWithTextEffectsSb.toString(),
-            fieldTextEffect.consoleTextBefore,
             fieldTextEffect.consoleTextAfter
-        )
+
+            fieldDetails = VerticalAlignedConsoleMsgFormatter.FieldDetails(
+                    tagWithoutTextEffectsSb.toString(),
+                    equalsWithoutTextEffectsSb.toString(),
+                    valueWithoutTextEffectsSb.toString(),
+                    tagWithTextEffectsSb.toString(),
+                    equalsWithTextEffectsSb.toString(),
+                    valueWithTextEffectsSb.toString(),
+                    fieldTextEffect.consoleTextBefore,
+                    fieldTextEffect.consoleTextAfter
+            )
+        }
     }
 }

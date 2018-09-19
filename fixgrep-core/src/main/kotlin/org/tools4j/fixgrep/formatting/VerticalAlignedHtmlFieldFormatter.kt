@@ -14,16 +14,18 @@ import java.util.*
  */
 class VerticalAlignedHtmlFieldFormatter(val fieldWriter: FieldWriter, formattingContext: FormattingContext): FieldFormatter(formattingContext) {
     override fun finish() {
-        val sb = StringBuilder()
-        sb.append("<tr class='field")
-        if(context.annotationPositions != AnnotationPositions.NO_ANNOTATION) sb.append(" annotatedField")
-        if(fieldTextEffect != TextEffect.NONE) sb.append(" " + fieldTextEffect.htmlClass)
-        sb.append("'>")
-        appendTag(sb)
-        appendEquals(sb)
-        appendValue(sb)
-        sb.append("</tr>\n")
-        fieldWriter.writeField(sb.toString())
+        if(context.displayTag(tagRaw!!)) {
+            val sb = StringBuilder()
+            sb.append("<tr class='field")
+            if (context.annotationPositions != AnnotationPositions.NO_ANNOTATION) sb.append(" annotatedField")
+            if (fieldTextEffect != TextEffect.NONE) sb.append(" " + fieldTextEffect.htmlClass)
+            sb.append("'>")
+            appendTag(sb)
+            appendEquals(sb)
+            appendValue(sb)
+            sb.append("</tr>\n")
+            fieldWriter.writeField(sb.toString())
+        }
     }
 
     private fun appendEquals(sb: StringBuilder) {

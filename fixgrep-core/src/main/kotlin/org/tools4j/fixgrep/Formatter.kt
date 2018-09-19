@@ -113,8 +113,6 @@ class Formatter (val spec: FormatSpec){
         if (formattedString.contains("\${msgFix}")) {
             var fields = FieldsAnnotator(inputFields, spec.fixSpec, spec.tagAnnotationPositions).fields
             fields = fields.sortBy(spec.sortByTags)
-            fields = fields.exclude(spec.excludeTags)
-            fields = fields.includeOnly(spec.onlyIncludeTags)
             if(!spec.suppressColors) fields = spec.highlight.apply(fields)
             val formattedFix = spec.getMsgFormatter(fields).format()
             formattedString = formattedString.replace("\${msgFix}", formattedFix)

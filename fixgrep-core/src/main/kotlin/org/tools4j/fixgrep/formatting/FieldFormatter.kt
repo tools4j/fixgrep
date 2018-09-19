@@ -4,6 +4,8 @@ import org.tools4j.fix.*
 import org.tools4j.fixgrep.highlights.HighlightedField
 import org.tools4j.fixgrep.texteffect.CompositeTextEffect
 import org.tools4j.fixgrep.texteffect.TextEffect
+import java.util.*
+import java.util.concurrent.ConcurrentSkipListSet
 
 /**
  * User: benjw
@@ -23,8 +25,8 @@ abstract class FieldFormatter(val context: FormattingContext): FieldVisitor, Val
             field = CompositeTextEffect(field, value)
         }
 
-    private val doFirsts = ArrayList<() -> (Any)>()
-    private val doLasts = ArrayList<() -> (Any)>()
+    private val doFirsts = Vector<() -> (Any)>()
+    private val doLasts = Vector<() -> (Any)>()
 
     override fun visit(field: Field) {
         //TEXT EFFECTS
@@ -127,5 +129,9 @@ abstract class FieldFormatter(val context: FormattingContext): FieldVisitor, Val
 
     open fun onFieldBody(){
         //no-op
+    }
+
+    fun voidFunc(): Unit {
+        return
     }
 }

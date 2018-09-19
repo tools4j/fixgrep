@@ -96,56 +96,7 @@ class VerticalHtmlTest extends Specification {
 
     def 'test vertical non-aligned format - indentGroupRepeats - prices'(){
         when:
-        final String fix =
-            "35=X${a}" +
-            "262=ABCD${a}" +
-            "268=4${a}" +
-                "279=0${a}" +
-                "269=0${a}" +
-                "9999=unknownField${a}" +
-                "55=AUD/USD${a}" +
-                "270=1.12345${a}" +
-                "453=2${a}" +
-                    "448=Ben${a}" +
-                    "9999=unknownField${a}" +
-                    "447=A${a}" +
-                    "448=Andy${a}" +
-
-                "279=0${a}" +
-                "269=1${a}" +
-                "453=2${a}" +
-                    "448=Amy${a}" +
-                    "447=A${a}" +
-                    "448=Milly${a}" +
-                "55=AUD/USD${a}" +
-                "270=1.12355${a}" +
-
-                "279=0${a}" +
-                "269=1${a}" +
-                "453=2${a}" +
-                    "448=Amy${a}" +
-                    "447=A${a}" +
-                    "448=Milly${a}" +
-                    "9999=unknownField${a}" +
-                "55=AUD/USD${a}" +
-                "270=1.12355${a}" +
-
-                "279=0${a}" +
-                "269=0${a}" +
-                "55=AUD/USD${a}" +
-                "270=1.12335${a}" +
-                "453=2${a}" +
-                    "448=Amy${a}" +
-                    "447=A${a}" +
-                    "448=Milly${a}" +
-            "215=2${a}" + //NoRoutingIDs
-                "216=3${a}" + //RoutingType
-                "217=routingId1${a}" + //RoutingID
-                "216=2${a}" + //RoutingType
-                "217=routingId2${a}" + //RoutingID
-            "1022=asdf"; //MDFeedType
-
-        def lines = parseToLines('', fix)
+        def lines = parseToLines('', VerticalTestUtil.PRICES_FIX)
 
         then:
         assert lines == """<div class='msg-header'>
@@ -269,58 +220,116 @@ class VerticalHtmlTest extends Specification {
 <br/>"""
     }
 
+
+    def 'test vertical non-aligned format - indentGroupRepeats - prices - excluding some fields'(){
+        when:
+        def lines = parseToLines('-e 268,448,55,215,217,270', VerticalTestUtil.PRICES_FIX)
+
+        then:
+        assert lines == """<div class='msg-header'>
+================================================================================</br>
+<span class='FgYellow'>MarketDataIncrementalRefresh</span><br/>
+================================================================================
+</div>
+<div class='fields'>
+<div class='field annotatedField'><span class='tag-annotation'>[MsgType]</span><span class='tag-raw bold'>35</span><span class='equals bold'>=</span><span class='value-raw bold'>X</span><span class='value-annotation'>[MARKETDATAINCREMENTALREFRESH]</span></div>
+<div class='field annotatedField'><span class='tag-annotation'>[MDReqID]</span><span class='tag-raw bold'>262</span><span class='equals bold'>=</span><span class='value-raw bold'>ABCD</span></div>
+<div class='group'>
+<div class='group-repeats'>
+<div class='group-repeat'>
+<div class='group-repeat-number'>1.</div>
+<div class='field annotatedField'><span class='tag-annotation'>[MDUpdateAction]</span><span class='tag-raw bold'>279</span><span class='equals bold'>=</span><span class='value-raw bold'>0</span><span class='value-annotation'>[NEW]</span></div>
+<div class='field annotatedField'><span class='tag-annotation'>[MDEntryType]</span><span class='tag-raw bold'>269</span><span class='equals bold'>=</span><span class='value-raw bold'>0</span><span class='value-annotation'>[BID]</span></div>
+<div class='field annotatedField'><span class='tag-raw bold'>9999</span><span class='equals bold'>=</span><span class='value-raw bold'>unknownField</span></div>
+<div class='group'>
+<div class='field annotatedField'><span class='tag-annotation'>[NoPartyIDs]</span><span class='tag-raw bold'>453</span><span class='equals bold'>=</span><span class='value-raw bold'>2</span></div>
+<div class='group-repeats'>
+<div class='group-repeat'>
+<div class='group-repeat-number'>1.</div>
+<div class='field annotatedField'><span class='tag-raw bold'>9999</span><span class='equals bold'>=</span><span class='value-raw bold'>unknownField</span></div>
+<div class='field annotatedField'><span class='tag-annotation'>[PartyIDSource]</span><span class='tag-raw bold'>447</span><span class='equals bold'>=</span><span class='value-raw bold'>A</span><span class='value-annotation'>[AUSTRALIAN_TAX_FILE_NUMBER]</span></div>
+</div><!--group repeat exit-->
+<div class='group-repeat'>
+<div class='group-repeat-number'>2.</div>
+</div><!--group repeat exit-->
+</div><!--group repeats exit-->
+</div><!--group exit-->
+</div><!--group repeat exit-->
+<div class='group-repeat'>
+<div class='group-repeat-number'>2.</div>
+<div class='field annotatedField'><span class='tag-annotation'>[MDUpdateAction]</span><span class='tag-raw bold'>279</span><span class='equals bold'>=</span><span class='value-raw bold'>0</span><span class='value-annotation'>[NEW]</span></div>
+<div class='field annotatedField'><span class='tag-annotation'>[MDEntryType]</span><span class='tag-raw bold'>269</span><span class='equals bold'>=</span><span class='value-raw bold'>1</span><span class='value-annotation'>[OFFER]</span></div>
+<div class='group'>
+<div class='field annotatedField'><span class='tag-annotation'>[NoPartyIDs]</span><span class='tag-raw bold'>453</span><span class='equals bold'>=</span><span class='value-raw bold'>2</span></div>
+<div class='group-repeats'>
+<div class='group-repeat'>
+<div class='group-repeat-number'>1.</div>
+<div class='field annotatedField'><span class='tag-annotation'>[PartyIDSource]</span><span class='tag-raw bold'>447</span><span class='equals bold'>=</span><span class='value-raw bold'>A</span><span class='value-annotation'>[AUSTRALIAN_TAX_FILE_NUMBER]</span></div>
+</div><!--group repeat exit-->
+<div class='group-repeat'>
+<div class='group-repeat-number'>2.</div>
+</div><!--group repeat exit-->
+</div><!--group repeats exit-->
+</div><!--group exit-->
+</div><!--group repeat exit-->
+<div class='group-repeat'>
+<div class='group-repeat-number'>3.</div>
+<div class='field annotatedField'><span class='tag-annotation'>[MDUpdateAction]</span><span class='tag-raw bold'>279</span><span class='equals bold'>=</span><span class='value-raw bold'>0</span><span class='value-annotation'>[NEW]</span></div>
+<div class='field annotatedField'><span class='tag-annotation'>[MDEntryType]</span><span class='tag-raw bold'>269</span><span class='equals bold'>=</span><span class='value-raw bold'>1</span><span class='value-annotation'>[OFFER]</span></div>
+<div class='group'>
+<div class='field annotatedField'><span class='tag-annotation'>[NoPartyIDs]</span><span class='tag-raw bold'>453</span><span class='equals bold'>=</span><span class='value-raw bold'>2</span></div>
+<div class='group-repeats'>
+<div class='group-repeat'>
+<div class='group-repeat-number'>1.</div>
+<div class='field annotatedField'><span class='tag-annotation'>[PartyIDSource]</span><span class='tag-raw bold'>447</span><span class='equals bold'>=</span><span class='value-raw bold'>A</span><span class='value-annotation'>[AUSTRALIAN_TAX_FILE_NUMBER]</span></div>
+</div><!--group repeat exit-->
+<div class='group-repeat'>
+<div class='group-repeat-number'>2.</div>
+<div class='field annotatedField'><span class='tag-raw bold'>9999</span><span class='equals bold'>=</span><span class='value-raw bold'>unknownField</span></div>
+</div><!--group repeat exit-->
+</div><!--group repeats exit-->
+</div><!--group exit-->
+</div><!--group repeat exit-->
+<div class='group-repeat'>
+<div class='group-repeat-number'>4.</div>
+<div class='field annotatedField'><span class='tag-annotation'>[MDUpdateAction]</span><span class='tag-raw bold'>279</span><span class='equals bold'>=</span><span class='value-raw bold'>0</span><span class='value-annotation'>[NEW]</span></div>
+<div class='field annotatedField'><span class='tag-annotation'>[MDEntryType]</span><span class='tag-raw bold'>269</span><span class='equals bold'>=</span><span class='value-raw bold'>0</span><span class='value-annotation'>[BID]</span></div>
+<div class='group'>
+<div class='field annotatedField'><span class='tag-annotation'>[NoPartyIDs]</span><span class='tag-raw bold'>453</span><span class='equals bold'>=</span><span class='value-raw bold'>2</span></div>
+<div class='group-repeats'>
+<div class='group-repeat'>
+<div class='group-repeat-number'>1.</div>
+<div class='field annotatedField'><span class='tag-annotation'>[PartyIDSource]</span><span class='tag-raw bold'>447</span><span class='equals bold'>=</span><span class='value-raw bold'>A</span><span class='value-annotation'>[AUSTRALIAN_TAX_FILE_NUMBER]</span></div>
+</div><!--group repeat exit-->
+<div class='group-repeat'>
+<div class='group-repeat-number'>2.</div>
+</div><!--group repeat exit-->
+</div><!--group repeats exit-->
+</div><!--group exit-->
+</div><!--group repeat exit-->
+</div><!--group repeats exit-->
+</div><!--group exit-->
+<div class='group'>
+<div class='group-repeats'>
+<div class='group-repeat'>
+<div class='group-repeat-number'>1.</div>
+<div class='field annotatedField'><span class='tag-annotation'>[RoutingType]</span><span class='tag-raw bold'>216</span><span class='equals bold'>=</span><span class='value-raw bold'>3</span><span class='value-annotation'>[BLOCK_FIRM]</span></div>
+</div><!--group repeat exit-->
+<div class='group-repeat'>
+<div class='group-repeat-number'>2.</div>
+<div class='field annotatedField'><span class='tag-annotation'>[RoutingType]</span><span class='tag-raw bold'>216</span><span class='equals bold'>=</span><span class='value-raw bold'>2</span><span class='value-annotation'>[TARGET_LIST]</span></div>
+</div><!--group repeat exit-->
+</div><!--group repeats exit-->
+</div><!--group exit-->
+<div class='field annotatedField'><span class='tag-annotation'>[MDFeedType]</span><span class='tag-raw bold'>1022</span><span class='equals bold'>=</span><span class='value-raw bold'>asdf</span></div>
+</div>
+
+<br/>"""
+    }
+
     def 'test vertical non-aligned format - DO NOT indentGroupRepeats - prices'(){
         when:
-        final String fix =
-                "35=X${a}" +
-                        "262=ABCD${a}" +
-                        "268=4${a}" +
-                        "279=0${a}" +
-                        "269=0${a}" +
-                        "9999=unknownField${a}" +
-                        "55=AUD/USD${a}" +
-                        "270=1.12345${a}" +
-                        "453=2${a}" +
-                        "448=Ben${a}" +
-                        "9999=unknownField${a}" +
-                        "447=A${a}" +
-                        "448=Andy${a}" +
-
-                        "279=0${a}" +
-                        "269=1${a}" +
-                        "453=2${a}" +
-                        "448=Amy${a}" +
-                        "447=A${a}" +
-                        "448=Milly${a}" +
-                        "55=AUD/USD${a}" +
-                        "270=1.12355${a}" +
-
-                        "279=0${a}" +
-                        "269=1${a}" +
-                        "453=2${a}" +
-                        "448=Amy${a}" +
-                        "447=A${a}" +
-                        "448=Milly${a}" +
-                        "9999=unknownField${a}" +
-                        "55=AUD/USD${a}" +
-                        "270=1.12355${a}" +
-
-                        "279=0${a}" +
-                        "269=0${a}" +
-                        "55=AUD/USD${a}" +
-                        "270=1.12335${a}" +
-                        "453=2${a}" +
-                        "448=Amy${a}" +
-                        "447=A${a}" +
-                        "448=Milly${a}" +
-                        "215=2${a}" + //NoRoutingIDs
-                        "216=3${a}" + //RoutingType
-                        "217=routingId1${a}" + //RoutingID
-                        "216=2${a}" + //RoutingType
-                        "217=routingId2${a}" + //RoutingID
-                        "1022=asdf"; //MDFeedType
-
-        def lines = parseToLines('--indent-group-repeats=false', fix)
+        def lines = parseToLines('--indent-group-repeats=false', VerticalTestUtil.PRICES_FIX)
 
         then:
         assert lines == """<div class='msg-header'>

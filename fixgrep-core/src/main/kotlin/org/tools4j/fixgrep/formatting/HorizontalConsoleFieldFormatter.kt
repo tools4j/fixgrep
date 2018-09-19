@@ -18,16 +18,20 @@ class HorizontalConsoleFieldFormatter(val fieldWriter: FieldWriter, formattingCo
     val sb = StringBuilder()
 
     override fun finish() {
-        fieldWriter.writeField(sb.toString())
+        if(context.displayTag(tagRaw!!)) {
+            fieldWriter.writeField(sb.toString())
+        }
     }
 
     override fun onFieldBody() {
-        independentlyMarkupTagsAndValuesAsBold = context.boldTagAndValue && !msgTextEffect.contains(MiscTextEffect.Bold) && !fieldTextEffect.contains(MiscTextEffect.Bold)
-        fieldTextEffect = msgTextEffect.compositeWith(fieldTextEffect)
-        sb.append(fieldTextEffect.consoleTextBefore)
-        appendTag(sb)
-        appendEquals(sb)
-        appendValue(sb)
-        sb.append(fieldTextEffect.consoleTextAfter)
+        if(context.displayTag(tagRaw!!)) {
+            independentlyMarkupTagsAndValuesAsBold = context.boldTagAndValue && !msgTextEffect.contains(MiscTextEffect.Bold) && !fieldTextEffect.contains(MiscTextEffect.Bold)
+            fieldTextEffect = msgTextEffect.compositeWith(fieldTextEffect)
+            sb.append(fieldTextEffect.consoleTextBefore)
+            appendTag(sb)
+            appendEquals(sb)
+            appendValue(sb)
+            sb.append(fieldTextEffect.consoleTextAfter)
+        }
     }
 }

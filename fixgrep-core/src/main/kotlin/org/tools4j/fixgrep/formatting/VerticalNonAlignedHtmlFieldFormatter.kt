@@ -13,14 +13,16 @@ class VerticalNonAlignedHtmlFieldFormatter(val fieldWriter: FieldWriter, formatt
     val sb = StringBuilder()
 
     override fun onFieldBody() {
-        sb.append("<div class='field")
-        if(context.annotationPositions != AnnotationPositions.NO_ANNOTATION) sb.append(" annotatedField")
-        if(fieldTextEffect != TextEffect.NONE) sb.append(" " + fieldTextEffect.htmlClass)
-        sb.append("'>")
-        appendTag(sb)
-        appendEquals(sb)
-        appendValue(sb)
-        sb.append("</div>\n")
+        if(context.displayTag(super.tagRaw!!)) {
+            sb.append("<div class='field")
+            if (context.annotationPositions != AnnotationPositions.NO_ANNOTATION) sb.append(" annotatedField")
+            if (fieldTextEffect != TextEffect.NONE) sb.append(" " + fieldTextEffect.htmlClass)
+            sb.append("'>")
+            appendTag(sb)
+            appendEquals(sb)
+            appendValue(sb)
+            sb.append("</div>\n")
+        }
     }
 
     override fun finish() {

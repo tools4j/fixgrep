@@ -5,6 +5,7 @@ import org.tools4j.fix.spec.FixSpecDefinition
 import org.tools4j.fixgrep.highlights.HighlightedFields
 import org.tools4j.fixgrep.texteffect.TextEffect
 import java.util.*
+import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * User: benjw
@@ -14,9 +15,10 @@ import java.util.*
 class VerticalNonAlignedConsoleMsgFormatter(val context: FormattingContext) : MsgFormatter(), FieldWriter {
     val sb = StringBuilder()
     var atLeastOneFieldWritten = false
+    val pendingGroupRepeatNumber = AtomicBoolean(false)
 
     override fun getFieldVisitor(): FieldVisitor {
-        return VerticalNonAlignedConsoleFieldFormatter(this, context, msgTextEffect)
+        return VerticalNonAlignedConsoleFieldFormatter(this, context, msgTextEffect, pendingGroupRepeatNumber)
     }
 
     override fun writeField(value: String) {
