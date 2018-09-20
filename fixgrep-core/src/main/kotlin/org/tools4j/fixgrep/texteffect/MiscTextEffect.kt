@@ -18,6 +18,11 @@ class MiscTextEffect(consoleTextBefore: String, consoleTextAfter: String, overri
                 "",
                 "console")
 
+        val Pre = MiscTextEffect(
+                "",
+                "",
+                "pre")
+
         @JvmStatic
         fun contains(expression: String): Boolean {
             return expression.toLowerCase() == "bold"

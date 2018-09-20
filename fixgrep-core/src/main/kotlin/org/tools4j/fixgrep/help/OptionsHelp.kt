@@ -211,7 +211,7 @@ the less 'interesting' fix fields, such as BeginString, BodyLength or Checksum. 
 
         optionsHelp.add(OptionHelp(Option.man, "Displays man page.", null,"Running with this command will print out the man page.  You can also use 'fixgrep man' (no dashes) which will run man and pipe it into less -R which preserves ansi colors.  Or 'fixgrep man online' which will launch the gixgrep online help into your default browser."))
 
-        optionsHelp.add(OptionHelp(Option.html, "Displays results in HTML format.", "page","There are two possible arguments for this option 'page' and 'raw'.  'page' is assumed as the default if no argument is given.  When in 'page' mode, then the HTML will be contain proper headers and footers and will include styles to format the output FIX.  If in 'raw' format, just the HTML required to render the tags is output.  No styles, header or footers will be output."))
+        optionsHelp.add(OptionHelp(Option.html, "Displays results in HTML format.", "page","There are two possible arguments for this option 'page' and 'raw'.  'page' is assumed as the default if no argument is given.  When in 'page' mode, then the HTML will be contain proper headers and footers and will include styles to format the output FIX.  If using the 'page' argument (or specifying no argument), you can also used the -l argument if running on a operating system with a browser, to launch the page into your default browser.   If in 'raw' format, just the HTML required to render the tags is output.  No styles, header or footers will be output."))
 
         optionsHelp.add(OptionHelp(Option.gimme_css, "Downloads a copy of the default fixgrep.css file to use with any fixgrep output formatted in HTML.", null,null))
 

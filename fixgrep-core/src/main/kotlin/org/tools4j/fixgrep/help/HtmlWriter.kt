@@ -16,6 +16,11 @@ import org.tools4j.fixgrep.texteffect.TextEffect
 open class HtmlWriter(): DocWriter {
     val sb = StringBuilder()
 
+    override fun writeCode(str: String): HtmlWriter {
+        write("<xmp>$str</xmp>")
+        return this
+    }
+
     override fun startList(): DocWriter {
         write("<ul>\n")
         return this

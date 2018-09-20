@@ -29,6 +29,11 @@ class ConsoleTextWriter(): DocWriter {
         return this
     }
 
+    override fun writeCode(str: String): ConsoleTextWriter {
+        write(str)
+        return this
+    }
+
     override fun startListItem(): DocWriter {
         write("* ")
         return this

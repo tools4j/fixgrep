@@ -37,42 +37,43 @@ class ManGenerator(val docWriterFactory: DocWriterFactory, val configAndArgument
                 "8=FIX.5.2^A9=67^A35=G^A9=232^A11=C32^A38=1465320^A40=2^A44=100.12",
                 "8=FIX.5.2^A9=23^A35=8^A11=C32^A150=5^A151=1465320^A14=0^A44=100.12",
                 "8=FIX.5.2^A9=56^A35=8^A11=C32^A150=2^A151=1072490^A14=392830^A44=100.00")
-        val horizontalFormatExample = SingleExample(horizontalFormatLines, listOf("-e", "8,9,35"), docWriterFactory).toFormattedString()
+        val horizontalFormatExample = SingleExample(horizontalFormatLines, listOf("-e", "8,9"), docWriterFactory).toFormattedString()
 
         val verticalAlignedLines = listOf(
                 "8=FIX.5.2^A9=232^A35=D^A11=C28^A55=AUD/USD^A54=2^A38=1464820^A44=100.026",
                 "8=FIX.5.2^A9=54^A35=8^A11=C28^A150=0^A151=1464820^A14=0^A44=100.02")
-        val verticalAlignedFormatExample = SingleExample(verticalAlignedLines, listOf("-e", "8,9,35", "-V", "-A"), docWriterFactory).toFormattedString()
+        val verticalAlignedFormatExample = SingleExample(verticalAlignedLines, listOf("-e", "8,9", "-V", "-A"), docWriterFactory).toFormattedString()
 
         val verticalNonAlignedLines = listOf(
                 "35=X^A262=ABCD^A268=3^A279=0^A269=0^A55=AUD/USD^A270=1.12345^A279=0^A269=1^A55=AUD/USD^A270=1.12355^A279=0^A269=1^A55=AUD/USD^A270=1.12355^A1022=FeedA^A"
         )
-        val verticalNonAlignedFormatExample = SingleExample(verticalNonAlignedLines, listOf("-e", "8,9,35", "-V"), docWriterFactory).toFormattedString()
+        val verticalNonAlignedFormatExample = SingleExample(verticalNonAlignedLines, listOf("-e", "8,9", "-V"), docWriterFactory).toFormattedString()
 
         val writer = docWriterFactory.createNew()
 
         with(writer) {
             writeHeading(1, "What is fixgrep")
             writeLn("fixgrep is a command line utility for making FIX protocol messages more readable.")
-            writeLn("Some brief examples:")
-            writeHeading(2, "Horizontal format:")
-            write(horizontalFormatExample)
-            writeHeading(2, "Vertical format (aligned):")
-            write(verticalAlignedFormatExample)
-            writeHeading(2, "Vertical format (non-aligned):")
-            write(verticalNonAlignedFormatExample)
             writeHeading(2, "fixgrep features:")
             startList()
             listItem("Annotated fix tags and values.")
-            listItem("Customization of input/output delimiters.")
             listItem("Highlighting of tags and lines matching specified criteria.")
+            listItem("Indenting of repeating groups (when in vertical format)")
             listItem("'Hiding' of 'uninteresting' tags.")
             listItem("Coloring of message by type.")
             listItem("Customized regex for extraction of FIX message from your logs.")
             listItem("Sort by tags to bring more important tags to the front of the message.")
             listItem("Exclusion of 'uninteresting' messages from the outputted FIX")
             listItem("Output to text or html format")
+            listItem("Customization of input/output delimiters.")
             endList()
+            writeHeading(2, "Some brief examples")
+            writeHeading(3, "Horizontal format:")
+            write(horizontalFormatExample)
+            writeHeading(3, "Vertical format (aligned):")
+            write(verticalAlignedFormatExample)
+            writeHeading(3, "Vertical format (non-aligned):")
+            write(verticalNonAlignedFormatExample)
             return toFormattedText()
         }
     }
@@ -134,31 +135,22 @@ class ManGenerator(val docWriterFactory: DocWriterFactory, val configAndArgument
     }
 
     private fun howToUseOutputFormats(): String {
-        val lines = listOf(
-                "8=FIX.5.2^A9=232^A35=D^A11=C28^A55=AUD/USD^A54=2^A38=1464820^A44=100.026",
-                "8=FIX.5.2^A9=54^A35=8^A11=C28^A150=0^A151=1464820^A14=0^A44=100.02")
-        val example = SingleExample(lines, listOf("-e", "8,9,35"), docWriterFactory)
         val writer = docWriterFactory.createNew()
         with(writer) {
             writeHeading(1, "Output formatting")
-            writeLn("fixgrep supports a msgType of different output formats.")
-            writeLn("Consider the following fix messages as an input:")
-            startSection(MiscTextEffect.Console)
-            lines.forEach { writeLn(it) }
-            endSection()
-            writeHeading(2, "Output 'modes'")
-            writeHeading(3, "Horizontal format, e.g:")
-            write(example.toFormattedString())
-            writeHeading(3, "Vertical format (non-aligned), e.g:")
-            write(example.toFormattedString())
-            writeHeading(3, "Vertical format (aligned), e.g:")
-            write(example.toFormattedString())
+            writeLn("fixgrep supports two basic styles of formatting:")
+            startList()
+            listItem("Horizontal format")
+            listItem("Vertical format (aligned & non-aligned)")
+            endList()
+            writeLn("And each of these formats can be viewed in the console, or as html.")
             writeLn("There are four different properties that can be used to define how output fix is formatted.")
             startList()
-            listItem(Option.output_format_horizontal_console.key)
-            listItem(Option.output_format_horizontal_html.key)
-            listItem(Option.output_format_vertical_console.key)
-            listItem(Option.output_format_vertical_html.key)
+                listItem(Option.output_format_horizontal_console.key)
+                listItem(Option.output_format_horizontal_html.key)
+                listItem(Option.output_format_vertical_console.key)
+                listItem(Option.output_format_vertical_html.key)
+                endList()
             writeLn("Each of these properties is a specification of how each fix message should be displayed in the corresponding display mode.")
             writeLn("These properties are free text, and can include any of the following tokens:")
             addTable()
@@ -171,8 +163,21 @@ class ManGenerator(val docWriterFactory: DocWriterFactory, val configAndArgument
                     .startNewRow().addCell("${'$'}{n}").addCell("displays the value of that fix tag.  e.g. for a NewOrderSingle ${'$'}{35} would print 'D'")
                     .startNewRow().addCell("${'$'}n").addCell("(note, no braces), will print the captured regex group 'n' from the regex specified in the parameter input-line-format (or property input.line.format).")
                     .endTable()
+            writeLn("Below you can see the default values for these settings.  They can be overridden in the application.properties file that ships with fixgrep.")
+            addTable()
+                    .startNewRow().addCell(Option.output_format_horizontal_console.key).addCell(inCellCode(configAndArguments.config.getAsString(Option.output_format_horizontal_console)))
+                    .startNewRow().addCell(Option.output_format_horizontal_html.key).addCell(inCellCode(configAndArguments.config.getAsString(Option.output_format_horizontal_html)))
+                    .startNewRow().addCell(Option.output_format_vertical_console.key).addCell(inCellCode(configAndArguments.config.getAsString(Option.output_format_vertical_console)))
+                    .startNewRow().addCell(Option.output_format_vertical_html.key).addCell(inCellCode(configAndArguments.config.getAsString(Option.output_format_vertical_html)))
+                    .endTable()
             return toFormattedText()
         }
+    }
+
+    private fun inCellCode(str: String): String{
+        val writer = docWriterFactory.createNew()
+        writer.writeCode(str)
+        return writer.toFormattedText()
     }
 
     private fun howToConfigure(): String {

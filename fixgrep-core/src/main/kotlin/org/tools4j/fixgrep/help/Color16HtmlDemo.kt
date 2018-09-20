@@ -16,11 +16,11 @@ class Color16HtmlDemo(val docWriterFactory: DocWriterFactory) {
         val writer = docWriterFactory.createNew()
         if(!writer.isHtml()) return ""
         writer.writeLn("</br>If your console supports 16 colors, this demo should show a table like the one below:")
-        writer.writeHeading(2, "Foreground colors:")
+        writer.writeHeading(3, "Foreground colors")
         writer.startSection(CompositeTextEffect(linkedSetOf(MiscTextEffect.Console, HtmlOnlyTextEffect("color16-div"))))
         writer.writeLn(Ansi16ForegroundColor.listAsHtml())
         writer.endSection()
-        writer.writeHeading(2, "Background colors:")
+        writer.writeHeading(3, "Background colors")
         writer.startSection(CompositeTextEffect(linkedSetOf(MiscTextEffect.Console, HtmlOnlyTextEffect("color16-div"))))
         writer.writeLn(Ansi16BackgroundColor.listAsHtml())
         writer.endSection()

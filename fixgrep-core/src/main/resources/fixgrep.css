@@ -58,6 +58,7 @@ body div.footer {
 
 .console {
     white-space: nowrap;
+    #unicode-bidi: embed;
     background-color: #333;
     color: white;
     padding: 0.5em;
@@ -151,6 +152,7 @@ h2 {
     font-size: 1.75em;
     padding-bottom: 0;
     margin-bottom: 0.2em;
+    margin-top: 0.75em;
 }
 
 h3, h3 a {
@@ -167,6 +169,7 @@ h3 {
     font-size: 1.5em;
     padding-bottom: 0;
     margin-bottom: 0.2em;
+    margin-top: 0.75em;
 }
 
 div.example-description {
@@ -193,6 +196,10 @@ div.example-list h2, div.example-list h2 a{
 
 div.option h2 a{
     margin-bottom: 1.0em;
+}
+
+div.option h3 {
+    font-size: 1.0em;
 }
 
 div.option {
@@ -225,6 +232,10 @@ div.group-repeat-number {
 
 div.group-repeats {
     padding-left: 4em;
+}
+
+td xmp{
+    margin-bottom: 0;
 }
 
 .FgBlack{ color: black; }

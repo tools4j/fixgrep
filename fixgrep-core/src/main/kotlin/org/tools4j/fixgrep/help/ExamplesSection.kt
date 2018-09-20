@@ -88,7 +88,7 @@ class ExamplesSection(val docWriterFactory: DocWriterFactory) {
                 .writeLn("Let's consider these log lines as input:")
 
         docWriter.startSection(MiscTextEffect.Console)
-        lines.forEach { docWriter.writeLn(it) }
+        lines2.forEach { docWriter.writeLn(it) }
         docWriter.endSection()
 
                 .writeLn("There is an options (-F --output-format-horizontal-console), which can be used to configure the regular expression that is run against every log line.  By default this is:")
@@ -98,7 +98,7 @@ class ExamplesSection(val docWriterFactory: DocWriterFactory) {
 
         examplesList.add("<no arguments>", "Parsing new log lines with no arguments.")
         examplesList.add("--input-line-format ^(\\d{4}-[01]\\d-[0-3]\\d[T\\s][0-2]\\d:[0-5]\\d:[0-5]\\d[\\.,]\\d+)?.*?(35=.*\$)", "Oh no! In the example above, fixgrep assumed the line containing '...mid price captured at time 07:12:34.011=100.3' contained a FIX message because of the '11=100.3' text, it then printed out: '[ClOrdID]11=100.3'.  To remedy this, we can use a more specific regex:")
-        examplesList.add("--output-format-horizontal-console ${'$'}1:${'$'}{msgFix} --input-line-format ^(\\d{4}-[01]\\d-[0-3]\\d[T\\s][0-2]\\d:[0-5]\\d:[0-5]\\d[\\.,]\\d+)?.*?(35=.*\$)", "That's better.  Now that log line is not picked up.  Let's assume we do wish to show the date at the start of each line.  We do this by specifying $DOLLAR$1 at the start of the output-format-horizontal-console.")
+        examplesList.add("--output-format-horizontal-console ${'$'}1:${'$'}{msgFix} --input-line-format ^(\\d{4}-[01]\\d-[0-3]\\d[T\\s][0-2]\\d:[0-5]\\d:[0-5]\\d[\\.,]\\d+)?.*?(35=.*\$)", "That's better.  Now that log line is not picked up.  Let's assume we do wish to show the date at the start of each line.  We do this by specifying ${DOLLAR}1 at the start of the output-format-horizontal-console.")
         examplesList.add("--output-format-horizontal-console ${'$'}1:${'$'}{msgFix} --input-line-format ^\\d{4}-[01]\\d-[0-3]\\d[T\\s]([0-2]\\d:[0-5]\\d:[0-5]\\d[\\.,]\\d+)?.*?(35=.*\$)", "Whilst we're at it, let's just print out the time by slightly modifying the position of the first set of capturing brackets, as the whole date becomes a bit redundant.")
         examplesList.add("--output-format-horizontal-console ${DOLLAR}1:${DOLLAR}{msgTypeName}:${'$'}{msgFix} --input-line-format ^\\d{4}-[01]\\d-[0-3]\\d[T\\s]([0-2]\\d:[0-5]\\d:[0-5]\\d[\\.,]\\d+)?.*?(35=.*\$)", "We can use another pre-defined tag ${DOLLAR}{msgTypeName} to print out not just the messageType, but also the execType if it's an execution report.")
         examplesList.add("--output-format-horizontal-console ${DOLLAR}1:${'$'}{msgColor}${DOLLAR}{msgTypeName}${'$'}{colorReset}:${'$'}{msgFix} --input-line-format ^\\d{4}-[01]\\d-[0-3]\\d[T\\s]([0-2]\\d:[0-5]\\d:[0-5]\\d[\\.,]\\d+)?.*?(35=.*\$)", "And add coloring per message type")
@@ -112,6 +112,24 @@ class ExamplesSection(val docWriterFactory: DocWriterFactory) {
                 "output.format.horizontal.console=${DOLLAR}1:${'$'}{msgColor}${DOLLAR}{msgTypeName}${'$'}{colorReset}:${'$'}{msgFix}\n" +
                 "input.line.format=^\\d{4}-[01]\\d-[0-3]\\d[T\\s]([0-2]\\d:[0-5]\\d:[0-5]\\d[\\.,]\\d+)?.*?(35=.*\$)", MiscTextEffect.Console)
 
+        examplesList.end()
+
+        docWriter.writeHeading(2, "Vertical formatting")
+                .writeLn("So far we've looked at examples using horizontal formatting.  Sometimes vertical formatting is preferable.  Especially when looking at messages containing repeating groups such as prices.")
+                .writeLn("Let's consider this single log lines as input.  It contains 3 repeating prices:")
+
+        val lines3 = listOf(
+                "35=X|262=ABCD|268=3|279=0|269=0|55=AUD/USD|270=1.12345|279=0|269=1|55=AUD/USD|270=1.12355|279=0|269=1|55=AUD/USD|270=1.12355|1022=FeedA|"
+        )
+
+        docWriter.startSection(MiscTextEffect.Console)
+        lines3.forEach { docWriter.writeLn(it) }
+        docWriter.endSection()
+
+        examplesList = ExamplesList(lines3, docWriter)
+        examplesList.add("-V", "The default vertical format is 'non-aligned', which has the benefit that repeating groups can be indented.")
+        examplesList.add("-V -G false", "To turn off repeating group indenting, set the -G parameter to 'false'.")
+        examplesList.add("-V -A", "And to use 'aligned' vertical formatting, use the -A flag.  Note that when using 'aligned' vertical formatting, you will not be able to use indented repeating groups.")
         examplesList.end()
 
         return docWriter.toFormattedText()

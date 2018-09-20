@@ -38,4 +38,5 @@ interface DocWriter {
     fun startListItem(): DocWriter
     fun endListItem(): DocWriter
     fun endList(): DocWriter
+    fun writeCode(str: String): DocWriter
 }
