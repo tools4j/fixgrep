@@ -31,7 +31,7 @@ class FixGrepOnLargeFileTest extends Specification {
         assert assertTwoFilesAreEqual(actualOutputFile, expectedOutputFile)
 
         cleanup:
-        actualOutputFile.delete()
+        if(actualOutputFile.exists()) actualOutputFile.delete()
     }
 
     boolean assertTwoFilesAreEqual(final File actualFile, final BufferedReader expected) {

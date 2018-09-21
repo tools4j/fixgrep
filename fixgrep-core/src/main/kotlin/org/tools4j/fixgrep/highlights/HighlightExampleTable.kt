@@ -2,6 +2,7 @@ package org.tools4j.fixgrep.highlights
 
 import org.tools4j.fixgrep.FormatSpec
 import org.tools4j.fixgrep.Formatter
+import org.tools4j.fixgrep.WrappedFormatter
 import org.tools4j.fixgrep.help.DocWriter
 import org.tools4j.fixgrep.help.TableBuilder
 import org.tools4j.fixgrep.texteffect.HtmlOnlyTextEffect
@@ -26,7 +27,7 @@ class HighlightExampleTable(val fix: String, val tableBuilder: TableBuilder, val
         tableBuilder.startNewRow().addTableHeaderCell("expression").addTableHeaderCell("message")
         for(expression in examples){
             val highlight = HighlightParser().parse(expression)
-            val formatter = Formatter(spec.copyWithModifications(highlight = highlight))
+            val formatter = WrappedFormatter(spec.copyWithModifications(highlight = highlight))
             val formattedString = formatter.format(fix)
             tableBuilder.startNewRow().addCell("-h " + expression).addCell(formattedString!!, MiscTextEffect.Console)
         }

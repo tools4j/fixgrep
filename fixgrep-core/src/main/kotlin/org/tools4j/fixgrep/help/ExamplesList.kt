@@ -4,6 +4,7 @@ import org.tools4j.fix.Fix50SP2FixSpecFromClassPath
 import org.tools4j.fixgrep.ConfigBuilder
 import org.tools4j.fixgrep.FormatSpec
 import org.tools4j.fixgrep.Formatter
+import org.tools4j.fixgrep.WrappedFormatter
 import org.tools4j.fixgrep.texteffect.HtmlOnlyTextEffect
 import org.tools4j.fixgrep.texteffect.MiscTextEffect
 import org.tools4j.properties.ConfigImpl
@@ -37,7 +38,7 @@ class ExamplesList (val fixLines: List<String>, val docWriter: DocWriter) {
         val configAndArguments = ConfigBuilder(example.args, ConfigImpl(configOverrides)).configAndArguments
 
         val spec = FormatSpec(config = configAndArguments.config)
-        val formatter = Formatter(spec)
+        val formatter = WrappedFormatter(spec)
         docWriter.startSection(MiscTextEffect.Console)
         for(line in fixLines){
             val formattedLine = formatter.format(line)

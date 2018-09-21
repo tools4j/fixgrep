@@ -9,6 +9,7 @@ import java.io.File
 import java.io.InputStream
 import java.io.OutputStream
 import java.io.PrintStream
+import java.util.function.Consumer
 
 
 /**
@@ -26,6 +27,9 @@ class FixGrep(val inputStream: InputStream?, val outputStream: OutputStream, val
     val printStream: PrintStream by lazy {
         PrintStream(outputStream)
     }
+
+    val fixLineHandler = DefaultFixLineHandler(formatter, Consumer{printStream.println(it)})
+    val lineHandler = DefaultLineHandler(formatter.spec, fixLineHandler)
 
     fun go() {
         try {
@@ -107,17 +111,7 @@ class FixGrep(val inputStream: InputStream?, val outputStream: OutputStream, val
         while (true) {
             val line = reader.readLine()
             if (line == null) break
-            else handleLine(line)
-        }
-    }
-
-    private fun handleLine(line: String) {
-        val matcher = formatter.logLineRegexPattern.matcher(line)
-        if (matcher.find()) {
-            val formattedLine = formatter.format(matcher)
-            if(formattedLine != null){
-                printStream.println(formattedLine)
-            }
+            else lineHandler.handle(line)
         }
     }
 }
