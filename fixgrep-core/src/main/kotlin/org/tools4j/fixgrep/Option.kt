@@ -12,7 +12,6 @@ import joptsimple.util.RegexMatcher
 enum class Option(val abbreviation: String?, val longForm: String, val otherForm: String? = null, val canHaveEquivalentPropertyInPropertiesFile: Boolean, val canBePassedAsCommandLineOption: Boolean, val commandLineOptionConfig: ((OptionSpecBuilder) -> Any)?){
     tag_annotations("a", "tag-annotations", null, true, true, {it.withRequiredArg().ofType(String::class.java).withValuesConvertedBy(RegexMatcher.regex("(none|outsideAnnotated|insideAnnotated|ba|ab|aa|bb|b_|a_|_a|_b|__)"))}),
     align_vertical_columns("A", "align-vertical-columns", "align", true, true, {}),
-//    group_by_order("g", "group-by-order", null, true, true, {it.withOptionalArg().ofType(String::class.java)}),
     input_delimiter("d", "input-delimiter", "input-delim", true, true, {it.withRequiredArg().ofType(String::class.java)}),
     exclude_tags("e", "exclude-tags", null, true, true, {it.withRequiredArg().ofType(Integer::class.java).withValuesSeparatedBy(",")}),
     to_file("f", "to-file", null, false, true, {it.withOptionalArg().ofType(String::class.java)}),
@@ -23,6 +22,7 @@ enum class Option(val abbreviation: String?, val longForm: String, val otherForm
     include_only_messages_of_type("m", "include-only-messages-of-type", null, true, true, {it.withRequiredArg().ofType(String::class.java).withValuesSeparatedBy(",")}),
     suppress_colors("n", "suppress-colors", "no-color", true, true, {}),
     output_delimiter("o", "output-delimiter", "output-delim", true, true, {it.withRequiredArg().ofType(String::class.java)}),
+    group_by_order("O", "group-by-order", null, true, true, {}),
     piped_input("p", "piped-input", "piped", false, true, {}),
     suppress_bold_tags_and_values("q", "suppress-bold-tags-and-values", null, true, true, {}),
     input_line_format("r", "input-line-format", null, true, true, {it.withRequiredArg().ofType(String::class.java)}),
@@ -45,7 +45,9 @@ enum class Option(val abbreviation: String?, val longForm: String, val otherForm
     online_help_url(null, "online-help-url", null, true, false, null),
     download_url(null, "download-url", null, true, false, null),
     vcs_home_url(null, "vcs-home-url", null, true, false, null),
-    fix_spec_path(null, "fix-spec-path", "fix-spec", true, true, {it.withRequiredArg().ofType(String::class.java)});
+    fix_spec_path(null, "fix-spec-path", "fix-spec", true, true, {it.withRequiredArg().ofType(String::class.java)}),
+    output_format_grouped_order_header_console(null, "output-format-grouped-order-header-console", null, true, false, null),
+    output_format_grouped_order_header_html(null, "output-format-grouped-order-header-html", null, true, false, null);
 
     init {
         if(otherForm != null && otherForm.length >= longForm.length){

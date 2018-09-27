@@ -10,6 +10,10 @@ import java.util.stream.Collectors
 open class FieldsImpl(val fields: List<Field>) : ArrayList<Field>(fields), Fields {
     constructor(str: String, inputDelimiter: String) : this(FieldsFromDelimitedString(str, inputDelimiter).fields)
 
+    override fun filterFields(predicate: (Field) -> Boolean): Fields {
+        return FieldsImpl(this.filter(predicate).toList())
+    }
+
     override fun accept(fieldsVisitor: FieldsVisitor) {
         fieldsVisitor.visit(this)
         for(field in fields){

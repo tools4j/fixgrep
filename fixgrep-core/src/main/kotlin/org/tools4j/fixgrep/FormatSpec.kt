@@ -26,6 +26,8 @@ class FormatSpec(
         val outputFormatHorizontalHtml: String,
         val outputFormatVerticalConsole: String,
         val outputFormatVerticalHtml: String,
+        val outputFormatGroupedOrderHeaderConsole: String,
+        val outputFormatGroupedOrderHeaderHtml: String,
         val lineRegex: String,
         val lineRegexGroupForFix: Int,
         val sortByTags: List<Int>,
@@ -53,6 +55,8 @@ class FormatSpec(
         "\${senderToTargetCompIdDirection} \${msgColor}[\${msgTypeName}]\${colorReset} \${msgFix}",
         "${Constants.EQUALS_SEPARATOR}\n\${msgColor}[\${msgTypeName}]\${colorReset}\n${Constants.EQUALS_SEPARATOR}\n\${msgFix}",
         "${Constants.EQUALS_SEPARATOR}<br/>\${msgColor}[\${msgTypeName}]\${colorReset}<br/>${Constants.EQUALS_SEPARATOR}<br/>\${msgFix}",
+        "${Constants.EQUALS_SEPARATOR}\n>ORDER orderId:\${orderId} clOrdId:\${origClOrdId}\n${Constants.EQUALS_SEPARATOR}\n",
+        "${Constants.EQUALS_SEPARATOR}<br/>ORDER orderId:\${orderId} clOrdId:\${origClOrdId}<br/>${Constants.EQUALS_SEPARATOR}<br/>",
         "^.*?(\\d+=.*?$)",
         1,
         Collections.emptyList(),
@@ -83,6 +87,8 @@ class FormatSpec(
                 outputFormatHorizontalHtml = config.getAsString(Option.output_format_horizontal_html),
                 outputFormatVerticalConsole = config.getAsString(Option.output_format_vertical_console),
                 outputFormatVerticalHtml = config.getAsString(Option.output_format_vertical_html),
+                outputFormatGroupedOrderHeaderConsole = config.getAsString(Option.output_format_grouped_order_header_console),
+                outputFormatGroupedOrderHeaderHtml = config.getAsString(Option.output_format_grouped_order_header_html),
                 lineRegex = config.getAsString(Option.input_line_format),
                 lineRegexGroupForFix = config.getAsInt(Option.line_regexgroup_for_fix),
                 sortByTags = config.getAsIntList(Option.sort_by_tags),
@@ -110,6 +116,8 @@ class FormatSpec(
             outputFormatHorizontalHtml: String = this.outputFormatHorizontalHtml,
             outputFormatVerticalConsole: String = this.outputFormatVerticalConsole,
             outputFormatVerticalHtml: String = this.outputFormatVerticalHtml,
+            outputFormatGroupedOrderHeaderConsole: String = this.outputFormatGroupedOrderHeaderConsole,
+            outputFormatGroupedOrderHeaderHtml: String = this.outputFormatGroupedOrderHeaderHtml,
             lineRegex: String = this.lineRegex,
             lineRegexGroupForFix: Int = this.lineRegexGroupForFix,
             sortByTags: List<Int> = this.sortByTags,
@@ -137,6 +145,8 @@ class FormatSpec(
             outputFormatHorizontalHtml,
             outputFormatVerticalConsole,
             outputFormatVerticalHtml,
+            outputFormatGroupedOrderHeaderConsole,
+            outputFormatGroupedOrderHeaderHtml,
             lineRegex,
             lineRegexGroupForFix,
             sortByTags,
@@ -196,6 +206,14 @@ class FormatSpec(
             } else {
                 return outputFormatHorizontalConsole
             }
+        }
+    }
+
+    fun getOutputFormatGroupedOrderHeader(): String{
+        if(formatInHtml) {
+            return outputFormatGroupedOrderHeaderHtml
+        } else {
+            return outputFormatGroupedOrderHeaderConsole
         }
     }
 }
