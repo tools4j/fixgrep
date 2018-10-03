@@ -10,7 +10,7 @@ import joptsimple.util.RegexMatcher
  * Time: 5:32 PM
  */
 enum class Option(val abbreviation: String?, val longForm: String, val otherForm: String? = null, val canHaveEquivalentPropertyInPropertiesFile: Boolean, val canBePassedAsCommandLineOption: Boolean, val commandLineOptionConfig: ((OptionSpecBuilder) -> Any)?){
-    tag_annotations("a", "tag-annotations", null, true, true, {it.withRequiredArg().ofType(String::class.java).withValuesConvertedBy(RegexMatcher.regex("(none|outsideAnnotated|insideAnnotated|ba|ab|aa|bb|b_|a_|_a|_b|__)"))}),
+    tag_annotations("a", "tag-annotations", null, true, true, {it.withRequiredArg().ofType(String::class.java).withValuesConvertedBy(RegexMatcher.regex("((none|outsideAnnotated|insideAnnotated|replaced)|([abr_][abr_]))"))}),
     align_vertical_columns("A", "align-vertical-columns", "align", true, true, {}),
     input_delimiter("d", "input-delimiter", "input-delim", true, true, {it.withRequiredArg().ofType(String::class.java)}),
     exclude_tags("e", "exclude-tags", null, true, true, {it.withRequiredArg().ofType(Integer::class.java).withValuesSeparatedBy(",")}),
@@ -24,7 +24,7 @@ enum class Option(val abbreviation: String?, val longForm: String, val otherForm
     output_delimiter("o", "output-delimiter", "output-delim", true, true, {it.withRequiredArg().ofType(String::class.java)}),
     group_by_order("O", "group-by-order", null, true, true, {}),
     piped_input("p", "piped-input", "piped", false, true, {}),
-    suppress_bold_tags_and_values("q", "suppress-bold-tags-and-values", null, true, true, {}),
+    suppress_bold_tags_and_values("q", "suppress-bold-tags-and-values", null, true, true, {it.withOptionalArg().ofType(Boolean::class.java)}),
     input_line_format("r", "input-line-format", null, true, true, {it.withRequiredArg().ofType(String::class.java)}),
     sort_by_tags("s", "sort-by-tags", null, true, true, {it.withRequiredArg().ofType(Integer::class.java).withValuesSeparatedBy(",")}),
     only_include_tags("t", "only-include-tags", null, true, true, {it.withRequiredArg().ofType(Integer::class.java).withValuesSeparatedBy(",")}),

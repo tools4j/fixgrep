@@ -9,7 +9,7 @@ import java.util.regex.Pattern
  * Date: 9/20/2018
  * Time: 5:15 PM
  */
-class DefaultLineHandler(val spec: FormatSpec, val fixLineHandler: FixLineHandler): LineHandler {
+class DefaultTextLineHandler(val spec: FormatSpec, val fixLineHandler: FixLineHandler): LineHandler {
     val logLineRegexPattern: Pattern by lazy {
         Pattern.compile(spec.lineRegex)
     }

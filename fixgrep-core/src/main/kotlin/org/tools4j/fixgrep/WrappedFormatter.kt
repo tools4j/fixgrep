@@ -11,7 +11,7 @@ class WrappedFormatter(val spec: FormatSpec){
     var result: String? = null
     val formatter = Formatter(spec)
     val fixLineHandler = DefaultFixLineHandler(formatter, Consumer { result = it })
-    val lineHandler = DefaultLineHandler(spec, fixLineHandler)
+    val lineHandler = DefaultTextLineHandler(spec, fixLineHandler)
 
     fun format(line: String): String? {
         lineHandler.handle(line)

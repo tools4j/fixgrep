@@ -105,7 +105,6 @@ class Formatter (val spec: FormatSpec){
         }
     }
 
-
     fun msgTypeAndExecTypeName(fields: Fields): String {
         if(fields.msgTypeCode != "8"){
             val msg = spec.fixSpec.messagesByMsgType.get(fields.msgTypeCode)
@@ -116,7 +115,9 @@ class Formatter (val spec: FormatSpec){
                 return msg.name
             }
         } else if(fields.getField(150) != null){
-            return "Exec." + ExecType.forCode(fields.getField(150)!!.value.valueRaw).name
+            val execTypeCode = fields.getField(150)?.value?.valueRaw
+            val execTypeName = if(execTypeCode != null && ExecType.codeExists(execTypeCode)) ExecType.forCode(execTypeCode) else execTypeCode
+            return "Exec." + execTypeName
         } else {
             return "ExecutionReport"
         }

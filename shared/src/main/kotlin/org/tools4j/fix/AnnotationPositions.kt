@@ -32,20 +32,18 @@ class AnnotationPositions(val tagAnnotationPosition: AnnotationPosition, val val
         val specs: MutableMap<String, AnnotationPositions> = HashMap()
         val OUTSIDE_ANNOTATED = AnnotationPositions(BEFORE, AFTER)
         val LEFT_ANNOTATED = AnnotationPositions(BEFORE, BEFORE)
+        val REPLACED = AnnotationPositions(REPLACE, REPLACE)
         val NO_ANNOTATION = AnnotationPositions(NONE, NONE)
 
         init{
             specs["outsideAnnotated"] = AnnotationPositions(BEFORE, AFTER)
             specs["insideAnnotated"] = AnnotationPositions(AFTER, BEFORE)
-            specs["ab"] = AnnotationPositions(AFTER, BEFORE)
-            specs["ba"] = AnnotationPositions(BEFORE, AFTER)
-            specs["bb"] = AnnotationPositions(BEFORE, BEFORE)
-            specs["aa"] = AnnotationPositions(AFTER, AFTER)
-            specs["a_"] = AnnotationPositions(AFTER, NONE)
-            specs["b_"] = AnnotationPositions(BEFORE, NONE)
-            specs["_a"] = AnnotationPositions(NONE, AFTER)
-            specs["_b"] = AnnotationPositions(NONE, BEFORE)
-            specs["__"] = NO_ANNOTATION
+            specs["replaced"] = AnnotationPositions(REPLACE, REPLACE)
+            for(tagAnnotation in AnnotationPosition.values()){
+                for(valueAnnotation in AnnotationPosition.values()){
+                    specs["${tagAnnotation.abbrev}${valueAnnotation.abbrev}"] = AnnotationPositions(tagAnnotation, valueAnnotation)
+                }
+            }
             specs["none"] = NO_ANNOTATION
         }
 

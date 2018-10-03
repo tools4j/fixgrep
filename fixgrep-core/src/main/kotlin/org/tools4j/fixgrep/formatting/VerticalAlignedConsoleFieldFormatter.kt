@@ -19,7 +19,7 @@ class VerticalAlignedConsoleFieldFormatter(val msgFormatter: VerticalAlignedCons
 
     override fun onFieldBody() {
         if(context.displayTag(tagRaw!!)) {
-            //Run first without any bold effects, so that we can gather the 'true' widths of the fields
+            //Run first without any bold effects, so that we can gather the 'true' widths of the fields, to get the max widths for alignment
             val tagWithoutTextEffectsSb = StringBuilder()
             appendTag(tagWithoutTextEffectsSb)
 

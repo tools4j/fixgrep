@@ -4,6 +4,10 @@ import mu.KLogging
 import org.tools4j.fixgrep.help.*
 import org.tools4j.fixgrep.html.HtmlPageFooter
 import org.tools4j.fixgrep.html.HtmlPageHeader
+import org.tools4j.fixgrep.orders.OrderGroupingFixLineHandler
+import org.tools4j.fixgrep.orders.UniqueClientOrderIdSpec
+import org.tools4j.fixgrep.orders.UniqueOrderIdSpec
+import org.tools4j.fixgrep.orders.UniqueOriginalClientOrderIdSpec
 import java.io.BufferedReader
 import java.io.File
 import java.io.InputStream
@@ -28,8 +32,22 @@ class FixGrep(val inputStream: InputStream?, val outputStream: OutputStream, val
         PrintStream(outputStream)
     }
 
-    val fixLineHandler = DefaultFixLineHandler(formatter, Consumer{printStream.println(it)})
-    val lineHandler = DefaultLineHandler(formatter.spec, fixLineHandler)
+    val fixLineHandler: FixLineHandler by lazy {
+        if(configAndArguments.config.hasPropertyAndIsNotFalse(Option.group_by_order)){
+            OrderGroupingFixLineHandler(
+                    formatter,
+                    UniqueClientOrderIdSpec(),
+                    UniqueOriginalClientOrderIdSpec(),
+                    UniqueOrderIdSpec(),
+                    Consumer {printStream.println(it)})
+        } else {
+            DefaultFixLineHandler(formatter, Consumer {printStream.println(it)})
+        }
+    }
+
+    val textLineHandler: LineHandler by lazy {
+        DefaultTextLineHandler(formatter.spec, fixLineHandler)
+    }
 
     fun go() {
         try {
@@ -37,12 +55,12 @@ class FixGrep(val inputStream: InputStream?, val outputStream: OutputStream, val
 
             val isFullPageHtml = config.hasProperty(Option.html)
                     && (config.getAsBoolean(Option.man, false)
-                            || config.hasPropertyAndIsNotFalse(Option.to_file)
-                            || config.getAsString(Option.html, "") == "page"
-                            || config.hasPropertyAndIsNotFalse(Option.launch_browser));
+                    || config.hasPropertyAndIsNotFalse(Option.to_file)
+                    || config.getAsString(Option.html, "") == "page"
+                    || config.hasPropertyAndIsNotFalse(Option.launch_browser));
 
-            if(isFullPageHtml){
-                if(config.getAsBoolean(Option.man, false)){
+            if (isFullPageHtml) {
+                if (config.getAsBoolean(Option.man, false)) {
                     HtmlPageHeader("fixgrep Man Page", true, false).write(printStream)
                 } else {
                     val heading = "fixgrep " + configAndArguments.originalApplicationArguments.joinToString(" ")
@@ -50,26 +68,28 @@ class FixGrep(val inputStream: InputStream?, val outputStream: OutputStream, val
                 }
             }
 
-            if(config.getAsBoolean(Option.color_demo_256, false)){
+            if (config.getAsBoolean(Option.color_demo_256, false)) {
                 printStream.println(Color256ConsoleDemo().demoForConsole)
-            } else if(config.getAsBoolean(Option.color_demo_16, false)){
+            } else if (config.getAsBoolean(Option.color_demo_16, false)) {
                 printStream.println(Color16ConsoleDemo().demoForConsole)
-            } else if(config.getAsBoolean(Option.man, false)){
-                val docWriterFactory = if(config.hasPropertyAndIsNotFalse(Option.html)) DocWriterFactory.Html else DocWriterFactory.ConsoleText
+            } else if (config.getAsBoolean(Option.man, false)) {
+                val docWriterFactory = if (config.hasPropertyAndIsNotFalse(Option.html)) DocWriterFactory.Html else DocWriterFactory.ConsoleText
                 printStream.println(ManGenerator(docWriterFactory, configAndArguments, config.getAsBoolean(Option.debug, false)).man)
-            } else if(config.getAsBoolean(Option.help, false)){
+            } else if (config.getAsBoolean(Option.help, false)) {
                 HelpGenerator().go(outputStream);
-            } else if(config.getAsBoolean(Option.install, false)){
+            } else if (config.getAsBoolean(Option.install, false)) {
                 ExampleAppPropertiesFileCreator().createIfNecessary()
-            } else if(config.getAsBoolean(Option.piped_input, false) && inputStream != null){
+            } else if (config.getAsBoolean(Option.piped_input, false) && inputStream != null) {
                 readFromPipedInput()
             } else {
                 readFromFiles(configAndArguments.arguments)
             }
 
-            if(isFullPageHtml){
+            if (isFullPageHtml) {
                 HtmlPageFooter().write(printStream)
             }
+        } catch (e: Throwable){
+            e.printStackTrace(printStream)
         } finally {
             outputStream.flush()
             outputStream.close()
@@ -111,7 +131,8 @@ class FixGrep(val inputStream: InputStream?, val outputStream: OutputStream, val
         while (true) {
             val line = reader.readLine()
             if (line == null) break
-            else lineHandler.handle(line)
+            else textLineHandler.handle(line)
         }
+        textLineHandler.finish()
     }
 }

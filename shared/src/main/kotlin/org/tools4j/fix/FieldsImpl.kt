@@ -10,6 +10,10 @@ import java.util.stream.Collectors
 open class FieldsImpl(val fields: List<Field>) : ArrayList<Field>(fields), Fields {
     constructor(str: String, inputDelimiter: String) : this(FieldsFromDelimitedString(str, inputDelimiter).fields)
 
+    override val fieldsAsSet: Set<Field> by lazy {
+        HashSet<Field>(fields)
+    }
+
     override fun filterFields(predicate: (Field) -> Boolean): Fields {
         return FieldsImpl(this.filter(predicate).toList())
     }
@@ -121,5 +125,16 @@ open class FieldsImpl(val fields: List<Field>) : ArrayList<Field>(fields), Field
 
     override val msgTypeAndExecTypeKey: String by lazy {
         Fields.getMsgTypeAndExecTypeKey(getField(35)!!.stringValue(), getField(150)?.stringValue())
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is FieldsImpl) return false
+        if (fields != other.fields) return false
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return fields.hashCode()
     }
 }

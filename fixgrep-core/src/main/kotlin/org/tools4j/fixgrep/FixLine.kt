@@ -10,4 +10,7 @@ import java.util.regex.Matcher
  */
 
 class FixLine(val fields: Fields, val matcher: Matcher) {
+    override fun toString(): String {
+        return fields.toDelimitedString()
+    }
 }

@@ -5,8 +5,9 @@ package org.tools4j.fix
  * Date: 14/05/2018
  * Time: 5:33 PM
  */
-enum class AnnotationPosition{
-    BEFORE,
-    AFTER,
-    NONE;
+enum class AnnotationPosition(val abbrev: kotlin.Char) {
+    REPLACE('r'),
+    BEFORE('b'),
+    AFTER('a'),
+    NONE('_');
 }

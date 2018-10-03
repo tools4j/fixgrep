@@ -20,6 +20,7 @@ interface Fields: MutableList<Field>{
     val pipeDelimitedString: String
     val msgTypeCode: String
     val msgTypeAndExecTypeKey: String
+    val fieldsAsSet: Set<Field>
     fun hasRepeatingTags(): Boolean
     fun accept(fieldsVisitor: FieldsVisitor)
     fun filterFields(predicate: (Field) -> Boolean): Fields;
