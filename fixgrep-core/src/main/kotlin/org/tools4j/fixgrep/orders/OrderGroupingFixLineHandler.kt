@@ -1,6 +1,6 @@
 package org.tools4j.fixgrep.orders
 
-import com.google.common.collect.LinkedHashMultimap
+import com.google.common.collect.ArrayListMultimap
 import mu.KLogging
 import org.tools4j.fix.Fields
 import org.tools4j.fixgrep.FixLine
@@ -15,83 +15,119 @@ import java.util.function.Consumer
  */
 class OrderGroupingFixLineHandler(
         val formatter: Formatter,
-        val uniqueClientOrderIdSpec: UniqueClientOrderIdSpec,
-        val uniqueOriginalClientOrderIdSpec: UniqueOriginalClientOrderIdSpec,
-        val uniqueOrderIdSpec: UniqueOrderIdSpec,
+        val uniqueIdSpecs: UniqueIdSpecs,
         val output: Consumer<String>) : FixLineHandler {
 
-    val ORDER_RESPONSE_INDENT = "   "
     companion object: KLogging()
 
     val childlessNewOrderSinglesByClOrderId = LinkedHashMap<UniqueClientOrderId, OrderMsg>()
-    val messagesByOrderId: LinkedHashMultimap<UniqueOrderId, OrderMsg> = LinkedHashMultimap.create()
+    val messagesByOrderId: ArrayListMultimap<UniqueOrderId, OrderMsg> = ArrayListMultimap.create()
     val orderIdByClOrderId = LinkedHashMap<UniqueClientOrderId, UniqueOrderId>()
+    val orphanMessages = ArrayList<FixLine>()
+
+    class Ids(
+            val clOrdId: UniqueClientOrderId,
+            val origClOrdId: UniqueClientOrderId,
+            val orderId: UniqueOrderId
+    )
 
     override fun handle(fixLine: FixLine) {
-        if(isOrderMessage(fixLine.fields)){
-            val orderMsg = OrderMsg(fixLine)
-            val clOrdId = uniqueClientOrderIdSpec.getId(orderMsg)
-            val orderId = uniqueOrderIdSpec.getId(orderMsg)
-            val origClOrdId = uniqueOriginalClientOrderIdSpec.getId(orderMsg)
-            val resolvedOrderId: UniqueOrderId
+        if(isOrderMessage(fixLine.fields)) {
+            val orderMsg = OrderMsg(fixLine, uniqueIdSpecs)
+            val ids = resolveIds(orderMsg)
 
-            if(orderMsg.isOrderRequestMessage()){
-                logger.info { "Received order REQUEST message: " + fixLine }
-
-                if(clOrdId.isNull()){
-                    logger.warn { "Could not find clOrdId.  Could not find at least one of these fields: $uniqueClientOrderIdSpec from message" }
-                    return
-
-                } else if(orderMsg.isNos()){
-                    logger.info { "Adding nos to orphan list" }
-                    childlessNewOrderSinglesByClOrderId.put(clOrdId, orderMsg)
-                    return
-
-                } else if(orderIdByClOrderId.containsKey(clOrdId)) {
-                    val linkedOrderId = orderIdByClOrderId.get(clOrdId)!!
-                    logger.info { "Found existing clOrdId linked to order: $linkedOrderId" }
-                    if(!orderId.isNull() && linkedOrderId != orderId) {
-                        logger.warn { "orderId on message [$orderId] does not match with other orderId linked to clOrderId [$linkedOrderId], this implies that there have been duplicate clOrdIds received." }
-                        return
-                    } else {
-                        resolvedOrderId = linkedOrderId
-                    }
-
-                } else if (orderIdByClOrderId.containsKey(origClOrdId)) {
-                    val linkedOrderId = orderIdByClOrderId.get(origClOrdId)!!
-                    logger.info { "Found orderId [$orderId] linked to origClOrdId [$origClOrdId], linking to new clOrdId [$clOrdId]" }
-                    if (!orderId.isNull() && linkedOrderId != orderId) {
-                        logger.warn { "orderId on message [$orderId] does not match with other orderId linked to origClOrdId [$linkedOrderId], this implies that there have been duplicate clOrdIds received." }
-                        return
-                    } else {
-                        orderIdByClOrderId.put(clOrdId, linkedOrderId)
-                        resolvedOrderId = linkedOrderId
-                    }
-                } else {
-                    logger.warn { "Could not find any orderIds linked to clOrdId [$clOrdId] or origClOrdId [$origClOrdId]" }
-                    return
-                }
-            } else {
-                logger.info { "Received order RESPONSE message"}
-                if(!orderId.isNull()){
-                    resolvedOrderId = orderId
-                    if(childlessNewOrderSinglesByClOrderId.containsKey(clOrdId)){
-                        logger.info { "Moving orphaned Nos with clOrdId [$clOrdId] to known message bucket for orderId [$resolvedOrderId]"}
-                        messagesByOrderId.put(resolvedOrderId, childlessNewOrderSinglesByClOrderId.remove(clOrdId))
-                    }
-                    orderIdByClOrderId.putIfAbsent(clOrdId, orderId)
-                } else {
-                    logger.warn { "Could not find mandatory orderId in message." }
-                    return
-                }
+            if (ids.clOrdId.isNull()) {
+                logger.warn { "Could not find or link to a clOrdId" }
+                orphanMessages.add(fixLine)
+                return
             }
-            messagesByOrderId.put(resolvedOrderId, orderMsg)
+
+            if (!orderMsg.isNos() && ids.orderId.isNull()) {
+                logger.warn { "Could not find or link to an orderId" }
+                orphanMessages.add(fixLine)
+                return
+            }
+
+            if(orderMsg.isNos()){
+                logger.info { "Adding nos to orphan list" }
+                childlessNewOrderSinglesByClOrderId.put(ids.clOrdId, orderMsg)
+                return;
+
+            } else if(childlessNewOrderSinglesByClOrderId.containsKey(ids.clOrdId)){
+                logger.info { "Moving orphaned Nos with clOrdId [$ids.clOrdId] to known message bucket for orderId [${ids.orderId}]"}
+                messagesByOrderId.put(ids.orderId, childlessNewOrderSinglesByClOrderId.remove(ids.clOrdId))
+            }
+
+            orderIdByClOrderId.putIfAbsent(ids.clOrdId, ids.orderId)
+            if(!ids.origClOrdId.isNull()) orderIdByClOrderId.putIfAbsent(ids.origClOrdId, ids.orderId)
+            messagesByOrderId.put(ids.orderId, orderMsg)
         }
     }
 
-    private fun formatAndPrint(fixLine: FixLine) {
-        val formattedLine = formatter.format(fixLine)
-        if (formattedLine != null) output.accept(formattedLine)
+    fun getMsgLinePrefix(orderMsgType: OrderMsg.OrderMsgType): String{
+        return if(formatter.spec.formatInHtml){
+            if(orderMsgType == OrderMsg.OrderMsgType.ORDER_RESPONSE){
+                "<div class='msg order-response'>"
+            } else {
+                "<div class='msg order-request'>"
+            }
+        } else {
+            if(orderMsgType == OrderMsg.OrderMsgType.ORDER_RESPONSE){
+                "   "
+            } else {
+                ""
+            }
+        }
+    }
+
+    fun getMsgLinePostfix(): String{
+        return if(formatter.spec.formatInHtml){
+            "</div>\n"
+        } else {
+            "\n"
+        }
+    }
+
+    fun getOrphanMsgLinePrefix(): String{
+        return if(formatter.spec.formatInHtml){
+            "<div class='msg orphan-message'>"
+        } else {
+            "   "
+        }
+    }
+
+    fun resolveIds(orderMsg: OrderMsg): OrderGroupingFixLineHandler.Ids {
+        var clOrdId = orderMsg.clOrdId
+        var orderId = orderMsg.orderId
+        var origClOrdId = orderMsg.origClOrdId
+
+        if(clOrdId.isNull() && !orderId.isNull()) {
+            clOrdId = findLastClOrdIdForOrderId(orderId) ?: clOrdId
+        }
+
+        if(orderId.isNull() && !clOrdId.isNull()){
+            orderId = orderIdByClOrderId.get(clOrdId) ?: orderId
+        }
+
+        if(orderId.isNull() && !origClOrdId.isNull()){
+            orderId = orderIdByClOrderId.get(origClOrdId) ?: orderId
+        }
+
+        if(origClOrdId.isNull() && !orderId.isNull()) {
+            origClOrdId = findLastOrigClOrdIdForOrderId(orderId) ?: origClOrdId
+        }
+
+        return OrderGroupingFixLineHandler.Ids(clOrdId, origClOrdId, orderId)
+    }
+
+    private fun findLastClOrdIdForOrderId(orderId: UniqueOrderId): UniqueClientOrderId?{
+        val messages = messagesByOrderId.get(orderId)
+        return messages?.asReversed()?.filter { !it.clOrdId.isNull() }?.map { it.clOrdId }?.firstOrNull();
+    }
+
+    private fun findLastOrigClOrdIdForOrderId(orderId: UniqueOrderId): UniqueClientOrderId?{
+        val messages = messagesByOrderId.get(orderId)
+        return messages?.asReversed()?.filter { !it.origClOrdId.isNull() }?.map { it.origClOrdId }?.firstOrNull();
     }
 
     private fun isOrderMessage(fields: Fields): Boolean {
@@ -104,20 +140,34 @@ class OrderGroupingFixLineHandler(
     }
 
     override fun finish() {
+        if(messagesByOrderId.isEmpty
+            && childlessNewOrderSinglesByClOrderId.isEmpty()
+            && orphanMessages.isEmpty()){
+            output.accept("No order messages found")
+        }
+
+        var atLeastOneOrderPrinted = false
         for (orderId in messagesByOrderId.keySet()) {
             printMessagesForOrder(messagesByOrderId.get(orderId).toList(), orderId.id!!.value.valueRaw)
             output.accept(formatter.spec.getCarriageReturn())
+            atLeastOneOrderPrinted = true
         }
-        for (orderMsg in childlessNewOrderSinglesByClOrderId.values) {
-            printMessagesForOrder(listOf(orderMsg), "UNKNOWN")
+        orphanMessages.addAll(childlessNewOrderSinglesByClOrderId.map { it.value.fixLine })
+        if(!orphanMessages.isEmpty()){
+            if(atLeastOneOrderPrinted) output.accept(formatter.spec.getCarriageReturn())
+            output.accept("ORPHAN MESSAGES:")
             output.accept(formatter.spec.getCarriageReturn())
+            for (orphanMessage in orphanMessages) {
+                val formattedMessage = formatter.format(orphanMessage)
+                output.accept(getOrphanMsgLinePrefix() + formattedMessage + getMsgLinePostfix())
+            }
         }
     }
 
     private fun printMessagesForOrder(messages: List<OrderMsg>, orderIdStr: String) {
         var orderHeader = formatter.spec.getOutputFormatGroupedOrderHeader()
         if (orderHeader.contains("\${origClOrdId}")) {
-            val firstClOrdId = uniqueClientOrderIdSpec.getId(messages.first()).id
+            val firstClOrdId = uniqueIdSpecs.uniqueClientOrderIdSpec.getId(messages.first()).id
             val clOrdIdToReplace = if (firstClOrdId != null) firstClOrdId.value.valueRaw else ""
             orderHeader = orderHeader.replace("\${origClOrdId}", clOrdIdToReplace)
         }
@@ -125,7 +175,7 @@ class OrderGroupingFixLineHandler(
             orderHeader = orderHeader.replace("\${orderId}", orderIdStr)
         }
         if (orderHeader.contains("\${carriageReturn}")) {
-            orderHeader = orderHeader.replace("\${carriageReturn}", formatter.spec.getCarriageReturn())
+            orderHeader = orderHeader.replace("\${carriageReturn}", "\n")
         }
 
         output.accept(orderHeader)
@@ -133,10 +183,7 @@ class OrderGroupingFixLineHandler(
             if (formatter.spec.shouldPrint(message.fixLine)) {
                 val formattedMessage = formatter.format(message.fixLine)
                 if (formattedMessage != null) {
-                    if (message.isOrderResponseMessage()) {
-                        output.accept(ORDER_RESPONSE_INDENT)
-                    }
-                    output.accept(formattedMessage + formatter.spec.getCarriageReturn())
+                    output.accept(getMsgLinePrefix(message.getOrderMsgType()) + formattedMessage + getMsgLinePostfix())
                 }
             }
         }

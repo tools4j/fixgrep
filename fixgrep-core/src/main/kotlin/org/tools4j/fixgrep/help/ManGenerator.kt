@@ -1,9 +1,9 @@
 package org.tools4j.fixgrep.help
 
+import org.tools4j.fixgrep.ConfigAndArguments
 import org.tools4j.fixgrep.Option
 import org.tools4j.fixgrep.texteffect.HtmlOnlyTextEffect
 import org.tools4j.fixgrep.texteffect.MiscTextEffect
-import org.tools4j.fixgrep.ConfigAndArguments
 
 /**
  * User: ben
@@ -212,7 +212,7 @@ class ManGenerator(val docWriterFactory: DocWriterFactory, val configAndArgument
             writeLn("It depends.  Applications such as 'more' or 'less' don't need to read an entire file during viewing.  Whereas fixgrep does.")
             writeLn("For large files (>100MB) it would be prudent to first extract the lines you wish to view (using grep or whatever), and pipe those lines into fixgrep.")
             writeHeading(2, "How much memory does fixgrep use?")
-            writeLn("Fixgrep should not use much more than 64MB.  It is uses considerably more than 64MB, please let me know.")
+            writeLn("Fixgrep should not use much more than 64MB.  Memory usage over time when parsing a large log file should not increase.  The exception to this is when grouping by order.  When grouping by order fixgrep will need to cache order messages before printing the out.  This option is not enabled by default.")
             writeHeading(2, "How much CPU does fixgrep use?")
             writeLn("Fixgrep is a single threaded app, so at most it shouldn't use more than one core whilst it is running.")
             writeHeading(2, "How can I reduce the impact on other existing processes whilst running fixgrep.")

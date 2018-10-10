@@ -18,5 +18,10 @@ class UniqueOrderIdSpec(val idTag: Int, val senderTagId: Int?, val targetTagId: 
         val idField = fields.getField(idTag)
         val senderField = if(senderTagId != null) fields.getField(senderTagId) else null
         val targetField = if(targetTagId != null) fields.getField(targetTagId) else null
-        return UniqueOrderId(idField, senderField, targetField, fields.filterFields{otherUniqueTags.contains(it.tag.number)})    }
+        return UniqueOrderId(idField, senderField, targetField, fields.filterFields{otherUniqueTags.contains(it.tag.number)})
+    }
+
+    override fun toString(): String {
+        return "UniqueOrderIdSpec(idTag=$idTag, senderTagId=$senderTagId, targetTagId=$targetTagId, otherUniqueTags=$otherUniqueTags)"
+    }
 }

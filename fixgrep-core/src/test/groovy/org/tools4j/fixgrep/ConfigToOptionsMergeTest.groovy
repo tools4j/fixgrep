@@ -18,12 +18,12 @@ class ConfigToOptionsMergeTest extends Specification {
         suppress.colors=true
         vertical.format=false
         highlights=150:Cyan,asdf
-        sort.by.tagsInId=[1,2,3,4,5]""")
+        sort.by.tags=[1,2,3,4,5]""")
 
         final OptionParser optionParser = new OptionParserFactory().optionParser
         final OptionSet options = optionParser.parse("-n",
                 "--highlights", "35:Blue,8:Yellow:Msg,51=1:Purple:Tag,Side=Buy:Green",
-                "--sort-by-tagsInId", "5,4,3,2,1")
+                "--sort-by-tags", "5,4,3,2,1")
         final OptionsToConfig optionsToProperties = new OptionsToConfig(options);
 
         when:
@@ -44,7 +44,7 @@ class ConfigToOptionsMergeTest extends Specification {
         suppress.colors=false
         vertical.format=false
         highlights=[150:Cyan,asdf]
-        sort.by.tagsInId=[1,2,3,4,5]""")
+        sort.by.tags=[1,2,3,4,5]""")
 
         final OptionParser optionParser = new OptionParserFactory().optionParser
         final OptionSet options = optionParser.parse("-n")

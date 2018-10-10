@@ -1,6 +1,5 @@
 package org.tools4j.fixgrep.orders
 
-import org.tools4j.fix.Field
 import org.tools4j.fix.Fields
 
 /**
@@ -20,5 +19,9 @@ class UniqueOriginalClientOrderIdSpec(val idTag: Int, val senderTagId: Int?, val
         val senderField = if(senderTagId != null) fields.getField(senderTagId) else null
         val targetField = if(targetTagId != null) fields.getField(targetTagId) else null
         return UniqueClientOrderId(idField, senderField, targetField, fields.filterFields{otherUniqueTags.contains(it.tag.number)})
+    }
+
+    override fun toString(): String {
+        return "UniqueOriginalClientOrderIdSpec(idTag=$idTag, senderTagId=$senderTagId, targetTagId=$targetTagId, otherUniqueTags=$otherUniqueTags)"
     }
 }

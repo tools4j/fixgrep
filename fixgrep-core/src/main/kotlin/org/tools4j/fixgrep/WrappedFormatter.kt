@@ -10,7 +10,7 @@ import java.util.function.Consumer
 class WrappedFormatter(val spec: FormatSpec){
     var result: String? = null
     val formatter = Formatter(spec)
-    val fixLineHandler = DefaultFixLineHandler(formatter, Consumer { result = it })
+    val fixLineHandler = DefaultFixLineHandlerWithNoCarriageReturn(formatter, Consumer { result = it })
     val lineHandler = DefaultTextLineHandler(spec, fixLineHandler)
 
     fun format(line: String): String? {

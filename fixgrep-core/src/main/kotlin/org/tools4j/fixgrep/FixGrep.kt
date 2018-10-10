@@ -4,15 +4,8 @@ import mu.KLogging
 import org.tools4j.fixgrep.help.*
 import org.tools4j.fixgrep.html.HtmlPageFooter
 import org.tools4j.fixgrep.html.HtmlPageHeader
-import org.tools4j.fixgrep.orders.OrderGroupingFixLineHandler
-import org.tools4j.fixgrep.orders.UniqueClientOrderIdSpec
-import org.tools4j.fixgrep.orders.UniqueOrderIdSpec
-import org.tools4j.fixgrep.orders.UniqueOriginalClientOrderIdSpec
-import java.io.BufferedReader
-import java.io.File
-import java.io.InputStream
-import java.io.OutputStream
-import java.io.PrintStream
+import org.tools4j.fixgrep.orders.*
+import java.io.*
 import java.util.function.Consumer
 
 
@@ -36,12 +29,13 @@ class FixGrep(val inputStream: InputStream?, val outputStream: OutputStream, val
         if(configAndArguments.config.hasPropertyAndIsNotFalse(Option.group_by_order)){
             OrderGroupingFixLineHandler(
                     formatter,
-                    UniqueClientOrderIdSpec(),
-                    UniqueOriginalClientOrderIdSpec(),
-                    UniqueOrderIdSpec(),
-                    Consumer {printStream.println(it)})
+                    UniqueIdSpecs(
+                        UniqueClientOrderIdSpec(),
+                        UniqueOriginalClientOrderIdSpec(),
+                        UniqueOrderIdSpec()),
+                    Consumer {printStream.print(it)})
         } else {
-            DefaultFixLineHandler(formatter, Consumer {printStream.println(it)})
+            DefaultFixLineHandler(formatter, Consumer {printStream.print(it)})
         }
     }
 

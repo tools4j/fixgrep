@@ -238,6 +238,14 @@ td xmp{
     margin-bottom: 0;
 }
 
+div.msg div.fields {
+    display: inline;
+}
+
+div.order-response, div.orphan-message {
+    margin-left: 3em;
+}
+
 .FgBlack{ color: black; }
 .FgRed{ color: #FF4444; }
 .FgGreen{ color: #00ff87; }

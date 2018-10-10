@@ -6,8 +6,6 @@ import org.tools4j.fixgrep.texteffect.Ansi256Color
 import org.tools4j.fixgrep.texteffect.AnsiForegroundBackground
 import org.tools4j.fixgrep.texteffect.HtmlOnlyTextEffect
 import org.tools4j.fixgrep.texteffect.MiscTextEffect
-import java.util.*
-import kotlin.collections.ArrayList
 
 /**
  * User: ben
@@ -68,6 +66,9 @@ e.g. '--exclude-tags 22,33' would hide tags 22 and 33 from being displayed.  Can
 the less 'interesting' fix fields, such as BeginString, BodyLength or Checksum.  Yawn!"""))
 
         optionsHelp.add(OptionHelp(Option.to_file, "Send output to a file.", "output.txt", """Filename is optional.  If no filename is specified, then a random file-htmlClass will be generated, with the prefix 'fixgrep-'.  And an extension of '.log' if in normal console mode, or an extension of '.html' if output is in html."""))
+
+        optionsHelp.add(OptionHelp(Option.group_by_order, "Group order messages by orderId", null,
+                "Using this option changes the 'mode' of fixgrep to discard any non-order messages, and to group the messages by order. fixgrep will attempt to keep track of 'order chains' when amends and cancels change the clOrdId, even if the orderId is not present on every message.  Using this option can increase the memory used by fixgrep, as fixgrep will need to cache all order messages before printing them out.  This should not affect other processes on the box, but it might mean that fixgrep will have to stop with an OutOfMemoryException if it uses all of it's allocated heap."))
 
         optionsHelp.add(OptionHelp(
                 Option.highlights, 
