@@ -21,28 +21,28 @@ class VerticalAlignedConsoleFieldFormatter(val msgFormatter: VerticalAlignedCons
         if(context.displayTag(tagRaw!!)) {
             //Run first without any bold effects, so that we can gather the 'true' widths of the fields, to get the max widths for alignment
             val tagWithoutTextEffectsSb = StringBuilder()
-            appendTag(tagWithoutTextEffectsSb)
+            tagAppender.append(tagWithoutTextEffectsSb)
 
             val equalsWithoutTextEffectsSb = StringBuilder()
             appendEquals(equalsWithoutTextEffectsSb)
 
             val valueWithoutTextEffectsSb = StringBuilder()
-            appendValue(valueWithoutTextEffectsSb)
+            valueAppender.append(valueWithoutTextEffectsSb)
 
             //Now the 'normal' run, setting bold property if required
-            independentlyMarkupTagsAndValuesAsBold = context.boldTagAndValue && !msgTextEffect.contains(MiscTextEffect.Bold) && !fieldTextEffect.contains(MiscTextEffect.Bold)
+            boldTagAndValue = context.boldTagAndValue && !msgTextEffect.contains(MiscTextEffect.Bold) && !fieldTextEffect.contains(MiscTextEffect.Bold)
             fieldTextEffect = msgTextEffect.compositeWith(fieldTextEffect)
 
             //Second run WITH bold effects (if configured that way)
             fieldTextEffect.consoleTextBefore
             val tagWithTextEffectsSb = StringBuilder()
-            appendTag(tagWithTextEffectsSb)
+            tagAppender.append(tagWithTextEffectsSb)
 
             val equalsWithTextEffectsSb = StringBuilder()
             appendEquals(equalsWithTextEffectsSb)
 
             val valueWithTextEffectsSb = StringBuilder()
-            appendValue(valueWithTextEffectsSb)
+            valueAppender.append(valueWithTextEffectsSb)
 
             fieldTextEffect.consoleTextAfter
 

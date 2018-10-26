@@ -4,6 +4,9 @@ import org.tools4j.fix.ClasspathResource
 import org.tools4j.properties.Config
 import org.tools4j.properties.ConfigImpl
 import spock.lang.Specification
+import sun.nio.ch.FileLockImpl
+
+import java.nio.channels.FileLock
 
 /**
  * User: ben
@@ -31,7 +34,9 @@ class FixGrepOnLargeFileTest extends Specification {
         assert assertTwoFilesAreEqual(actualOutputFile, expectedOutputFile)
 
         cleanup:
-        if(actualOutputFile != null && actualOutputFile.exists()) actualOutputFile.delete()
+        outputStream.flush()
+        outputStream.close()
+        actualOutputFile.deleteOnExit()
     }
 
     boolean assertTwoFilesAreEqual(final File actualFile, final BufferedReader expected) {

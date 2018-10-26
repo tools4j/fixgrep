@@ -4,7 +4,6 @@ import org.tools4j.extensions.constantToCapitalCase
 import org.tools4j.fix.*
 import org.tools4j.fixgrep.texteffect.Ansi
 import org.tools4j.fixgrep.utils.Constants.Companion.DOLLAR
-import java.util.regex.Pattern
 
 /**
  * User: ben
@@ -77,7 +76,7 @@ class Formatter (val spec: FormatSpec){
         }
 
         if (formattedString.contains("\${msgFix}")) {
-            var fields = FieldsAnnotator(line.fields, spec.fixSpec, spec.tagAnnotationPositions).fields
+            var fields = FieldsAnnotator(line.fields, spec.fixSpec).fields
             fields = fields.sortBy(spec.sortByTags)
             if(!spec.suppressColors) fields = spec.highlight.apply(fields)
             val formattedFix = spec.getMsgFormatter(fields).format()

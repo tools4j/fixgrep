@@ -27,12 +27,12 @@ class VerticalNonAlignedConsoleFieldFormatter(val fieldWriter: FieldWriter, form
 
     override fun onFieldBody() {
         if(context.displayTag(tagRaw!!)) {
-            independentlyMarkupTagsAndValuesAsBold = context.boldTagAndValue && !msgTextEffect.contains(MiscTextEffect.Bold) && !fieldTextEffect.contains(MiscTextEffect.Bold)
+            boldTagAndValue = context.boldTagAndValue && !msgTextEffect.contains(MiscTextEffect.Bold) && !fieldTextEffect.contains(MiscTextEffect.Bold)
             fieldTextEffect = msgTextEffect.compositeWith(fieldTextEffect)
             sb.append(fieldTextEffect.consoleTextBefore)
-            appendTag(sb)
+            tagAppender.append(sb)
             appendEquals(sb)
-            appendValue(sb)
+            valueAppender.append(sb)
             sb.append(fieldTextEffect.consoleTextAfter)
         }
     }

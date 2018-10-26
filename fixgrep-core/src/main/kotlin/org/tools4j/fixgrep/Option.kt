@@ -10,19 +10,19 @@ import joptsimple.util.RegexMatcher
  * Time: 5:32 PM
  */
 enum class Option(val abbreviation: String?, val longForm: String, val otherForm: String? = null, val canHaveEquivalentPropertyInPropertiesFile: Boolean, val canBePassedAsCommandLineOption: Boolean, val commandLineOptionConfig: ((OptionSpecBuilder) -> Any)?){
-    tag_annotations("a", "tag-annotations", null, true, true, {it.withRequiredArg().ofType(String::class.java).withValuesConvertedBy(RegexMatcher.regex("((none|outsideAnnotated|insideAnnotated|replaced)|([abr_][abr_]))"))}),
+    tag_annotations("a", "tag-annotations", null, true, true, {it.withRequiredArg().ofType(String::class.java).withValuesConvertedBy(RegexMatcher.regex("((none|outsideAnnotated|insideAnnotated|replaced)|([abr_]([abr_])?))"))}),
     align_vertical_columns("A", "align-vertical-columns", "align", true, true, {}),
     input_delimiter("d", "input-delimiter", "input-delim", true, true, {it.withRequiredArg().ofType(String::class.java)}),
     exclude_tags("e", "exclude-tags", null, true, true, {it.withRequiredArg().ofType(Integer::class.java).withValuesSeparatedBy(",")}),
     to_file("f", "to-file", null, false, true, {it.withOptionalArg().ofType(String::class.java)}),
     line_regexgroup_for_fix("g", "line-regexgroup-for-fix", null, true, true, {it.withRequiredArg().ofType(Integer::class.java)}),
-    indent_group_repeats("G", "indent-group-repeats", null, true, true, {it.withRequiredArg().ofType(Boolean::class.java)}),
+    indent_group_repeats("G", "indent-group-repeats", null, true, true, {it.withOptionalArg().ofType(kotlin.String::class.java).withValuesSeparatedBy(",")}),
     highlights("h", "highlights", "highlight", true, true, {it.withRequiredArg().ofType(String::class.java).withValuesSeparatedBy(",")}),
     launch_browser("l", "launch-browser", null, false, true, {}),
     include_only_messages_of_type("m", "include-only-messages-of-type", null, true, true, {it.withRequiredArg().ofType(String::class.java).withValuesSeparatedBy(",")}),
     suppress_colors("n", "suppress-colors", "no-color", true, true, {}),
     output_delimiter("o", "output-delimiter", "output-delim", true, true, {it.withRequiredArg().ofType(String::class.java)}),
-    group_by_order("O", "group-by-order", null, true, true, {}),
+    group_by_order("O", "group-by-order", null, true, true, {it.withOptionalArg().ofType(kotlin.String::class.java).withValuesSeparatedBy(",")}),
     piped_input("p", "piped-input", "piped", false, true, {}),
     suppress_bold_tags_and_values("q", "suppress-bold-tags-and-values", null, true, true, {it.withOptionalArg().ofType(Boolean::class.java)}),
     input_line_format("r", "input-line-format", null, true, true, {it.withRequiredArg().ofType(String::class.java)}),

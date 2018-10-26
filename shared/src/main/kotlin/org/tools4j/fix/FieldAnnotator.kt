@@ -7,9 +7,7 @@ import org.tools4j.fix.spec.FixSpecDefinition
  * Date: 11/7/17
  * Time: 5:19 PM
  */
-class FieldAnnotator(
-        val fixSpec: FixSpecDefinition,
-        val annotationPositions: AnnotationPositions = AnnotationPositions.OUTSIDE_ANNOTATED){
+class FieldAnnotator(val fixSpec: FixSpecDefinition){
 
     fun getField(field: Field): Field {
         return FieldImpl(getTag(field.tag), getValue(field.tag, field.value))

@@ -1,6 +1,5 @@
 package org.tools4j.fixgrep.highlights
 
-import org.tools4j.fix.Delimiter
 import org.tools4j.fix.Fields
 
 /**

@@ -3,7 +3,6 @@ package org.tools4j.fixgrep
 import org.tools4j.fix.ExecType
 import org.tools4j.fix.Fields
 import org.tools4j.fix.FixMessageType
-import org.tools4j.fixgrep.texteffect.Ansi
 import org.tools4j.fixgrep.texteffect.Ansi16ForegroundColor
 import org.tools4j.fixgrep.texteffect.NullTextEffect
 import org.tools4j.fixgrep.texteffect.TextEffect

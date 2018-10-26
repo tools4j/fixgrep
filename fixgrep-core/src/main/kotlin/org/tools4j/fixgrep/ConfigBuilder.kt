@@ -1,9 +1,9 @@
 package org.tools4j.fixgrep
 
 import mu.KLogging
-import org.tools4j.properties.ConfigLoader
 import org.tools4j.properties.Config
 import org.tools4j.properties.ConfigImpl
+import org.tools4j.properties.ConfigLoader
 
 /**
  * User: ben

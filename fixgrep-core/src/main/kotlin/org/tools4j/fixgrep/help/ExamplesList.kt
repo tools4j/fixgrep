@@ -1,9 +1,7 @@
 package org.tools4j.fixgrep.help
 
-import org.tools4j.fix.Fix50SP2FixSpecFromClassPath
 import org.tools4j.fixgrep.ConfigBuilder
 import org.tools4j.fixgrep.FormatSpec
-import org.tools4j.fixgrep.Formatter
 import org.tools4j.fixgrep.WrappedFormatter
 import org.tools4j.fixgrep.texteffect.HtmlOnlyTextEffect
 import org.tools4j.fixgrep.texteffect.MiscTextEffect

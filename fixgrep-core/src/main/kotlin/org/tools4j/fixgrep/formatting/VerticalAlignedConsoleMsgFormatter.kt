@@ -2,8 +2,6 @@ package org.tools4j.fixgrep.formatting
 
 import org.tools4j.extensions.padEnd
 import org.tools4j.extensions.padStart
-import org.tools4j.fix.Delimiter
-import org.tools4j.fix.DelimiterImpl
 import org.tools4j.fix.FieldVisitor
 
 /**

@@ -1,10 +1,7 @@
 package org.tools4j.fixgrep.formatting
 
-import org.tools4j.fix.*
-import org.tools4j.fix.spec.FixSpecDefinition
-import org.tools4j.fixgrep.highlights.HighlightedFields
+import org.tools4j.fix.FieldVisitor
 import org.tools4j.fixgrep.texteffect.TextEffect
-import java.util.*
 
 /**
  * User: benjw

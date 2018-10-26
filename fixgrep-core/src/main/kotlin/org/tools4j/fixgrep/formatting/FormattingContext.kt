@@ -22,6 +22,8 @@ class FormattingContext(
 
     constructor(fields: Fields): this(fields, AnnotationPositions.OUTSIDE_ANNOTATED, true, true, emptyList<Int>(), emptyList<Int>(), FixSpecParser().parseSpec())
     constructor(fields: Fields, annotationPositions: AnnotationPositions, boldTagAndValue: Boolean, fixSpec: FixSpecDefinition): this(fields, annotationPositions, boldTagAndValue, true, emptyList<Int>(), emptyList<Int>(), fixSpec)
+    constructor(fields: Fields, annotationPositions: AnnotationPositions, boldTagAndValue: Boolean): this(fields, annotationPositions, boldTagAndValue, true, emptyList<Int>(), emptyList<Int>(), FixSpecParser().parseSpec())
+    constructor(fields: Fields, annotationPositions: AnnotationPositions): this(fields, annotationPositions, true, true, emptyList<Int>(), emptyList<Int>(), FixSpecParser().parseSpec())
 
     val groupStack: GroupStack by lazy {
         GroupStack(messageSpec)

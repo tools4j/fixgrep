@@ -1,6 +1,5 @@
 package org.tools4j.fix
 
-import spock.lang.Shared
 import spock.lang.Specification
 
 /**
@@ -9,9 +8,6 @@ import spock.lang.Specification
  * Time: 7:02 AM
  */
 class FieldsExcludeTest extends Specification {
-    @Shared
-    private FixSpec fixSpec = new Fix50SP2FixSpecFromClassPath().spec;
-
     def "test exclude"(List<Integer> exclude, String expectedOutput) {
         given:
         final String fix ="35=8;11=asdf;22=3;55=ABC;99=qwerty"
@@ -29,6 +25,5 @@ class FieldsExcludeTest extends Specification {
         [99,35]             | "11=asdf;22=3;55=ABC"
         [22,11,55,99,35]    | ""
         []                  | "35=8;11=asdf;22=3;55=ABC;99=qwerty"
-
     }
 }

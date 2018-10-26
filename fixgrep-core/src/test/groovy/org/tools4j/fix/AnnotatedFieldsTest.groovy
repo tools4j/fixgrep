@@ -1,5 +1,10 @@
 package org.tools4j.fix
 
+import org.tools4j.fix.spec.FixSpecDefinition
+import org.tools4j.fix.spec.FixSpecParser
+import org.tools4j.fixgrep.formatting.FormattingContext
+import org.tools4j.fixgrep.formatting.HorizontalConsoleMsgFormatter
+import org.tools4j.fixgrep.formatting.MsgFormatter
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -10,7 +15,11 @@ import spock.lang.Unroll
  * Time: 6:15 PM
  */
 class AnnotatedFieldsTest extends Specification {
-    @Shared FixSpec fixSpec = new Fix50SP2FixSpecFromClassPath().spec
+    @Shared FixSpecDefinition fixSpec;
+
+    def setup(){
+        fixSpec = new FixSpecParser().parseSpec()
+    }
 
     @Unroll
     def "test #spec"(final String spec, final String expectedAnnotatedOutput) {
@@ -20,10 +29,11 @@ class AnnotatedFieldsTest extends Specification {
         final Fields fields = new FieldsImpl(Arrays.asList(field1, field2))
 
         when:
-        final Fields annotatedFields = new FieldsAnnotator(fields, fixSpec, AnnotationPositions.parse(spec)).fields
+        final Fields annotatedFields = new FieldsAnnotator(fields, fixSpec).fields
 
         then:
-        assert annotatedFields.toConsoleText() == expectedAnnotatedOutput
+        final MsgFormatter msgFormatter = new HorizontalConsoleMsgFormatter(new FormattingContext(annotatedFields, AnnotationPositions.parse(spec), false), "|")
+        assert msgFormatter.format() == expectedAnnotatedOutput
 
         where:
         spec               | expectedAnnotatedOutput

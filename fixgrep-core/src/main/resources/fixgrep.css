@@ -234,6 +234,10 @@ div.group-repeats {
     padding-left: 4em;
 }
 
+div.group-repeat {
+    min-height: 1.5em;
+}
+
 td xmp{
     margin-bottom: 0;
 }

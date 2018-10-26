@@ -1,7 +1,6 @@
 package org.tools4j.fixgrep.highlights
 
 import org.tools4j.fixgrep.FormatSpec
-import org.tools4j.fixgrep.Formatter
 import org.tools4j.fixgrep.WrappedFormatter
 import org.tools4j.fixgrep.help.DocWriter
 import org.tools4j.fixgrep.help.TableBuilder

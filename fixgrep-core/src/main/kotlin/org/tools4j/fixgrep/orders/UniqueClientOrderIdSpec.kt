@@ -11,12 +11,12 @@ import org.tools4j.fix.Fields
 class UniqueClientOrderIdSpec(val idTag: Int, val senderTagId: Int?, val targetTagId: Int?, val otherUniqueTags: List<Int>) {
     constructor(): this(11, 49, 56, emptyList()) //default is clOrdId, and SenderCompId & TargetCompId
 
-    fun getId(orderMsg: OrderMsg): UniqueClientOrderId{
-        return getId(orderMsg.fields)
+    fun isPresent(fields: Fields): Boolean {
+        return fields.getField(idTag) != null
     }
 
     fun getId(fields: Fields): UniqueClientOrderId {
-        val idField = fields.getField(idTag)
+        val idField = fields.getField(idTag)!!
         val senderField = if(senderTagId != null) fields.getField(senderTagId) else null
         val targetField = if(targetTagId != null) fields.getField(targetTagId) else null
         return UniqueClientOrderId(idField, senderField, targetField,  fields.filterFields{otherUniqueTags.contains(it.tag.number)})

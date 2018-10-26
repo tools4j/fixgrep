@@ -39,7 +39,7 @@ class OptionParserFactoryTest extends Specification {
     }
 
     @Unroll
-    def "SetupOptionParser tag-annotations.  e.g. outsideAnnotated etc"(final String optionArgument) {
+    def "SetupOptionParser tag annotations.  e.g. outsideAnnotated etc"(final String optionArgument) {
         given:
         final OptionParser optionParser = new OptionParserFactory().optionParser
 
@@ -68,7 +68,7 @@ class OptionParserFactoryTest extends Specification {
         'none'| _
     }
 
-    def "SetupOptionParser tag-annotations.  e.g. illegal option"() {
+    def "SetupOptionParser tag annotations.  e.g. illegal option"() {
         given:
         final OptionParser optionParser = new OptionParserFactory().optionParser
 

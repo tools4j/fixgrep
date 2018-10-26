@@ -19,8 +19,8 @@ class VerticalConsoleTest extends Specification {
 
     private static File newAssertionsFile = new File("new-assertions.txt")
     private static File resultsFile = new File("results.txt")
-    private static boolean logResultsToFile = true;
-    private static boolean logNewAssertionsToFile = true;
+    private static boolean logResultsToFile = false;
+    private static boolean logNewAssertionsToFile = false;
 
     def setupSpec() {
         if(logNewAssertionsToFile) deleteAndCreateNewFile(newAssertionsFile)
@@ -181,39 +181,58 @@ class VerticalConsoleTest extends Specification {
 
     def 'test vertical non-aligned format - indentGroupRepeats - prices - excluding some fields'(){
         when:
-        def lines = parseToLines('-e 268,448,55,215,217,270', VerticalTestUtil.PRICES_FIX)
+        def lines = parseToLines('-e 268,448,55,215,217,270 -q', VerticalTestUtil.PRICES_FIX)
 
         then:
         assert lines == """================================================================================
 \u001B[33mMarketDataIncrementalRefresh\u001B[0m
 ================================================================================
-[MsgType]\u001B[1m35\u001B[22m\u001B[1m=\u001B[22m\u001B[1mX\u001B[22m[MARKETDATAINCREMENTALREFRESH]
-[MDReqID]\u001B[1m262\u001B[22m\u001B[1m=\u001B[22m\u001B[1mABCD\u001B[22m
-    1.  [MDUpdateAction]\u001B[1m279\u001B[22m\u001B[1m=\u001B[22m\u001B[1m0\u001B[22m[NEW]
-        [MDEntryType]\u001B[1m269\u001B[22m\u001B[1m=\u001B[22m\u001B[1m0\u001B[22m[BID]
-        \u001B[1m9999\u001B[22m\u001B[1m=\u001B[22m\u001B[1munknownField\u001B[22m
-        [NoPartyIDs]\u001B[1m453\u001B[22m\u001B[1m=\u001B[22m\u001B[1m2\u001B[22m
-            1.  \u001B[1m9999\u001B[22m\u001B[1m=\u001B[22m\u001B[1munknownField\u001B[22m
-                [PartyIDSource]\u001B[1m447\u001B[22m\u001B[1m=\u001B[22m\u001B[1mA\u001B[22m[AUSTRALIAN_TAX_FILE_NUMBER]
-    2.  [MDUpdateAction]\u001B[1m279\u001B[22m\u001B[1m=\u001B[22m\u001B[1m0\u001B[22m[NEW]
-        [MDEntryType]\u001B[1m269\u001B[22m\u001B[1m=\u001B[22m\u001B[1m1\u001B[22m[OFFER]
-        [NoPartyIDs]\u001B[1m453\u001B[22m\u001B[1m=\u001B[22m\u001B[1m2\u001B[22m
-            1.  [PartyIDSource]\u001B[1m447\u001B[22m\u001B[1m=\u001B[22m\u001B[1mA\u001B[22m[AUSTRALIAN_TAX_FILE_NUMBER]
-    3.  [MDUpdateAction]\u001B[1m279\u001B[22m\u001B[1m=\u001B[22m\u001B[1m0\u001B[22m[NEW]
-        [MDEntryType]\u001B[1m269\u001B[22m\u001B[1m=\u001B[22m\u001B[1m1\u001B[22m[OFFER]
-        [NoPartyIDs]\u001B[1m453\u001B[22m\u001B[1m=\u001B[22m\u001B[1m2\u001B[22m
-            1.  [PartyIDSource]\u001B[1m447\u001B[22m\u001B[1m=\u001B[22m\u001B[1mA\u001B[22m[AUSTRALIAN_TAX_FILE_NUMBER]
-            2.  \u001B[1m9999\u001B[22m\u001B[1m=\u001B[22m\u001B[1munknownField\u001B[22m
-    4.  [MDUpdateAction]\u001B[1m279\u001B[22m\u001B[1m=\u001B[22m\u001B[1m0\u001B[22m[NEW]
-        [MDEntryType]\u001B[1m269\u001B[22m\u001B[1m=\u001B[22m\u001B[1m0\u001B[22m[BID]
-        [NoPartyIDs]\u001B[1m453\u001B[22m\u001B[1m=\u001B[22m\u001B[1m2\u001B[22m
-            1.  [PartyIDSource]\u001B[1m447\u001B[22m\u001B[1m=\u001B[22m\u001B[1mA\u001B[22m[AUSTRALIAN_TAX_FILE_NUMBER]
-    1.  [RoutingType]\u001B[1m216\u001B[22m\u001B[1m=\u001B[22m\u001B[1m3\u001B[22m[BLOCK_FIRM]
-    2.  [RoutingType]\u001B[1m216\u001B[22m\u001B[1m=\u001B[22m\u001B[1m2\u001B[22m[TARGET_LIST]
-[MDFeedType]\u001B[1m1022\u001B[22m\u001B[1m=\u001B[22m\u001B[1masdf\u001B[22m
+[MsgType]35=X[MARKETDATAINCREMENTALREFRESH]
+[MDReqID]262=ABCD
+    1.  [MDUpdateAction]279=0[NEW]
+        [MDEntryType]269=0[BID]
+        9999=unknownField
+        [NoPartyIDs]453=2
+            1.  9999=unknownField
+                [PartyIDSource]447=A[AUSTRALIAN_TAX_FILE_NUMBER]
+    2.  [MDUpdateAction]279=0[NEW]
+        [MDEntryType]269=1[OFFER]
+        [NoPartyIDs]453=2
+            1.  [PartyIDSource]447=A[AUSTRALIAN_TAX_FILE_NUMBER]
+    3.  [MDUpdateAction]279=0[NEW]
+        [MDEntryType]269=1[OFFER]
+        [NoPartyIDs]453=2
+            1.  [PartyIDSource]447=A[AUSTRALIAN_TAX_FILE_NUMBER]
+            2.  9999=unknownField
+    4.  [MDUpdateAction]279=0[NEW]
+        [MDEntryType]269=0[BID]
+        [NoPartyIDs]453=2
+            1.  [PartyIDSource]447=A[AUSTRALIAN_TAX_FILE_NUMBER]
+    1.  [RoutingType]216=3[BLOCK_FIRM]
+    2.  [RoutingType]216=2[TARGET_LIST]
+[MDFeedType]1022=asdf
 """
     }
-    
+
+
+    def 'test vertical non-aligned format - indentGroupRepeats - prices - excluding a lot of fields'(){
+        when:
+        def lines = parseToLines('-e 279 -q',
+                    "35=X${a}" +
+                    "268=2${a}" +
+                    "279=0${a}" +
+                    "279=0" )
+
+        then:
+        assert lines == """================================================================================
+\u001B[33mMarketDataIncrementalRefresh\u001B[0m
+================================================================================
+[MsgType]35=X[MARKETDATAINCREMENTALREFRESH]
+[NoMDEntries]268=2
+"""
+    }
+
+
 
     def 'test vertical non-aligned format - indentGroupRepeats - simple prices'(){
         when:

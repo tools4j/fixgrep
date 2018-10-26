@@ -1,10 +1,8 @@
 package org.tools4j.fixgrep.formatting
 
-import org.tools4j.fix.*
-import org.tools4j.fix.spec.FixSpecDefinition
-import org.tools4j.fixgrep.highlights.HighlightedFields
+import org.tools4j.fix.FieldVisitor
 import org.tools4j.fixgrep.texteffect.TextEffect
-import java.util.*
+import java.util.concurrent.atomic.AtomicInteger
 
 /**
  * User: benjw
@@ -14,9 +12,10 @@ import java.util.*
 class VerticalNonAlignedHtmlMsgFormatter(val context: FormattingContext) : MsgFormatter(), FieldWriter {
     val sb = StringBuilder()
     var writtenAtLeastOneField = false
+    val uid = AtomicInteger(0)
 
     override fun getFieldVisitor(): FieldVisitor {
-        return VerticalNonAlignedHtmlFieldFormatter(this, context)
+        return VerticalNonAlignedHtmlFieldFormatter(this, context, uid)
     }
 
     override fun writeField(value: String) {

@@ -10,9 +10,9 @@ import spock.lang.Specification
  */
 class FieldsImplTest extends Specification {
     @Shared String a = new Ascii1Char().toString()
-    @Shared Fields fields = new FieldsFromDelimitedString("35=D${a}11=ABC${a}55=AUD/USD", a, "|").fields
-    @Shared Fields fieldsWithDupTag = new FieldsFromDelimitedString("35=D${a}11=ABC${a}55=AUD/USD${a}55=ABC/DEF", a, "|").fields
-    @Shared Fields emptyFields = new FieldsFromDelimitedString("", a, "|").fields
+    @Shared Fields fields = new FieldsFromDelimitedString("35=D${a}11=ABC${a}55=AUD/USD", a).fields
+    @Shared Fields fieldsWithDupTag = new FieldsFromDelimitedString("35=D${a}11=ABC${a}55=AUD/USD${a}55=ABC/DEF", a).fields
+    @Shared Fields emptyFields = new FieldsFromDelimitedString("", a).fields
 
     void setup() {
         fields
@@ -177,66 +177,6 @@ class FieldsImplTest extends Specification {
         assert fields.getPipeDelimitedString() == "35=D|11=ABC|55=AUD/USD"
         assert fieldsWithDupTag.getPipeDelimitedString() == "35=D|11=ABC|55=AUD/USD|55=ABC/DEF"
         assert emptyFields.getPipeDelimitedString() == ""
-    }
-
-    def "ToConsoleText"() {
-        expect:
-        assert fields.toConsoleText() == "35=D|11=ABC|55=AUD/USD"
-        assert fieldsWithDupTag.toConsoleText() == "35=D|11=ABC|55=AUD/USD|55=ABC/DEF"
-        assert emptyFields.toConsoleText() == ""
-    }
-
-    def "ToHtml"() {
-        expect:
-        assert fields.toHtml() ==
-            "<span class='fields'>" +
-                "<span class='field'>" +
-                    "<span class='tag number'>35</span>" +
-                    "<span class='equals'>=</span>" +
-                    "<span class='value valueRaw'>D</span>" +
-                "</span>" +
-                "<span class='delim'>|</span>" +
-                "<span class='field'>" +
-                    "<span class='tag number'>11</span>" +
-                    "<span class='equals'>=</span>" +
-                    "<span class='value valueRaw'>ABC</span>" +
-                "</span>" +
-                "<span class='delim'>|</span>" +
-                "<span class='field'>" +
-                    "<span class='tag number'>55</span>" +
-                    "<span class='equals'>=</span>" +
-                    "<span class='value valueRaw'>AUD/USD</span>" +
-                "</span>" +
-            "</span>"
-
-        assert fieldsWithDupTag.toHtml() ==
-            "<span class='fields'>" +
-                "<span class='field'>" +
-                    "<span class='tag number'>35</span>" +
-                    "<span class='equals'>=</span>" +
-                    "<span class='value valueRaw'>D</span>" +
-                "</span>" +
-                "<span class='delim'>|</span>" +
-                "<span class='field'>" +
-                    "<span class='tag number'>11</span>" +
-                    "<span class='equals'>=</span>" +
-                    "<span class='value valueRaw'>ABC</span>" +
-                "</span>" +
-                "<span class='delim'>|</span>" +
-                "<span class='field'>" +
-                    "<span class='tag number'>55</span>" +
-                    "<span class='equals'>=</span>" +
-                    "<span class='value valueRaw'>AUD/USD</span>" +
-                "</span>" +
-                "<span class='delim'>|</span>" +
-                "<span class='field'>" +
-                    "<span class='tag number'>55</span>" +
-                    "<span class='equals'>=</span>" +
-                    "<span class='value valueRaw'>ABC/DEF</span>" +
-                "</span>" +
-            "</span>"
-
-        assert emptyFields.toHtml() == "<span class='fields'></span>"
     }
 
     def "GetMsgTypeCode"() {

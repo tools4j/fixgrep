@@ -1,6 +1,5 @@
 package org.tools4j.fix
 
-import java.util.stream.Collectors
 import org.tools4j.fix.AnnotationPosition.*
 
 class AnnotationPositions(val tagAnnotationPosition: AnnotationPosition, val valueAnnotationPosition: AnnotationPosition){
@@ -39,10 +38,11 @@ class AnnotationPositions(val tagAnnotationPosition: AnnotationPosition, val val
             specs["outsideAnnotated"] = AnnotationPositions(BEFORE, AFTER)
             specs["insideAnnotated"] = AnnotationPositions(AFTER, BEFORE)
             specs["replaced"] = AnnotationPositions(REPLACE, REPLACE)
-            for(tagAnnotation in AnnotationPosition.values()){
-                for(valueAnnotation in AnnotationPosition.values()){
-                    specs["${tagAnnotation.abbrev}${valueAnnotation.abbrev}"] = AnnotationPositions(tagAnnotation, valueAnnotation)
+            for(firstSymbol in AnnotationPosition.values()){
+                for(secondSymbol in AnnotationPosition.values()){
+                    specs["${firstSymbol.abbrev}${secondSymbol.abbrev}"] = AnnotationPositions(firstSymbol, secondSymbol)
                 }
+                specs["${firstSymbol.abbrev}"] = AnnotationPositions(firstSymbol, firstSymbol)
             }
             specs["none"] = NO_ANNOTATION
         }

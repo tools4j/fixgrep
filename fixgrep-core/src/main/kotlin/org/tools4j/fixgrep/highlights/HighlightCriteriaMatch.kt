@@ -39,6 +39,4 @@ class HighlightCriteriaMatch(val matches: Boolean, val matchingFields: List<Fiel
         val NO_MATCH = HighlightCriteriaMatch(false, emptyList())
         val EMPTY_MATCH = HighlightCriteriaMatch(true, emptyList())
     }
-
-
 }

@@ -14,12 +14,11 @@ class FixSpecParserTest extends Specification {
 
         then:
         assert fixSpec.fieldsByName.size() == 916
-        assert fixSpec.groupsByName.size() == 52
         assert fixSpec.messagesByName.size() == 92
 
         then:
         final MessageSpec nos = fixSpec.messagesByMsgType.get("D")
-        assert nos.fields.size() == 149
+        assert nos.fields.size() == 178
     }
 
     def "test FIX default"() {
@@ -28,25 +27,23 @@ class FixSpecParserTest extends Specification {
 
         then:
         assert fixSpec.fieldsByName.size() == 1606
-        assert fixSpec.groupsByName.size() == 117
         assert fixSpec.messagesByName.size() == 117
 
         then:
         final MessageSpec nos = fixSpec.messagesByMsgType.get("D")
-        assert nos.fields.size() == 232
+        assert nos.fields.size() == 264
     }
 
     def "test FIX five zero SP two - from working dir"() {
         when:
-        final FixSpecDefinition fixSpec = new FixSpecParser('fixgrep-core/src/main/resources/FIX50SP2.xml').parseSpec()
+        final FixSpecDefinition fixSpec = new FixSpecParser().parseSpec()
 
         then:
         assert fixSpec.fieldsByName.size() == 1606
-        assert fixSpec.groupsByName.size() == 117
         assert fixSpec.messagesByName.size() == 117
 
         then:
         final MessageSpec nos = fixSpec.messagesByMsgType.get("D")
-        assert nos.fields.size() == 232
+        assert nos.fields.size() == 264
     }
 }

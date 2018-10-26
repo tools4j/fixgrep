@@ -33,6 +33,7 @@ class FixGrep(val inputStream: InputStream?, val outputStream: OutputStream, val
                         UniqueClientOrderIdSpec(),
                         UniqueOriginalClientOrderIdSpec(),
                         UniqueOrderIdSpec()),
+                    IdFilter(configAndArguments.config.getAsStringList(Option.group_by_order, null)),
                     Consumer {printStream.print(it)})
         } else {
             DefaultFixLineHandler(formatter, Consumer {printStream.print(it)})
@@ -85,6 +86,8 @@ class FixGrep(val inputStream: InputStream?, val outputStream: OutputStream, val
         } catch (e: Throwable){
             e.printStackTrace(printStream)
         } finally {
+            printStream.flush()
+            printStream.close()
             outputStream.flush()
             outputStream.close()
         }
@@ -111,14 +114,20 @@ class FixGrep(val inputStream: InputStream?, val outputStream: OutputStream, val
                 System.err.println("File at location: [" + file.absolutePath + "] does not exist.")
                 return
             }
-            readFromBufferedReader(file.bufferedReader())
+            file.bufferedReader().use {
+                readFromBufferedReader(it)
+            }
         }
     }
 
     private fun readFromPipedInput() {
         val reader = inputStream!!.bufferedReader()
-        logger.info("About to read from piped input")
-        readFromBufferedReader(reader)
+        try {
+            logger.info("About to read from piped input")
+            readFromBufferedReader(reader)
+        } finally {
+            reader.close()
+        }
     }
 
     private fun readFromBufferedReader(reader: BufferedReader) {

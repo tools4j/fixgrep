@@ -1,7 +1,5 @@
 package org.tools4j.fixgrep.formatting
 
-import org.tools4j.fix.FieldsVisitor
-
 /**
  * User: benjw
  * Date: 7/17/2018

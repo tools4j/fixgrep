@@ -1,6 +1,8 @@
 package org.tools4j.fixgrep.formatting
 
-import org.tools4j.fix.*
+import org.tools4j.fix.Delimiter
+import org.tools4j.fix.DelimiterImpl
+import org.tools4j.fix.FieldVisitor
 
 /**
  * User: benjw

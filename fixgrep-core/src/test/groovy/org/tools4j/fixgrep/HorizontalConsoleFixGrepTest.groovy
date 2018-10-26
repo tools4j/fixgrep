@@ -19,8 +19,8 @@ class HorizontalConsoleFixGrepTest extends Specification {
     @Shared private Config testOverrides
     private static File newAssertionsFile = new File("new-assertions.txt")
     private static File resultsFile = new File("results.txt")
-    private static boolean logResultsToFile = true;
-    private static boolean logNewAssertionsToFile = true;
+    private static boolean logResultsToFile = false;
+    private static boolean logNewAssertionsToFile = false;
 
     def setupSpec() {
         if(logNewAssertionsToFile) deleteAndCreateNewFile(newAssertionsFile)

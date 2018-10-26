@@ -1,6 +1,9 @@
 package org.tools4j.fixgrep
 
-import org.tools4j.fix.*
+import org.tools4j.fix.AnnotationPositions
+import org.tools4j.fix.Ascii1Char
+import org.tools4j.fix.DelimiterImpl
+import org.tools4j.fix.Fields
 import org.tools4j.fix.spec.FixSpecDefinition
 import org.tools4j.fix.spec.FixSpecParser
 import org.tools4j.fixgrep.formatting.*
@@ -18,7 +21,7 @@ class FormatSpec(
         val suppressColors: Boolean,
         val suppressBoldTagsAndValues: Boolean,
         val highlight: Highlight,
-        val groupBy: GroupBy,
+        val groupBy: List<String>?,
         val indentGroupRepeats: Boolean,
         val inputDelimiter: String,
         val outputDelimiter: String,
@@ -47,7 +50,7 @@ class FormatSpec(
             false,
             false,
             Highlight.NO_HIGHLIGHT,
-            GroupBy.NONE,
+            null,
             true,
             Ascii1Char().toString(),
             "|",
@@ -79,7 +82,7 @@ class FormatSpec(
             suppressColors = config.getAsBoolean(Option.suppress_colors),
             suppressBoldTagsAndValues = config.getAsBoolean(Option.suppress_bold_tags_and_values),
             highlight = HighlightParser().parse(config.getAsStringList(Option.highlights)),
-            groupBy = GroupBy.NONE,
+            groupBy = config.getAsStringList(Option.group_by_order, null),
             indentGroupRepeats = config.getAsBoolean(Option.indent_group_repeats),
             inputDelimiter = config.getAsString(Option.input_delimiter),
             outputDelimiter = config.getAsString(Option.output_delimiter),
@@ -108,7 +111,7 @@ class FormatSpec(
             suppressColors: Boolean = this.suppressColors,
             suppressBoldTagsAndValues: Boolean = this.suppressBoldTagsAndValues,
             highlight: Highlight = this.highlight,
-            groupBy: GroupBy = this.groupBy,
+            groupBy: List<String>? = this.groupBy,
             indentGroupRepeats: Boolean = this.indentGroupRepeats,
             inputDelimiter: String = this.inputDelimiter,
             outputDelimiter: String = this.outputDelimiter,

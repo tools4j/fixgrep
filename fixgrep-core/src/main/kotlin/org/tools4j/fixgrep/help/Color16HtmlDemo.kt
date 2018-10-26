@@ -1,10 +1,6 @@
 package org.tools4j.fixgrep.help
 
-import org.tools4j.fixgrep.texteffect.Ansi16BackgroundColor
-import org.tools4j.fixgrep.texteffect.Ansi16ForegroundColor
-import org.tools4j.fixgrep.texteffect.CompositeTextEffect
-import org.tools4j.fixgrep.texteffect.HtmlOnlyTextEffect
-import org.tools4j.fixgrep.texteffect.MiscTextEffect
+import org.tools4j.fixgrep.texteffect.*
 
 /**
  * User: ben

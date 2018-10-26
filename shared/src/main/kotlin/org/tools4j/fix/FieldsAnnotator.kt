@@ -1,19 +1,15 @@
 package org.tools4j.fix
 
 import org.tools4j.fix.spec.FixSpecDefinition
-import java.util.ArrayList
+import java.util.*
 
 /**
  * User: ben
  * Date: 11/7/17
  * Time: 5:19 PM
  */
-class FieldsAnnotator(
-        val inputFields: Fields,
-        val fixSpec: FixSpecDefinition,
-        val annotationPositions: AnnotationPositions = AnnotationPositions.OUTSIDE_ANNOTATED) : FieldsSource {
-
-    val fieldAnnotator = FieldAnnotator(fixSpec, annotationPositions)
+class FieldsAnnotator(val inputFields: Fields, val fixSpec: FixSpecDefinition) : FieldsSource {
+    val fieldAnnotator = FieldAnnotator(fixSpec)
 
     override val fields: Fields by lazy {
         val returnFields = ArrayList<Field>()

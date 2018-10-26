@@ -5,7 +5,6 @@ import org.tools4j.fixgrep.highlights.HighlightedField
 import org.tools4j.fixgrep.texteffect.CompositeTextEffect
 import org.tools4j.fixgrep.texteffect.TextEffect
 import java.util.*
-import java.util.concurrent.ConcurrentSkipListSet
 
 /**
  * User: benjw
@@ -52,6 +51,7 @@ abstract class FieldFormatter(val context: FormattingContext): FieldVisitor, Val
 
         //Check whether we are exiting group(s)
         while (!context.groupStack.getCurrentMessageOrGroupContext()!!.fields.contains(fieldSpec)) {
+
             //Check whether we are entering a new group repeat
             val enteringNewGroupAfterGroupExit = context.groupStack.getCurrentMessageOrGroupContext()?.getGroupByLeadingFieldNumber(field.tag.number)
             if (enteringNewGroupAfterGroupExit != null) {

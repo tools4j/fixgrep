@@ -3,11 +3,7 @@ package org.tools4j.fixgrep.formatting
 import org.tools4j.fix.AnnotationPosition
 import org.tools4j.fix.AnnotationPositions
 import org.tools4j.fix.Ansi
-import org.tools4j.fix.spec.FixSpecDefinition
-import org.tools4j.fix.spec.MessageSpec
-import org.tools4j.fixgrep.texteffect.MiscTextEffect
 import org.tools4j.fixgrep.texteffect.TextEffect
-import java.util.Stack;
 
 /**
  * User: benjw
@@ -15,60 +11,33 @@ import java.util.Stack;
  * Time: 6:39 AM
  */
 abstract class AbstractConsoleFieldFormatter(val formattingContext: FormattingContext, val msgTextEffect: TextEffect): FieldFormatter(formattingContext) {
-    var independentlyMarkupTagsAndValuesAsBold: Boolean = true
+    var boldTagAndValue: Boolean = true
+    val tagAppender: ConsolePartAppender by lazy {ConsolePartAppender(formattingContext.annotationPositions.tagAnnotationPosition, tagRaw, tagAnnotation, boldTagAndValue)}
+    val valueAppender: ConsolePartAppender by lazy {ConsolePartAppender(formattingContext.annotationPositions.valueAnnotationPosition, valueRaw, valueAnnotation, boldTagAndValue)}
 
     internal fun appendEquals(sb: StringBuilder) {
-        val rawTagAndValueAreEitherSideOfEqualsAndAreBold = context.annotationPositions == AnnotationPositions.OUTSIDE_ANNOTATED && context.boldTagAndValue
-        if (rawTagAndValueAreEitherSideOfEqualsAndAreBold && independentlyMarkupTagsAndValuesAsBold) sb.append(Ansi.Bold)
+        val boldTagAndValue = context.annotationPositions == AnnotationPositions.OUTSIDE_ANNOTATED && context.boldTagAndValue
+        if (boldTagAndValue && this.boldTagAndValue) sb.append(Ansi.Bold)
         sb.append("=")
-        if (rawTagAndValueAreEitherSideOfEqualsAndAreBold && independentlyMarkupTagsAndValuesAsBold) sb.append(Ansi.Normal)
+        if (boldTagAndValue && this.boldTagAndValue) sb.append(Ansi.Normal)
     }
 
-    fun appendTag(sb: StringBuilder){
-        if(context.annotationPositions.tagAnnotationPosition == AnnotationPosition.NONE){
-            appendTagRaw(sb)
-        } else if(context.annotationPositions.tagAnnotationPosition == AnnotationPosition.BEFORE){
-            appendTagAnnotation(sb)
-            appendTagRaw(sb)
-        } else {
-            appendTagRaw(sb)
-            appendTagAnnotation(sb)
+    class ConsolePartAppender(annotationPosition: AnnotationPosition,
+                              val raw: Any?,
+                              val annotation: String?,
+                              val boldTagAndValue: Boolean): AbstractPartAppender(annotationPosition) {
+        override fun appendRaw(sb: StringBuilder) {
+            if (boldTagAndValue && annotationPosition != AnnotationPosition.REPLACE) sb.append(Ansi.Bold)
+            sb.append(raw)
+            if (boldTagAndValue && annotationPosition != AnnotationPosition.REPLACE) sb.append(Ansi.Normal)
         }
-    }
 
-    fun appendTagRaw(sb: StringBuilder) {
-        if (independentlyMarkupTagsAndValuesAsBold) sb.append(Ansi.Bold)
-        sb.append(tagRaw)
-        if (independentlyMarkupTagsAndValuesAsBold) sb.append(Ansi.Normal)
-    }
-
-    fun appendTagAnnotation(sb: StringBuilder) {
-        if(tagAnnotation != null) sb.append("[").append(tagAnnotation).append("]")
-    }
-
-    internal fun appendValue(sb: StringBuilder) {
-        if (context.annotationPositions.valueAnnotationPosition == AnnotationPosition.NONE) {
-            appendValueRaw(sb)
-        } else if (context.annotationPositions.valueAnnotationPosition == AnnotationPosition.BEFORE) {
-            appendValueAnnotation(sb)
-            appendValueRaw(sb)
-        } else {
-            appendValueRaw(sb)
-            appendValueAnnotation(sb)
+        override fun appendAnnotation(sb: StringBuilder) {
+            if (annotationPosition != AnnotationPosition.REPLACE) sb.append("[")
+            sb.append(annotation)
+            if (annotationPosition != AnnotationPosition.REPLACE) sb.append("]")
         }
-    }
 
-    fun appendValueRaw(sb: StringBuilder) {
-        if (independentlyMarkupTagsAndValuesAsBold){
-            sb.append(Ansi.Bold)
-        }
-        sb.append(valueRaw)
-        if (independentlyMarkupTagsAndValuesAsBold){
-            sb.append(Ansi.Normal)
-        }
-    }
-
-    fun appendValueAnnotation(sb: StringBuilder) {
-        if(valueAnnotation != null) sb.append("[").append(valueAnnotation).append("]")
+        override fun hasAnnotation() = annotation != null
     }
 }
