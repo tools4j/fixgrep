@@ -3,7 +3,7 @@ package org.tools4j.fixgrep.html
 import org.tools4j.fix.ClasspathResource
 import java.io.PrintStream
 
-class HtmlPageHeader(val heading: String, val displayToc: Boolean = false) {
+class HtmlPageHeader(val heading: String, val displayToc: Boolean = false, val useConsoleStyleClassForContent: Boolean = false) {
     fun write(printStream: PrintStream) {
         val html = StringBuilder()
         html.appendln("""<html>
@@ -21,7 +21,9 @@ class HtmlPageHeader(val heading: String, val displayToc: Boolean = false) {
         }
 
         html.appendln("</head>")
-        html.appendln("<body>")
+        html.append("<body")
+        if(useConsoleStyleClassForContent) html.append(" class='console'")
+        html.appendln(">")
         html.appendln("<div class='top-strip'>&nbsp;</div>")
                 .appendln("<div class='header'>")
                 .appendln("<span>$heading</span>")

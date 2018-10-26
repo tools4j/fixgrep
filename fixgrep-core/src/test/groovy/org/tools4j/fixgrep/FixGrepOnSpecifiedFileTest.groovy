@@ -1,7 +1,6 @@
 package org.tools4j.fixgrep
 
 import org.tools4j.properties.Config
-import org.tools4j.properties.ConfigAndArguments
 import org.tools4j.properties.ConfigImpl
 import org.tools4j.util.CircularBufferedReaderWriter
 import spock.lang.Specification
@@ -19,7 +18,7 @@ class FixGrepOnSpecifiedFileTest extends Specification {
         println '1.' + new File(System.getProperty('user.dir')).parentFile.name
         println '2.' + (new File(System.getProperty('user.dir')).parentFile.name == 'fixgrep-core')
 
-        Config testConfig = TestConfigBuilder.load().overrideWith(new ConfigImpl(["no.color": "true", "suppress.bold.tags.and.values": "true"]))
+        Config testConfig = TestConfigBuilder.load().overrideWith(new ConfigImpl(["suppress.colors": "true", "suppress.bold.tags.and.values": "true"]))
         ConfigAndArguments configAndArguments = new ConfigAndArguments(testConfig, Arrays.asList("${pathPrefix}src/test/resources/small-log1.log"))
 
         when:
@@ -36,7 +35,7 @@ class FixGrepOnSpecifiedFileTest extends Specification {
     def 'run fixgrep multiple file test'(){
         given:
         String pathPrefix = new File(System.getProperty('user.dir')).name == 'fixgrep-core' ? '': 'fixgrep-core/'
-        Config testConfig = TestConfigBuilder.load().overrideWith(new ConfigImpl(["no.color": "true", "suppress.bold.tags.and.values": "true"]))
+        Config testConfig = TestConfigBuilder.load().overrideWith(new ConfigImpl(["suppress.colors": "true", "suppress.bold.tags.and.values": "true"]))
         ConfigAndArguments configAndArguments = new ConfigAndArguments(testConfig, Arrays.asList("", "${pathPrefix}src/test/resources/small-log1.log", "${pathPrefix}src/test/resources/small-log2.log"))
 
         when:

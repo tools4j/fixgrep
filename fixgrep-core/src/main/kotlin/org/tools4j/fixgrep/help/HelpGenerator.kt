@@ -28,11 +28,11 @@ class HelpGenerator: HelpFormatter {
         sb.append("Usage: fixgrep [options] [files ...]\n")
         sb.append("Options:\n")
         val optionsHelp = OptionsHelp(DocWriterFactory.ConsoleText)
-        for (desc in optionsHelp.helpByOptions.values.distinct()) {
-            val optionVariations = desc.optionVariations
+        for (help in optionsHelp.optionsHelp) {
+            val optionVariations = help.option.optionVariationsWithDashPrefixesAsCommaDelimitedString
             sb.append(optionVariations.toString().padEnd(40))
                     .append(" ")
-                    .append(optionsHelp.helpByOptions.get(desc.optionVariations.get(0))!!.tagline)
+                    .append(help.tagline)
                     .append("\n")
         }
         sb.append("\n(type 'fixgrep --man' for more detailed help)\n")

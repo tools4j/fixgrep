@@ -3,6 +3,7 @@ package org.tools4j.clientsimandexchangesim
 import org.tools4j.clientsim.ClientSimFactory
 import org.tools4j.exhangesim.ExchangeFactory
 import org.tools4j.fix.Fix50SP2FixSpecFromClassPath
+import org.tools4j.fix.spec.FixSpecParser
 import org.tools4j.model.RandomLongGivenAverage
 import org.tools4j.strategy.EvaluationTriggerImpl
 
@@ -14,7 +15,7 @@ import org.tools4j.strategy.EvaluationTriggerImpl
 object Main {
     @JvmStatic
     fun main(args: Array<String>) {
-        val fixSpec = Fix50SP2FixSpecFromClassPath().spec;
+        val fixSpec = FixSpecParser().parseSpec();
         val evaluationTrigger = EvaluationTriggerImpl()
 
         //ClientSim

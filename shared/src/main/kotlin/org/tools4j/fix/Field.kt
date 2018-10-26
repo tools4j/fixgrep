@@ -21,8 +21,7 @@ interface Field {
     fun idValue(): Id
     fun execTypeValue(): ExecType
     fun ordStatusValue(): OrdStatus
-    fun toConsoleText(): String
-    fun toHtml(): String
+    fun accept(fieldVisitor: FieldVisitor)
     override fun equals(other: Any?): Boolean
     override fun hashCode(): Int
 }

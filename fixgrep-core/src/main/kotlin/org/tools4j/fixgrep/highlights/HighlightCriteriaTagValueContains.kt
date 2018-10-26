@@ -15,7 +15,7 @@ class HighlightCriteriaTagValueContains(val tag: Int, val match: String): Highli
                 return HighlightCriteriaMatch(field)
             }
         }
-        if(field.value.rawValue.contains(match)){
+        if(field.value.valueRaw.contains(match)){
             return HighlightCriteriaMatch(field)
         } else {
             return HighlightCriteriaMatch.NO_MATCH

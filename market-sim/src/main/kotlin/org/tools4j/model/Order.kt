@@ -8,6 +8,7 @@ import org.tools4j.fix.Price
 import org.tools4j.fix.PriceOperations
 import org.tools4j.fix.Priceable
 import org.tools4j.fix.Side
+import org.tools4j.fix.spec.FixSpecDefinition
 import org.tools4j.model.fix.messages.NewOrderSingle
 import java.text.NumberFormat
 
@@ -56,7 +57,7 @@ interface Order : Priceable {
     val orderType: OrderType
             get() = if (price.hasPrice()) OrderType.LIMIT else OrderType.MARKET
 
-    fun createNewOrderSingle(dateTimeService: DateTimeService, fixSpec: FixSpec): NewOrderSingle {
+    fun createNewOrderSingle(dateTimeService: DateTimeService, fixSpec: FixSpecDefinition): NewOrderSingle {
         return NewOrderSingle(
                 senderCompId = senderCompId,
                 targetCompId = targetCompId,

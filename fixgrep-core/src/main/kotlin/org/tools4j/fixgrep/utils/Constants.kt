@@ -7,6 +7,7 @@ package org.tools4j.fixgrep.utils
 public class Constants{
     companion object {
         val DOLLAR: String = "${'$'}"
+        val EQUALS_SEPARATOR: String = "========================================"
     }
 }
 

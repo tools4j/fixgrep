@@ -1,5 +1,7 @@
 package org.tools4j.fixgrep.help
 
+import org.tools4j.fixgrep.Option
+import org.tools4j.fixgrep.help.HelpGenerator.Companion.fix
 import org.tools4j.fixgrep.texteffect.Ansi256Color
 import org.tools4j.fixgrep.texteffect.AnsiForegroundBackground
 import org.tools4j.fixgrep.texteffect.HtmlOnlyTextEffect
@@ -15,29 +17,19 @@ class OptionsHelp(val docWriterFactory: DocWriterFactory) {
 
     fun toFormattedText(): String{
         val sb = StringBuilder(docWriterFactory.createNew().writeHeading(1, "Options").toFormattedText())
-        helpByOptions.values.stream().distinct().forEach{sb.append(it.toFormattedText())}
+        optionsHelp.forEach{sb.append(it.toFormattedText())}
         return sb.toString()
     }
 
-    val optionsThatDoNotNeedHelpItems: List<String> by lazy {
-        listOf("?", "help", "[arguments]", "install-dir")
+    val optionsThatDoNotNeedHelpItems: List<Option> by lazy {
+        ArrayList<Option>()
     }
 
-    val longestOptions: List<String> by lazy {
-        helpByOptions.values.map { it.longestOptionVariation }.toSet().toList()
-    }
+    val optionsHelp: List<OptionHelp> by lazy {
+        val optionsHelp = ArrayList<OptionHelp>()
 
-    val helpByPropertyValues: Map<String, OptionHelp> by lazy {
-        helpByOptions.filter { it.value.longestOptionVariation == it.key }
-                .filter { !optionsThatDoNotNeedHelpItems.contains(it.key) }
-                .mapKeys {it.value.optionVariations.longestAsPropertyKey}
-    }
-
-    val helpByOptions: Map<String, OptionHelp> by lazy {
-        val helpByOptions: MutableMap<String, OptionHelp> = LinkedHashMap()
-
-        addOptionHelp(helpByOptions, OptionHelp(
-                listOf("a", "tag-annotations"),
+        optionsHelp.add(OptionHelp(
+                Option.tag_annotations,
                 "Defines the format of annotations to use when printing fields.",
                 "outsideAnnotations",
                 docWriterFactory.createNew().write("Using the built in fix spec it is possible to annotate FIX tags with information to make them more human readable. e.g. the fix message '35=D^A11=ABC^A55=AUD/USD' can be made much more readable when presented with the tag and/or value descriptions.  e.g. '[MsgType]")
@@ -65,23 +57,28 @@ class OptionsHelp(val docWriterFactory: DocWriterFactory) {
                 .endTable()
                 .toFormattedText()))
 
-        addOptionHelp(helpByOptions, OptionHelp(listOf("d", "input-delimiter", "input-delim"), "Defines the FIX delimiter used in the input fix messages.  Default to control character 1, i.e. \\u0001", ":", null))
+        optionsHelp.add(OptionHelp(Option.align_vertical_columns, "Aligns tags, values and annotations when viewing messages in vertical format.", null, null))
 
-        addOptionHelp(helpByOptions, OptionHelp(listOf("e", "exclude-tags"), "Tags to exclude from the formatted FIX.", "22,33", """A comma separated list of tags which should not be displayed in the output 'formatted' fix.
+        optionsHelp.add(OptionHelp(Option.input_delimiter, "Defines the FIX delimiter used in the input fix messages.  Default to control character 1, i.e. \\u0001", ":", null))
+
+        optionsHelp.add(OptionHelp(Option.exclude_tags, "Tags to exclude from the formatted FIX.", "22,33", """A comma separated list of tags which should not be displayed in the output 'formatted' fix.
 e.g. '--exclude-tags 22,33' would hide tags 22 and 33 from being displayed.  Can be useful for hiding some of
 the less 'interesting' fix fields, such as BeginString, BodyLength or Checksum.  Yawn!"""))
 
-        addOptionHelp(helpByOptions, OptionHelp(listOf("f", "to-file"), "Send output to a file.", "output.txt", """Filename is optional.  If no filename is specified, then a random file-name will be generated, with the prefix 'fixgrep-'.  And an extension of '.log' if in normal console mode, or an extension of '.html' if output is in html."""))
+        optionsHelp.add(OptionHelp(Option.to_file, "Send output to a file.", "output.txt", """Filename is optional.  If no filename is specified, then a random file-htmlClass will be generated, with the prefix 'fixgrep-'.  And an extension of '.log' if in normal console mode, or an extension of '.html' if output is in html."""))
 
-        addOptionHelp(helpByOptions, OptionHelp(
-                listOf("h", "highlight", "highlights"), 
+        optionsHelp.add(OptionHelp(Option.group_by_order, "Group order messages by orderId", null,
+                "Using this option changes the 'mode' of fixgrep to discard any non-order messages, and to group the messages by order. fixgrep will attempt to keep track of 'order chains' when amends and cancels change the clOrdId, even if the orderId is not present on every message.  Using this option can increase the memory used by fixgrep, as fixgrep will need to cache all order messages before printing them out.  This should not affect other processes on the box, but it might mean that fixgrep will have to stop with an OutOfMemoryException if it uses all of it's allocated heap."))
+
+        optionsHelp.add(OptionHelp(
+                Option.highlights, 
                 "Highlight fields or lines using color or console text effects.", 
                 "35,55",
                 docWriterFactory.createNew()
                 .write("Format: ").writeBold("criteria[:texteffect1][:texteffect2][:scope]")
                 .writeLn(" (criteria is mandatory, texteffect and scope are optional.)")
                 .writeHeading(3, "criteria")
-                .writeLn(" must start with a tag number, and can optionally have an equals or tilda followed by a string to match the tags value against.  An equals sign '=' performs an exact match.  If just the tag number is specified, the tag and associated value will be highlighted. Multiple tag (and optional equals value) pairs can be chained together into an 'and' statement using the && operator.  'Or' statements are not supported as of yet, as you can just specify another highlight.")
+                .writeLn(" must start with a tag number, and can optionally have an equals or tilda followed by a string to match the tagsInId value against.  An equals sign '=' performs an exact match.  If just the tag number is specified, the tag and associated value will be highlighted. Multiple tag (and optional equals value) pairs can be chained together into an 'and' statement using the && operator.  'Or' statements are not supported as of yet, as you can just specify another highlight.")
                 .writeHeading(3, "texteffect1 & texteffect2")
                 .writeLn(" are optional. It uses ansi escape codes to print display attributes which affect how the text is displayed.  If this is not specified, fixgrep will loop through a predefined set of foreground colors. If specified, it can be of four different formats. 16 color text effects, 256 color text effects, Bold, or a raw escape code.  Whether these escape codes will work will depend on your particular shell environment.")
                 .writeHeading(3, "scope")
@@ -104,20 +101,21 @@ the less 'interesting' fix fields, such as BeginString, BodyLength or Checksum. 
                 .writeFormatExamplesTable(fix)
                 .add("35")
                 .add("35:Bold")
+                .add("35:Bold:Msg")
                 .add("11")
                 .add("11:FgWhite:BgBlue")
                 .add("11:FgWhite:BgBlue:Field")
-                .add("11:FgWhite:BgBlue:Line")
+                .add("11:FgWhite:BgBlue:Msg")
                 .add("11:Field")
-                .add("11:Line")
+                .add("11:Msg")
                 .add("35=D")
                 .add("35=D:BgBlue:FgWhite")
                 .add("35=D:Fg176")
-                .add("35=D:Fg177:Line")
+                .add("35=D:Fg177:Msg")
                 .add("35=D&&55=AUD")
                 .add("35=D&&55=AUD:FgRed")
                 .add("35=D&&55=AUD:FgRed:Field")
-                .add("35=D&&55=AUD:FgRed:Line")
+                .add("35=D&&55=AUD:FgRed:Msg")
                 .add("35=D&&55=AUD&&11=AB:FgPurple")
                 .endTable()
                 .writeHeading(3,"Some examples specifying multiple highlights (separated by commas):")
@@ -128,49 +126,60 @@ the less 'interesting' fix fields, such as BeginString, BodyLength or Checksum. 
                 .add("35,55,11")
                 .add("35:Bold,55")
                 .add("35=D:Fg176,55=AUD&&11=AB:FgBlue:BgBrightYellow")
-                .add("35=D:Fg176:Line,55=AUD:BgBrightGreen")
+                .add("35=D:Fg176:Msg,55=AUD:BgBrightGreen")
                 .endTable()
                 .toFormattedText()))
 
-        addOptionHelp(helpByOptions, OptionHelp(
-                listOf("F", "output-line-format"),
-                "The format of each line.",
+        optionsHelp.add(OptionHelp(
+                Option.output_format_horizontal_console,
+                "The format of each message when displaying fix on the console in horizontal format.",
                 "Thread:${'$'}1 ${'$'}{msgFix}",
-                docWriterFactory.createNew().writeLn("The output-line-format is a specification of how each outputted line should be displayed.  The output-line-format param is free text, and can include any of the following tokens:")
-                .addTable()
-                .startNewRow().addTableHeaderCell("token").addTableHeaderCell("description")
-                .startNewRow().addCell("${'$'}{senderToTargetCompIdDirection}").addCell("will display the compIds of the current msg. e.g. ABC->DEF")
-                .startNewRow().addCell("${'$'}{msgColor}").addCell("will 'start' formatting text using the pre-defined color for the particular FIX message type.")
-                .startNewRow().addCell("${'$'}{msgReset}").addCell("stops formatting text using the pre-defined color for the FIX message.")
-                .startNewRow().addCell("${'$'}{msgTypeName}").addCell("displays the FIX msg type name & sub-type, e.g. NewOrderSingle, CancelRequest, Exec.Fill")
-                .startNewRow().addCell("${'$'}{msgFix}").addCell("displays the formatted FIX message")
-                .startNewRow().addCell("${'$'}{n}").addCell("displays the value of that fix tag.  e.g. for a NewOrderSingle ${'$'}{35} would print 'D'")
-                .startNewRow().addCell("${'$'}n").addCell("(note, no braces), will print the captured regex group 'n' from the regex specified in the parameter input-line-format (or property input.line.format).")
-                .endTable()
+                docWriterFactory.createNew().writeLn("See the section on 'Output Formatting' for more information.")
                 .toFormattedText()))
 
-        addOptionHelp(helpByOptions, OptionHelp(listOf("G", "line-regexgroup-for-fix"), "Combined with the 'input-line-format' parameter, is used to specify which 'capturing group' of the regex contains the actual fix message.", "2",null))
+        optionsHelp.add(OptionHelp(
+                Option.output_format_vertical_console,
+                "The format of each message when displaying fix in html in horizontal format.",
+                "==========\\n${'$'}{msgColor}${'$'}{msgTypeName}${'$'}{colorReset}\\n==========\\n${'$'}{msgFix}",
+                docWriterFactory.createNew().writeLn("See the section on 'Output Formatting' for more information.")
+                        .toFormattedText()))
 
-        addOptionHelp(helpByOptions, OptionHelp(listOf("install"), "Create a customizable application.properties file in the ~/.fixgrep directory", null,"Fixgrep will try to create a folder in the users home directory called '.fixgrep', and inside that folder fixgrep will try to create an application.properties file that the user can customize."))
+        optionsHelp.add(OptionHelp(
+                Option.output_format_horizontal_html,
+                "The format of each message when displaying fix on the console in horizontal format.",
+                "<b>Thread:</b>${'$'}1 ${'$'}{msgFix}",
+                docWriterFactory.createNew().writeLn("See the section on 'Output Formatting' for more information.")
+                        .toFormattedText()))
 
-        addOptionHelp(helpByOptions, OptionHelp(listOf("l", "launch-browser"), "Will launch a browser containing the output log file.", null, "Will open the output file in the system browser.  Can only be used if the -f or --to-file option has been given."))
+        optionsHelp.add(OptionHelp(
+                Option.output_format_vertical_html,
+                "The format of each line when displaying fix on the console in horizontal format.",
+                "<div class='msg-header'>\\n==========</br>\\n${'$'}{msgColor}${'$'}{msgTypeName}${'$'}{colorReset}<br/>\\n==========\\n</div>\\n${'$'}{msgFix}\\n<br/>",
+                docWriterFactory.createNew().writeLn("See the section on 'Output Formatting' for more information.")
+                        .toFormattedText()))
 
-        addOptionHelp(helpByOptions, OptionHelp(listOf("m", "include-only-messages-of-type"), "A comma separated list of msg types to display.", "D,8", "e.g. to display only NewOrderSingles and ExecutionReports, use 35,8"))
+        optionsHelp.add(OptionHelp(Option.line_regexgroup_for_fix, "Combined with the 'input-line-format' parameter, is used to specify which 'capturing group' of the regex contains the actual fix message.", "2",null))
 
-        addOptionHelp(helpByOptions, OptionHelp(listOf("n", "no-color", "suppress-colors"), "Suppresses any colorization in lines.", "true", "Note, see the 'suppress-bold-tags-and-values' parameter to also suppress usage of bold text effect on formatted lines"))
+        optionsHelp.add(OptionHelp(Option.install, "Create a customizable application.properties file in the ~/.fixgrep directory", null,"Fixgrep will try to create a folder in the users home directory called '.fixgrep', and inside that folder fixgrep will try to create an application.properties file that the user can customize."))
 
-        addOptionHelp(helpByOptions, OptionHelp(listOf("o", "output-delimiter", "output-delim"), "Defines the delimiter to print between FIX tags in the formatted output.", ";", null))
+        optionsHelp.add(OptionHelp(Option.launch_browser, "Will launch a browser containing the output log file.", null, "Will open the output file in the system browser.  Can only be used if the -f or --to-file option has been given."))
 
-        addOptionHelp(helpByOptions, OptionHelp(listOf("p", "piped", "piped-input"), "Whether or not piped input is being used.  Should not every be required.  Is used by fixgrep bash script to communicate with fixgrep java app.", null, "Normally there is no need to specify this, as it is detected and set by teh fixgrep bash script."))
+        optionsHelp.add(OptionHelp(Option.include_only_messages_of_type, "A comma separated list of msg types to display.", "D,8", "e.g. to display only NewOrderSingles and ExecutionReports, use 35,8"))
 
-        addOptionHelp(helpByOptions, OptionHelp(
-                listOf("q", "suppress-bold-tags-and-values"),
+        optionsHelp.add(OptionHelp(Option.suppress_colors, "Suppresses any colorization in lines.", "true", "Note, see the 'suppress-bold-tags-and-values' parameter to also suppress usage of bold text effect on formatted lines"))
+
+        optionsHelp.add(OptionHelp(Option.output_delimiter, "Defines the delimiter to print between FIX tags in the formatted output.", ";", null))
+
+        optionsHelp.add(OptionHelp(Option.piped_input, "Whether or not piped input is being used.  Should not every be required.  Is used by fixgrep bash script to communicate with fixgrep java app.", null, "Normally there is no need to specify this, as it is detected and set by teh fixgrep bash script."))
+
+        optionsHelp.add(OptionHelp(
+                Option.suppress_bold_tags_and_values,
                 "Suppresses the bold formatting of tags and values.",
                 "true",
                 docWriterFactory.createNew().write("By default tags and values are displayed in bold. E.g.: '[MsgType]").writeBold("35=D").write("[NEWORDERSINGLE]|[ClOrdID]").writeBold("11=ABC").write("[Symbol]").writeBold("55=AUD/USD").write(".  In some shells highlighting and bold text don't work well together resulting in partially highlighted fields and lines.  On such shells the user may wish to suppress bold tags and values, so that highlighting is not broken.").toFormattedText()))
 
-        addOptionHelp(helpByOptions, OptionHelp(
-                listOf("R", "input-line-format"),
+        optionsHelp.add(OptionHelp(
+                Option.input_line_format,
                 "Defines the regex to use, when parsing input lines.", 
                 "\\d\\d\\d\\d-\\d\\d-\\d\\d \\[(\\d)\\] (\\d+=.*)",
                 docWriterFactory.createNew().write("Although FIX messages appear in some logs as 'pure' FIX, they can also be displayed as part of an application's normal logging, and may have text appearing before/after the FIX message.  Such as timestamps, thread identifiers, etc.  This line can be customized for your application so that fixgrep knows where to find the actual FIX message in each log line.  Use in conjunction with the parameter 'line-regexgroup-for-fix' to tell fixgrep, which regex 'group' to use.  The default value for this is ").writeBold("^(\\d{4}-[01]\\d-[0-3]\\d[T\\s][0-2]\\d:[0-5]\\d:[0-5]\\d[\\.,]\\d+)?.*?(\\d+=.*${'$'})")
@@ -178,50 +187,57 @@ the less 'interesting' fix fields, such as BeginString, BodyLength or Checksum. 
                         .writeBold("NOTE: Running this regex is the single biggest user of CPU in fixgrep ").write("because the regex is run against every line in the file/pipe being processed.  So it pays to experiment with different regexes to find one that is fastest.  The regex does not need to match the _whole_ line, just the part of the line that indicates it's a line of FIX, and a regex group (brackets) which captures the FIX message.")
                         .toFormattedText()))
 
-        addOptionHelp(helpByOptions, OptionHelp(listOf("s", "sort-by-tags"), "Defines the preferred order of the FIX tags in the formatted output.", "35,11", "Let's face it, some tags are more interesting than others.  This parameter allows you to display the more 'interesting' tags at the front of the outputted message."))
+        optionsHelp.add(OptionHelp(Option.sort_by_tags, "Defines the preferred order of the FIX tags in the formatted output.", "35,11", "Let's face it, some tags are more interesting than others.  This parameter allows you to display the more 'interesting' tags at the front of the outputted message."))
 
-        addOptionHelp(helpByOptions, OptionHelp(listOf("t", "only-include-tags"), "Tags to include in the formatted fix.", "35,55,11", """A comma separated list of tags numbers to include in the output FIX.  Any other fields are discarded."""))
+        optionsHelp.add(OptionHelp(Option.only_include_tags, "Tags to include in the formatted fix.", "35,55,11", """A comma separated list of tags numbers to include in the output FIX.  Any other fields are discarded."""))
 
-        addOptionHelp(helpByOptions, OptionHelp(listOf("v", "exclude-messages-of-type"), "Comma separated list of msgType codes.  Can be used to hide messages of certain types from being displayed.", "A,O", "e.g. To 'hide' Logon and Heartbeat messages, this parameter could be defined as 'A,0'"))
+        optionsHelp.add(OptionHelp(Option.exclude_messages_of_type, "Comma separated list of msgType codes.  Can be used to hide messages of certain types from being displayed.", "A,O", "e.g. To 'hide' Logon and Heartbeat messages, this parameter could be defined as 'A,0'"))
 
-        addOptionHelp(helpByOptions, OptionHelp(listOf("x", "debug"), "Run in debug mode.", null, null))
+        optionsHelp.add(OptionHelp(Option.vertical_format, "View messages in vertical format.  Default is false (horizontal).", null, null))
 
-        addOptionHelp(helpByOptions, OptionHelp(listOf("?", "help"), "Displays help text", "",null))
+        optionsHelp.add(OptionHelp(Option.indent_group_repeats, "Indent group repeats when viewing messages in vertical format.", "true",
+                """Often when viewing messages which have a lot of repeating groups e.g. prices, it is useful to see the repeating groups indented.  Default is true. Has no effect when viewing messages in the default horizontal format."""))
 
-        addOptionHelp(helpByOptions, OptionHelp(listOf("256-color-demo"), "Displays a table of 256 colors using 8 bit Ansi Escape codes.", null,
-                "Most modern consoles support 256 colors.  To use any of these colors in your highlights, prefix the number with 'Fg' or 'Bg' depending on whether you wish to highlight the foreground or background.'" +
+        optionsHelp.add(OptionHelp(Option.debug, "Run in debug mode.", null, null))
+
+        optionsHelp.add(OptionHelp(Option.help, "Displays help text", "",null))
+
+        optionsHelp.add(OptionHelp(Option.color_demo_256, "Displays a table of 256 colors using 8 bit Ansi Escape codes.", null,
+                "Most modern consoles support 256 colors.  To use any of these colors in your highlights, prefix the msgType with 'Fg' or 'Bg' depending on whether you wish to highlight the foreground or background.'" +
                             Color256HtmlDemo(docWriterFactory).toFormattedText()))
 
-        addOptionHelp(helpByOptions, OptionHelp(listOf("16-color-demo"), "Displays a list of 16 foreground colors and 16 background colors using 16 color Ansi Escape codes.", null,
-                "Most consoles support 16 colors.  To use any of these colors in your highlights, prefix the name of the colors below with 'Fg' or 'Bg' depending on whether you wish to highlight the foreground or background.  E.g. FgWhite, BgRed.  To find out whether your console supports these colors, run this demo by specifying this option." +
+        optionsHelp.add(OptionHelp(Option.color_demo_16, "Displays a list of 16 foreground colors and 16 background colors using 16 color Ansi Escape codes.", null,
+                "Most consoles support 16 colors.  To use any of these colors in your highlights, prefix the htmlClass of the colors below with 'Fg' or 'Bg' depending on whether you wish to highlight the foreground or background.  E.g. FgWhite, BgRed.  To find out whether your console supports these colors, run this demo by specifying this option." +
                             Color16HtmlDemo(docWriterFactory).toFormattedText()))
 
-        addOptionHelp(helpByOptions, OptionHelp(listOf("man"), "Displays man page.", null,"Running with this command will print out the man page.  You can also use 'fixgrep man' (no dashes) which will run man and pipe it into less -R which preserves ansi colors.  Or 'fixgrep man online' which will launch the gixgrep online help into your default browser."))
+        optionsHelp.add(OptionHelp(Option.man, "Displays man page.", null,"Running with this command will print out the man page.  You can also use 'fixgrep man' (no dashes) which will run man and pipe it into less -R which preserves ansi colors.  Or 'fixgrep man online' which will launch the gixgrep online help into your default browser."))
 
-        addOptionHelp(helpByOptions, OptionHelp(listOf("html"), "Displays results in HTML format.", "page","There are two possible arguments for this option 'page' and 'raw'.  'page' is assumed as the default if no argument is given.  When in 'page' mode, then the HTML will be contain proper headers and footers and will include styles to format the output FIX.  If in 'raw' format, just the HTML required to render the tags is output.  No styles, header or footers will be output."))
+        optionsHelp.add(OptionHelp(Option.html, "Displays results in HTML format.", "page","There are two possible arguments for this option 'page' and 'raw'.  'page' is assumed as the default if no argument is given.  When in 'page' mode, then the HTML will be contain proper headers and footers and will include styles to format the output FIX.  If using the 'page' argument (or specifying no argument), you can also used the -l argument if running on a operating system with a browser, to launch the page into your default browser.   If in 'raw' format, just the HTML required to render the tags is output.  No styles, header or footers will be output."))
 
-        addOptionHelp(helpByOptions, OptionHelp(listOf("gimme-css"), "Downloads a copy of the default fixgrep.css file to use with any fixgrep output formatted in HTML.", null,null))
+        optionsHelp.add(OptionHelp(Option.gimme_css, "Downloads a copy of the default fixgrep.css file to use with any fixgrep output formatted in HTML.", null,null))
 
-        helpByOptions
-    }
+        optionsHelp.add(OptionHelp(Option.fix_spec_path, "Specifies an alternative fixspec definition to use.  Spec must be in the format used by quickfix.  Default spec is 5.0-SP2.", "FIX40_modified.xml","FixGrep first looks for the file relative to the current working directory.  If it is not found there, then FixGrep will look on the classpath.  Examples:\nmy-fix-spec.xml\npath/to/my-fix-spec.xml\n/package/path/to/my-fix-spec.xml"))
 
-    private fun addOptionHelp(helpByOptions: MutableMap<String, OptionHelp>, optionHelp: OptionHelp) {
-        for(option in optionHelp.optionVariations.values){
-            helpByOptions.put(option, optionHelp)
+        //Verify we have all the options
+        val optionsThatHaveHelpDefined = optionsHelp.map { it.option }
+        val optionsThatWeDontHaveHelpYetDefined = ArrayList<Option>()
+        for(option in Option.optionsThatCanBePassedOnCommandLine){
+            if(!optionsThatHaveHelpDefined.contains(option) && !optionsThatDoNotNeedHelpItems.contains(option)){
+                optionsThatWeDontHaveHelpYetDefined.add(option)
+            }
         }
-    }
-
-    inner class OptionHelp(val optionVariations: OptionVariations, val tagline: String, val exampleValue: String?, val description: String?){
-        constructor(options: List<String>, tagline: String, exampleValue: String?, description: String?): this(OptionVariations(options), tagline, exampleValue, description)
-
-        val longestOptionVariation:String by lazy {
-            optionVariations.longest
+        if(!optionsThatWeDontHaveHelpYetDefined.isEmpty()){
+            throw IllegalStateException("We still need to define help items for options $optionsThatWeDontHaveHelpYetDefined")
         }
 
+        optionsHelp
+    }
+
+    inner class OptionHelp(val option: Option, val tagline: String, val exampleValue: String?, val description: String?){
         fun toFormattedText(): String {
             val writer = docWriterFactory.createNew()
             writer.startSection(HtmlOnlyTextEffect("option"))
-                    .writeHeading(2, optionVariations.toString())
+                    .writeHeading(2, option.optionVariationsWithDashPrefixesAsCommaDelimitedString)
                     .writeLn(tagline, HtmlOnlyTextEffect("tagline"))
             if(description != null) writer.write(description, HtmlOnlyTextEffect("description"))
             return writer.endSection().toFormattedText()
@@ -231,7 +247,7 @@ the less 'interesting' fix fields, such as BeginString, BodyLength or Checksum. 
             if (this === other) return true
             if (other !is OptionHelp) return false
 
-            if (optionVariations != other.optionVariations) return false
+            if (option != other.option) return false
             if (tagline != other.tagline) return false
             if (description != other.description) return false
 
@@ -239,40 +255,18 @@ the less 'interesting' fix fields, such as BeginString, BodyLength or Checksum. 
         }
 
         override fun hashCode(): Int {
-            var result = optionVariations.hashCode()
+            var result = option.hashCode()
             result = 31 * result + tagline.hashCode()
             result = 31 * result + (description?.hashCode() ?: 0)
             return result
         }
 
         override fun toString(): String {
-            return "OptionHelp(optionVariations=$optionVariations, tagline='$tagline', description=$description)"
-        }
-    }
-
-    class OptionVariations (val values: List<String>): List<String> by values{
-        override fun toString(): String {
-            val sb = StringBuilder()
-            values.forEach {
-                if(sb.length > 0) sb.append(", ")
-                sb.append(if(it.length == 1) "-" else "--")
-                sb.append(it)
-            }
-            return sb.toString()
-        }
-
-        val longest: String by lazy {
-            values.sortedBy { it.length }.last()
-        }
-
-        val longestAsPropertyKey: String by lazy {
-            longest.replace('-', '.')
+            return "OptionHelp(optionVariations=$option, tagline='$tagline', description=$description)"
         }
     }
 
     companion object {
-        val fix = "35=D|11=ABC|55=AUD/USD"
-
         @JvmStatic
         fun main(args: Array<String>) {
             println(OptionsHelp(DocWriterFactory.Html).toFormattedText())

@@ -1,9 +1,8 @@
 package org.tools4j.fixgrep.help
 
-import org.tools4j.fix.Fix50SP2FixSpecFromClassPath
 import org.tools4j.fixgrep.ConfigBuilder
 import org.tools4j.fixgrep.FormatSpec
-import org.tools4j.fixgrep.Formatter
+import org.tools4j.fixgrep.WrappedFormatter
 import org.tools4j.fixgrep.texteffect.HtmlOnlyTextEffect
 import org.tools4j.fixgrep.texteffect.MiscTextEffect
 import org.tools4j.properties.ConfigImpl
@@ -14,8 +13,6 @@ import org.tools4j.properties.ConfigImpl
  * Time: 5:25 PM
  */
 class ExamplesList (val fixLines: List<String>, val docWriter: DocWriter) {
-    val fixSpec = Fix50SP2FixSpecFromClassPath().spec
-
     init {
         docWriter.startSection(HtmlOnlyTextEffect("example-list"))
     }
@@ -34,12 +31,12 @@ class ExamplesList (val fixLines: List<String>, val docWriter: DocWriter) {
         val configOverrides: MutableMap<String, String> = LinkedHashMap()
         configOverrides.put("html", ""+docWriter.isHtml())
         configOverrides.put("input.delimiter", "|")
-        configOverrides.put("output.line.format", "${'$'}{msgFix}")
+        configOverrides.put("output.format.horizontal.console", "${'$'}{msgFix}")
 
         val configAndArguments = ConfigBuilder(example.args, ConfigImpl(configOverrides)).configAndArguments
 
-        val spec = FormatSpec(config = configAndArguments.config, fixSpec = fixSpec)
-        val formatter = Formatter(spec)
+        val spec = FormatSpec(config = configAndArguments.config)
+        val formatter = WrappedFormatter(spec)
         docWriter.startSection(MiscTextEffect.Console)
         for(line in fixLines){
             val formattedLine = formatter.format(line)

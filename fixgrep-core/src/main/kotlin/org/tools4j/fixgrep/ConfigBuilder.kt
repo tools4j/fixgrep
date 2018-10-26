@@ -1,10 +1,9 @@
 package org.tools4j.fixgrep
 
 import mu.KLogging
-import org.tools4j.properties.ConfigLoader
 import org.tools4j.properties.Config
-import org.tools4j.properties.ConfigAndArguments
 import org.tools4j.properties.ConfigImpl
+import org.tools4j.properties.ConfigLoader
 
 /**
  * User: ben
@@ -19,9 +18,16 @@ class ConfigBuilder(val args: List<String>, val overrides: Config?){
 
     val configAndArguments: ConfigAndArguments by lazy {
         val parsedOptions = OptionParserFactory().optionParser.parse(*args.toTypedArray())
+
         val optionsConfig = OptionsToConfig(parsedOptions).config
+        optionsConfig.validateAllPropertyKeysAreOneOf(Option.optionsThatCanBePassedOnCommandLine.map { it.key })
+
         val classpathConfig = ConfigLoader.fromClasspath("application.properties")!!
+        classpathConfig.validateAllPropertyKeysAreOneOf(Option.optionsThatCanBeConfigurableInPropertiesFile.map { it.key })
+
         val homeDirConfig = ConfigLoader.fromHomeDir(".fixgrep/application.properties")
+        homeDirConfig?.validateAllPropertyKeysAreOneOf(Option.optionsThatCanBeConfigurableInPropertiesFile.map { it.key })
+
         val rawArguments = parsedOptions.nonOptionArguments()
         val cleanedArguments = rawArguments
                 .filter { it != null && !it.toString().trim().isEmpty() }

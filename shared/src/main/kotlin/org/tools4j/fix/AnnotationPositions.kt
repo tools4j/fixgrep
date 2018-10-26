@@ -1,6 +1,5 @@
 package org.tools4j.fix
 
-import java.util.stream.Collectors
 import org.tools4j.fix.AnnotationPosition.*
 
 class AnnotationPositions(val tagAnnotationPosition: AnnotationPosition, val valueAnnotationPosition: AnnotationPosition){
@@ -32,20 +31,19 @@ class AnnotationPositions(val tagAnnotationPosition: AnnotationPosition, val val
         val specs: MutableMap<String, AnnotationPositions> = HashMap()
         val OUTSIDE_ANNOTATED = AnnotationPositions(BEFORE, AFTER)
         val LEFT_ANNOTATED = AnnotationPositions(BEFORE, BEFORE)
+        val REPLACED = AnnotationPositions(REPLACE, REPLACE)
         val NO_ANNOTATION = AnnotationPositions(NONE, NONE)
 
         init{
             specs["outsideAnnotated"] = AnnotationPositions(BEFORE, AFTER)
             specs["insideAnnotated"] = AnnotationPositions(AFTER, BEFORE)
-            specs["ab"] = AnnotationPositions(AFTER, BEFORE)
-            specs["ba"] = AnnotationPositions(BEFORE, AFTER)
-            specs["bb"] = AnnotationPositions(BEFORE, BEFORE)
-            specs["aa"] = AnnotationPositions(AFTER, AFTER)
-            specs["a_"] = AnnotationPositions(AFTER, NONE)
-            specs["b_"] = AnnotationPositions(BEFORE, NONE)
-            specs["_a"] = AnnotationPositions(NONE, AFTER)
-            specs["_b"] = AnnotationPositions(NONE, BEFORE)
-            specs["__"] = NO_ANNOTATION
+            specs["replaced"] = AnnotationPositions(REPLACE, REPLACE)
+            for(firstSymbol in AnnotationPosition.values()){
+                for(secondSymbol in AnnotationPosition.values()){
+                    specs["${firstSymbol.abbrev}${secondSymbol.abbrev}"] = AnnotationPositions(firstSymbol, secondSymbol)
+                }
+                specs["${firstSymbol.abbrev}"] = AnnotationPositions(firstSymbol, firstSymbol)
+            }
             specs["none"] = NO_ANNOTATION
         }
 

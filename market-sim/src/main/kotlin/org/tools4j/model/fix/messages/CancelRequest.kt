@@ -1,14 +1,7 @@
 package org.tools4j.model.fix.messages
 
-import org.tools4j.fix.Fields
-import org.tools4j.fix.FieldsFromDelimitedString
-import org.tools4j.fix.FixFieldTypes
-import org.tools4j.fix.FixMessageType
-import org.tools4j.fix.FixSpec
-import org.tools4j.fix.Id
-import org.tools4j.fix.OrderType
-import org.tools4j.fix.Price
-import org.tools4j.fix.Side
+import org.tools4j.fix.*
+import org.tools4j.fix.spec.FixSpecDefinition
 import org.tools4j.model.FieldsBuilder
 import org.tools4j.utils.FormatUtils
 
@@ -29,7 +22,7 @@ class CancelRequest(
         private val orderQty: Long,
         private val orderType: OrderType,
         private val price: Price,
-        fixSpec: FixSpec) : OrderRequestMessage, FixMessage(fixSpec) {
+        fixSpec: FixSpecDefinition) : OrderRequestMessage, FixMessage(fixSpec) {
 
     override fun dispatchBackTo(messageHandler: DoubleDispatchingMessageHandler) {
         messageHandler.handleCancelRequest(this);
@@ -56,7 +49,7 @@ class CancelRequest(
                 .fields
     }
 
-    class Decoder(val fixSpec: FixSpec) : FixMessageDecoder<CancelRequest> {
+    class Decoder(val fixSpec: FixSpecDefinition) : FixMessageDecoder<CancelRequest> {
         override val msgType: String
             get() = MSG_TYPE
 

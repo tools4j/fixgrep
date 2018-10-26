@@ -1,7 +1,5 @@
 package org.tools4j.fixgrep.texteffect
 
-import org.tools4j.fixgrep.highlights.HighlightScope
-
 /**
  * User: ben
  * Date: 5/04/2018

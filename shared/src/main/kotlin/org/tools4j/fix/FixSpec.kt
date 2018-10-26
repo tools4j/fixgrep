@@ -29,7 +29,7 @@ class FixSpec(
                 return msgTypeName
             }
         } else if(fields.getField(150) != null){
-            return "Exec." + ExecType.forCode(fields.getField(150)!!.value.rawValue).name
+            return "Exec." + ExecType.forCode(fields.getField(150)!!.value.valueRaw).name
         } else {
             return "ExecutionReport"
         }

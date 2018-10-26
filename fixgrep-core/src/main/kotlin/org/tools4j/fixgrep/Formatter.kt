@@ -1,14 +1,9 @@
 package org.tools4j.fixgrep
 
 import org.tools4j.extensions.constantToCapitalCase
-import org.tools4j.fix.Fields
-import org.tools4j.fix.FieldsAnnotator
-import org.tools4j.fix.FieldsFromDelimitedString
-import org.tools4j.fix.FixFieldTypes
+import org.tools4j.fix.*
 import org.tools4j.fixgrep.texteffect.Ansi
 import org.tools4j.fixgrep.utils.Constants.Companion.DOLLAR
-import java.util.regex.Matcher
-import java.util.regex.Pattern
 
 /**
  * User: ben
@@ -16,51 +11,18 @@ import java.util.regex.Pattern
  * Time: 6:49 AM
  */
 class Formatter (val spec: FormatSpec){
-    val logLineRegexPattern: Pattern by lazy {
-        Pattern.compile(spec.lineRegex)
-    }
 
-    fun format(line: String): String? {
-        val matcher = logLineRegexPattern.matcher(line)
-        if(!matcher.find()){
-            return null
-        }
-        return format(matcher)
-    }
-
-    fun format(matcher: Matcher): String? {
-        val fixString = matcher.group(spec.lineRegexGroupForFix)
-        val fields: Fields = FieldsFromDelimitedString(fixString, spec.inputDelimiter, spec.outputDelimiter).fields
-
-        if(!shouldPrint(fields)){
-            return null
-        }
-        return format(fields, matcher)
-    }
-
-    private fun shouldPrint(fields: Fields): Boolean {
-        if(!spec.includeOnlyMessagesOfType.isEmpty()
-            && !spec.includeOnlyMessagesOfType.contains(fields.msgTypeCode)){
-            return false
-        } else if(!spec.excludeMessagesOfType.isEmpty()
-                && spec.excludeMessagesOfType.contains(fields.msgTypeCode)) {
-            return false
-        } else {
-            return true
-        }
-    }
-
-    fun format(inputFields: Fields, matcher: Matcher): String? {
-        var formattedString = spec.lineFormat
+    fun format(line: FixLine): String? {
+        var formattedString = spec.getOutputFormat()
         if (formattedString.contains("\${msgTypeName}")) {
-            val msgTypeName = spec.fixSpec.msgTypeAndExecTypeName(inputFields)
+            val msgTypeName = msgTypeAndExecTypeName(line.fields)
             formattedString = formattedString.replace("\${msgTypeName}", msgTypeName)
         }
 
         if (formattedString.contains("\${msgColor}")) {
             val replaceWith: String
             if(!spec.suppressColors) {
-                val msgColor = spec.msgColors.getColor(inputFields)
+                val msgColor = spec.msgColors.getColor(line.fields)
                 if(spec.formatInHtml){
                     replaceWith = "<span class='${msgColor.htmlClass}'>"
                 } else {
@@ -87,22 +49,22 @@ class Formatter (val spec: FormatSpec){
         }
 
         if (formattedString.contains("\${msgTypeName}")) {
-            val msgTypeCode = inputFields.msgTypeCode
+            val msgTypeCode = line.fields.msgTypeCode
             val msgTypeName: String
             if (msgTypeCode == "8") {
-                val execTypeCode = inputFields.getField(150)!!.value.rawValue
-                val execTypeString = spec.fixSpec.fieldsAndEnumValues.get("150." + execTypeCode)
+                val execTypeCode = line.fields.getField(150)!!.value.valueRaw
+                val execTypeString = spec.fixSpec.fieldsByNumber[150]!!.enumsByCode[execTypeCode]
                 val execTypeStringAsCapitalCase = execTypeString!!.constantToCapitalCase()
                 msgTypeName = "Exec." + execTypeStringAsCapitalCase
             } else {
-                msgTypeName = spec.fixSpec.getMsgTypeNameGivenCode(msgTypeCode)!!
+                msgTypeName = spec.fixSpec.messagesByMsgType[msgTypeCode]!!.name
             }
             formattedString = formattedString.replace("\${msgTypeName}", msgTypeName)
         }
 
         if (formattedString.contains("\${senderToTargetCompIdDirection}")) {
-            val senderCompId: String? = inputFields.getField(FixFieldTypes.SenderCompID)?.stringValue()
-            val targetCompId: String? = inputFields.getField(FixFieldTypes.TargetCompID)?.stringValue()
+            val senderCompId: String? = line.fields.getField(FixFieldTypes.SenderCompID)?.stringValue()
+            val targetCompId: String? = line.fields.getField(FixFieldTypes.TargetCompID)?.stringValue()
 
             val direction: String
             if (senderCompId != null && targetCompId != null) {
@@ -114,18 +76,16 @@ class Formatter (val spec: FormatSpec){
         }
 
         if (formattedString.contains("\${msgFix}")) {
-            var fields = FieldsAnnotator(inputFields, spec.fixSpec, spec.tagAnnotationSpec).fields
+            var fields = FieldsAnnotator(line.fields, spec.fixSpec).fields
             fields = fields.sortBy(spec.sortByTags)
-            fields = fields.exclude(spec.excludeTags)
-            fields = fields.includeOnly(spec.onlyIncludeTags)
             if(!spec.suppressColors) fields = spec.highlight.apply(fields)
-            val formattedFix = if(spec.formatInHtml) fields.toHtml() else fields.toConsoleText()
+            val formattedFix = spec.getMsgFormatter(fields).format()
             formattedString = formattedString.replace("\${msgFix}", formattedFix)
         }
 
-        for (i in 1..matcher.groupCount()) {
+        for (i in 1..line.matcher.groupCount()) {
             if (formattedString.contains("$" + i)) {
-                val groupValue = matcher.group(i)
+                val groupValue = line.matcher.group(i)
                 if (groupValue != null) {
                     formattedString = formattedString.replace("${DOLLAR}$i", groupValue)
                 } else {
@@ -137,12 +97,28 @@ class Formatter (val spec: FormatSpec){
 
         if(formattedString.isEmpty()){
             return null
-        } else if(spec.formatInHtml) {
-            return "<div class='line'>$formattedString</div>"
         } else if(spec.debug){
             return formattedString.replace("\u001b", "\\u001b")
         } else {
             return formattedString
+        }
+    }
+
+    fun msgTypeAndExecTypeName(fields: Fields): String {
+        if(fields.msgTypeCode != "8"){
+            val msg = spec.fixSpec.messagesByMsgType.get(fields.msgTypeCode)
+            if(msg == null) {
+                FixSpec.logger.debug { "Could not find message type for msgTypeCode: $fields.msgTypeCode returning 'Unknown'" }
+                return "Unknown"
+            } else {
+                return msg.name
+            }
+        } else if(fields.getField(150) != null){
+            val execTypeCode = fields.getField(150)?.value?.valueRaw
+            val execTypeName = if(execTypeCode != null && ExecType.codeExists(execTypeCode)) ExecType.forCode(execTypeCode) else execTypeCode
+            return "Exec." + execTypeName
+        } else {
+            return "ExecutionReport"
         }
     }
 }

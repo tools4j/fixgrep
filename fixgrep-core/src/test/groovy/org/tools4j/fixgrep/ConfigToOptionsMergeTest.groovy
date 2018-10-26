@@ -22,7 +22,7 @@ class ConfigToOptionsMergeTest extends Specification {
 
         final OptionParser optionParser = new OptionParserFactory().optionParser
         final OptionSet options = optionParser.parse("-n",
-                "--highlights", "35:Blue,8:Yellow:Line,51=1:Purple:Tag,Side=Buy:Green",
+                "--highlights", "35:Blue,8:Yellow:Msg,51=1:Purple:Tag,Side=Buy:Green",
                 "--sort-by-tags", "5,4,3,2,1")
         final OptionsToConfig optionsToProperties = new OptionsToConfig(options);
 
@@ -33,7 +33,7 @@ class ConfigToOptionsMergeTest extends Specification {
 
         then:
         assert config.getAsBoolean("suppress.colors")
-        assert config.getAsStringList("highlights") == ["35:Blue", "8:Yellow:Line", "51=1:Purple:Tag" ,"Side=Buy:Green"]
+        assert config.getAsStringList("highlights") == ["35:Blue", "8:Yellow:Msg", "51=1:Purple:Tag" ,"Side=Buy:Green"]
         assert config.getAsIntList("sort.by.tags") == [5,4,3,2,1]
     }
 

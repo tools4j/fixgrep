@@ -1,7 +1,6 @@
 package org.tools4j.fixgrep.help
 
 import org.tools4j.fixgrep.highlights.HighlightExampleTable
-import org.tools4j.fixgrep.texteffect.HtmlOnlyTextEffect
 import org.tools4j.fixgrep.texteffect.TextEffect
 
 /**
@@ -38,4 +37,5 @@ interface DocWriter {
     fun startListItem(): DocWriter
     fun endListItem(): DocWriter
     fun endList(): DocWriter
+    fun writeCode(str: String): DocWriter
 }

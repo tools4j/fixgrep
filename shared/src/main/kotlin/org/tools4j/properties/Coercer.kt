@@ -24,9 +24,9 @@ interface Coercer {
     fun getAsBooleanList(): List<Boolean>
     fun getAsStringList(): List<String>
 
-    fun getAsDoubleList(default: List<Double>): List<Double>
-    fun getAsLongList(default: List<Long>): List<Long>
-    fun getAsIntList(default: List<Int>): List<Int>
-    fun getAsBooleanList(default: List<Boolean>): List<Boolean>
-    fun getAsStringList(default: List<String>): List<String>
+    fun getAsDoubleList(default: List<Double>?): List<Double>?
+    fun getAsLongList(default: List<Long>?): List<Long>?
+    fun getAsIntList(default: List<Int>?): List<Int>?
+    fun getAsBooleanList(default: List<Boolean>?): List<Boolean>?
+    fun getAsStringList(default: List<String>?): List<String>?
 }

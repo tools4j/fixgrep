@@ -1,20 +1,12 @@
 package org.tools4j.fixgrep
 
 import mu.KLogging
-import org.tools4j.fixgrep.help.Color16ConsoleDemo
-import org.tools4j.fixgrep.help.Color256ConsoleDemo
-import org.tools4j.fixgrep.help.DocWriterFactory
-import org.tools4j.fixgrep.help.ExampleAppPropertiesFileCreator
-import org.tools4j.fixgrep.help.HelpGenerator
-import org.tools4j.fixgrep.help.ManGenerator
+import org.tools4j.fixgrep.help.*
 import org.tools4j.fixgrep.html.HtmlPageFooter
 import org.tools4j.fixgrep.html.HtmlPageHeader
-import org.tools4j.properties.ConfigAndArguments
-import java.io.BufferedReader
-import java.io.File
-import java.io.InputStream
-import java.io.OutputStream
-import java.io.PrintStream
+import org.tools4j.fixgrep.orders.*
+import java.io.*
+import java.util.function.Consumer
 
 
 /**
@@ -33,40 +25,69 @@ class FixGrep(val inputStream: InputStream?, val outputStream: OutputStream, val
         PrintStream(outputStream)
     }
 
+    val fixLineHandler: FixLineHandler by lazy {
+        if(configAndArguments.config.hasPropertyAndIsNotFalse(Option.group_by_order)){
+            OrderGroupingFixLineHandler(
+                    formatter,
+                    UniqueIdSpecs(
+                        UniqueClientOrderIdSpec(),
+                        UniqueOriginalClientOrderIdSpec(),
+                        UniqueOrderIdSpec()),
+                    IdFilter(configAndArguments.config.getAsStringList(Option.group_by_order, null)),
+                    Consumer {printStream.print(it)})
+        } else {
+            DefaultFixLineHandler(formatter, Consumer {printStream.print(it)})
+        }
+    }
+
+    val textLineHandler: LineHandler by lazy {
+        DefaultTextLineHandler(formatter.spec, fixLineHandler)
+    }
+
     fun go() {
         try {
             val config = configAndArguments.config
 
-            if(config.hasProperty("html") && config.getAsString("html", "page") == "page"){
-                if(config.getAsBoolean("man", false)){
-                    HtmlPageHeader("fixgrep Man Page", true).write(printStream)
+            val isFullPageHtml = config.hasProperty(Option.html)
+                    && (config.getAsBoolean(Option.man, false)
+                    || config.hasPropertyAndIsNotFalse(Option.to_file)
+                    || config.getAsString(Option.html, "") == "page"
+                    || config.hasPropertyAndIsNotFalse(Option.launch_browser));
+
+            if (isFullPageHtml) {
+                if (config.getAsBoolean(Option.man, false)) {
+                    HtmlPageHeader("fixgrep Man Page", true, false).write(printStream)
                 } else {
                     val heading = "fixgrep " + configAndArguments.originalApplicationArguments.joinToString(" ")
-                    HtmlPageHeader(heading).write(printStream)
+                    HtmlPageHeader(heading, false, true).write(printStream)
                 }
             }
 
-            if(config.getAsBoolean("256.color.demo", false)){
+            if (config.getAsBoolean(Option.color_demo_256, false)) {
                 printStream.println(Color256ConsoleDemo().demoForConsole)
-            } else if(config.getAsBoolean("16.color.demo", false)){
+            } else if (config.getAsBoolean(Option.color_demo_16, false)) {
                 printStream.println(Color16ConsoleDemo().demoForConsole)
-            } else if(config.getAsBoolean("man", false)){
-                val docWriterFactory = if(config.hasPropertyAndIsNotFalse("html")) DocWriterFactory.Html else DocWriterFactory.ConsoleText
-                printStream.println(ManGenerator(docWriterFactory, configAndArguments, config.getAsBoolean("debug", false)).man)
-            } else if(config.getAsBoolean("help", false)){
+            } else if (config.getAsBoolean(Option.man, false)) {
+                val docWriterFactory = if (config.hasPropertyAndIsNotFalse(Option.html)) DocWriterFactory.Html else DocWriterFactory.ConsoleText
+                printStream.println(ManGenerator(docWriterFactory, configAndArguments, config.getAsBoolean(Option.debug, false)).man)
+            } else if (config.getAsBoolean(Option.help, false)) {
                 HelpGenerator().go(outputStream);
-            } else if(config.getAsBoolean("install", false)){
+            } else if (config.getAsBoolean(Option.install, false)) {
                 ExampleAppPropertiesFileCreator().createIfNecessary()
-            } else if(config.getAsBoolean("piped.input", false) && inputStream != null){
+            } else if (config.getAsBoolean(Option.piped_input, false) && inputStream != null) {
                 readFromPipedInput()
             } else {
                 readFromFiles(configAndArguments.arguments)
             }
 
-            if(config.hasProperty("html") && config.getAsString("html", "page") == "page"){
+            if (isFullPageHtml) {
                 HtmlPageFooter().write(printStream)
             }
+        } catch (e: Throwable){
+            e.printStackTrace(printStream)
         } finally {
+            printStream.flush()
+            printStream.close()
             outputStream.flush()
             outputStream.close()
         }
@@ -74,7 +95,7 @@ class FixGrep(val inputStream: InputStream?, val outputStream: OutputStream, val
 
     private fun readFromFiles(arguments: List<*>) {
         if(arguments.isEmpty()){
-            System.err.println("File list empty.  Must received piped input, or specify one or more files as arguments")
+            System.err.println("File list empty.  Must received piped input, or specify one or more files as arguments.")
             HelpGenerator().go(outputStream);
             return
         }
@@ -93,31 +114,28 @@ class FixGrep(val inputStream: InputStream?, val outputStream: OutputStream, val
                 System.err.println("File at location: [" + file.absolutePath + "] does not exist.")
                 return
             }
-            readFromBufferedReader(file.bufferedReader())
+            file.bufferedReader().use {
+                readFromBufferedReader(it)
+            }
         }
     }
 
     private fun readFromPipedInput() {
         val reader = inputStream!!.bufferedReader()
-        logger.info("About to read from piped input")
-        readFromBufferedReader(reader)
+        try {
+            logger.info("About to read from piped input")
+            readFromBufferedReader(reader)
+        } finally {
+            reader.close()
+        }
     }
 
     private fun readFromBufferedReader(reader: BufferedReader) {
         while (true) {
             val line = reader.readLine()
             if (line == null) break
-            else handleLine(line)
+            else textLineHandler.handle(line)
         }
-    }
-
-    private fun handleLine(line: String) {
-        val matcher = formatter.logLineRegexPattern.matcher(line)
-        if (matcher.find()) {
-            val formattedLine = formatter.format(matcher)
-            if(formattedLine != null){
-                printStream.println(formattedLine)
-            }
-        }
+        textLineHandler.finish()
     }
 }

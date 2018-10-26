@@ -208,19 +208,19 @@ class ConfigImpl : Config {
         return StringCoercer(get(key)).getAsStringList()
     }
 
-    override fun getAsDoubleList(key: String, default: List<Double>): List<Double>{
+    override fun getAsDoubleList(key: String, default: List<Double>?): List<Double>?{
         return StringCoercer(get(key)).getAsDoubleList(default)
     }
 
-    override fun getAsLongList(key: String, default: List<Long>): List<Long>{
+    override fun getAsLongList(key: String, default: List<Long>?): List<Long>?{
         return StringCoercer(get(key)).getAsLongList(default)
     }
 
-    override fun getAsIntList(key: String, default: List<Int>): List<Int>{
+    override fun getAsIntList(key: String, default: List<Int>?): List<Int>?{
         return StringCoercer(get(key)).getAsIntList(default)
     }
 
-    override fun getAsBooleanList(key: String, default: List<Boolean>): List<Boolean>{
+    override fun getAsBooleanList(key: String, default: List<Boolean>?): List<Boolean>?{
         return StringCoercer(get(key)).getAsBooleanList(default)
     }
 
@@ -232,7 +232,7 @@ class ConfigImpl : Config {
         return hasProperty(key) && (get(key) == null || getAsString(key).toLowerCase() != "false")
     }
 
-    override fun getAsStringList(key: String, default: List<String>): List<String>{
+    override fun getAsStringList(key: String, default: List<String>?): List<String>?{
         return StringCoercer(get(key)).getAsStringList(default)
     }
 }

@@ -18,8 +18,8 @@ public class CircularReaderWriter {
     private final Writer writer;
     private final Reader reader;
 
-    public CircularReaderWriter() throws IOException {
-        cs = new CircularStream();
+    public CircularReaderWriter(final int bufferSize) throws IOException {
+        cs = new CircularStream(bufferSize);
         writer = new OutputStreamWriter(cs.getOutput());
         reader = new InputStreamReader(cs.getInput());
     }

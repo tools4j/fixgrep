@@ -39,7 +39,7 @@ class OptionParserFactoryTest extends Specification {
     }
 
     @Unroll
-    def "SetupOptionParser tag-annotations.  e.g. outsideAnnotated etc"(final String optionArgument) {
+    def "SetupOptionParser tag annotations.  e.g. outsideAnnotated etc"(final String optionArgument) {
         given:
         final OptionParser optionParser = new OptionParserFactory().optionParser
 
@@ -68,7 +68,7 @@ class OptionParserFactoryTest extends Specification {
         'none'| _
     }
 
-    def "SetupOptionParser tag-annotations.  e.g. illegal option"() {
+    def "SetupOptionParser tag annotations.  e.g. illegal option"() {
         given:
         final OptionParser optionParser = new OptionParserFactory().optionParser
 
@@ -86,13 +86,13 @@ class OptionParserFactoryTest extends Specification {
         final OptionParser optionParser = new OptionParserFactory().optionParser
 
         when:
-        final OptionSet options = optionParser.parse("--highlights", "35:Blue,8:Yellow:Line,51=1:Purple:Tag,Side=Buy:Green")
+        final OptionSet options = optionParser.parse("--highlights", "35:Blue,8:Yellow:Msg,51=1:Purple:Tag,Side=Buy:Green")
 
         then:
         assert options.has('h')
         final List<?> arguments = options.valuesOf('h')
         assert arguments.get(0) == '35:Blue'
-        assert arguments.get(1) == '8:Yellow:Line'
+        assert arguments.get(1) == '8:Yellow:Msg'
         assert arguments.get(2) == '51=1:Purple:Tag'
         assert arguments.get(3) == 'Side=Buy:Green'
     }

@@ -104,7 +104,7 @@ class StringCoercer(val str: String?): Coercer {
         return returnStr
     }
 
-    override fun getAsDoubleList(default: List<Double>): List<Double> {
+    override fun getAsDoubleList(default: List<Double>?): List<Double>? {
         if(str != null && !str.trim().isEmpty()){
             return getAsDoubleList()
         } else {
@@ -112,7 +112,7 @@ class StringCoercer(val str: String?): Coercer {
         }
     }
 
-    override fun getAsLongList(default: List<Long>): List<Long> {
+    override fun getAsLongList(default: List<Long>?): List<Long>? {
         if(str != null && !str.trim().isEmpty()){
             return getAsLongList()
         } else {
@@ -120,7 +120,7 @@ class StringCoercer(val str: String?): Coercer {
         }
     }
 
-    override fun getAsIntList(default: List<Int>): List<Int> {
+    override fun getAsIntList(default: List<Int>?): List<Int>? {
         if(str != null && !str.trim().isEmpty()){
             return getAsIntList()
         } else {
@@ -128,7 +128,7 @@ class StringCoercer(val str: String?): Coercer {
         }
     }
 
-    override fun getAsBooleanList(default: List<Boolean>): List<Boolean> {
+    override fun getAsBooleanList(default: List<Boolean>?): List<Boolean>? {
         if(str != null && !str.trim().isEmpty()){
             return getAsBooleanList()
         } else {
@@ -136,7 +136,7 @@ class StringCoercer(val str: String?): Coercer {
         }
     }
 
-    override fun getAsStringList(default: List<String>): List<String> {
+    override fun getAsStringList(default: List<String>?): List<String>? {
         if(str != null && !str.trim().isEmpty()){
             return getAsStringList()
         } else {

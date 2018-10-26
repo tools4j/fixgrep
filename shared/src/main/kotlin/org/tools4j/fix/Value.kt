@@ -6,7 +6,7 @@ package org.tools4j.fix
  * Time: 5:27 PM
  */
 interface Value {
-    val rawValue: String
+    val valueRaw: String
     fun intValue(): Int
     fun doubleValue(): Double
     fun longValue(): Long
@@ -18,8 +18,7 @@ interface Value {
     fun idValue(): Id
     fun execTypeValue(): ExecType
     fun ordStatusValue(): OrdStatus
-    fun toHtml(): String
-    fun toConsoleText(): String
+    fun accept(valueVisitor: ValueVisitor)
     fun isEmpty(): Boolean {
         return toString().isEmpty()
     }
