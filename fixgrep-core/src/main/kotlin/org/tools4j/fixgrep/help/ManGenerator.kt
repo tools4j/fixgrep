@@ -1,7 +1,7 @@
 package org.tools4j.fixgrep.help
 
-import org.tools4j.fixgrep.ConfigAndArguments
-import org.tools4j.fixgrep.Option
+import org.tools4j.fixgrep.config.ConfigAndArguments
+import org.tools4j.fixgrep.config.Option
 import org.tools4j.fixgrep.texteffect.HtmlOnlyTextEffect
 import org.tools4j.fixgrep.texteffect.MiscTextEffect
 

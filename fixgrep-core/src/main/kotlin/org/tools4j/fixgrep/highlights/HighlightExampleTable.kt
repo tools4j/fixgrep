@@ -1,7 +1,7 @@
 package org.tools4j.fixgrep.highlights
 
-import org.tools4j.fixgrep.FormatSpec
-import org.tools4j.fixgrep.WrappedFormatter
+import org.tools4j.fixgrep.formatting.FormatSpec
+import org.tools4j.fixgrep.formatting.WrappedFormatter
 import org.tools4j.fixgrep.help.DocWriter
 import org.tools4j.fixgrep.help.TableBuilder
 import org.tools4j.fixgrep.texteffect.HtmlOnlyTextEffect

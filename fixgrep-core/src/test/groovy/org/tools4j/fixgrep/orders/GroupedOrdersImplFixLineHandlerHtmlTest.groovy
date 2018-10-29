@@ -1,7 +1,7 @@
 package org.tools4j.fixgrep.orders
 
 import org.tools4j.fix.ExecType
-import org.tools4j.fixgrep.FixGrepMain
+import org.tools4j.fixgrep.main.FixGrepMain
 import org.tools4j.util.CircularBufferedReaderWriter
 import org.tools4j.utils.ArgsAsString
 import spock.lang.Shared

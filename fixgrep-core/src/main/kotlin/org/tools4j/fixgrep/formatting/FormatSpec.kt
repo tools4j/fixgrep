@@ -1,4 +1,4 @@
-package org.tools4j.fixgrep
+package org.tools4j.fixgrep.formatting
 
 import org.tools4j.fix.AnnotationPositions
 import org.tools4j.fix.Ascii1Char
@@ -6,9 +6,11 @@ import org.tools4j.fix.DelimiterImpl
 import org.tools4j.fix.Fields
 import org.tools4j.fix.spec.FixSpecDefinition
 import org.tools4j.fix.spec.FixSpecParser
-import org.tools4j.fixgrep.formatting.*
+import org.tools4j.fixgrep.config.ConfigKeyedWithOption
+import org.tools4j.fixgrep.config.Option
 import org.tools4j.fixgrep.highlights.Highlight
 import org.tools4j.fixgrep.highlights.HighlightParser
+import org.tools4j.fixgrep.linehandlers.FixLine
 import org.tools4j.fixgrep.utils.Constants
 import java.util.*
 

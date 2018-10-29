@@ -1,4 +1,4 @@
-package org.tools4j.fixgrep
+package org.tools4j.fixgrep.linehandlers
 
 /**
  * User: benjw

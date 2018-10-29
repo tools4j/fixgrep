@@ -1,12 +1,11 @@
 package org.tools4j.fixgrep
 
 import org.tools4j.fix.Ascii1Char
+import org.tools4j.fixgrep.main.FixGrepMain
 import org.tools4j.util.CircularBufferedReaderWriter
 import org.tools4j.utils.ArgsAsString
-import spock.lang.Ignore
 import spock.lang.Shared
 import spock.lang.Specification
-import spock.lang.Unroll
 
 /**
  * User: ben

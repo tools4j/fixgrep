@@ -1,6 +1,6 @@
 package org.tools4j.fixgrep.orders
 
-import org.tools4j.fixgrep.FixLine
+import org.tools4j.fixgrep.linehandlers.FixLine
 import java.util.concurrent.atomic.AtomicLong
 
 /**

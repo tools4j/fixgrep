@@ -1,9 +1,9 @@
 package org.tools4j.fixgrep.help
 
-import org.tools4j.fixgrep.ConfigBuilder
-import org.tools4j.fixgrep.FormatSpec
-import org.tools4j.fixgrep.Option
-import org.tools4j.fixgrep.WrappedFormatter
+import org.tools4j.fixgrep.config.ConfigBuilder
+import org.tools4j.fixgrep.formatting.FormatSpec
+import org.tools4j.fixgrep.config.Option
+import org.tools4j.fixgrep.formatting.WrappedFormatter
 import org.tools4j.fixgrep.texteffect.HtmlOnlyTextEffect
 import org.tools4j.fixgrep.texteffect.MiscTextEffect
 import org.tools4j.properties.ConfigImpl

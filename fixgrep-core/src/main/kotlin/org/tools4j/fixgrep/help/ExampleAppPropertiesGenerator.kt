@@ -1,6 +1,6 @@
 package org.tools4j.fixgrep.help
 
-import org.tools4j.fixgrep.Option
+import org.tools4j.fixgrep.config.Option
 
 /**
  * User: ben

@@ -1,5 +1,7 @@
 package org.tools4j.fixgrep
 
+import org.tools4j.fixgrep.formatting.FormatSpec
+import org.tools4j.fixgrep.formatting.WrappedFormatter
 import spock.lang.Specification
 
 /**

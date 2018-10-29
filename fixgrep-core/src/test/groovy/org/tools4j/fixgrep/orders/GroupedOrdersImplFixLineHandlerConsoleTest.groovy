@@ -1,7 +1,11 @@
 package org.tools4j.fixgrep.orders
 
 import org.tools4j.fix.ExecType
-import org.tools4j.fixgrep.*
+import org.tools4j.fixgrep.config.ConfigBuilder
+import org.tools4j.fixgrep.config.ConfigKeyedWithOption
+import org.tools4j.fixgrep.formatting.FormatSpec
+import org.tools4j.fixgrep.formatting.Formatter
+import org.tools4j.fixgrep.linehandlers.DefaultTextLineHandler
 import spock.lang.Specification
 
 import java.util.function.Consumer

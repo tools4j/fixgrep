@@ -1,7 +1,8 @@
-package org.tools4j.fixgrep
+package org.tools4j.fixgrep.formatting
 
 import org.tools4j.extensions.constantToCapitalCase
 import org.tools4j.fix.*
+import org.tools4j.fixgrep.linehandlers.FixLine
 import org.tools4j.fixgrep.texteffect.Ansi
 import org.tools4j.fixgrep.utils.Constants.Companion.DOLLAR
 

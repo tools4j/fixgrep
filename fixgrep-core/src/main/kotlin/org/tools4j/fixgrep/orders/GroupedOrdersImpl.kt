@@ -3,8 +3,7 @@ package org.tools4j.fixgrep.orders
 import com.google.common.collect.ArrayListMultimap
 import mu.KLogging
 import org.tools4j.fix.Fields
-import org.tools4j.fixgrep.FixLine
-import java.util.function.Consumer
+import org.tools4j.fixgrep.linehandlers.FixLine
 
 /**
  * User: benjw

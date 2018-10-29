@@ -2,7 +2,7 @@ package org.tools4j.fixgrep.help
 
 import joptsimple.HelpFormatter
 import joptsimple.OptionDescriptor
-import org.tools4j.fixgrep.OptionParserFactory
+import org.tools4j.fixgrep.config.OptionParserFactory
 import java.io.OutputStream
 
 /**

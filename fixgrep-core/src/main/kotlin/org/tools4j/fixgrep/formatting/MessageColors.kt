@@ -1,4 +1,4 @@
-package org.tools4j.fixgrep
+package org.tools4j.fixgrep.formatting
 
 import org.tools4j.fix.ExecType
 import org.tools4j.fix.Fields

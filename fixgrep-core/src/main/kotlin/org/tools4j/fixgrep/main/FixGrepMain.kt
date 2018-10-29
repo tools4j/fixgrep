@@ -1,5 +1,8 @@
-package org.tools4j.fixgrep
+package org.tools4j.fixgrep.main
 
+import org.tools4j.fixgrep.config.ConfigAndArguments
+import org.tools4j.fixgrep.config.ConfigBuilder
+import org.tools4j.fixgrep.config.Option
 import org.tools4j.fixgrep.utils.OutputFile
 import java.awt.Desktop
 import java.io.InputStream

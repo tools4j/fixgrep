@@ -1,4 +1,4 @@
-package org.tools4j.fixgrep;
+package org.tools4j.fixgrep.linehandlers;
 
 import org.tools4j.fix.Fields
 import java.util.regex.Matcher

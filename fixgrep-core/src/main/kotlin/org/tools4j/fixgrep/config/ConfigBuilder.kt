@@ -1,4 +1,4 @@
-package org.tools4j.fixgrep
+package org.tools4j.fixgrep.config
 
 import mu.KLogging
 import org.tools4j.properties.Config

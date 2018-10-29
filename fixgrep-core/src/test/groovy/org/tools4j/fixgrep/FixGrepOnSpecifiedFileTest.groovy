@@ -1,5 +1,7 @@
 package org.tools4j.fixgrep
 
+import org.tools4j.fixgrep.config.ConfigAndArguments
+import org.tools4j.fixgrep.main.FixGrep
 import org.tools4j.properties.Config
 import org.tools4j.properties.ConfigImpl
 import org.tools4j.util.CircularBufferedReaderWriter

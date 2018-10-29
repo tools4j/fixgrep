@@ -1,6 +1,6 @@
 package org.tools4j.fixgrep.orders
 
-import org.tools4j.fixgrep.Formatter
+import org.tools4j.fixgrep.formatting.Formatter
 import java.util.function.Consumer
 
 /**

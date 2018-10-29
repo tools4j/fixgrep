@@ -1,5 +1,6 @@
-package org.tools4j.fixgrep
+package org.tools4j.fixgrep.linehandlers
 
+import org.tools4j.fixgrep.formatting.Formatter
 import java.util.function.Consumer
 
 /**

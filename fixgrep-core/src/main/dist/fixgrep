@@ -16,4 +16,4 @@ if ! [ -t 0 ]; then
     ADDITIONAL_PARAMS="--piped"
 fi
 
-java -Xmx64m -XX:+UseSerialGC -cp "lib/*" org.tools4j.fixgrep.FixGrepMain "$ADDITIONAL_PARAMS" "$@" <&0
+java -Xmx64m -XX:+UseSerialGC -cp "lib/*" org.tools4j.fixgrep.main.FixGrepMain "$ADDITIONAL_PARAMS" "$@" <&0

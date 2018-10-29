@@ -2,6 +2,8 @@ package org.tools4j.fixgrep
 
 import joptsimple.OptionParser
 import joptsimple.OptionSet
+import org.tools4j.fixgrep.config.OptionParserFactory
+import org.tools4j.fixgrep.config.OptionsToConfig
 import org.tools4j.properties.Config
 import spock.lang.Specification
 

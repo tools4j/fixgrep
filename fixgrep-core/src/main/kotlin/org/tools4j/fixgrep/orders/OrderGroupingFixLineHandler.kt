@@ -1,11 +1,8 @@
 package org.tools4j.fixgrep.orders
 
-import com.google.common.collect.ArrayListMultimap
-import mu.KLogging
-import org.tools4j.fix.Fields
-import org.tools4j.fixgrep.FixLine
-import org.tools4j.fixgrep.FixLineHandler
-import org.tools4j.fixgrep.Formatter
+import org.tools4j.fixgrep.linehandlers.FixLine
+import org.tools4j.fixgrep.linehandlers.FixLineHandler
+import org.tools4j.fixgrep.formatting.Formatter
 import java.util.function.Consumer
 
 /**

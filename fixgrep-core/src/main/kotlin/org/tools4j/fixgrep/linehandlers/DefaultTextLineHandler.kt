@@ -1,7 +1,8 @@
-package org.tools4j.fixgrep
+package org.tools4j.fixgrep.linehandlers
 
 import org.tools4j.fix.Fields
 import org.tools4j.fix.FieldsFromDelimitedString
+import org.tools4j.fixgrep.formatting.FormatSpec
 import java.util.regex.Pattern
 
 /**

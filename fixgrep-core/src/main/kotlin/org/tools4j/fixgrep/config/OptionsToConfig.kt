@@ -1,4 +1,4 @@
-package org.tools4j.fixgrep
+package org.tools4j.fixgrep.config
 
 import joptsimple.ArgumentAcceptingOptionSpec
 import joptsimple.OptionSet

@@ -1,7 +1,7 @@
 package org.tools4j.fixgrep.help
 
 import org.tools4j.fix.Ansi
-import org.tools4j.fixgrep.FormatSpec
+import org.tools4j.fixgrep.formatting.FormatSpec
 import org.tools4j.fixgrep.highlights.DefaultHighlightTextEffects
 import org.tools4j.fixgrep.highlights.HighlightExampleTable
 import org.tools4j.fixgrep.texteffect.Ansi16BackgroundColor

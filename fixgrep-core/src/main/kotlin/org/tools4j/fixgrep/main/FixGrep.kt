@@ -1,9 +1,17 @@
-package org.tools4j.fixgrep
+package org.tools4j.fixgrep.main
 
 import mu.KLogging
+import org.tools4j.fixgrep.config.ConfigAndArguments
+import org.tools4j.fixgrep.config.Option
+import org.tools4j.fixgrep.formatting.FormatSpec
+import org.tools4j.fixgrep.formatting.Formatter
 import org.tools4j.fixgrep.help.*
 import org.tools4j.fixgrep.html.HtmlPageFooter
 import org.tools4j.fixgrep.html.HtmlPageHeader
+import org.tools4j.fixgrep.linehandlers.DefaultFixLineHandler
+import org.tools4j.fixgrep.linehandlers.DefaultTextLineHandler
+import org.tools4j.fixgrep.linehandlers.FixLineHandler
+import org.tools4j.fixgrep.linehandlers.LineHandler
 import org.tools4j.fixgrep.orders.*
 import java.io.*
 import java.util.function.Consumer
@@ -36,7 +44,7 @@ class FixGrep(val inputStream: InputStream?, val outputStream: OutputStream, val
                     IdFilter(configAndArguments.config.getAsStringList(Option.group_by_order, null)),
                     Consumer {printStream.print(it)})
         } else {
-            DefaultFixLineHandler(formatter, Consumer {printStream.print(it)})
+            DefaultFixLineHandler(formatter, Consumer { printStream.print(it) })
         }
     }
 

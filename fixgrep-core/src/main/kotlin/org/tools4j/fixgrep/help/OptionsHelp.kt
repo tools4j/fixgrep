@@ -1,6 +1,6 @@
 package org.tools4j.fixgrep.help
 
-import org.tools4j.fixgrep.Option
+import org.tools4j.fixgrep.config.Option
 import org.tools4j.fixgrep.help.HelpGenerator.Companion.fix
 import org.tools4j.fixgrep.texteffect.Ansi256Color
 import org.tools4j.fixgrep.texteffect.AnsiForegroundBackground
@@ -71,7 +71,7 @@ the less 'interesting' fix fields, such as BeginString, BodyLength or Checksum. 
                 "Using this option changes the 'mode' of fixgrep to discard any non-order messages, and to group the messages by order. fixgrep will attempt to keep track of 'order chains' when amends and cancels change the clOrdId, even if the orderId is not present on every message.  Using this option can increase the memory used by fixgrep, as fixgrep will need to cache all order messages before printing them out.  This should not affect other processes on the box, but it might mean that fixgrep will have to stop with an OutOfMemoryException if it uses all of it's allocated heap."))
 
         optionsHelp.add(OptionHelp(
-                Option.highlights, 
+                Option.highlights,
                 "Highlight fields or lines using color or console text effects.", 
                 "35,55",
                 docWriterFactory.createNew()

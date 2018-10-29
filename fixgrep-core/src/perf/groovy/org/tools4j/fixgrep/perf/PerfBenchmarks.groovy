@@ -1,9 +1,9 @@
 package org.tools4j.fixgrep.perf
 
-import org.tools4j.fixgrep.FixGrep
+import org.tools4j.fixgrep.main.FixGrep
 import org.tools4j.fixgrep.TestConfigBuilder
 import org.tools4j.properties.Config
-import org.tools4j.fixgrep.ConfigAndArguments
+import org.tools4j.fixgrep.config.ConfigAndArguments
 import org.tools4j.properties.ConfigImpl
 import org.tools4j.util.CircularBufferedReaderWriter
 import spock.lang.Shared
