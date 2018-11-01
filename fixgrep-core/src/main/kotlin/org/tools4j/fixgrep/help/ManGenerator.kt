@@ -1,6 +1,7 @@
 package org.tools4j.fixgrep.help
 
 import org.tools4j.fixgrep.config.ConfigAndArguments
+import org.tools4j.fixgrep.config.FixGrepConfig
 import org.tools4j.fixgrep.config.Option
 import org.tools4j.fixgrep.texteffect.HtmlOnlyTextEffect
 import org.tools4j.fixgrep.texteffect.MiscTextEffect
@@ -11,7 +12,7 @@ import org.tools4j.fixgrep.texteffect.MiscTextEffect
  * Time: 5:25 PM
  */
 
-class ManGenerator(val docWriterFactory: DocWriterFactory, val configAndArguments: ConfigAndArguments, val debug: Boolean = false) {
+class ManGenerator(val docWriterFactory: DocWriterFactory, val config: FixGrepConfig, val debug: Boolean = false) {
     val man: String by lazy {
         val sb = StringBuilder()
         sb.append(whatIsFixgrep())
@@ -79,8 +80,8 @@ class ManGenerator(val docWriterFactory: DocWriterFactory, val configAndArgument
     }
 
     private fun howToGet(): String {
-        val fixgrepDownloadUrl = configAndArguments.config.getAsString(Option.download_url)
-        val fixgrepVcsUrl = configAndArguments.config.getAsString(Option.vcs_home_url)
+        val fixgrepDownloadUrl = config.fixgrepDownloadUrl
+        val fixgrepVcsUrl = config.vcsHomeUrl
 
         return docWriterFactory.createNew().writeHeading(1, "How to get")
                 .write("Download the latest version from ")
@@ -91,7 +92,7 @@ class ManGenerator(val docWriterFactory: DocWriterFactory, val configAndArgument
     }
 
     private fun howToGetHelp(): String {
-        val fixgrepHelpUrl = configAndArguments.config.getAsString(Option.online_help_url)
+        val fixgrepHelpUrl = config.onlineHelpUrl
         val writer = docWriterFactory.createNew()
         with(writer) {
             writeHeading(1, "How to get help")
@@ -165,10 +166,10 @@ class ManGenerator(val docWriterFactory: DocWriterFactory, val configAndArgument
                     .endTable()
             writeLn("Below you can see the default values for these settings.  They can be overridden in the application.properties file that ships with fixgrep.")
             addTable()
-                    .startNewRow().addCell(Option.output_format_horizontal_console.key).addCell(inCellCode(configAndArguments.config.getAsString(Option.output_format_horizontal_console)))
-                    .startNewRow().addCell(Option.output_format_horizontal_html.key).addCell(inCellCode(configAndArguments.config.getAsString(Option.output_format_horizontal_html)))
-                    .startNewRow().addCell(Option.output_format_vertical_console.key).addCell(inCellCode(configAndArguments.config.getAsString(Option.output_format_vertical_console)))
-                    .startNewRow().addCell(Option.output_format_vertical_html.key).addCell(inCellCode(configAndArguments.config.getAsString(Option.output_format_vertical_html)))
+                    .startNewRow().addCell(Option.output_format_horizontal_console.key).addCell(inCellCode(config.outputFormatHorizontalConsole))
+                    .startNewRow().addCell(Option.output_format_horizontal_html.key).addCell(inCellCode(config.outputFormatHorizontalHtml))
+                    .startNewRow().addCell(Option.output_format_vertical_console.key).addCell(inCellCode(config.outputFormatVerticalConsole))
+                    .startNewRow().addCell(Option.output_format_vertical_html.key).addCell(inCellCode(config.outputFormatVerticalHtml))
                     .endTable()
             return toFormattedText()
         }

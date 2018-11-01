@@ -1,6 +1,7 @@
 package org.tools4j.fixgrep.orders
 
 import org.tools4j.fix.ClasspathResource
+import org.tools4j.fixgrep.TestFixGrep
 import org.tools4j.fixgrep.config.ConfigAndArguments
 import org.tools4j.fixgrep.main.FixGrep
 import org.tools4j.fixgrep.TestConfigBuilder
@@ -16,19 +17,16 @@ import spock.lang.Specification
 class FixGrepOnLargeFileTest extends Specification {
     def 'run fixgrep file test'(){
         given:
-        Config testSpecificConfig = new ConfigImpl(['input.line.format': '^(\\d{4}-[01]\\d-[0-3]\\d[T\\s][0-2]\\d:[0-5]\\d:[0-5]\\d[\\.,]\\d+)?.*?RawFix:(\\d+=.*$)',
-                                                    'output.format.horizontal.console': '$1 ${senderToTargetCompIdDirection} ${msgColor}[${msgTypeName}]${colorReset} ${msgFix}',
-                                                    'piped.input': 'true',
-                                                    'group.by.order': 'true'])
-
-        Config config = TestConfigBuilder.load().overrideWith(testSpecificConfig)
-        ConfigAndArguments configAndArguments = new ConfigAndArguments(config)
+        final List<String> args = ['--input-line-format', '^(\\d{4}-[01]\\d-[0-3]\\d[T\\s][0-2]\\d:[0-5]\\d:[0-5]\\d[\\.,]\\d+)?.*?RawFix:(\\d+=.*$)',
+                            '--output-format-horizontal-console', '$1 ${senderToTargetCompIdDirection} ${msgColor}[${msgTypeName}]${colorReset} ${msgFix}',
+                            '--piped-input', 'true',
+                            '--group-by-order', 'true']
 
         when:
         final File actualOutputFile = new File("fixgrep-file-test-output.log")
         if(actualOutputFile.exists()) actualOutputFile.delete()
         final OutputStream outputStream = new FileOutputStream(actualOutputFile);
-        new FixGrep(this.class.getResourceAsStream('/test.log'), outputStream, configAndArguments).go()
+        new FixGrep(args, this.class.getResourceAsStream('/test.log'), outputStream).go()
         final expectedOutputFile = new ClasspathResource("/test-orders-expected-output.log").asBufferedReader()
 
         then:

@@ -9,10 +9,10 @@ import kotlin.collections.ArrayList
  * Date: 7/06/2018
  * Time: 7:04 AM
  */
-class ConfigAndArguments(val config: ConfigKeyedWithOption, val arguments: List<*>, val originalApplicationArguments: List<String>){
-    constructor(config: ConfigKeyedWithOption): this(config, ArrayList<Any>(), Collections.emptyList())
-    constructor(config: ConfigKeyedWithOption, arguments: List<*>): this(config, arguments, Collections.emptyList())
+class ConfigAndArguments(val config: ConfigKeyedWithOption, val arguments: List<String>, val originalApplicationArguments: List<String>){
+    constructor(config: ConfigKeyedWithOption): this(config, emptyList(), Collections.emptyList())
+    constructor(config: ConfigKeyedWithOption, arguments: List<String>): this(config, arguments, Collections.emptyList())
     constructor(config: Config): this(ConfigKeyedWithOption(config))
-    constructor(config: Config, arguments: List<*>): this(ConfigKeyedWithOption(config), arguments)
-    constructor(config: Config, arguments: List<*>, originalApplicationArguments: List<String>): this(ConfigKeyedWithOption(config), arguments, originalApplicationArguments)
+    constructor(config: Config, arguments: List<String>): this(ConfigKeyedWithOption(config), arguments)
+    constructor(config: Config, arguments: List<String>, originalApplicationArguments: List<String>): this(ConfigKeyedWithOption(config), arguments, originalApplicationArguments)
 }

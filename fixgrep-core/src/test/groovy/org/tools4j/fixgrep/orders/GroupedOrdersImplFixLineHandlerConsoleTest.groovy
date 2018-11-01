@@ -3,6 +3,7 @@ package org.tools4j.fixgrep.orders
 import org.tools4j.fix.ExecType
 import org.tools4j.fixgrep.config.ConfigBuilder
 import org.tools4j.fixgrep.config.ConfigKeyedWithOption
+import org.tools4j.fixgrep.config.FixGrepConfig
 import org.tools4j.fixgrep.formatting.FormatSpec
 import org.tools4j.fixgrep.formatting.Formatter
 import org.tools4j.fixgrep.linehandlers.DefaultTextLineHandler
@@ -38,7 +39,7 @@ class GroupedOrdersImplFixLineHandlerConsoleTest extends Specification {
         given:
         final StringBuilder output = new StringBuilder()
         final ConfigKeyedWithOption config = new ConfigBuilder(['--output-format-horizontal-console', '\${senderToTargetCompIdDirection} [\${msgTypeName}] \${msgFix}', '--suppress-bold-tags-and-values', 'true']).configAndArguments.config
-        final FormatSpec formatSpec = new FormatSpec(config)
+        final FormatSpec formatSpec = new FormatSpec(new FixGrepConfig(config))
 
         when:
         final OrderGroupingFixLineHandler fixLineHandler = new OrderGroupingFixLineHandler(new Formatter(formatSpec), new UniqueIdSpecs(), new Consumer<String>() {
@@ -60,7 +61,7 @@ class GroupedOrdersImplFixLineHandlerConsoleTest extends Specification {
         given:
         final StringBuilder output = new StringBuilder()
         final ConfigKeyedWithOption config = new ConfigBuilder(['--output-format-horizontal-console', '\${senderToTargetCompIdDirection} [\${msgTypeName}] \${msgFix}', '--suppress-bold-tags-and-values', 'true']).configAndArguments.config
-        final FormatSpec formatSpec = new FormatSpec(config)
+        final FormatSpec formatSpec = new FormatSpec(new FixGrepConfig(config))
 
         when:
         final OrderGroupingFixLineHandler fixLineHandler = new OrderGroupingFixLineHandler(new Formatter(formatSpec), new UniqueIdSpecs(), new Consumer<String>() {
@@ -83,7 +84,7 @@ class GroupedOrdersImplFixLineHandlerConsoleTest extends Specification {
         given:
         final StringBuilder output = new StringBuilder()
         final ConfigKeyedWithOption config = new ConfigBuilder(['--output-format-horizontal-console', '${senderToTargetCompIdDirection} ${msgColor}[${msgTypeName}]${colorReset} ${msgFix}', '--suppress-bold-tags-and-values', 'false']).configAndArguments.config
-        final FormatSpec formatSpec = new FormatSpec(config)
+        final FormatSpec formatSpec = new FormatSpec(new FixGrepConfig(config))
 
         when:
         final OrderGroupingFixLineHandler fixLineHandler = new OrderGroupingFixLineHandler(new Formatter(formatSpec), new UniqueIdSpecs(), new Consumer<String>() {
@@ -107,7 +108,7 @@ class GroupedOrdersImplFixLineHandlerConsoleTest extends Specification {
         given:
         final StringBuilder output = new StringBuilder()
         final ConfigKeyedWithOption config = new ConfigBuilder(['--output-format-horizontal-console', '\${senderToTargetCompIdDirection} [\${msgTypeName}] \${msgFix}', '--suppress-bold-tags-and-values', 'true',]).configAndArguments.config
-        final FormatSpec formatSpec = new FormatSpec(config)
+        final FormatSpec formatSpec = new FormatSpec(new FixGrepConfig(config))
 
         when:
         final OrderGroupingFixLineHandler fixLineHandler = new OrderGroupingFixLineHandler(new Formatter(formatSpec), new UniqueIdSpecs(), new Consumer<String>() {
@@ -135,7 +136,7 @@ class GroupedOrdersImplFixLineHandlerConsoleTest extends Specification {
         given:
         final StringBuilder output = new StringBuilder()
         final ConfigKeyedWithOption config = new ConfigBuilder(['--output-format-horizontal-console', '\${senderToTargetCompIdDirection} [\${msgTypeName}] \${msgFix}', '--suppress-bold-tags-and-values', 'true', '-e', '35,49,56,150', '-a', 'aa']).configAndArguments.config
-        final FormatSpec formatSpec = new FormatSpec(config)
+        final FormatSpec formatSpec = new FormatSpec(new FixGrepConfig(config))
 
         when:
         final OrderGroupingFixLineHandler fixLineHandler = new OrderGroupingFixLineHandler(new Formatter(formatSpec), new UniqueIdSpecs(), new Consumer<String>() {
@@ -179,7 +180,7 @@ CLIENT->SERVER [OrderCancelReplaceRequest] 41[OrigClOrdID]=DEF|11[ClOrdID]=GHI|3
         given:
         final StringBuilder output = new StringBuilder()
         final ConfigKeyedWithOption config = new ConfigBuilder(['--output-format-horizontal-console', '\${senderToTargetCompIdDirection} [\${msgTypeName}] \${msgFix}', '--suppress-bold-tags-and-values', 'true', '-e', '35,49,56,150', '-a', 'aa']).configAndArguments.config
-        final FormatSpec formatSpec = new FormatSpec(config)
+        final FormatSpec formatSpec = new FormatSpec(new FixGrepConfig(config))
 
         when:
         final OrderGroupingFixLineHandler fixLineHandler = new OrderGroupingFixLineHandler(new Formatter(formatSpec), new UniqueIdSpecs(), new Consumer<String>() {
@@ -223,7 +224,7 @@ ORDER orderId:123 clOrdId:ABC
         given:
         final StringBuilder output = new StringBuilder()
         final ConfigKeyedWithOption config = new ConfigBuilder(['--output-format-horizontal-console', '\${senderToTargetCompIdDirection} [\${msgTypeName}] \${msgFix}', '--suppress-bold-tags-and-values', 'true', '-e', '49,56,150', '-a', 'aa']).configAndArguments.config
-        final FormatSpec formatSpec = new FormatSpec(config)
+        final FormatSpec formatSpec = new FormatSpec(new FixGrepConfig(config))
 
         when:
         final OrderGroupingFixLineHandler fixLineHandler = new OrderGroupingFixLineHandler(new Formatter(formatSpec), new UniqueIdSpecs(), new Consumer<String>() {
@@ -288,7 +289,7 @@ ORPHAN MESSAGES:
         given:
         final StringBuilder output = new StringBuilder()
         final ConfigKeyedWithOption config = new ConfigBuilder(['--output-format-horizontal-console', '\${senderToTargetCompIdDirection} [\${msgTypeName}] \${msgFix}', '--suppress-bold-tags-and-values', 'true', '-e', '49,56,150', '-a', 'aa']).configAndArguments.config
-        final FormatSpec formatSpec = new FormatSpec(config)
+        final FormatSpec formatSpec = new FormatSpec(new FixGrepConfig(config))
 
         when:
         final OrderGroupingFixLineHandler fixLineHandler = new OrderGroupingFixLineHandler(new Formatter(formatSpec), new UniqueIdSpecs(), new Consumer<String>() {
@@ -349,7 +350,7 @@ ORPHAN MESSAGES:
         given:
         final StringBuilder output = new StringBuilder()
         final ConfigKeyedWithOption config = new ConfigBuilder(['--output-format-horizontal-console', '\${senderToTargetCompIdDirection} [\${msgTypeName}] \${msgFix}', '--suppress-bold-tags-and-values', 'true', '-e', '49,56,150', '-a', 'aa']).configAndArguments.config
-        final FormatSpec formatSpec = new FormatSpec(config)
+        final FormatSpec formatSpec = new FormatSpec(new FixGrepConfig(config))
 
         when:
         final OrderGroupingFixLineHandler fixLineHandler = new OrderGroupingFixLineHandler(new Formatter(formatSpec), new UniqueIdSpecs(), new Consumer<String>() {
@@ -410,7 +411,7 @@ ORPHAN MESSAGES:
         given:
         final StringBuilder output = new StringBuilder()
         final ConfigKeyedWithOption config = new ConfigBuilder(['-O BC1 --output-format-horizontal-console', '\${senderToTargetCompIdDirection} [\${msgTypeName}] \${msgFix}', '--suppress-bold-tags-and-values', 'true', '-e', '49,56,150', '-a', 'aa']).configAndArguments.config
-        final FormatSpec formatSpec = new FormatSpec(config)
+        final FormatSpec formatSpec = new FormatSpec(new FixGrepConfig(config))
 
         when:
         final OrderGroupingFixLineHandler fixLineHandler = new OrderGroupingFixLineHandler(new Formatter(formatSpec), new UniqueIdSpecs(), new IdFilter(["BC1"]), new Consumer<String>() {

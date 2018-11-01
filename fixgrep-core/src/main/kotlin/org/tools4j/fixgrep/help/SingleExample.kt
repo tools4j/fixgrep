@@ -1,6 +1,7 @@
 package org.tools4j.fixgrep.help
 
 import org.tools4j.fixgrep.config.ConfigBuilder
+import org.tools4j.fixgrep.config.FixGrepConfig
 import org.tools4j.fixgrep.formatting.FormatSpec
 import org.tools4j.fixgrep.config.Option
 import org.tools4j.fixgrep.formatting.WrappedFormatter
@@ -21,7 +22,7 @@ class SingleExample (val fixLines: List<String>, val args: List<String>, val doc
         configOverrides.put(Option.html.key, ""+docWriter.isHtml())
         configOverrides.put(Option.input_delimiter.key, "^A")
         val configAndArguments = ConfigBuilder(args, ConfigImpl(configOverrides)).configAndArguments
-        val spec = FormatSpec(config = configAndArguments.config)
+        val spec = FormatSpec(FixGrepConfig(configAndArguments.config))
         val formatter = WrappedFormatter(spec)
         docWriter.startSection(MiscTextEffect.Console)
         for(line in fixLines){

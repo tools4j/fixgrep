@@ -17,7 +17,9 @@ class ConfigBuilder(val args: List<String>, val overrides: Config?){
     companion object: KLogging()
 
     val configAndArguments: ConfigAndArguments by lazy {
-        val parsedOptions = OptionParserFactory().optionParser.parse(*args.toTypedArray())
+        val cleanedArgs: List<String> = cleanArgsOfAnyHiddenNonStringObjects()
+
+        val parsedOptions = OptionParserFactory().optionParser.parse(*cleanedArgs.toTypedArray())
 
         val optionsConfig = OptionsToConfig(parsedOptions).config
         optionsConfig.validateAllPropertyKeysAreOneOf(Option.optionsThatCanBePassedOnCommandLine.map { it.key })
@@ -38,7 +40,7 @@ class ConfigBuilder(val args: List<String>, val overrides: Config?){
         logger.info("================================")
         logger.info("Non-option arguments: "+ cleanedArguments)
         logger.info("================================")
-        logger.info("Options: "+ args.toList())
+        logger.info("Options: $cleanedArgs")
         logger.info("================================")
         logger.info("Options config:\n"+ optionsConfig.toPrettyString())
         logger.info("================================")
@@ -56,6 +58,15 @@ class ConfigBuilder(val args: List<String>, val overrides: Config?){
 
         logger.info("================================")
         logger.info("Resolved config:\n"+ resolvedConfig.toPrettyString())
-        ConfigAndArguments(resolvedConfig, cleanedArguments, args)
+        ConfigAndArguments(resolvedConfig, cleanedArguments, cleanedArgs)
+    }
+
+    /**
+     * If called from Groovy, String's can actually be GStrings.  Which will break later on.
+     */
+    private fun cleanArgsOfAnyHiddenNonStringObjects(): List<String> {
+        val argsAsObjects: List<Any> = args
+        val cleanedArgs: List<String> = argsAsObjects.map { it.toString() }
+        return cleanedArgs
     }
 }

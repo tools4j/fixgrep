@@ -7,13 +7,10 @@ import org.tools4j.properties.Config
  * Date: 4/05/2018
  * Time: 9:16 AM
  */
-class ConfigKeyedWithOption(val config: Config) {
+open class ConfigKeyedWithOption(val config: Config) {
     init {
         config.validateAllPropertyKeysAreOneOf(Option.values().map{it.key})
     }
-
-    fun getWithPrefix(prefix: String): ConfigKeyedWithOption = ConfigKeyedWithOption(config.getWithPrefix(prefix))
-    fun size(): Int = config.size()
 
     operator fun get(option: Option): String? = config.get(option.key)
     operator fun get(option: Option, defaultValue: String): String? = config.get(option.key, defaultValue)

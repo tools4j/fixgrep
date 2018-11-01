@@ -11,16 +11,16 @@ import java.io.OutputStream
  * Time: 5:25 PM
  */
 
-class HelpGenerator: HelpFormatter {
+class HelpGenerator(val outputStream: OutputStream): HelpFormatter {
 
     override fun format(options: MutableMap<String, out OptionDescriptor>): String {
         return help
     }
 
-    fun go(os: OutputStream){
+    fun go(){
         val optionParser = OptionParserFactory().optionParser
         optionParser.formatHelpWith(this)
-        optionParser.printHelpOn(os)
+        optionParser.printHelpOn(outputStream)
     }
 
     val help: String by lazy {
@@ -44,7 +44,7 @@ class HelpGenerator: HelpFormatter {
 
         @JvmStatic
         fun main(args: Array<String>) {
-            val help = HelpGenerator()
+            val help = HelpGenerator(System.out)
             val optionParser = OptionParserFactory().optionParser
             optionParser.formatHelpWith(help)
             optionParser.printHelpOn(System.out)

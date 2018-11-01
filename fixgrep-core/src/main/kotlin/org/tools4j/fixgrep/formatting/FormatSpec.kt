@@ -6,8 +6,7 @@ import org.tools4j.fix.DelimiterImpl
 import org.tools4j.fix.Fields
 import org.tools4j.fix.spec.FixSpecDefinition
 import org.tools4j.fix.spec.FixSpecParser
-import org.tools4j.fixgrep.config.ConfigKeyedWithOption
-import org.tools4j.fixgrep.config.Option
+import org.tools4j.fixgrep.config.FixGrepConfig
 import org.tools4j.fixgrep.highlights.Highlight
 import org.tools4j.fixgrep.highlights.HighlightParser
 import org.tools4j.fixgrep.linehandlers.FixLine
@@ -79,35 +78,35 @@ class FormatSpec(
 
     @JvmOverloads
     constructor(
-            config: ConfigKeyedWithOption,
+            config: FixGrepConfig,
             msgColors: MessageColors = MessageColors()) : this(
-            suppressColors = config.getAsBoolean(Option.suppress_colors),
-            suppressBoldTagsAndValues = config.getAsBoolean(Option.suppress_bold_tags_and_values),
-            highlight = HighlightParser().parse(config.getAsStringList(Option.highlights)),
-            groupBy = config.getAsStringList(Option.group_by_order, null),
-            indentGroupRepeats = config.getAsBoolean(Option.indent_group_repeats),
-            inputDelimiter = config.getAsString(Option.input_delimiter),
-            outputDelimiter = config.getAsString(Option.output_delimiter),
-            outputFormatHorizontalConsole = config.getAsString(Option.output_format_horizontal_console),
-            outputFormatHorizontalHtml = config.getAsString(Option.output_format_horizontal_html),
-            outputFormatVerticalConsole = config.getAsString(Option.output_format_vertical_console),
-            outputFormatVerticalHtml = config.getAsString(Option.output_format_vertical_html),
-            outputFormatGroupedOrderHeaderConsole = config.getAsString(Option.output_format_grouped_order_header_console),
-            outputFormatGroupedOrderHeaderHtml = config.getAsString(Option.output_format_grouped_order_header_html),
-            lineRegex = config.getAsString(Option.input_line_format),
-            lineRegexGroupForFix = config.getAsInt(Option.line_regexgroup_for_fix),
-            sortByTags = config.getAsIntList(Option.sort_by_tags),
-            onlyIncludeTags = config.getAsIntList(Option.only_include_tags),
-            excludeTags = config.getAsIntList(Option.exclude_tags),
-            tagAnnotations = config.getAsString(Option.tag_annotations),
-            verticalFormat = config.getAsBoolean(Option.vertical_format),
-            alignVerticalColumns = config.getAsBoolean(Option.align_vertical_columns),
-            includeOnlyMessagesOfType = config.getAsStringList(Option.include_only_messages_of_type),
-            excludeMessagesOfType = config.getAsStringList(Option.exclude_messages_of_type),
-            fixSpec = FixSpecParser(config.getAsString(Option.fix_spec_path)).parseSpec(),
+            suppressColors = config.suppressColors,
+            suppressBoldTagsAndValues = config.suppressBoldTagsAndValues,
+            highlight = HighlightParser().parse(config.highlights),
+            groupBy = config.getIdsToOrdersGroupsBy,
+            indentGroupRepeats = config.indentGroupRepeats,
+            inputDelimiter = config.inputDelimiter,
+            outputDelimiter = config.outputDelimiter,
+            outputFormatHorizontalConsole = config.outputFormatHorizontalConsole,
+            outputFormatHorizontalHtml = config.outputFormatHorizontalHtml,
+            outputFormatVerticalConsole = config.outputFormatVerticalConsole,
+            outputFormatVerticalHtml = config.outputFormatVerticalHtml,
+            outputFormatGroupedOrderHeaderConsole = config.outputFormatGroupedOrderHeaderConsole,
+            outputFormatGroupedOrderHeaderHtml = config.outputFormatGroupedOrderHeaderHtml,
+            lineRegex = config.inputLineFormatRegex,
+            lineRegexGroupForFix = config.lineRegexGroupForFix,
+            sortByTags = config.sortByTags,
+            onlyIncludeTags = config.includeOnlyTags,
+            excludeTags = config.excludeTags,
+            tagAnnotations = config.tagAnnotations,
+            verticalFormat = config.verticalFormat,
+            alignVerticalColumns = config.alignVerticalColumns,
+            includeOnlyMessagesOfType = config.includeOnlyMessagesOfType,
+            excludeMessagesOfType = config.excludeMessagesOfType,
+            fixSpec = FixSpecParser(config.fixSpecPath).parseSpec(),
             msgColors = msgColors,
-            formatInHtml = config.hasPropertyAndIsNotFalse(Option.html),
-            debug = config.getAsBoolean(Option.debug, false))
+            formatInHtml = config.htmlFormatting,
+            debug = config.debugMode)
 
     fun copyWithModifications(
             suppressColors: Boolean = this.suppressColors,

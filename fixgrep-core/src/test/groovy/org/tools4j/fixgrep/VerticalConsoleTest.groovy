@@ -1,9 +1,6 @@
 package org.tools4j.fixgrep
 
 import org.tools4j.fix.Ascii1Char
-import org.tools4j.fixgrep.main.FixGrepMain
-import org.tools4j.util.CircularBufferedReaderWriter
-import org.tools4j.utils.ArgsAsString
 import spock.lang.Shared
 import spock.lang.Specification
 
@@ -14,23 +11,16 @@ import spock.lang.Specification
  */
 class VerticalConsoleTest extends Specification {
     @Shared private final static String a = new Ascii1Char().toString()
-    @Shared private String testOverrides;
-
-    private static File newAssertionsFile = new File("new-assertions.txt")
-    private static File resultsFile = new File("results.txt")
-    private static boolean logResultsToFile = false;
-    private static boolean logNewAssertionsToFile = false;
+    @Shared private TestFixGrep fixGrep;
 
     def setupSpec() {
-        if(logNewAssertionsToFile) deleteAndCreateNewFile(newAssertionsFile)
-        if(logResultsToFile) deleteAndCreateNewFile(resultsFile)
-        testOverrides = ' -V -p'
+        fixGrep = new TestFixGrep(' -V -p')
     }
 
     def 'test vertical aligned format'(){
         when:
         final String fix = "35=D${a}11=ABC${a}55=AUD/USD\n35=8${a}150=F${a}55=AUD/USD"
-        def lines = parseToLines('-A', fix)
+        def lines = fixGrep.go('-A', fix)
 
         then:
         assert lines == """================================================================================
@@ -55,7 +45,7 @@ class VerticalConsoleTest extends Specification {
     def 'test vertical aligned format - highlighted field'(){
         when:
         final String fix = "35=D${a}11=ABC${a}55=AUD/USD\n35=8${a}150=F${a}55=AUD/USD"
-        def lines = parseToLines('-A -h 35', fix)
+        def lines = fixGrep.go('-A -h 35', fix)
 
         then:
         assert lines == """================================================================================
@@ -79,7 +69,7 @@ class VerticalConsoleTest extends Specification {
     def 'test vertical aligned format - highlighted message'(){
         when:
         final String fix = "35=D${a}11=ABC${a}55=AUD/USD\n35=8${a}150=F${a}55=AUD/USD"
-        def lines = parseToLines('-A -h 35:Msg', fix)
+        def lines = fixGrep.go('-A -h 35:Msg', fix)
 
         then:
         assert lines == """================================================================================
@@ -103,7 +93,7 @@ class VerticalConsoleTest extends Specification {
     def 'test vertical non-aligned format'(){
         when:
         final String fix = "35=D${a}11=ABC${a}55=AUD/USD\n35=8${a}150=F${a}55=AUD/USD"
-        def lines = parseToLines('', fix)
+        def lines = fixGrep.go('', fix)
 
         then:
         assert lines == """================================================================================
@@ -124,7 +114,7 @@ class VerticalConsoleTest extends Specification {
 
     def 'test vertical non-aligned format - indentGroupRepeats - prices'(){
         when:
-        def lines = parseToLines('', VerticalTestUtil.PRICES_FIX)
+        def lines = fixGrep.go('', VerticalTestUtil.PRICES_FIX)
 
         then:
         assert lines == """================================================================================
@@ -180,7 +170,7 @@ class VerticalConsoleTest extends Specification {
 
     def 'test vertical non-aligned format - indentGroupRepeats - prices - excluding some fields'(){
         when:
-        def lines = parseToLines('-e 268,448,55,215,217,270 -q', VerticalTestUtil.PRICES_FIX)
+        def lines = fixGrep.go('-e 268,448,55,215,217,270 -q', VerticalTestUtil.PRICES_FIX)
 
         then:
         assert lines == """================================================================================
@@ -216,7 +206,7 @@ class VerticalConsoleTest extends Specification {
 
     def 'test vertical non-aligned format - indentGroupRepeats - prices - excluding a lot of fields'(){
         when:
-        def lines = parseToLines('-e 279 -q',
+        def lines = fixGrep.go('-e 279 -q',
                     "35=X${a}" +
                     "268=2${a}" +
                     "279=0${a}" +
@@ -253,7 +243,7 @@ class VerticalConsoleTest extends Specification {
                 "270=1.12355${a}" +
                 "1022=FeedA${a}"
 
-        def lines = parseToLines('', fix)
+        def lines = fixGrep.go('', fix)
 
         then:
         assert lines == """================================================================================
@@ -280,7 +270,7 @@ class VerticalConsoleTest extends Specification {
 
     def 'test vertical non-aligned format - DO NOT indentGroupRepeats - prices'(){
         when:
-        def lines = parseToLines('--indent-group-repeats=false', VerticalTestUtil.PRICES_FIX)
+        def lines = fixGrep.go('--indent-group-repeats=false', VerticalTestUtil.PRICES_FIX)
 
         then:
         assert lines == """================================================================================
@@ -331,46 +321,5 @@ class VerticalConsoleTest extends Specification {
 [RoutingID]\u001B[1m217\u001B[22m\u001B[1m=\u001B[22m\u001B[1mroutingId2\u001B[22m
 [MDFeedType]\u001B[1m1022\u001B[22m\u001B[1m=\u001B[22m\u001B[1masdf\u001B[22m
 """
-    }
-
-    private String parseToLines(String args, final String fix){
-        args = args + testOverrides
-        final List<String> argsList = new ArgsAsString(args).toArgs()
-
-        final CircularBufferedReaderWriter input = new CircularBufferedReaderWriter();
-        final CircularBufferedReaderWriter output = new CircularBufferedReaderWriter();
-
-        input.writer.write(fix)
-        input.writer.flush()
-        input.writer.close()
-
-        new FixGrepMain(input.inputStream, output.outputStream, argsList).go()
-
-        output.outputStream.flush()
-        String lines = output.readLines('\n')
-
-        if(logNewAssertionsToFile) {
-            def testCriteriaIfActualIsCorrect = ("'" + args + "'").padRight(35) + "| '" + lines.replace("\n", "\\" + "n").replace('\u001b', '\\' + 'u001b') + "'"
-            newAssertionsFile.append(testCriteriaIfActualIsCorrect + '\n')
-        }
-        if(logResultsToFile) {
-            def testCriteriaIfActualIsCorrect = ("'" + args + "'").padRight(35) + "| '" + lines.replace("\n", "\\" + "n").replace('\u001b', '\\' + 'u001b') + "'"
-            resultsFile.append(args)
-            resultsFile.append('\n')
-            resultsFile.append(lines)
-            resultsFile.append('\n')
-            resultsFile.append('\n')
-        }
-        println lines
-        return lines
-    }
-
-    protected void deleteAndCreateNewFile(final File file) {
-        if (file) {
-            if (file.exists()) {
-                file.delete()
-            }
-            file.createNewFile()
-        }
     }
 }

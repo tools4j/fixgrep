@@ -19,16 +19,10 @@ import spock.lang.Unroll
  */
 class HorizontalConsoleFixGrepTest extends Specification {
     @Shared private final static String a = new Ascii1Char().toString()
-    @Shared private Config testOverrides
-    private static File newAssertionsFile = new File("new-assertions.txt")
-    private static File resultsFile = new File("results.txt")
-    private static boolean logResultsToFile = false;
-    private static boolean logNewAssertionsToFile = false;
+    @Shared private TestFixGrep fixGrep;
 
     def setupSpec() {
-        if(logNewAssertionsToFile) deleteAndCreateNewFile(newAssertionsFile)
-        if(logResultsToFile) deleteAndCreateNewFile(resultsFile)
-        testOverrides = new ConfigImpl(['output.format.horizontal.console': '${msgFix}', 'piped.input': 'true'])
+        fixGrep = new TestFixGrep('--output-format-horizontal-console=${msgFix} --piped-input true')
     }
 
     @Unroll
@@ -37,7 +31,7 @@ class HorizontalConsoleFixGrepTest extends Specification {
         final String fix = "35=D${a}11=ABC${a}55=AUD/USD\n35=8${a}150=F${a}55=AUD/USD"
 
         when:
-        def lines = parseToLines(args, fix)
+        def lines = fixGrep.go(args, fix)
         println 'expected:' + expectedOutput
 
         then:
@@ -101,7 +95,7 @@ class HorizontalConsoleFixGrepTest extends Specification {
         final String fix = "35=D${a}11=ABC${a}55=AUD/USD\n35=8${a}150=F${a}55=AUD/USD"
 
         when:
-        def lines = parseToLines(args, fix)
+        def lines = fixGrep.go(args, fix)
         println 'expected:' + expectedOutput
 
         then:
@@ -120,7 +114,7 @@ class HorizontalConsoleFixGrepTest extends Specification {
 
         when:
         println "\033[31mnormal\033[1mbold\033[22mnormal"
-        def lines = parseToLines(args, fix)
+        def lines = fixGrep.go(args, fix)
 
         then:
         assert lines == expectedOutput
@@ -143,7 +137,7 @@ class HorizontalConsoleFixGrepTest extends Specification {
                 'Thread:7 [MsgType]\u001B[1m35\u001B[22m\u001B[1m=\u001B[22m\u001B[1m8\u001B[22m[EXECUTIONREPORT]|[ExecType]\u001B[1m150\u001B[22m\u001B[1m=\u001B[22m\u001B[1mF\u001B[22m[TRADE_PARTIAL_FILL_OR_FILL]|[Symbol]\u001B[1m55\u001B[22m\u001B[1m=\u001B[22m\u001B[1mAUD/USD\u001B[22m'
 
 
-        def lines = parseToLines(args, fix)
+        def lines = fixGrep.go(args, fix)
 
         then:
         assert lines == expectedOutput
@@ -161,7 +155,7 @@ class HorizontalConsoleFixGrepTest extends Specification {
         def expectedOutput = 'Thread:6 [MsgType]\u001B[1m35\u001B[22m\u001B[1m=\u001B[22m\u001B[1mD\u001B[22m[NEWORDERSINGLE]|[ClOrdID]\u001B[1m11\u001B[22m\u001B[1m=\u001B[22m\u001B[1mABC\u001B[22m|[Symbol]\u001B[1m55\u001B[22m\u001B[1m=\u001B[22m\u001B[1mAUD/USD\u001B[22m\n' +
                 'Thread:7 [MsgType]\u001B[1m35\u001B[22m\u001B[1m=\u001B[22m\u001B[1m8\u001B[22m[EXECUTIONREPORT]|[ExecType]\u001B[1m150\u001B[22m\u001B[1m=\u001B[22m\u001B[1mF\u001B[22m[TRADE_PARTIAL_FILL_OR_FILL]|[Symbol]\u001B[1m55\u001B[22m\u001B[1m=\u001B[22m\u001B[1mAUD/USD\u001B[22m'
 
-        def lines = parseToLines(args, fix)
+        def lines = fixGrep.go(args, fix)
 
         then:
         assert lines == expectedOutput
@@ -173,7 +167,7 @@ class HorizontalConsoleFixGrepTest extends Specification {
         final String fix = "35=D:11=ABC:55=AUD/USD\n35=8:150=F:55=AUD/USD"
 
         when:
-        def lines = parseToLines(args, fix)
+        def lines = fixGrep.go(args, fix)
 
         then:
         assert lines == expectedOutput
@@ -182,48 +176,5 @@ class HorizontalConsoleFixGrepTest extends Specification {
         args                            | expectedOutput
         '--input-delimiter :'              | '[MsgType]\u001B[1m35\u001B[22m\u001B[1m=\u001B[22m\u001B[1mD\u001B[22m[NEWORDERSINGLE]|[ClOrdID]\u001B[1m11\u001B[22m\u001B[1m=\u001B[22m\u001B[1mABC\u001B[22m|[Symbol]\u001B[1m55\u001B[22m\u001B[1m=\u001B[22m\u001B[1mAUD/USD\u001B[22m\n' + '[MsgType]\u001B[1m35\u001B[22m\u001B[1m=\u001B[22m\u001B[1m8\u001B[22m[EXECUTIONREPORT]|[ExecType]\u001B[1m150\u001B[22m\u001B[1m=\u001B[22m\u001B[1mF\u001B[22m[TRADE_PARTIAL_FILL_OR_FILL]|[Symbol]\u001B[1m55\u001B[22m\u001B[1m=\u001B[22m\u001B[1mAUD/USD\u001B[22m'
         '-d :'                             | '[MsgType]\u001B[1m35\u001B[22m\u001B[1m=\u001B[22m\u001B[1mD\u001B[22m[NEWORDERSINGLE]|[ClOrdID]\u001B[1m11\u001B[22m\u001B[1m=\u001B[22m\u001B[1mABC\u001B[22m|[Symbol]\u001B[1m55\u001B[22m\u001B[1m=\u001B[22m\u001B[1mAUD/USD\u001B[22m\n' + '[MsgType]\u001B[1m35\u001B[22m\u001B[1m=\u001B[22m\u001B[1m8\u001B[22m[EXECUTIONREPORT]|[ExecType]\u001B[1m150\u001B[22m\u001B[1m=\u001B[22m\u001B[1mF\u001B[22m[TRADE_PARTIAL_FILL_OR_FILL]|[Symbol]\u001B[1m55\u001B[22m\u001B[1m=\u001B[22m\u001B[1mAUD/USD\u001B[22m'
-    }
-
-
-
-    private String parseToLines(final String args, final String fix){
-        final List<String> argsList = new ArgsAsString(args).toArgs()
-
-        final CircularBufferedReaderWriter input = new CircularBufferedReaderWriter();
-        final CircularBufferedReaderWriter output = new CircularBufferedReaderWriter();
-        final ConfigAndArguments testConfig = new ConfigBuilder(argsList, this.testOverrides).getConfigAndArguments()
-
-        input.writer.write(fix)
-        input.writer.flush()
-        input.writer.close()
-
-        new FixGrep(input.inputStream, output.outputStream, testConfig).go()
-        output.outputStream.flush()
-        String lines = output.readLines('\n')
-
-        if(logNewAssertionsToFile) {
-            def testCriteriaIfActualIsCorrect = ("'" + args + "'").padRight(35) + "| '" + lines.replace("\n", "\\" + "n").replace('\u001b', '\\' + 'u001b') + "'"
-            newAssertionsFile.append(testCriteriaIfActualIsCorrect + '\n')
-        }
-        if(logResultsToFile) {
-            def testCriteriaIfActualIsCorrect = ("'" + args + "'").padRight(35) + "| '" + lines.replace("\n", "\\" + "n").replace('\u001b', '\\' + 'u001b') + "'"
-            resultsFile.append(args)
-            resultsFile.append('\n')
-            resultsFile.append(lines)
-            resultsFile.append('\n')
-            resultsFile.append('\n')
-        }
-
-        println 'actual:  ' + lines
-        return lines
-    }
-
-    protected void deleteAndCreateNewFile(final File file) {
-        if (file) {
-            if (file.exists()) {
-                file.delete()
-            }
-            file.createNewFile()
-        }
     }
 }

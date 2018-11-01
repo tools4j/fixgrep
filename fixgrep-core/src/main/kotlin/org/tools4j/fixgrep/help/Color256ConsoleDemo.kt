@@ -27,7 +27,7 @@ class Color256ConsoleDemo {
         sb.toString()
     }
 
-    val demoForConsole = consoleIntro + demo
+    val demoForConsole: String by lazy { consoleIntro + demo }
 
     private fun getText(color: Int): String {
         return getText(color, (color == 3 || color in 6..15))

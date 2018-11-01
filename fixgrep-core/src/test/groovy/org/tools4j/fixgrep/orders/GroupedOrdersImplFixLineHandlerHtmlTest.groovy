@@ -1,7 +1,7 @@
 package org.tools4j.fixgrep.orders
 
 import org.tools4j.fix.ExecType
-import org.tools4j.fixgrep.main.FixGrepMain
+import org.tools4j.fixgrep.TestFixGrep
 import org.tools4j.util.CircularBufferedReaderWriter
 import org.tools4j.utils.ArgsAsString
 import spock.lang.Shared
@@ -13,6 +13,7 @@ import spock.lang.Specification
  * Time: 6:15 AM
  */
 class GroupedOrdersImplFixLineHandlerHtmlTest extends Specification {
+    private static final char a = '\u0001'
     private final static int msgType = 35
     private final static int clOrdId = 11
     private final static int origClOrdId = 41
@@ -22,27 +23,14 @@ class GroupedOrdersImplFixLineHandlerHtmlTest extends Specification {
     private final static int execType = 150
     private final static int ordStatus = 39
     private final static int cxlRejResponseTo = 434
-
     private final static String clientToServer = "49=CLIENT${a}56=SERVER"
     private final static String serverToClient = "49=SERVER${a}56=CLIENT"
-
     private final static String clientToServer2 = "49=CLIENT2${a}56=SERVER2"
     private final static String serverToClient2 = "49=SERVER2${a}56=CLIENT2"
-
-    static final char a = '\u0001'
-
-    @Shared private String testOverrides;
-
-    private static File newAssertionsFile = new File("new-assertions.txt")
-    private static File resultsFile = new File("results.txt")
-    private static boolean logResultsToFile = false
-    private static boolean logNewAssertionsToFile = false
-    private static boolean launchResultInBrowser = false
+    @Shared private TestFixGrep fixGrep;
 
     def setupSpec() {
-        if(logNewAssertionsToFile) deleteAndCreateNewFile(newAssertionsFile)
-        if(logResultsToFile) deleteAndCreateNewFile(resultsFile)
-        testOverrides = ' --html -p -O'
+        fixGrep = new TestFixGrep('--html -p -O')
     }
     
     def "no order messages found"() {
@@ -51,7 +39,7 @@ class GroupedOrdersImplFixLineHandlerHtmlTest extends Specification {
                 """${msgType}=blah1${a}${clientToServer}${a}${clOrdId}=ABC")\n
                    ${msgType}=blah2${a}${clientToServer}${a}${clOrdId}=ABC"""
 
-        def lines = parseToLines('--output-format-horizontal-html "${senderToTargetCompIdDirection} [${msgTypeName}] ${msgFix}" --suppress-bold-tags-and-values true', fix)
+        def lines = fixGrep.go('--output-format-horizontal-html "${senderToTargetCompIdDirection} [${msgTypeName}] ${msgFix}" --suppress-bold-tags-and-values true', fix)
 
         then:
         assert lines == "No order messages found"
@@ -61,7 +49,7 @@ class GroupedOrdersImplFixLineHandlerHtmlTest extends Specification {
         when:
         final String fix = "${msgType}=D${a}${clientToServer}${a}${clOrdId}=ABC"
 
-        def lines = parseToLines('--output-format-horizontal-html "${senderToTargetCompIdDirection} [${msgTypeName}] ${msgFix}" --suppress-bold-tags-and-values true', fix)
+        def lines = fixGrep.go('--output-format-horizontal-html "${senderToTargetCompIdDirection} [${msgTypeName}] ${msgFix}" --suppress-bold-tags-and-values true', fix)
 
         then:
         assert lines == """ORPHAN MESSAGES:<br/>
@@ -72,7 +60,7 @@ class GroupedOrdersImplFixLineHandlerHtmlTest extends Specification {
         when:
         final String fix = "35=D${a}49=CLIENT${a}56=SERVER${a}11=ABC"
 
-        def lines = parseToLines('--output-format-horizontal-html "${senderToTargetCompIdDirection} ${msgColor}[${msgTypeName}]${colorReset} ${msgFix}" --suppress-bold-tags-and-values false', fix)
+        def lines = fixGrep.go('--output-format-horizontal-html "${senderToTargetCompIdDirection} ${msgColor}[${msgTypeName}]${colorReset} ${msgFix}" --suppress-bold-tags-and-values false', fix)
 
         then:
         assert lines == """ORPHAN MESSAGES:<br/>
@@ -85,7 +73,7 @@ class GroupedOrdersImplFixLineHandlerHtmlTest extends Specification {
                               ${msgType}=D${a}${clientToServer}${a}${clOrdId}=DEF\n
                               ${msgType}=D${a}${clientToServer}${a}${clOrdId}=GHI"""
 
-        def lines = parseToLines('--output-format-horizontal-html "${senderToTargetCompIdDirection} [${msgTypeName}] ${msgFix}" --suppress-bold-tags-and-values true', fix)
+        def lines = fixGrep.go('--output-format-horizontal-html "${senderToTargetCompIdDirection} [${msgTypeName}] ${msgFix}" --suppress-bold-tags-and-values true', fix)
 
         then:
         assert lines == """ORPHAN MESSAGES:<br/>
@@ -106,7 +94,7 @@ class GroupedOrdersImplFixLineHandlerHtmlTest extends Specification {
                                 ${msgType}=9${a}${serverToClient}${a}${origClOrdId}=DEF${a}${clOrdId}=GHI\n
                                 ${msgType}=8${a}${serverToClient}${a}${execType}=${ExecType.PartialFill}${a}${orderId}=123\n"""
 
-        def lines = parseToLines('--output-format-horizontal-html "${senderToTargetCompIdDirection} [${msgTypeName}] ${msgFix}" --suppress-bold-tags-and-values true', fix)
+        def lines = fixGrep.go('--output-format-horizontal-html "${senderToTargetCompIdDirection} [${msgTypeName}] ${msgFix}" --suppress-bold-tags-and-values true', fix)
 
         then:
         assert lines == """<div class='order-header'>
@@ -137,7 +125,7 @@ ORDER orderId:123 clOrdId:ABC<br/>
                                 ${msgType}=9${a}${serverToClient}${a}${origClOrdId}=DEF${a}${clOrdId}=GHI\n
                                 ${msgType}=8${a}${serverToClient}${a}${execType}=${ExecType.PartialFill}${a}${orderId}=123\n"""
 
-        def lines = parseToLines('--output-format-horizontal-html "${senderToTargetCompIdDirection} [${msgTypeName}] ${msgFix}" --suppress-bold-tags-and-values true -e 35,49,56,150', fix)
+        def lines = fixGrep.go('--output-format-horizontal-html "${senderToTargetCompIdDirection} [${msgTypeName}] ${msgFix}" --suppress-bold-tags-and-values true -e 35,49,56,150', fix)
 
         then:
         assert lines == """<div class='order-header'>
@@ -177,7 +165,7 @@ ORDER orderId:123 clOrdId:ABC<br/>
                                 ${msgType}=F${a}${clientToServer2}${a}${clOrdId}=GHI\n
                                 ${msgType}=8${a}${serverToClient2}${a}${execType}=${ExecType.Canceled}${a}${orderId}=123"""
 
-        def lines = parseToLines('--output-format-horizontal-html "${senderToTargetCompIdDirection} [${msgTypeName}] ${msgFix}" --suppress-bold-tags-and-values true -e 35,49,56,150', fix)
+        def lines = fixGrep.go('--output-format-horizontal-html "${senderToTargetCompIdDirection} [${msgTypeName}] ${msgFix}" --suppress-bold-tags-and-values true -e 35,49,56,150', fix)
 
         then:
         assert lines == """<div class='order-header'>
@@ -238,7 +226,7 @@ ORPHAN MESSAGES:<br/>
                                 ${msgType}=8${a}${serverToClient}${a}${execType}=${ExecType.PartialFill}${a}${orderId}=123\n
                                 ${msgType}=8${a}${serverToClient2}${a}${execType}=${ExecType.Canceled}${a}${orderId}=123"""
 
-        def lines = parseToLines('--output-format-horizontal-html "${senderToTargetCompIdDirection} [${msgTypeName}] ${msgFix}" --suppress-bold-tags-and-values true -e 35,49,56,150', fix)
+        def lines = fixGrep.go('--output-format-horizontal-html "${senderToTargetCompIdDirection} [${msgTypeName}] ${msgFix}" --suppress-bold-tags-and-values true -e 35,49,56,150', fix)
 
         then:
         assert lines == """<div class='order-header'>
@@ -280,62 +268,6 @@ ORDER orderId:123 clOrdId:ABC<br/>
 ORPHAN MESSAGES:<br/>
 <div class='msg orphan-message'>SERVER2->CLIENT2 [OrderCancelReject] <div class='fields'><span class='field annotatedField'><span class='tag annotation'>[OrigClOrdID]</span><span class='tag raw'>41</span><span class='equals'>=</span><span class='value raw'>ORPHAN1</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[ClOrdID]</span><span class='tag raw'>11</span><span class='equals'>=</span><span class='value raw'>ORPHAN1</span></span></div></div>
 <div class='msg orphan-message'>SERVER2->CLIENT2 [OrderCancelReject] <div class='fields'><span class='field annotatedField'><span class='tag annotation'>[OrigClOrdID]</span><span class='tag raw'>41</span><span class='equals'>=</span><span class='value raw'>ORPHAN2</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[ClOrdID]</span><span class='tag raw'>11</span><span class='equals'>=</span><span class='value raw'>ORPHAN2</span></span></div></div>"""
-    }
-
-
-    private String parseToLines(String args, final String fix){
-        args = args + testOverrides
-        final List<String> argsList = new ArgsAsString(args).toArgs()
-
-        if(launchResultInBrowser){
-            final CircularBufferedReaderWriter browserLaunchInput = new CircularBufferedReaderWriter();
-            final CircularBufferedReaderWriter browserLaunchOutput = new CircularBufferedReaderWriter();
-
-            browserLaunchInput.writer.write(fix)
-            browserLaunchInput.writer.flush()
-            browserLaunchInput.writer.close()
-
-            final List<String> argsListWithLaunchBrowserFlag = new ArrayList<>(argsList)
-            argsListWithLaunchBrowserFlag.add('-l')
-            new FixGrepMain(browserLaunchInput.inputStream, browserLaunchOutput.outputStream, argsListWithLaunchBrowserFlag).go()
-        }
-
-        final CircularBufferedReaderWriter input = new CircularBufferedReaderWriter();
-        final CircularBufferedReaderWriter output = new CircularBufferedReaderWriter();
-
-        input.writer.write(fix)
-        input.writer.flush()
-        input.writer.close()
-
-        new FixGrepMain(input.inputStream, output.outputStream, argsList).go()
-
-        output.outputStream.flush()
-        String lines = output.readLines('\n')
-
-        if(logNewAssertionsToFile) {
-            def testCriteriaIfActualIsCorrect = ("'" + args + "'").padRight(35) + "| '" + lines.replace("\n", "\\" + "n").replace('\u001b', '\\' + 'u001b') + "'"
-            newAssertionsFile.append(testCriteriaIfActualIsCorrect + '\n')
-        }
-        if(logResultsToFile) {
-            def testCriteriaIfActualIsCorrect = ("'" + args + "'").padRight(35) + "| '" + lines.replace("\n", "\\" + "n").replace('\u001b', '\\' + 'u001b') + "'"
-            resultsFile.append(args)
-            resultsFile.append('\n')
-            resultsFile.append(lines)
-            resultsFile.append('\n')
-            resultsFile.append('\n')
-        }
-
-        println 'actual:  ' + lines
-        return lines
-    }
-
-    protected void deleteAndCreateNewFile(final File file) {
-        if (file) {
-            if (file.exists()) {
-                file.delete()
-            }
-            file.createNewFile()
-        }
     }
 }
 
