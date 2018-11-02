@@ -43,7 +43,7 @@ class FormattingDi(val diContext: DiContext, val inputDi: InputDi, val outputDi:
     }
 
     fun start(){
-        val reader = inputDi.inputStream.bufferedReader()
+        val reader = inputDi.lineReader
         while (true) {
             val line = reader.readLine()
             if (line == null) break

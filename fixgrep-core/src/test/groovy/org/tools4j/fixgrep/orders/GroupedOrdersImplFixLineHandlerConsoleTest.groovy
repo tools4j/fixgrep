@@ -83,7 +83,7 @@ class GroupedOrdersImplFixLineHandlerConsoleTest extends Specification {
     def "simple formatted"() {
         given:
         final StringBuilder output = new StringBuilder()
-        final ConfigKeyedWithOption config = new ConfigBuilder(['--output-format-horizontal-console', '${senderToTargetCompIdDirection} ${msgColor}[${msgTypeName}]${colorReset} ${msgFix}', '--suppress-bold-tags-and-values', 'false']).configAndArguments.config
+        final ConfigKeyedWithOption config = new ConfigBuilder(['--output-format-horizontal-console', '${senderToTargetCompIdDirection} ${msgColor}[${msgTypeName}]${colorReset} ${msgFix}']).configAndArguments.config
         final FormatSpec formatSpec = new FormatSpec(new FixGrepConfig(config))
 
         when:
@@ -107,7 +107,7 @@ class GroupedOrdersImplFixLineHandlerConsoleTest extends Specification {
     def "three NewOrderSingles"() {
         given:
         final StringBuilder output = new StringBuilder()
-        final ConfigKeyedWithOption config = new ConfigBuilder(['--output-format-horizontal-console', '\${senderToTargetCompIdDirection} [\${msgTypeName}] \${msgFix}', '--suppress-bold-tags-and-values', 'true',]).configAndArguments.config
+        final ConfigKeyedWithOption config = new ConfigBuilder(['--output-format-horizontal-console', '\${senderToTargetCompIdDirection} [\${msgTypeName}] \${msgFix}', '--suppress-bold-tags-and-values']).configAndArguments.config
         final FormatSpec formatSpec = new FormatSpec(new FixGrepConfig(config))
 
         when:

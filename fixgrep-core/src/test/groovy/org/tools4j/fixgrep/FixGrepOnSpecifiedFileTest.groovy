@@ -20,12 +20,13 @@ class FixGrepOnSpecifiedFileTest extends Specification {
         println '1.' + new File(System.getProperty('user.dir')).parentFile.name
         println '2.' + (new File(System.getProperty('user.dir')).parentFile.name == 'fixgrep-core')
 
-        final List<String> args = ["--suppress-colors", "true", "--suppress-bold-tags-and-values=true", "${pathPrefix}src/test/resources/small-log1.log"]
+        final List<String> args = ["--suppress-colors", "--suppress-bold-tags-and-values", "${pathPrefix}src/test/resources/small-log1.log"]
 
         when:
         final CircularBufferedReaderWriter output = new CircularBufferedReaderWriter();
         new FixGrep(args, output.outputStream).go()
         output.outputStream.flush()
+        output.outputStream.close()
         String lines = output.readLines('\n')
 
         then:

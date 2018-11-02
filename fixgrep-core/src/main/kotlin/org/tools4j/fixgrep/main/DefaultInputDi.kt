@@ -1,5 +1,9 @@
 package org.tools4j.fixgrep.main
 
+import org.tools4j.fixgrep.utils.BufferedLineReader
+import org.tools4j.fixgrep.utils.CompositeLineReader
+import org.tools4j.fixgrep.utils.LineReader
+import java.io.BufferedReader
 import java.io.File
 import java.io.InputStream
 import java.io.SequenceInputStream
@@ -13,15 +17,15 @@ import kotlin.collections.ArrayList
  */
 class DefaultInputDi(val diContext: DiContext): InputDi {
 
-    override val inputStream: InputStream by lazy {
+    override val lineReader: LineReader by lazy {
         if (diContext.config.pipedInput && System.`in` != null) {
-            System.`in`
+            BufferedLineReader(System.`in`)
         } else {
             fromFilesSpecifiedAsArguments()
         }
     }
 
-    private fun fromFilesSpecifiedAsArguments(): InputStream {
+    private fun fromFilesSpecifiedAsArguments(): LineReader {
         if(diContext.args.isEmpty()){
             throw IllegalArgumentException("File list empty.  Must received piped input, or specify one or more files as arguments.")
         }
@@ -38,6 +42,6 @@ class DefaultInputDi(val diContext: DiContext): InputDi {
             }
             inputStreams.add(file.inputStream())
         }
-        return SequenceInputStream(Vector(inputStreams).elements())
+        return CompositeLineReader(inputStreams.map { BufferedLineReader(it.bufferedReader()) })
     }
 }

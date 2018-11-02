@@ -17,7 +17,7 @@ class ReplacedAnnotationHtmlTest extends Specification {
     @Shared private TestFixGrep fixGrep;
 
     def setupSpec() {
-        fixGrep = new TestFixGrep(' -V --html -p -a rr')
+        fixGrep = new TestFixGrep('-V --html -p -a rr')
     }
 
     def 'test vertical aligned format'(){

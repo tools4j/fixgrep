@@ -60,7 +60,7 @@ class GroupedOrdersImplFixLineHandlerHtmlTest extends Specification {
         when:
         final String fix = "35=D${a}49=CLIENT${a}56=SERVER${a}11=ABC"
 
-        def lines = fixGrep.go('--output-format-horizontal-html "${senderToTargetCompIdDirection} ${msgColor}[${msgTypeName}]${colorReset} ${msgFix}" --suppress-bold-tags-and-values false', fix)
+        def lines = fixGrep.go('--output-format-horizontal-html "${senderToTargetCompIdDirection} ${msgColor}[${msgTypeName}]${colorReset} ${msgFix}"', fix)
 
         then:
         assert lines == """ORPHAN MESSAGES:<br/>
