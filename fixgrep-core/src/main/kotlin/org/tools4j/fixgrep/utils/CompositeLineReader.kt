@@ -1,5 +1,6 @@
 package org.tools4j.fixgrep.utils
 
+import mu.KLogging
 import java.io.InputStream
 
 /**
@@ -11,6 +12,8 @@ class CompositeLineReader(private val lineReaders: Collection<LineReader>): Line
     constructor(is1: InputStream, is2: InputStream): this(listOf(BufferedLineReader(is1), BufferedLineReader(is2)))
     constructor(lines1: String, lines2: String): this(listOf(StringLineReader(lines1), StringLineReader(lines2)))
 
+    companion object: KLogging()
+
     private val lineReadersIterator = lineReaders.iterator()
     private var currentLineReader: LineReader? = if(lineReadersIterator.hasNext()) lineReadersIterator.next() else null
 
@@ -20,9 +23,11 @@ class CompositeLineReader(private val lineReaders: Collection<LineReader>): Line
         if(line != null){
             return line
         } else if(lineReadersIterator.hasNext()){
+            logger.debug { "Detected that the currentLineReader has nothing left to read, moving to next lineReader" }
             currentLineReader = lineReadersIterator.next()
             return readLine()
         } else {
+            logger.debug { "Detected that the currentLineReader has nothing left to read, and that there are no more lineReaders.  Exiting." }
             currentLineReader = null
             return null
         }

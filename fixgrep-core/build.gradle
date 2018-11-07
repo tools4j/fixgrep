@@ -46,6 +46,13 @@ sourceSets {
         }
         resources.srcDir file('src/perf/resources')
     }
+    integrationTest {
+        java {
+            compileClasspath += main.output + test.output
+            runtimeClasspath += main.output + test.output
+            srcDir 'src/integration-test/kotlin'
+        }
+    }
 }
 
 dependencies {
@@ -64,9 +71,15 @@ dependencies {
     perfCompile 'junit:junit:4.12'
     perfCompile "org.spockframework:spock-core:1.0-groovy-2.4"
     perfCompile project(':shared')
+
+    integrationTestCompile 'org.assertj:assertj-core:3.11.1'
+    integrationTestCompile 'org.junit.jupiter:junit-jupiter-api:5.3.1'
+    integrationTestRuntime 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
 }
 
 configurations {
+    integrationTestCompile.extendsFrom testCompile
+    integrationTestRuntime.extendsFrom testRuntime
     perfCompile.extendsFrom testCompile
     perfRuntime.extendsFrom testRuntime
 }
@@ -131,7 +144,7 @@ task copyFromLibsToDistLib(type: Copy) {
 }
 
 task createHtmlManPage(type:JavaExec) {
-    main = "org.tools4j.fixgrep.FixGrepMain"
+    main = "org.tools4j.fixgrep.main.FixGrep"
     classpath = sourceSets.main.runtimeClasspath
     args = ["--man", "--html", "page", "--to-file", "../docs/index.html"]
     environment("FIXGREP_VERSION", "$fullVersion")
@@ -141,7 +154,7 @@ task createTextManPage(type:JavaExec) {
     doLast {
         println "Written man page to: $buildDir/dist/files/man.txt"
     }
-    main = "org.tools4j.fixgrep.FixGrepMain"
+    main = "org.tools4j.fixgrep.main.FixGrep"
     classpath = sourceSets.main.runtimeClasspath
     args = ["--man", "page", "--to-file", "$buildDir/dist/files/man.txt"]
 }
@@ -152,13 +165,18 @@ task deleteAnyOldZipFiles(type: Delete) {
     }
 }
 
+task createFiles {
+    dependsOn assemble
+    dependsOn copyAdditionalResources
+    dependsOn copyPerfResults
+    dependsOn copyFromLibsToDistLib
+}
+
 task createZip(type: Zip) {
     dependsOn build
     dependsOn test
     dependsOn perf
-    dependsOn copyAdditionalResources
-    dependsOn copyPerfResults
-    dependsOn copyFromLibsToDistLib
+    dependsOn createFiles
     dependsOn createHtmlManPage
     dependsOn createTextManPage
     dependsOn versionTxt
@@ -204,6 +222,13 @@ task copyZipToDistDirectory(type: Copy) {
     into 'dist/'
 }
 
+task integrationTest(type: Test, group: 'Verification') {
+    dependsOn createFiles
+    dependsOn 'cleanIntegrationTest'
+    useJUnitPlatform()
+    testClassesDirs = sourceSets.integrationTest.output.classesDirs
+    classpath = sourceSets.integrationTest.runtimeClasspath
+}
 
 build.dependsOn(copyDependenciesToLib)
 

@@ -37,16 +37,20 @@ class ConfigBuilder(val args: List<String>, val overrides: Config?){
                 .flatMap { it.split(Regex("\\s")) }
                 .toList()
 
-        logger.info("================================")
-        logger.info("Non-option arguments: "+ cleanedArguments)
-        logger.info("================================")
-        logger.info("Options: $cleanedArgs")
-        logger.info("================================")
-        logger.info("Options config:\n"+ optionsConfig.toPrettyString())
-        logger.info("================================")
-        logger.info("Classpath config:\n"+ classpathConfig.toPrettyString())
-        logger.info("================================")
-        logger.info("HomeDir config:\n"+ homeDirConfig?.toPrettyString())
+        logger.info{"Non-option arguments: "+ cleanedArguments}
+        logger.info{"Options: $cleanedArgs"}
+        logger.info{"================================"}
+        logger.info{"Options config:"}
+        logger.info{"================================"}
+        logger.info{optionsConfig.toPrettyString()}
+        logger.info{"================================"}
+        logger.info{"Classpath config:"}
+        logger.info{"================================"}
+        logger.info{classpathConfig.toPrettyString()}
+        logger.info{"================================"}
+        logger.info{"HomeDir config:"}
+        logger.info{"================================"}
+        logger.info{(homeDirConfig?.toPrettyString() ?: "<empty>")}
 
 
         val config: Config = ConfigImpl()
@@ -56,8 +60,10 @@ class ConfigBuilder(val args: List<String>, val overrides: Config?){
                 .overrideWith(overrides)
                 .overrideWith(optionsConfig)
 
-        logger.info("================================")
-        logger.info("Resolved config:\n"+ resolvedConfig.toPrettyString())
+        logger.info{"================================"}
+        logger.info{"Resolved config:"}
+        logger.info{"================================"}
+        logger.info{resolvedConfig.toPrettyString()}
         ConfigAndArguments(resolvedConfig, cleanedArguments, cleanedArgs)
     }
 

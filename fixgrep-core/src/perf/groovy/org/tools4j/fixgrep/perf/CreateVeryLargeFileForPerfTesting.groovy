@@ -8,7 +8,6 @@ package org.tools4j.fixgrep.perf
 class CreateVeryLargeFileForPerfTesting {
     public static void main(String[] args) {
         println new File("src/test/resources/test.log").absolutePath
-
         createTestFile()
     }
 

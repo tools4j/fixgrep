@@ -102,13 +102,13 @@ class ExamplesSection(val docWriterFactory: DocWriterFactory) {
         examplesList.add("--output-format-horizontal-console ${'$'}1:${'$'}{msgFix} --input-line-format ^\\d{4}-[01]\\d-[0-3]\\d[T\\s]([0-2]\\d:[0-5]\\d:[0-5]\\d[\\.,]\\d+)?.*?(35=.*\$)", "Whilst we're at it, let's just print out the time by slightly modifying the position of the first set of capturing brackets, as the whole date becomes a bit redundant.")
         examplesList.add("--output-format-horizontal-console ${DOLLAR}1:${DOLLAR}{msgTypeName}:${'$'}{msgFix} --input-line-format ^\\d{4}-[01]\\d-[0-3]\\d[T\\s]([0-2]\\d:[0-5]\\d:[0-5]\\d[\\.,]\\d+)?.*?(35=.*\$)", "We can use another pre-defined tag ${DOLLAR}{msgTypeName} to print out not just the messageType, but also the execType if it's an execution report.")
         examplesList.add("--output-format-horizontal-console ${DOLLAR}1:${'$'}{msgColor}${DOLLAR}{msgTypeName}${'$'}{colorReset}:${'$'}{msgFix} --input-line-format ^\\d{4}-[01]\\d-[0-3]\\d[T\\s]([0-2]\\d:[0-5]\\d:[0-5]\\d[\\.,]\\d+)?.*?(35=.*\$)", "And add coloring per message type")
-        examplesList.add("--exclude-tagsInId 35 --output-format-horizontal-console ${DOLLAR}1:${'$'}{msgColor}${DOLLAR}{msgTypeName}${'$'}{colorReset}:${'$'}{msgFix} --input-line-format ^\\d{4}-[01]\\d-[0-3]\\d[T\\s]([0-2]\\d:[0-5]\\d:[0-5]\\d[\\.,]\\d+)?.*?(35=.*\$)", "I'm going to exclude (hide) field 35 as I already have the MessageType printed at the start of the line.")
+        examplesList.add("--exclude-tags 35 --output-format-horizontal-console ${DOLLAR}1:${'$'}{msgColor}${DOLLAR}{msgTypeName}${'$'}{colorReset}:${'$'}{msgFix} --input-line-format ^\\d{4}-[01]\\d-[0-3]\\d[T\\s]([0-2]\\d:[0-5]\\d:[0-5]\\d[\\.,]\\d+)?.*?(35=.*\$)", "I'm going to exclude (hide) field 35 as I already have the MessageType printed at the start of the line.")
 
         docWriter.writeLn("This is now looking more presentable.  If I want to have these settings applied each time I run fixgrep, I just need to modify my ~/.fixgrep/application.properties file. Fixgrep can automatically create this file by running:")
         docWriter.writeLn("fixgrep --install", MiscTextEffect.Console)
         docWriter.writeLn("And populate this file with the corresponding property settings (notice I've replaced the option dashes, with property dots):")
         docWriter.writeLn(
-                "exclude.tagsInId=35\n" +
+                "exclude.tags=35\n" +
                 "output.format.horizontal.console=${DOLLAR}1:${'$'}{msgColor}${DOLLAR}{msgTypeName}${'$'}{colorReset}:${'$'}{msgFix}\n" +
                 "input.line.format=^\\d{4}-[01]\\d-[0-3]\\d[T\\s]([0-2]\\d:[0-5]\\d:[0-5]\\d[\\.,]\\d+)?.*?(35=.*\$)", MiscTextEffect.Console)
 

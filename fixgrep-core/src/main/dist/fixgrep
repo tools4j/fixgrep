@@ -8,12 +8,20 @@ if [ "$1" = "man" ]; then
     exit 0
 fi
 
+if ! command -v java >/dev/null 2>&1; then
+    echo "Could not find java.  Please ensure that the java bin directory to your path."
+    exit -1
+fi
+
 if ! [[ $(java -version 2>&1 | egrep '(1.8|1.9|1.10)') ]]; then
     echo "Could not find appropriate java version installed.  Please ensure that java >= 1.8 is installed and on your path.  Results of java version check $(java -version)"
+    exit -1
 fi
 
-if ! [ -t 0 ]; then
-    ADDITIONAL_PARAMS="--piped"
+if readlink /proc/$$/fd/0 | grep -q "^pipe:"; then
+    if test -s /dev/stdin; then
+        ADDITIONAL_PARAMS="--piped"
+    fi
 fi
 
-java -Xmx64m -XX:+UseSerialGC -cp "lib/*" org.tools4j.fixgrep.main.FixGrepMain "$ADDITIONAL_PARAMS" "$@" <&0
+java -Xmx64m -XX:+UseSerialGC -cp "lib/*" org.tools4j.fixgrep.main.FixGrep "$ADDITIONAL_PARAMS" "$@" <&0

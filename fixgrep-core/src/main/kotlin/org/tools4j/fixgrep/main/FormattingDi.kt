@@ -1,11 +1,13 @@
 package org.tools4j.fixgrep.main
 
+import mu.KLogging
 import org.tools4j.fixgrep.formatting.FormatSpec
 import org.tools4j.fixgrep.formatting.Formatter
 import org.tools4j.fixgrep.linehandlers.DefaultFixLineHandler
 import org.tools4j.fixgrep.linehandlers.DefaultTextLineHandler
 import org.tools4j.fixgrep.linehandlers.FixLineHandler
 import org.tools4j.fixgrep.linehandlers.LineHandler
+import org.tools4j.fixgrep.main.FixGrep.Companion.logger
 import org.tools4j.fixgrep.orders.*
 import java.util.function.Consumer
 
@@ -18,6 +20,8 @@ class FormattingDi(val diContext: DiContext, val inputDi: InputDi, val outputDi:
     init {
         diContext.addRunnable { this.start() }
     }
+
+    companion object: KLogging()
 
     val formatter: Formatter by lazy {
         Formatter(FormatSpec(diContext.config))
@@ -44,11 +48,13 @@ class FormattingDi(val diContext: DiContext, val inputDi: InputDi, val outputDi:
 
     fun start(){
         val reader = inputDi.lineReader
+        logger.debug { "Starting to read lines" }
         while (true) {
             val line = reader.readLine()
             if (line == null) break
             else textLineHandler.handle(line)
         }
+        logger.debug { "Finished reading lines" }
         textLineHandler.finish()
     }
 }

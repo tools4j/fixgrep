@@ -30,12 +30,20 @@ public class PerfBenchmarks extends Specification {
     }
 
     @Unroll
-    def 'run fixgrep file test [#config]'(final Map<String, String> config, final int expectedLineCount, final long expectedMaxMillis){
+    def 'run fixgrep file test [#args]'(final List<String> args, final int expectedLineCount, final long expectedMaxMillis){
         given:
-        config.put("input.line.format", 'RawFix:(\\d+=.*$)')
-        config.put("line.regexgroup.for.fix", '1')
-        Config testConfig = TestConfigBuilder.load().overrideWith(new ConfigImpl(config))
-        ConfigAndArguments configAndArguments = new ConfigAndArguments(testConfig, Arrays.asList("src/perf/resources/test.log"))
+        args.addAll("--input-line-format", 'RawFix:(\\d+=.*$)')
+        args.addAll("--line-regexgroup-for-fix", '1')
+
+        String testLogLocation = "src/perf/resources/test.log"
+        if(!new File(testLogLocation).exists()){
+            testLogLocation = "fixgrep-core/$testLogLocation"
+        }
+        if(!new File(testLogLocation).exists()){
+            throw new IllegalStateException("Could not find test.log at $testLogLocation")
+        }
+
+        args.add(testLogLocation)
 
         when:
         final CircularBufferedReaderWriter output = new CircularBufferedReaderWriter();
@@ -44,7 +52,7 @@ public class PerfBenchmarks extends Specification {
             @Override
             public Integer call() {
                 long startTime = System.currentTimeMillis()
-                new FixGrep(null, output.outputStream, configAndArguments).go()
+                new FixGrep(args, output.outputStream).go()
                 long endTime = System.currentTimeMillis()
                 long durationMs = endTime - startTime
                 output.outputStream.flush()
@@ -53,25 +61,27 @@ public class PerfBenchmarks extends Specification {
         })
         List<String> lines = output.readLines()
         final Integer durationInMs = future.get()
-        reportFile.append(config.toString() + "\t" + durationInMs + "ms\n");
+        reportFile.append(args.toString() + "\t" + durationInMs + "ms\n");
 
         then:
         assert lines.size() == expectedLineCount
         assert durationInMs <= expectedMaxMillis
 
         where:
-        config                                      | expectedLineCount | expectedMaxMillis
-        [:]                                         | 373               | 10000 //warmup
-        [:]                                         | 373               | 100
-        ["suppress.bold.tags.and.values":"true"]    | 373               | 100
-        ["suppress.colors":"true"]                  | 373               | 100
-        ["highlights":"35"]                         | 373               | 100
-        ["sort.by.tags":"35,55"]                    | 373               | 100
-        ["only.include.tags":"35,55"]               | 373               | 100
-        ["exclude.tags":"35"]                       | 373               | 100
-        ["tag.annotations":"__"]                    | 373               | 100
-        ["tag.annotations":"ab"]                    | 373               | 100
-        ["include.only.messages.of.type":"8"]       | 258               | 100
-        ["exclude.messages.of.type":"8"]            | 115               | 100
+        args                                   | expectedLineCount | expectedMaxMillis
+        []                                     | 373               | 10000 //warmup
+        []                                     | 373               | 10000 //warmup
+        []                                     | 373               | 10000 //warmup
+        []                                     | 373               | 300
+        ["--suppress-bold-tags-and-values"]    | 373               | 200
+        ["--suppress-colors"]                  | 373               | 200
+        ["--highlights","35"]                  | 373               | 200
+        ["--sort-by-tags","35,55"]             | 373               | 200
+        ["--only-include-tags","35,55"]        | 373               | 200
+        ["--exclude-tags","35"]                | 373               | 200
+        ["--tag-annotations","__"]             | 373               | 200
+        ["--tag-annotations","ab"]             | 373               | 200
+        ["--include-only-messages-of-type","8"]| 258               | 200
+        ["--exclude-messages-of-type","8"]     | 115               | 200
     }
 }

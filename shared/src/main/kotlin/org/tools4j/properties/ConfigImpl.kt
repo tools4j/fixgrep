@@ -23,7 +23,7 @@ class ConfigImpl : Config {
     override fun toPrettyString(): String {
         val sb = StringBuilder()
         for(key in properties.keys){
-            sb.append(key).append("=").append(properties[key]).append("\n")
+            sb.append(key).append("=").append(properties[key]?.replace("\n", "\\n")).append("\n")
         }
         return sb.toString()
     }

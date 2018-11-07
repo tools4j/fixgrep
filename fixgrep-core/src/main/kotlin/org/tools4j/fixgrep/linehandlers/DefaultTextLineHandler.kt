@@ -1,5 +1,6 @@
 package org.tools4j.fixgrep.linehandlers
 
+import mu.KLogging
 import org.tools4j.fix.Fields
 import org.tools4j.fix.FieldsFromDelimitedString
 import org.tools4j.fixgrep.formatting.FormatSpec
@@ -11,6 +12,8 @@ import java.util.regex.Pattern
  * Time: 5:15 PM
  */
 class DefaultTextLineHandler(val spec: FormatSpec, val fixLineHandler: FixLineHandler): LineHandler {
+    companion object: KLogging()
+
     val logLineRegexPattern: Pattern by lazy {
         Pattern.compile(spec.lineRegex)
     }
@@ -22,6 +25,7 @@ class DefaultTextLineHandler(val spec: FormatSpec, val fixLineHandler: FixLineHa
     override fun handle(line: String) {
         val fixLine = extractLine(line)
         if(fixLine != null){
+            logger.debug { "handling line: $line" }
             fixLineHandler.handle(fixLine)
         }
     }
