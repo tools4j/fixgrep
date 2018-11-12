@@ -22,7 +22,7 @@ class HorizontalConsoleFixGrepTest extends Specification {
     @Shared private TestFixGrep fixGrep;
 
     def setupSpec() {
-        fixGrep = new TestFixGrep('--output-format-horizontal-console=${msgFix} --piped-input true')
+        fixGrep = new TestFixGrep('--output-format-horizontal-console=${msgFix}')
     }
 
     @Unroll

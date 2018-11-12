@@ -19,7 +19,6 @@ class FixGrepOnLargeFileTest extends Specification {
         given:
         final List<String> args = ['--input-line-format', '^(\\d{4}-[01]\\d-[0-3]\\d[T\\s][0-2]\\d:[0-5]\\d:[0-5]\\d[\\.,]\\d+)?.*?RawFix:(\\d+=.*$)',
                             '--output-format-horizontal-console', '$1 ${senderToTargetCompIdDirection} ${msgColor}[${msgTypeName}]${colorReset} ${msgFix}',
-                            '--piped-input', 'true',
                             '--group-by-order', 'true']
 
         when:

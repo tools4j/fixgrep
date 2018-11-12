@@ -25,21 +25,14 @@ class DiContext(private val configAndArguments: ConfigAndArguments) {
     val args: List<String> by lazy { configAndArguments.arguments }
 
     fun go(){
-        try {
-            if(config.debugMode) Logging.setLoggingLevel(Level.DEBUG)
-            logger.info{"Running initializations"}
-            initializations.forEach { it() }
-            logger.info{"Running services"}
-            services.forEach { it() }
-            logger.info{"Running shutdowns"}
-            shutdowns.forEach { it() }
-            logger.info{"Finished, exiting"}
-        } catch (e: Throwable){
-            FixGrep.logger.error { e }
-            System.err.println("Invalid option ${e.message}")
-            HelpGenerator(System.out).go();
-            System.exit(-1);
-        }
+        if(config.debugMode) Logging.setLoggingLevel(Level.DEBUG)
+        logger.info{"Running initializations"}
+        initializations.forEach { it() }
+        logger.info{"Running services"}
+        services.forEach { it() }
+        logger.info{"Running shutdowns"}
+        shutdowns.forEach { it() }
+        logger.info{"Finished, exiting"}
     }
 
     fun addInit(initialization: () -> Unit){

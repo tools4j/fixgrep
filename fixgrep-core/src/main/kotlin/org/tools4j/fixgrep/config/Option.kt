@@ -23,7 +23,6 @@ enum class Option(val abbreviation: String?, val longForm: String, val otherForm
     suppress_colors("n", "suppress-colors", "no-color", true, true, {}),
     output_delimiter("o", "output-delimiter", "output-delim", true, true, {it.withRequiredArg().ofType(String::class.java)}),
     group_by_order("O", "group-by-order", null, true, true, {it.withOptionalArg().ofType(kotlin.String::class.java).withValuesSeparatedBy(",")}),
-    piped_input("p", "piped-input", "piped", false, true, {}),
     suppress_bold_tags_and_values("q", "suppress-bold-tags-and-values", null, true, true, {}),
     input_line_format("r", "input-line-format", null, true, true, {it.withRequiredArg().ofType(String::class.java)}),
     sort_by_tags("s", "sort-by-tags", null, true, true, {it.withRequiredArg().ofType(Integer::class.java).withValuesSeparatedBy(",")}),

@@ -27,6 +27,14 @@ class FormattingDi(val diContext: DiContext, val inputDi: InputDi, val outputDi:
         Formatter(FormatSpec(diContext.config))
     }
 
+    val consumerToPrintln: Consumer<String> by lazy {
+        Consumer<String> {
+            logger.debug { "About to send string to output" }
+            outputDi.printStream.print(it)
+            logger.debug { "Finished sending string to output" }
+        }
+    }
+
     val fixLineHandler: FixLineHandler by lazy {
         if(diContext.config.groupByOrder){
             OrderGroupingFixLineHandler(
@@ -36,9 +44,9 @@ class FormattingDi(val diContext: DiContext, val inputDi: InputDi, val outputDi:
                             UniqueOriginalClientOrderIdSpec(),
                             UniqueOrderIdSpec()),
                     IdFilter(diContext.config.getIdsToOrdersGroupsBy),
-                    Consumer {outputDi.printStream.print(it)})
+                    consumerToPrintln)
         } else {
-            DefaultFixLineHandler(formatter, Consumer { outputDi.printStream.print(it) })
+            DefaultFixLineHandler(formatter, consumerToPrintln)
         }
     }
 

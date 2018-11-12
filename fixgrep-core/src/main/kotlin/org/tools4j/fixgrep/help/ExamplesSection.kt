@@ -67,7 +67,6 @@ class ExamplesSection(val docWriterFactory: DocWriterFactory) {
         examplesList.add("-h 35:Bg176,55:Bg9", "Highlight tag 35 with a background color of 8.  Highlight tag 55 with a background color of 9.")
         examplesList.add("-h 35=D:Msg,55", "When a message has tag 35=D, highlight the whole line.  Also highlight tag 55.")
         examplesList.add("--suppress-bold-tags-and-values", "Don't use bold text effects in the output fix.")
-        examplesList.add("-p", "Same configuration but with short form option -p")
         examplesList.end()
 
         val lines2 = listOf(

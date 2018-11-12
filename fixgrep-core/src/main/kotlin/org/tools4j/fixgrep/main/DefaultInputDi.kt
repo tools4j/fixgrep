@@ -1,6 +1,7 @@
 package org.tools4j.fixgrep.main
 
 import mu.KLogging
+import org.tools4j.fixgrep.main.FixGrep.Companion.logger
 import org.tools4j.fixgrep.utils.BufferedLineReader
 import org.tools4j.fixgrep.utils.CompositeLineReader
 import org.tools4j.fixgrep.utils.LineReader
@@ -20,18 +21,12 @@ class DefaultInputDi(val diContext: DiContext): InputDi {
     companion object: KLogging()
 
     override val lineReader: LineReader by lazy {
-        if (diContext.config.pipedInput && System.`in` != null) {
-            logger.info { "Detected piped input, reading from there..." }
-            BufferedLineReader(System.`in`)
-        } else {
-            logger.info { "No piped input found, looking for filenames specified in args..." }
-            fromFilesSpecifiedAsArguments()
-        }
+        fromFilesSpecifiedAsArguments() ?: BufferedLineReader(System.`in`)
     }
 
-    private fun fromFilesSpecifiedAsArguments(): LineReader {
+    private fun fromFilesSpecifiedAsArguments(): LineReader? {
         if(diContext.args.isEmpty()){
-            throw IllegalArgumentException("File list empty.  Must received piped input, or specify one or more files as arguments.")
+            return null
         }
         val inputStreams = ArrayList<InputStream>()
         logger.info{"About to read from files ${diContext.args}"}
@@ -46,6 +41,6 @@ class DefaultInputDi(val diContext: DiContext): InputDi {
             }
             inputStreams.add(file.inputStream())
         }
-        return CompositeLineReader(inputStreams.map { BufferedLineReader(it.bufferedReader()) })
+        return if(inputStreams.isEmpty()) null else return CompositeLineReader(inputStreams.map { BufferedLineReader(it.bufferedReader()) })
     }
 }

@@ -18,10 +18,4 @@ if ! [[ $(java -version 2>&1 | egrep '(1.8|1.9|1.10)') ]]; then
     exit -1
 fi
 
-if readlink /proc/$$/fd/0 | grep -q "^pipe:"; then
-    if test -s /dev/stdin; then
-        ADDITIONAL_PARAMS="--piped"
-    fi
-fi
-
 java -Xmx64m -XX:+UseSerialGC -cp "lib/*" org.tools4j.fixgrep.main.FixGrep "$ADDITIONAL_PARAMS" "$@" <&0

@@ -8,7 +8,6 @@ package org.tools4j.fixgrep.config
 class FixGrepConfig(config: ConfigKeyedWithOption) {
     val getIdsToOrdersGroupsBy: List<String>? by lazy {config.getAsStringList(Option.group_by_order, emptyList())}
     val groupByOrder: Boolean by lazy { config.hasPropertyAndIsNotFalse(Option.group_by_order) }
-    val pipedInput: Boolean by lazy { config.getAsBoolean(Option.piped_input, false) }
     val install: Boolean by lazy { config.getAsBoolean(Option.install, false) }
     val help: Boolean by lazy { config.getAsBoolean(Option.help, false) }
     val man: Boolean by lazy { config.getAsBoolean(Option.man, false) }

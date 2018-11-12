@@ -30,7 +30,7 @@ class GroupedOrdersImplFixLineHandlerHtmlTest extends Specification {
     @Shared private TestFixGrep fixGrep;
 
     def setupSpec() {
-        fixGrep = new TestFixGrep('--html -p -O')
+        fixGrep = new TestFixGrep('--html -O')
     }
     
     def "no order messages found"() {

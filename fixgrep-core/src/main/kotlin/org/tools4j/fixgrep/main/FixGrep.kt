@@ -1,6 +1,7 @@
 package org.tools4j.fixgrep.main
 
 import mu.KotlinLogging
+import org.tools4j.fixgrep.help.HelpGenerator
 import java.io.InputStream
 import java.io.OutputStream
 
@@ -27,7 +28,14 @@ class FixGrep(val diContext: DiContext, val inputDi: InputDi, val outputDi: Outp
         val logger = KotlinLogging.logger {}
         @JvmStatic
         fun main(args: Array<String>) {
-            FixGrep(args.toList()).go()
+            try {
+                FixGrep(args.toList()).go()
+            } catch (e: Exception){
+                FixGrep.logger.error { e }
+                System.err.println("Error: ${e.message}")
+                HelpGenerator(System.out).go();
+                System.exit(-1);
+            }
         }
     }
 

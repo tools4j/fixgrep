@@ -170,8 +170,6 @@ the less 'interesting' fix fields, such as BeginString, BodyLength or Checksum. 
 
         optionsHelp.add(OptionHelp(Option.output_delimiter, "Defines the delimiter to print between FIX tags in the formatted output.", ";", null))
 
-        optionsHelp.add(OptionHelp(Option.piped_input, "Whether or not piped input is being used.  Should not every be required.  Is used by fixgrep bash script to communicate with fixgrep java app.", null, "Normally there is no need to specify this, as it is detected and set by teh fixgrep bash script."))
-
         optionsHelp.add(OptionHelp(
                 Option.suppress_bold_tags_and_values,
                 "Suppresses the bold formatting of tags and values.",

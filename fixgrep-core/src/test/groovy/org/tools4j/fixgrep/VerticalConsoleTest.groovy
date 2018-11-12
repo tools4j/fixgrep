@@ -14,7 +14,7 @@ class VerticalConsoleTest extends Specification {
     @Shared private TestFixGrep fixGrep;
 
     def setupSpec() {
-        fixGrep = new TestFixGrep(' -V -p')
+        fixGrep = new TestFixGrep(' -V')
     }
 
     def 'test vertical aligned format'(){

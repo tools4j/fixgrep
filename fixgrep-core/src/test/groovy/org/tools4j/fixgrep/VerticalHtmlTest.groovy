@@ -17,7 +17,7 @@ class VerticalHtmlTest extends Specification {
     @Shared private TestFixGrep fixGrep;
 
     def setupSpec() {
-        fixGrep = new TestFixGrep(' -V --html -p')
+        fixGrep = new TestFixGrep(' -V --html')
     }
 
     def 'test vertical aligned format'(){
