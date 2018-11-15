@@ -1,21 +1,41 @@
 #!/bin/bash
 
+# set any additional parameters
 ADDITIONAL_PARAMS=""
 
-if [ "$1" = "man" ]; then
-    DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-    less -R $DIR/man.txt
-    exit 0
-fi
-
+# check that java is on the path
 if ! command -v java >/dev/null 2>&1; then
     echo "Could not find java.  Please ensure that the java bin directory to your path."
     exit -1
 fi
 
-if ! [[ $(java -version 2>&1 | egrep '(1.8|1.9|1.10)') ]]; then
+# check that java is an adequate version
+if ! [[ $(java -version 2>&1 | egrep '(1.8|1.9|1.10|1.11)') ]]; then
     echo "Could not find appropriate java version installed.  Please ensure that java >= 1.8 is installed and on your path.  Results of java version check $(java -version)"
     exit -1
 fi
 
-java -Xmx64m -XX:+UseSerialGC -cp "lib/*" org.tools4j.fixgrep.main.FixGrep "$ADDITIONAL_PARAMS" "$@" <&0
+# resolve what directory the fixgrep bash script is.  Source: https://stackoverflow.com/questions/59895/getting-the-source-directory-of-a-bash-script-from-within
+SOURCE="${BASH_SOURCE[0]}"
+while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
+  FIXGREP_DIR_ABSOLUTE="$( cd -P "$( dirname "$SOURCE" )" >/dev/null && pwd )"
+  SOURCE="$(readlink "$SOURCE")"
+  [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
+done
+FIXGREP_DIR_ABSOLUTE="$( cd -P "$( dirname "$SOURCE" )" >/dev/null && pwd )"
+
+
+# resolve windows directory if running in cygwin, so that the java classpath is windows friendly
+FIXGREP_DIR_NATIVE=$FIXGREP_DIR_ABSOLUTE
+if command -v cygpath >/dev/null 2>&1; then
+    FIXGREP_DIR_NATIVE=$(cygpath -w "$FIXGREP_DIR_ABSOLUTE")
+fi
+
+# check if wanting to view man page
+if [ "$1" = "man" ]; then
+    less -R $FIXGREP_DIR_ABSOLUTE/man.txt
+    exit 0
+fi
+
+# run fixgrep
+java -Dlog.dir="$FIXGREP_DIR_ABSOLUTE" -Xmx64m -XX:+UseSerialGC -cp "$FIXGREP_DIR_NATIVE/lib/*" org.tools4j.fixgrep.main.FixGrep "$ADDITIONAL_PARAMS" "$@" <&0

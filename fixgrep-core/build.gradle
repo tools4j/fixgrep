@@ -129,6 +129,10 @@ task copyDependenciesToLib(type: Copy) {
     from configurations.runtime
 }
 
+task deleteOldDistResources(type: Delete) {
+    delete fileTree('build/dist/')
+}
+
 task copyAdditionalResources(type: Copy) {
     from 'src/main/dist'
     into 'build/dist/files'
@@ -166,11 +170,19 @@ task deleteAnyOldZipFiles(type: Delete) {
     }
 }
 
-task createFiles {
-    dependsOn assemble
+task copyAllResources {
     dependsOn copyAdditionalResources
     dependsOn copyPerfResults
     dependsOn copyFromLibsToDistLib
+}
+
+task createFiles {
+    dependsOn assemble
+    dependsOn deleteOldDistResources
+    dependsOn copyAllResources
+    dependsOn createHtmlManPage
+    dependsOn createTextManPage
+    dependsOn versionTxt
 }
 
 task createZip(type: Zip) {
@@ -178,9 +190,6 @@ task createZip(type: Zip) {
     dependsOn test
     dependsOn perf
     dependsOn createFiles
-    dependsOn createHtmlManPage
-    dependsOn createTextManPage
-    dependsOn versionTxt
     dependsOn deleteAnyOldZipFiles
 
     from 'build/dist/files'
@@ -232,6 +241,8 @@ task integrationTest(type: Test, group: 'Verification') {
 }
 
 build.dependsOn(copyDependenciesToLib)
+copyAllResources.mustRunAfter(deleteOldDistResources)
+createZip.mustRunAfter(deleteAnyOldZipFiles)
 
 gradle.taskGraph.whenReady {taskGraph ->
     if (taskGraph.hasTask(release)) {  /* when run debug task */
