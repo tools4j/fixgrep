@@ -5,13 +5,13 @@ ADDITIONAL_PARAMS=""
 
 # check that java is on the path
 if ! command -v java >/dev/null 2>&1; then
-    echo "Could not find java.  Please ensure that the java bin directory to your path."
+    >&2 echo "Could not find java.  Please ensure that the java bin directory to your path."
     exit -1
 fi
 
 # check that java is an adequate version
 if ! [[ $(java -version 2>&1 | egrep '(1.8|1.9|1.10|1.11)') ]]; then
-    echo "Could not find appropriate java version installed.  Please ensure that java >= 1.8 is installed and on your path.  Results of java version check $(java -version)"
+    >&2 echo "Could not find appropriate java version installed.  Please ensure that java >= 1.8 is installed and on your path.  Results of java version check $(java -version)"
     exit -1
 fi
 
