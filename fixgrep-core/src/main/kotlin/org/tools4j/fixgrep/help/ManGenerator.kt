@@ -1,6 +1,5 @@
 package org.tools4j.fixgrep.help
 
-import org.tools4j.fixgrep.config.ConfigAndArguments
 import org.tools4j.fixgrep.config.FixGrepConfig
 import org.tools4j.fixgrep.config.Option
 import org.tools4j.fixgrep.texteffect.HtmlOnlyTextEffect
@@ -24,7 +23,7 @@ class ManGenerator(val docWriterFactory: DocWriterFactory, val config: FixGrepCo
         sb.append(OptionsHelp(docWriterFactory).toFormattedText())
         sb.append(howToUseOutputFormats())
         sb.append(ExamplesSection(docWriterFactory).toFormattedText())
-        sb.append(notesOnPerformance())
+        sb.append(faq())
         sb.append(licencing())
         val toString = sb.toString()
         if(debug) toString.replace("\u001b", "\\u001b")
@@ -203,20 +202,26 @@ class ManGenerator(val docWriterFactory: DocWriterFactory, val config: FixGrepCo
         }
     }
 
-    private fun notesOnPerformance(): String {
+    private fun faq(): String {
         val writer = docWriterFactory.createNew()
         with(writer) {
-            writeHeading(1, "Some FAQs regarding performance")
-            writeHeading(2, "Can gixgrep be used as an alternative to grep when filtering large files.")
+            writeHeading(1, "FAQ")
+            writeHeading(2, "General")
+            writeHeading(3, "Is fixgrep free to use in a commercial environment")
+            writeLn("Yes.  Fixgrep is released under the MIT licence which allows usage free-of-charge in a commercial environment.")
+            writeHeading(3, "Does fixgrep run under windows.")
+            writeLn("Yes.  Fixgrep will run under any OS that has a JVM greater than or equal to Java 1.8.  The most convenient way to run fixgrep is by using the fixgrep bash command.  To run this under windows you will need to be running a bash prompt, e.g. cygwin.  Currently there is no fixgrep.bat script written.  At the moment I have no immediate intention to create one, but please feel free to submit a proposal.")
+            writeHeading(2, "Performance")
+            writeHeading(3, "Can gixgrep be used as an alternative to grep when filtering large files.")
             writeLn("It depends.  Fixgrep will be much slower than grep, and will consume more CPU.  For example running on my mac laptop, grep is roughly 5 times faster than fixgrep for searching for messages. If you don't want to wait too long and/or you are concerned about impact on CPU, best to use conventional grep commands to filter first and then pipe into fixgrep.")
-            writeHeading(2, "Can fixgrep be used as an alternative to 'more' or 'less' to view large FIX log files.")
+            writeHeading(3, "Can fixgrep be used as an alternative to 'more' or 'less' to view large FIX log files.")
             writeLn("It depends.  Applications such as 'more' or 'less' don't need to read an entire file during viewing.  Whereas fixgrep does.")
             writeLn("For large files (>100MB) it would be prudent to first extract the lines you wish to view (using grep or whatever), and pipe those lines into fixgrep.")
-            writeHeading(2, "How much memory does fixgrep use?")
-            writeLn("Fixgrep should not use much more than 64MB.  Memory usage over time when parsing a large log file should not increase.  The exception to this is when grouping by order.  When grouping by order fixgrep will need to cache order messages before printing the out.  This option is not enabled by default.")
-            writeHeading(2, "How much CPU does fixgrep use?")
+            writeHeading(3, "How much memory does fixgrep use?")
+            writeLn("With one exception, fixgrep should not use much more than 64MB.  Memory usage over time when parsing a large log file should not increase.  The exception to this is when grouping by order.  When grouping by order fixgrep will need to cache order messages before printing the out.  This option is not enabled by default.")
+            writeHeading(3, "How much CPU does fixgrep use?")
             writeLn("Fixgrep is a single threaded app, so at most it shouldn't use more than one core whilst it is running.")
-            writeHeading(2, "How can I reduce the impact on other existing processes whilst running fixgrep.")
+            writeHeading(3, "How can I reduce the impact on other existing processes whilst running fixgrep.")
             writeLn("The regex which is run on each line to determine if the line is a fix message, and to capture the fix message is the single biggest CPU user in fixgrep.  See the help for the input-line-format option for hints on how to make this fast.")
             writeLn("Another way is to use the 'nice' command by specifying 'nice' before the 'fixgrep' script.  e.g. 'nice fixgrep myfixlog.log' or 'cat myfixlog.log | nice fixgrep'")
             writeLn("Nice takes a parameter which specifies how 'nice' you wish to be to other processes.  Have a look at the nice man page for more info.")

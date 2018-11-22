@@ -5,24 +5,40 @@ import joptsimple.OptionSpecBuilder
 import joptsimple.util.RegexMatcher
 
 /**
- * User: benjw
- * Date: 8/15/2018
- * Time: 5:32 PM
+ * NOTE, I have chosen to NOT define options with optional arguments.
+ * -- An option either does not require an argument.
+ * -- Or is requires a mandatory argument.
+ *
+ * This is to remove the confusion about when options stop, and arguments begin.
+ *
+ * For example, if -O (group by order) option, had an optional argument, which could be the order ID,
+ * then calling fixgrep -O fix.log, would assume that 'fix.log' is the orderID to group by.  (which of course
+ * is incorrect, it's the first non-option, which specifies the file to parse.).  And if a user runs this
+ * command, then fixgrep will block indefinitely on teh command line, waiting for stdIn input.
+ *
+ * joptsimple offers a solution to this in that the user can specify a double -- to indicate where
+ * options end, and arguments begin.  e.g. fixgrep -O -- fixgrep.log
+ *
+ * However I think that might not be intuitive to the average user.
+ *
+ * So NO optional arguments please.
  */
 enum class Option(val abbreviation: String?, val longForm: String, val otherForm: String? = null, val canHaveEquivalentPropertyInPropertiesFile: Boolean, val canBePassedAsCommandLineOption: Boolean, val commandLineOptionConfig: ((OptionSpecBuilder) -> Any)?){
     tag_annotations("a", "tag-annotations", null, true, true, {it.withRequiredArg().ofType(String::class.java).withValuesConvertedBy(RegexMatcher.regex("((none|outsideAnnotated|insideAnnotated|replaced)|([abr_]([abr_])?))"))}),
     align_vertical_columns("A", "align-vertical-columns", "align", true, true, {}),
     input_delimiter("d", "input-delimiter", "input-delim", true, true, {it.withRequiredArg().ofType(String::class.java)}),
+    output_delimiter("D", "output-delimiter", "output-delim", true, true, {it.withRequiredArg().ofType(String::class.java)}),
     exclude_tags("e", "exclude-tags", null, true, true, {it.withRequiredArg().ofType(Integer::class.java).withValuesSeparatedBy(",")}),
-    to_file("f", "to-file", null, false, true, {it.withOptionalArg().ofType(String::class.java)}),
+    to_file("f", "to-file", null, false, true, {}),
+    to_given_file("F", "to-given-file", null, false, true, {it.withRequiredArg().ofType(kotlin.String::class.java)}),
     line_regexgroup_for_fix("g", "line-regexgroup-for-fix", null, true, true, {it.withRequiredArg().ofType(Integer::class.java)}),
-    indent_group_repeats("G", "indent-group-repeats", null, true, true, {it.withOptionalArg().ofType(String::class.java)}),
+    suppress_indent_group_repeats("G", "suppress-indent-group-repeats", null, true, true, {}),
     highlights("h", "highlights", "highlight", true, true, {it.withRequiredArg().ofType(String::class.java).withValuesSeparatedBy(",")}),
     launch_browser("l", "launch-browser", null, false, true, {}),
     include_only_messages_of_type("m", "include-only-messages-of-type", null, true, true, {it.withRequiredArg().ofType(String::class.java).withValuesSeparatedBy(",")}),
     suppress_colors("n", "suppress-colors", "no-color", true, true, {}),
-    output_delimiter("o", "output-delimiter", "output-delim", true, true, {it.withRequiredArg().ofType(String::class.java)}),
-    group_by_order("O", "group-by-order", null, true, true, {it.withOptionalArg().ofType(kotlin.String::class.java).withValuesSeparatedBy(",")}),
+    group_by_given_orders("o", "group-by-given-orders",null, true, true, {it.withRequiredArg().ofType(kotlin.String::class.java).withValuesSeparatedBy(",")}),
+    group_by_order("O", "group-by-order", null, true, true, {}),
     suppress_bold_tags_and_values("q", "suppress-bold-tags-and-values", null, true, true, {}),
     input_line_format("r", "input-line-format", null, true, true, {it.withRequiredArg().ofType(String::class.java)}),
     sort_by_tags("s", "sort-by-tags", null, true, true, {it.withRequiredArg().ofType(Integer::class.java).withValuesSeparatedBy(",")}),
@@ -38,7 +54,8 @@ enum class Option(val abbreviation: String?, val longForm: String, val otherForm
     color_demo_256(null, "256-color-demo", null, false, true, {}),
     color_demo_16(null, "16-color-demo", null, false, true, {}),
     man(null, "man", null, false, true, {}),
-    html(null, "html", null, false, true, {it.withOptionalArg().ofType(String::class.java).withValuesConvertedBy(RegexMatcher.regex("(page)"))}),
+    html(null, "html", null, false, true, {}),
+    html_page(null, "html-page", null, false, true, {}),
     gimme_css(null, "gimme-css", null, false, true, {}),
     help("?", "help", null, false, true, {}),
     online_help_url(null, "online-help-url", null, true, false, null),

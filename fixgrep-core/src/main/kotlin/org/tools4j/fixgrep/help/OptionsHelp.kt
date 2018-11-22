@@ -61,14 +61,21 @@ class OptionsHelp(val docWriterFactory: DocWriterFactory) {
 
         optionsHelp.add(OptionHelp(Option.input_delimiter, "Defines the FIX delimiter used in the input fix messages.  Default to control character 1, i.e. \\u0001", ":", null))
 
+        optionsHelp.add(OptionHelp(Option.output_delimiter, "Defines the delimiter to print between FIX tags in the formatted output.", ";", null))
+
         optionsHelp.add(OptionHelp(Option.exclude_tags, "Tags to exclude from the formatted FIX.", "22,33", """A comma separated list of tags which should not be displayed in the output 'formatted' fix.
 e.g. '--exclude-tags 22,33' would hide tags 22 and 33 from being displayed.  Can be useful for hiding some of
 the less 'interesting' fix fields, such as BeginString, BodyLength or Checksum.  Yawn!"""))
 
-        optionsHelp.add(OptionHelp(Option.to_file, "Send output to a file.", "output.txt", """Filename is optional.  If no filename is specified, then a random file-htmlClass will be generated, with the prefix 'fixgrep-'.  And an extension of '.log' if in normal console mode, or an extension of '.html' if output is in html."""))
+        optionsHelp.add(OptionHelp(Option.to_file, "Send output to a file with a generated filename.  Filename is printed to std out after being written..", null, """A random file-htmlClass will be generated, with the prefix 'fixgrep-'.  And an extension of '.log' if in normal console mode, or an extension of '.html' if output is in html."""))
 
-        optionsHelp.add(OptionHelp(Option.group_by_order, "Group order messages by orderId", null,
-                "Using this option changes the 'mode' of fixgrep to discard any non-order messages, and to group the messages by order. fixgrep will attempt to keep track of 'order chains' when amends and cancels change the clOrdId, even if the orderId is not present on every message.  Using this option can increase the memory used by fixgrep, as fixgrep will need to cache all order messages before printing them out.  This should not affect other processes on the box, but it might mean that fixgrep will have to stop with an OutOfMemoryException if it uses all of it's allocated heap."))
+        optionsHelp.add(OptionHelp(Option.to_given_file, "Send output to a given file.", "output.txt", """Output is printed to the specified file."""))
+
+        optionsHelp.add(OptionHelp(Option.group_by_given_orders, "Group order messages by orderId and/or clientOrderId.  Only orders which have an id containing the given text will be matched.", null,
+                "Using this option changes the 'mode' of fixgrep to discard any non-order messages, and to group the messages by order. fixgrep will attempt to keep track of 'order chains' when amends and cancels change the clOrdId, even if the orderId is not present on every message.  Using this option can increase the memory used by fixgrep, as fixgrep will need to cache all order messages before printing them out.  Even if order messages do not contain the given id, fixgrep still needs to cache them in case it discovers and amend in the order chain which DOES contain the given id.  This should not affect other processes on the box, but it might mean that fixgrep will stop with an OutOfMemoryException if it uses all of it's allocated heap."))
+
+        optionsHelp.add(OptionHelp(Option.group_by_order, "Group order messages by orderId and/or clientOrderId.", null,
+                "Using this option changes the 'mode' of fixgrep to discard any non-order messages, and to group the messages by order. fixgrep will attempt to keep track of 'order chains' when amends and cancels change the clOrdId, even if the orderId is not present on every message.  Using this option can increase the memory used by fixgrep, as fixgrep will need to cache all order messages before printing them out.  This should not affect other processes on the box, but it might mean that fixgrep will stop with an OutOfMemoryException if it uses all of it's allocated heap."))
 
         optionsHelp.add(OptionHelp(
                 Option.highlights,
@@ -168,8 +175,6 @@ the less 'interesting' fix fields, such as BeginString, BodyLength or Checksum. 
 
         optionsHelp.add(OptionHelp(Option.suppress_colors, "Suppresses any colorization in lines.", "true", "Note, see the 'suppress-bold-tags-and-values' parameter to also suppress usage of bold text effect on formatted lines"))
 
-        optionsHelp.add(OptionHelp(Option.output_delimiter, "Defines the delimiter to print between FIX tags in the formatted output.", ";", null))
-
         optionsHelp.add(OptionHelp(
                 Option.suppress_bold_tags_and_values,
                 "Suppresses the bold formatting of tags and values.",
@@ -193,8 +198,10 @@ the less 'interesting' fix fields, such as BeginString, BodyLength or Checksum. 
 
         optionsHelp.add(OptionHelp(Option.vertical_format, "View messages in vertical format.  Default is false (horizontal).", null, null))
 
-        optionsHelp.add(OptionHelp(Option.indent_group_repeats, "Indent group repeats when viewing messages in vertical format.", "true",
-                """Often when viewing messages which have a lot of repeating groups e.g. prices, it is useful to see the repeating groups indented.  Default is true. Has no effect when viewing messages in the default horizontal format."""))
+        optionsHelp.add(OptionHelp(Option.suppress_indent_group_repeats, "Suppress indenting of group repeats in vertical format.", null,
+                """Often when viewing messages which have a lot of repeating groups e.g. prices, it is useful to see the repeating groups indented.  By default,
+                    |groups will be indented in vertical formatting. Use this option to suppress this behaviour.  Has no effect when viewing messages in the default horizontal format.
+                    |Note, indentation will also be suppressed if the user is attempting to sort tags.""".trimMargin()))
 
         optionsHelp.add(OptionHelp(Option.debug, "Run in debug mode.", null, null))
 
@@ -210,7 +217,10 @@ the less 'interesting' fix fields, such as BeginString, BodyLength or Checksum. 
 
         optionsHelp.add(OptionHelp(Option.man, "Displays man page.", null,"Running with this command will print out the man page.  You can also use 'fixgrep man' (no dashes) which will run man and pipe it into less -R which preserves ansi colors.  Or 'fixgrep man online' which will launch the gixgrep online help into your default browser."))
 
-        optionsHelp.add(OptionHelp(Option.html, "Displays results in HTML format.", "page","There are two possible arguments for this option 'page' and 'raw'.  'page' is assumed as the default if no argument is given.  When in 'page' mode, then the HTML will be contain proper headers and footers and will include styles to format the output FIX.  If using the 'page' argument (or specifying no argument), you can also used the -l argument if running on a operating system with a browser, to launch the page into your default browser.   If in 'raw' format, just the HTML required to render the tags is output.  No styles, header or footers will be output."))
+        optionsHelp.add(OptionHelp(Option.html, "Displays results in HTML format.", null,"Displays as raw html.  No css, header or footers will be output."))
+
+        optionsHelp.add(OptionHelp(Option.html_page, "Displays results in a fully formed HTML page.", null, "Outputs html ready to be displayed in a browser.  Will include headers and footers. " +
+                "Will also include inline css to format the fix appropriately.  You can also used the -l argument if running on a operating system with a browser, to launch the page into your default browser."))
 
         optionsHelp.add(OptionHelp(Option.gimme_css, "Downloads a copy of the default fixgrep.css file to use with any fixgrep output formatted in HTML.", null,null))
 

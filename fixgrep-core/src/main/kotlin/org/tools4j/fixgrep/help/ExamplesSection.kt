@@ -26,6 +26,8 @@ class ExamplesSection(val docWriterFactory: DocWriterFactory) {
         lines.forEach { docWriter.startSection(HtmlOnlyTextEffect("line")).write(it).endSection() }
         docWriter.endSection()
 
+        docWriter.writeHeading(2, "Horizontal Formatting")
+        docWriter.writeLn("By default fixgrep formats fix in 'horizontal format', i.e. one fix message per line")
         var examplesList = ExamplesList(lines, docWriter)
         examplesList.add("<no arguments>", "This is how fix messages will appear by default by fixgrep.  Notice that the date has been stripped from the front of each message.  See later examples on how to add this date back in.")
         examplesList.add("--exclude-tags 55,11", "Exclude tags 55 and 11.")
@@ -50,7 +52,7 @@ class ExamplesSection(val docWriterFactory: DocWriterFactory) {
         examplesList.add("-m D", "Same inclusion of just NewOrderSingle messages, but option specified in short form 'm'")
         examplesList.add("-m D,8", "Only show NewOrderSingles and ExecutionReports")
         examplesList.add("--output-delimiter :", "Set output delimiter to ':'.  (Default is pipe '|')")
-        examplesList.add("-o :", "Same, but using short form option -o")
+        examplesList.add("-D :", "Same, but using short form option -D")
         examplesList.add("--sort-by-tags 55,11", "For each fix line, show tags 55 then 11 first if they exist, followed by other tags in the order that they originally appeared.")
         examplesList.add("-s 55,11", "Same configuration, but using short form option -s.")
         examplesList.add("-s 55,11,35", "Show tags 55, then 11, then 35 first on each line, followed by other tags in the order that they originally appeared.")
@@ -113,7 +115,7 @@ class ExamplesSection(val docWriterFactory: DocWriterFactory) {
 
         examplesList.end()
 
-        docWriter.writeHeading(2, "Vertical formatting")
+        docWriter.writeHeading(2, "Vertical Formatting")
                 .writeLn("So far we've looked at examples using horizontal formatting.  Sometimes vertical formatting is preferable.  Especially when looking at messages containing repeating groups such as prices.")
                 .writeLn("Let's consider this single log lines as input.  It contains 3 repeating prices:")
 
@@ -129,6 +131,51 @@ class ExamplesSection(val docWriterFactory: DocWriterFactory) {
         examplesList.add("-V", "The default vertical format is 'non-aligned', which has the benefit that repeating groups can be indented.")
         examplesList.add("-V -G false", "To turn off repeating group indenting, set the -G parameter to 'false'.")
         examplesList.add("-V -A", "And to use 'aligned' vertical formatting, use the -A flag.  Note that when using 'aligned' vertical formatting, you will not be able to use indented repeating groups.")
+        examplesList.end()
+
+        docWriter.writeHeading(2, "Order Grouping")
+                .writeLn("Order grouping allows the grouping of order messages by order.  When using Order Grouping:")
+                .startList()
+                .listItem("Any non-order messages are discarded.")
+                .listItem("Messages are cached until fixgrep has finished parsing the entire input, then the formatted messages are output.")
+                .listItem("fixgrep does it's best to link messages together by clientOrderId, origClientOrderId and orderId.")
+                .listItem("Using the following input fix:")
+
+        val lines4 = listOf(
+            "35=D49=CLIENT56=SERVER11=ABC",
+            "35=D49=CLIENT256=SERVER211=ABC",
+            "35=849=SERVER256=CLIENT2150=New11=ABC37=123",
+            "35=849=SERVER256=CLIENT2150=PartialFill11=ABC37=123",
+            "35=849=SERVER256=CLIENT2150=PartialFill11=ABC",
+            "35=849=SERVER56=CLIENT150=New11=ABC37=123",
+            "35=849=SERVER256=CLIENT2150=PartialFill37=123",
+            "35=G49=CLIENT256=SERVER241=ABC11=DEF37=123",
+            "35=849=SERVER56=CLIENT150=PartialFill11=ABC37=123",
+            "35=849=SERVER256=CLIENT2150=PartialFill37=123",
+            "35=G49=CLIENT256=SERVER241=DEF11=GHI39=8434=2",
+            "35=949=SERVER256=CLIENT241=DEF11=GHI",
+            "35=949=SERVER256=CLIENT241=ORPHAN111=ORPHAN1",
+            "35=849=SERVER56=CLIENT150=PartialFill37=123",
+            "35=G49=CLIENT56=SERVER41=ABC11=DEF37=123",
+            "35=849=SERVER256=CLIENT2150=PartialFill37=123",
+            "35=H49=CLIENT256=SERVER211=GHI",
+            "35=949=SERVER256=CLIENT241=ORPHAN211=ORPHAN2",
+            "35=849=SERVER56=CLIENT150=PartialFill37=123",
+            "35=849=SERVER256=CLIENT2150=OrderStatus37=123",
+            "35=G49=CLIENT56=SERVER41=DEF11=GHI39=8434=2",
+            "35=H49=CLIENT256=SERVER237=123",
+            "35=849=SERVER256=CLIENT2150=OrderStatus37=123",
+            "35=949=SERVER56=CLIENT41=DEF11=GHI",
+            "35=F49=CLIENT256=SERVER211=GHI",
+            "35=849=SERVER56=CLIENT150=PartialFill37=123",
+            "35=849=SERVER256=CLIENT2150=Canceled37=123")
+
+        docWriter.startSection(MiscTextEffect.Console)
+        lines4.forEach { docWriter.writeLn(it) }
+        docWriter.endSection()
+
+        examplesList = ExamplesList(lines4, docWriter)
+        examplesList.add("-O", "Messages are grouped by order.")
         examplesList.end()
 
         return docWriter.toFormattedText()

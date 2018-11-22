@@ -41,6 +41,14 @@ class DefaultInputDi(val diContext: DiContext): InputDi {
             }
             inputStreams.add(file.inputStream())
         }
-        return if(inputStreams.isEmpty()) null else return CompositeLineReader(inputStreams.map { BufferedLineReader(it.bufferedReader()) })
+        return if(inputStreams.isEmpty()){
+            null
+        } else {
+            val compositeLineReader = CompositeLineReader(inputStreams.map { BufferedLineReader(it.bufferedReader()) })
+            diContext.addShutdown {
+                compositeLineReader.close()
+            }
+            return compositeLineReader
+        }
     }
 }

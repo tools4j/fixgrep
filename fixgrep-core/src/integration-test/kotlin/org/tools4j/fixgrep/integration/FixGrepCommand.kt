@@ -44,9 +44,11 @@ Options:
 -a,--tag-annotations                     Defines the format of annotations to use when printing fields.
 -A,--align-vertical-columns,--align      Aligns tags, values and annotations when viewing messages in vertical format.
 -d,--input-delimiter,--input-delim       Defines the FIX delimiter used in the input fix messages.  Default to control character 1, i.e. \u0001
+-D,--output-delimiter,--output-delim     Defines the delimiter to print between FIX tags in the formatted output.
 -e,--exclude-tags                        Tags to exclude from the formatted FIX.
 -f,--to-file                             Send output to a file.
--O,--group-by-order                      Group order messages by orderId
+-o,--group-by-given-orders               Group order messages by orderId and/or clientOrderId.  Only orders which have an id containing the given text will be matched.
+-O,--group-by-order                      Group order messages by orderId and/or clientOrderId.
 -h,--highlights,--highlight              Highlight fields or lines using color or console text effects.
 --output-format-horizontal-console       The format of each message when displaying fix on the console in horizontal format.
 --output-format-vertical-console         The format of each message when displaying fix in html in horizontal format.
@@ -57,20 +59,20 @@ Options:
 -l,--launch-browser                      Will launch a browser containing the output log file.
 -m,--include-only-messages-of-type       A comma separated list of msg types to display.
 -n,--suppress-colors,--no-color          Suppresses any colorization in lines.
--o,--output-delimiter,--output-delim     Defines the delimiter to print between FIX tags in the formatted output.
 -q,--suppress-bold-tags-and-values       Suppresses the bold formatting of tags and values.
 -r,--input-line-format                   Defines the regex to use, when parsing input lines.
 -s,--sort-by-tags                        Defines the preferred order of the FIX tags in the formatted output.
 -t,--only-include-tags                   Tags to include in the formatted fix.
 -v,--exclude-messages-of-type            Comma separated list of msgType codes.  Can be used to hide messages of certain types from being displayed.
 -V,--vertical-format                     View messages in vertical format.  Default is false (horizontal).
--G,--indent-group-repeats                Indent group repeats when viewing messages in vertical format.
+-G,--suppress-indent-group-repeats       Suppress indenting of group repeats in vertical format.
 -x,--debug                               Run in debug mode.
 -?,--help                                Displays help text
 --256-color-demo                         Displays a table of 256 colors using 8 bit Ansi Escape codes.
 --16-color-demo                          Displays a list of 16 foreground colors and 16 background colors using 16 color Ansi Escape codes.
 --man                                    Displays man page.
 --html                                   Displays results in HTML format.
+--html-page                              Displays results in a fully formed HTML page.
 --gimme-css                              Downloads a copy of the default fixgrep.css file to use with any fixgrep output formatted in HTML.
 --fix-spec-path,--fix-spec               Specifies an alternative fixspec definition to use.  Spec must be in the format used by quickfix.  Default spec is 5.0-SP2.
 

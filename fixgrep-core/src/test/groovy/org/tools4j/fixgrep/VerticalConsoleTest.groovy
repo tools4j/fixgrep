@@ -270,7 +270,7 @@ class VerticalConsoleTest extends Specification {
 
     def 'test vertical non-aligned format - DO NOT indentGroupRepeats - prices'(){
         when:
-        def lines = fixGrep.go('--indent-group-repeats=false', VerticalTestUtil.PRICES_FIX)
+        def lines = fixGrep.go('--suppress-indent-group-repeats', VerticalTestUtil.PRICES_FIX)
 
         then:
         assert lines == """================================================================================

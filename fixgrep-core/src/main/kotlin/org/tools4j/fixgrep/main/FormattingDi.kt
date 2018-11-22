@@ -7,7 +7,6 @@ import org.tools4j.fixgrep.linehandlers.DefaultFixLineHandler
 import org.tools4j.fixgrep.linehandlers.DefaultTextLineHandler
 import org.tools4j.fixgrep.linehandlers.FixLineHandler
 import org.tools4j.fixgrep.linehandlers.LineHandler
-import org.tools4j.fixgrep.main.FixGrep.Companion.logger
 import org.tools4j.fixgrep.orders.*
 import java.util.function.Consumer
 
@@ -36,14 +35,14 @@ class FormattingDi(val diContext: DiContext, val inputDi: InputDi, val outputDi:
     }
 
     val fixLineHandler: FixLineHandler by lazy {
-        if(diContext.config.groupByOrder){
+        if(diContext.config.groupByOrders){
             OrderGroupingFixLineHandler(
                     formatter,
                     UniqueIdSpecs(
                             UniqueClientOrderIdSpec(),
                             UniqueOriginalClientOrderIdSpec(),
                             UniqueOrderIdSpec()),
-                    IdFilter(diContext.config.getIdsToOrdersGroupsBy),
+                    IdFilter(diContext.config.groupByGivenOrders),
                     consumerToPrintln)
         } else {
             DefaultFixLineHandler(formatter, consumerToPrintln)

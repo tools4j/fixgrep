@@ -19,7 +19,7 @@ class FixGrepOnLargeFileTest extends Specification {
         given:
         final List<String> args = ['--input-line-format', '^(\\d{4}-[01]\\d-[0-3]\\d[T\\s][0-2]\\d:[0-5]\\d:[0-5]\\d[\\.,]\\d+)?.*?RawFix:(\\d+=.*$)',
                             '--output-format-horizontal-console', '$1 ${senderToTargetCompIdDirection} ${msgColor}[${msgTypeName}]${colorReset} ${msgFix}',
-                            '--group-by-order', 'true']
+                            '--group-by-order']
 
         when:
         final File actualOutputFile = new File("fixgrep-file-test-output.log")
@@ -38,7 +38,9 @@ class FixGrepOnLargeFileTest extends Specification {
     boolean assertTwoFilesAreEqual(final File actualFile, final BufferedReader expected) {
         final BufferedReader actual = actualFile.newReader()
 
+        int lineNumber = 0
         while(true){
+            lineNumber++
             final String actualLine = actual.readLine()
             final String expectedLine = expected.readLine()
             if(actualLine == null){
@@ -48,7 +50,9 @@ class FixGrepOnLargeFileTest extends Specification {
                 println "Reached end of expected file"
             }
             if(actualLine == null || expectedLine == null) return true
-            else {
+            else if(actualLine != expectedLine){
+                println  "Assertion failure on line number: $lineNumber"
+                //We know this will fail, running assertion so that we get a nice comparison error
                 assert actualLine == expectedLine
             }
         }

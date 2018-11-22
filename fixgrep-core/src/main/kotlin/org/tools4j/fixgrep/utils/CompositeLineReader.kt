@@ -1,6 +1,8 @@
 package org.tools4j.fixgrep.utils
 
 import mu.KLogging
+import org.tools4j.fixgrep.main.FixGrep.Companion.logger
+import java.io.Closeable
 import java.io.InputStream
 
 /**
@@ -8,10 +10,10 @@ import java.io.InputStream
  * Date: 02/11/2018
  * Time: 04:03
  */
-class CompositeLineReader(private val lineReaders: Collection<LineReader>): LineReader {
+class CompositeLineReader(private val lineReaders: Collection<LineReader>, private val closeables: Collection<Closeable>): LineReader {
     constructor(is1: InputStream, is2: InputStream): this(listOf(BufferedLineReader(is1), BufferedLineReader(is2)))
     constructor(lines1: String, lines2: String): this(listOf(StringLineReader(lines1), StringLineReader(lines2)))
-
+    constructor(lineReaders: Collection<LineReader>): this(lineReaders, lineReaders)
     companion object: KLogging()
 
     private val lineReadersIterator = lineReaders.iterator()
@@ -30,6 +32,12 @@ class CompositeLineReader(private val lineReaders: Collection<LineReader>): Line
             logger.debug { "Detected that the currentLineReader has nothing left to read, and that there are no more lineReaders.  Exiting." }
             currentLineReader = null
             return null
+        }
+    }
+
+    override fun close(){
+        for (closeable in closeables) {
+            closeable.close()
         }
     }
 }

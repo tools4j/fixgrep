@@ -22,8 +22,9 @@ class FormatSpec(
         val suppressColors: Boolean,
         val suppressBoldTagsAndValues: Boolean,
         val highlight: Highlight,
-        val groupBy: List<String>?,
-        val indentGroupRepeats: Boolean,
+        val groupByOrders: Boolean,
+        val groupByGivenOrders: List<String>,
+        val suppressIndentGroupRepeats: Boolean,
         val inputDelimiter: String,
         val outputDelimiter: String,
         val outputFormatHorizontalConsole: String,
@@ -51,8 +52,9 @@ class FormatSpec(
             false,
             false,
             Highlight.NO_HIGHLIGHT,
-            null,
-            true,
+            false,
+            Collections.emptyList(),
+            false,
             Ascii1Char().toString(),
             "|",
             "\${senderToTargetCompIdDirection} \${msgColor}[\${msgTypeName}]\${colorReset} \${msgFix}",
@@ -83,8 +85,9 @@ class FormatSpec(
             suppressColors = config.suppressColors,
             suppressBoldTagsAndValues = config.suppressBoldTagsAndValues,
             highlight = HighlightParser().parse(config.highlights),
-            groupBy = config.getIdsToOrdersGroupsBy,
-            indentGroupRepeats = config.indentGroupRepeats,
+            groupByOrders = config.groupByOrders,
+            groupByGivenOrders = config.groupByGivenOrders,
+            suppressIndentGroupRepeats = config.suppressIndentGroupRepeats,
             inputDelimiter = config.inputDelimiter,
             outputDelimiter = config.outputDelimiter,
             outputFormatHorizontalConsole = config.outputFormatHorizontalConsole,
@@ -112,8 +115,9 @@ class FormatSpec(
             suppressColors: Boolean = this.suppressColors,
             suppressBoldTagsAndValues: Boolean = this.suppressBoldTagsAndValues,
             highlight: Highlight = this.highlight,
-            groupBy: List<String>? = this.groupBy,
-            indentGroupRepeats: Boolean = this.indentGroupRepeats,
+            groupByOrders: Boolean = this.groupByOrders,
+            groupByGivenOrders: List<String> = this.groupByGivenOrders,
+            suppressIndentGroupRepeats: Boolean = this.suppressIndentGroupRepeats,
             inputDelimiter: String = this.inputDelimiter,
             outputDelimiter: String = this.outputDelimiter,
             outputFormatHorizontalConsole: String = this.outputFormatHorizontalConsole,
@@ -141,8 +145,9 @@ class FormatSpec(
                 suppressColors,
                 suppressBoldTagsAndValues,
                 highlight,
-                groupBy,
-                indentGroupRepeats,
+                groupByOrders,
+                groupByGivenOrders,
+                suppressIndentGroupRepeats,
                 inputDelimiter,
                 outputDelimiter,
                 outputFormatHorizontalConsole,
@@ -172,7 +177,7 @@ class FormatSpec(
     }
 
     fun getMsgFormatter(fields: Fields): MsgFormatter {
-        val indentGroupRepeatsForThisMessage = indentGroupRepeats && sortByTags.isEmpty()
+        val indentGroupRepeatsForThisMessage = (!suppressIndentGroupRepeats) && sortByTags.isEmpty()
         val formattingContext = FormattingContext(fields, tagAnnotationPositions, !suppressBoldTagsAndValues, indentGroupRepeatsForThisMessage, onlyIncludeTags, excludeTags, fixSpec)
         if (formatInHtml) {
             if (verticalFormat) {

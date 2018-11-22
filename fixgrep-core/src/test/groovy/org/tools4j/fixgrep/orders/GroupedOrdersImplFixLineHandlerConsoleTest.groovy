@@ -301,7 +301,7 @@ ORPHAN MESSAGES:
         final DefaultTextLineHandler handlerPointer1 = new DefaultTextLineHandler(formatSpec, fixLineHandler)
         final DefaultTextLineHandler handlerPointer2 = handlerPointer1
         populateTwoSingleOrdersWithMessagesInterleaved_differentCompIdsSameOrderIds(handlerPointer1, handlerPointer2)
-
+        
 
         then:
         println output
@@ -410,7 +410,7 @@ ORPHAN MESSAGES:
     def "two single orders, with messages interleaved, filtering on clOrdId"() {
         given:
         final StringBuilder output = new StringBuilder()
-        final ConfigKeyedWithOption config = new ConfigBuilder(['-O BC1 --output-format-horizontal-console', '\${senderToTargetCompIdDirection} [\${msgTypeName}] \${msgFix}', '--suppress-bold-tags-and-values', 'true', '-e', '49,56,150', '-a', 'aa']).configAndArguments.config
+        final ConfigKeyedWithOption config = new ConfigBuilder(['-o BC1 --output-format-horizontal-console', '\${senderToTargetCompIdDirection} [\${msgTypeName}] \${msgFix}', '--suppress-bold-tags-and-values', 'true', '-e', '49,56,150', '-a', 'aa']).configAndArguments.config
         final FormatSpec formatSpec = new FormatSpec(new FixGrepConfig(config))
 
         when:

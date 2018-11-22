@@ -39,6 +39,11 @@ class TestFixGrep {
         go("", fix)
     }
 
+
+    public String go(){
+        go("", "")
+    }
+
     public String go(String args, final String fix){
         args = args + " " + commonArgs
         final List<String> argsList = new ArgsAsString(args).toArgs()

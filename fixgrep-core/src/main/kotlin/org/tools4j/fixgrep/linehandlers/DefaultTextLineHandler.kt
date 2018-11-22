@@ -23,6 +23,7 @@ class DefaultTextLineHandler(val spec: FormatSpec, val fixLineHandler: FixLineHa
     }
 
     override fun handle(line: String) {
+        logger.debug { "received raw line: $line" }
         val fixLine = extractLine(line)
         if(fixLine != null){
             logger.debug { "handling line: $line" }

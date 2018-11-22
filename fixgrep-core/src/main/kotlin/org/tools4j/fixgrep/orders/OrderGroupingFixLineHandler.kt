@@ -1,5 +1,6 @@
 package org.tools4j.fixgrep.orders
 
+import mu.KLogging
 import org.tools4j.fixgrep.linehandlers.FixLine
 import org.tools4j.fixgrep.linehandlers.FixLineHandler
 import org.tools4j.fixgrep.formatting.Formatter
@@ -20,13 +21,16 @@ class OrderGroupingFixLineHandler(
                 uniqueIdSpecs: UniqueIdSpecs,
                 output: Consumer<String>): this(formatter, uniqueIdSpecs, IdFilter(), output)
 
+    companion object: KLogging()
+
     val groupedOrders = GroupedOrdersImpl(uniqueIdSpecs)
 
     override fun handle(fixLine: FixLine) {
+        logger.info { "handling line ${fixLine.fields.toDelimitedString()}" }
         groupedOrders.handle(fixLine)
     }
 
     override fun finish() {
-        OrderGroupingPrinter(groupedOrders, idFilter, formatter, output ).print()
+        OrderGroupingPrinter(groupedOrders, idFilter, formatter, output).print()
     }
 }

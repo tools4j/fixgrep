@@ -6,8 +6,8 @@ package org.tools4j.fixgrep.config
  * Time: 9:16 AM
  */
 class FixGrepConfig(config: ConfigKeyedWithOption) {
-    val getIdsToOrdersGroupsBy: List<String>? by lazy {config.getAsStringList(Option.group_by_order, emptyList())}
-    val groupByOrder: Boolean by lazy { config.hasPropertyAndIsNotFalse(Option.group_by_order) }
+    val groupByGivenOrders: List<String> by lazy {config.getAsStringList(Option.group_by_given_orders, emptyList())!!}
+    val groupByOrders: Boolean by lazy { !groupByGivenOrders.isEmpty() || config.hasPropertyAndIsNotFalse(Option.group_by_order) }
     val install: Boolean by lazy { config.getAsBoolean(Option.install, false) }
     val help: Boolean by lazy { config.getAsBoolean(Option.help, false) }
     val man: Boolean by lazy { config.getAsBoolean(Option.man, false) }
@@ -26,7 +26,7 @@ class FixGrepConfig(config: ConfigKeyedWithOption) {
     val suppressColors: Boolean by lazy { config.getAsBoolean(Option.suppress_colors) }
     val suppressBoldTagsAndValues: Boolean by lazy { config.getAsBoolean(Option.suppress_bold_tags_and_values) }
     val highlights: List<String> by lazy { config.getAsStringList(Option.highlights) }
-    val indentGroupRepeats: Boolean by lazy { config.getAsBoolean(Option.indent_group_repeats) }
+    val suppressIndentGroupRepeats: Boolean by lazy { config.getAsBoolean(Option.suppress_indent_group_repeats) }
     val inputDelimiter: String by lazy { config.getAsString(Option.input_delimiter) }
     val outputDelimiter: String by lazy { config.getAsString(Option.output_delimiter) }
     val outputFormatGroupedOrderHeaderConsole: String by lazy { config.getAsString(Option.output_format_grouped_order_header_console) }
@@ -43,9 +43,9 @@ class FixGrepConfig(config: ConfigKeyedWithOption) {
     val excludeMessagesOfType: List<String> by lazy { config.getAsStringList(Option.exclude_messages_of_type) }
     val fixSpecPath: String by lazy { config.getAsString(Option.fix_spec_path) }
     val launchInBrowser: Boolean by lazy { config.hasPropertyAndIsNotFalse(Option.launch_browser) }
-    val outputToFile: Boolean by lazy { config.hasPropertyAndIsNotFalse(Option.to_file) }
-    val outputToFileButFilenameNotGiven: Boolean by lazy { config.hasPropertyAndIsTrueOrNull(Option.to_file) }
-    val outputFileName: String by lazy { config.getAsString(Option.to_file) }
+    val outputToGivenFile: Boolean by lazy { config.hasProperty(Option.to_given_file) || outputToFileButFilenameNotGiven }
+    val outputToFileButFilenameNotGiven: Boolean by lazy { config.hasProperty(Option.to_file) }
+    val outputFileName: String by lazy { config.getAsString(Option.to_given_file) }
     val outputToHtmlPage: Boolean by lazy { config.getAsString(Option.html, "") == "page" }
-    val isFullPageHtml: Boolean by lazy { config.hasProperty(Option.html) && (man || outputToFile || outputToHtmlPage || launchInBrowser) }
+    val isFullPageHtml: Boolean by lazy { config.hasProperty(Option.html) && (man || outputToGivenFile || outputToHtmlPage || launchInBrowser) }
 }

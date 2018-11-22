@@ -1,7 +1,6 @@
 package org.tools4j.fixgrep.main
 
-import org.tools4j.fixgrep.config.FixGrepConfig
-import org.tools4j.fixgrep.config.Option
+import mu.KLogging
 import org.tools4j.fixgrep.utils.OutputFile
 import java.io.OutputStream
 import java.io.PrintStream
@@ -12,25 +11,29 @@ import java.io.PrintStream
  * Time: 06:46
  */
 class DefaultOutputDi(val diContext: DiContext): OutputDi {
+    companion object: KLogging()
+
     override val outputStream: OutputStream by lazy {
         val outputStream: OutputStream
-        val writingToFile = diContext.config.outputToFile || diContext.config.launchInBrowser
+        val writingToFile = diContext.config.outputToGivenFile || diContext.config.launchInBrowser
 
         if(writingToFile){
-            val fileNameNotGiven = diContext.config.outputToFileButFilenameNotGiven
+            logger.info { "Writing to file" }
             val outputFile: OutputFile
-            if(fileNameNotGiven){
+            if(diContext.config.outputToFileButFilenameNotGiven){
                 val isHtml = diContext.config.htmlFormatting
                 val extension = if(isHtml) OutputFile.Extension.html else OutputFile.Extension.log
                 outputFile = OutputFile(extension)
+                logger.info { "Writing to generated filename: ${outputFile.fileObj.absolutePath}" }
             } else {
                 val toFile = diContext.config.outputFileName
                 outputFile = OutputFile(toFile)
-                diContext.addShutdown {
-                    outputFile.finish()
-                    if (diContext.config.launchInBrowser) {
-                        outputFile.launchInBrowser()
-                    }
+                logger.info { "Writing to specified filename: $toFile" }
+            }
+            diContext.addShutdown {
+                outputFile.finish()
+                if (diContext.config.launchInBrowser) {
+                    outputFile.launchInBrowser()
                 }
             }
             outputStream = outputFile.outputStream

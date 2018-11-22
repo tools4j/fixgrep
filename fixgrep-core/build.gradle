@@ -151,7 +151,7 @@ task copyFromLibsToDistLib(type: Copy) {
 task createHtmlManPage(type:JavaExec) {
     main = "org.tools4j.fixgrep.main.FixGrep"
     classpath = sourceSets.main.runtimeClasspath
-    args = ["--man", "--html", "page", "--to-file", "../docs/index.html"]
+    args = ["--man", "--html-page", "--to-given-file", "../docs/index.html"]
     environment("FIXGREP_VERSION", "$fullVersion")
 }
 
@@ -161,7 +161,7 @@ task createTextManPage(type:JavaExec) {
     }
     main = "org.tools4j.fixgrep.main.FixGrep"
     classpath = sourceSets.main.runtimeClasspath
-    args = ["--man", "page", "--to-file", "$buildDir/dist/files/man.txt"]
+    args = ["--man", "--to-given-file", "$buildDir/dist/files/man.txt"]
 }
 
 task deleteAnyOldZipFiles(type: Delete) {

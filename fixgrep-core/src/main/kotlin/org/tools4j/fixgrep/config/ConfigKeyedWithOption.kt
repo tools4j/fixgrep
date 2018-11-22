@@ -35,7 +35,7 @@ open class ConfigKeyedWithOption(val config: Config) {
     fun getAsLongList(option: Option, default: List<Long>?): List<Long>? = config.getAsLongList(option.key, default)
     fun getAsIntList(option: Option, default: List<Int>?): List<Int>? = config.getAsIntList(option.key, default)
     fun getAsBooleanList(option: Option, default: List<Boolean>?): List<Boolean>? = config.getAsBooleanList(option.key, default)
-    fun getAsStringList(option: Option, default: List<String>?): List<String>? = config.getAsStringList(option.key, default)
+    fun getAsStringList(option: Option, default: List<String>): List<String>? = config.getAsStringList(option.key, default)
     fun hasProperty(option: Option): Boolean = config.hasProperty(option.key)
     fun toPrettyString(): String = config.toPrettyString()
     fun hasPropertyAndIsNotFalse(option: Option): Boolean = config.hasPropertyAndIsNotFalse(option.key)
