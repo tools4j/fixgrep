@@ -30,15 +30,15 @@ class DefaultOutputDi(val diContext: DiContext): OutputDi {
                 outputFile = OutputFile(toFile)
                 logger.info { "Writing to specified filename: $toFile" }
             }
-            diContext.addShutdown {
-                outputFile.finish()
-                if (diContext.config.launchInBrowser) {
-                    outputFile.launchInBrowser()
-                }
-            }
             outputStream = outputFile.outputStream
+            diContext.addShutdown { outputStream.flush(); outputStream.close() }
+            diContext.addShutdown { outputFile.finish() }
+            if (diContext.config.launchInBrowser) {
+                diContext.addShutdown { outputFile.launchInBrowser() }
+            }
         } else {
             outputStream = System.out
+            diContext.addShutdown { outputStream.flush(); outputStream.close() }
         }
         outputStream
     }
