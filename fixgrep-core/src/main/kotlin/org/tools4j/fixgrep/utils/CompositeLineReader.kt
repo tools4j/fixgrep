@@ -10,10 +10,9 @@ import java.io.InputStream
  * Date: 02/11/2018
  * Time: 04:03
  */
-class CompositeLineReader(private val lineReaders: Collection<LineReader>, private val closeables: Collection<Closeable>): LineReader {
+class CompositeLineReader(private val lineReaders: Collection<LineReader>): LineReader {
     constructor(is1: InputStream, is2: InputStream): this(listOf(BufferedLineReader(is1), BufferedLineReader(is2)))
     constructor(lines1: String, lines2: String): this(listOf(StringLineReader(lines1), StringLineReader(lines2)))
-    constructor(lineReaders: Collection<LineReader>): this(lineReaders, lineReaders)
     companion object: KLogging()
 
     private val lineReadersIterator = lineReaders.iterator()
@@ -36,7 +35,7 @@ class CompositeLineReader(private val lineReaders: Collection<LineReader>, priva
     }
 
     override fun close(){
-        for (closeable in closeables) {
+        for (closeable in lineReaders) {
             closeable.close()
         }
     }
