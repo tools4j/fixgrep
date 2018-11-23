@@ -1,5 +1,6 @@
 package org.tools4j.fixgrep.integration
 
+import com.sun.prism.Texture
 import mu.KotlinLogging
 import java.io.File
 
@@ -46,8 +47,9 @@ Options:
 -d,--input-delimiter,--input-delim       Defines the FIX delimiter used in the input fix messages.  Default to control character 1, i.e. \u0001
 -D,--output-delimiter,--output-delim     Defines the delimiter to print between FIX tags in the formatted output.
 -e,--exclude-tags                        Tags to exclude from the formatted FIX.
--f,--to-file                             Send output to a file.
--o,--group-by-given-orders               Group order messages by orderId and/or clientOrderId.  Only orders which have an id containing the given text will be matched.
+-f,--to-file                             Send output to a file with a generated filename.  Filename is printed to std out after being written..
+-F,--to-given-file                       Send output to a given file.
+-o,--group-by-orders-with-id             Group order messages by orderId and/or clientOrderId.  Only orders which have an id containing the given text will be matched.
 -O,--group-by-order                      Group order messages by orderId and/or clientOrderId.
 -h,--highlights,--highlight              Highlight fields or lines using color or console text effects.
 --output-format-horizontal-console       The format of each message when displaying fix on the console in horizontal format.
@@ -78,6 +80,7 @@ Options:
 
 (type 'fixgrep --man' for more detailed help)
 """
+
         val SMALL_LOG_FIX_NO_BOLD = """[MsgType]35=D[NEWORDERSINGLE];[SenderCompID]49=CLIENT_SIM;[TargetCompID]56=ACME_EXCHANGE;[ClOrdID]11=C1;[Symbol]55=AUD/USD;[Side]54=1[BUY];[TransactTime]60=20180312-17:37:29.302;[OrderQty]38=545710;[OrdType]40=2[LIMIT];[Price]44=99.99279924932014
 [MsgType]35=8[EXECUTIONREPORT];[SenderCompID]49=ACME_EXCHANGE;[TargetCompID]56=CLIENT_SIM;[OrderID]37=O1;[ClOrdID]11=C1;[OrigClOrdID]41=C1;[Symbol]55=AUD/USD;[Side]54=1[BUY];[TransactTime]60=20180312-17:37:29.302;[ExecID]17=O1_1;[ExecType]150=0[NEW];[OrdStatus]39=A[PENDING_NEW];[LeavesQty]151=545710;[CumQty]14=0;[Price]44=99.99279924932014
 [MsgType]35=D[NEWORDERSINGLE];[SenderCompID]49=CLIENT_SIM;[TargetCompID]56=ACME_EXCHANGE;[ClOrdID]11=C2;[Symbol]55=AUD/USD;[Side]54=2[SELL];[TransactTime]60=20180312-17:37:30.201;[OrderQty]38=342180;[OrdType]40=2[LIMIT];[Price]44=99.97800707655466

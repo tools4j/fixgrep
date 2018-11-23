@@ -59,7 +59,7 @@ sourceSets {
 dependencies {
     compile project(':shared')
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    compile "io.github.microutils:kotlin-logging:1.4.9"
+    compile "io.github.microutils:kotlin-logging:1.6.20"
     compile 'ch.qos.logback:logback-classic:1.2.3'
     compile 'net.sf.jopt-simple:jopt-simple:5.0.4'
     compile "com.google.guava:guava-collections:r03"

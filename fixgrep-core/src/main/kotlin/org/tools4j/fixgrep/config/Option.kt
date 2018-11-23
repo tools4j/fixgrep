@@ -37,7 +37,7 @@ enum class Option(val abbreviation: String?, val longForm: String, val otherForm
     launch_browser("l", "launch-browser", null, false, true, {}),
     include_only_messages_of_type("m", "include-only-messages-of-type", null, true, true, {it.withRequiredArg().ofType(String::class.java).withValuesSeparatedBy(",")}),
     suppress_colors("n", "suppress-colors", "no-color", true, true, {}),
-    group_by_given_orders("o", "group-by-given-orders",null, true, true, {it.withRequiredArg().ofType(kotlin.String::class.java).withValuesSeparatedBy(",")}),
+    group_by_orders_with_id("o", "group-by-orders-with-id",null, true, true, {it.withRequiredArg().ofType(kotlin.String::class.java).withValuesSeparatedBy(",")}),
     group_by_order("O", "group-by-order", null, true, true, {}),
     suppress_bold_tags_and_values("q", "suppress-bold-tags-and-values", null, true, true, {}),
     input_line_format("r", "input-line-format", null, true, true, {it.withRequiredArg().ofType(String::class.java)}),

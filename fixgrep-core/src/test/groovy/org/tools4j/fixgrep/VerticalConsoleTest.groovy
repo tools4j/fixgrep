@@ -1,6 +1,7 @@
 package org.tools4j.fixgrep
 
 import org.tools4j.fix.Ascii1Char
+import org.tools4j.fixgrep.utils.WrappedFixGrep
 import spock.lang.Shared
 import spock.lang.Specification
 
@@ -11,10 +12,10 @@ import spock.lang.Specification
  */
 class VerticalConsoleTest extends Specification {
     @Shared private final static String a = new Ascii1Char().toString()
-    @Shared private TestFixGrep fixGrep;
+    @Shared private WrappedFixGrep fixGrep;
 
     def setupSpec() {
-        fixGrep = new TestFixGrep(' -V')
+        fixGrep = new WrappedFixGrep(' -V')
     }
 
     def 'test vertical aligned format'(){

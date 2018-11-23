@@ -10,7 +10,7 @@ import org.tools4j.fixgrep.html.HtmlPageHeader
  */
 class FullPageHtmlDi(diContext: DiContext, outputDi: OutputDi){
     init{
-        if (diContext.config.isFullPageHtml) {
+        if (diContext.config.htmlPageFormatting) {
             if (diContext.config.man) {
                 HtmlPageHeader("fixgrep Man Page", true, false).write(outputDi.printStream)
             } else {

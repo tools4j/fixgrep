@@ -17,6 +17,7 @@ import java.util.function.Consumer
  */
 class FormattingDi(val diContext: DiContext, val inputDi: InputDi, val outputDi: OutputDi) {
     init {
+        if(diContext.config.htmlPageFormatting) FullPageHtmlDi(diContext, outputDi)
         diContext.addRunnable { this.start() }
     }
 

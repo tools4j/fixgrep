@@ -71,7 +71,7 @@ the less 'interesting' fix fields, such as BeginString, BodyLength or Checksum. 
 
         optionsHelp.add(OptionHelp(Option.to_given_file, "Send output to a given file.", "output.txt", """Output is printed to the specified file."""))
 
-        optionsHelp.add(OptionHelp(Option.group_by_given_orders, "Group order messages by orderId and/or clientOrderId.  Only orders which have an id containing the given text will be matched.", null,
+        optionsHelp.add(OptionHelp(Option.group_by_orders_with_id, "Group order messages by orderId and/or clientOrderId.  Only orders which have an id containing the given text will be matched.", null,
                 "Using this option changes the 'mode' of fixgrep to discard any non-order messages, and to group the messages by order. fixgrep will attempt to keep track of 'order chains' when amends and cancels change the clOrdId, even if the orderId is not present on every message.  Using this option can increase the memory used by fixgrep, as fixgrep will need to cache all order messages before printing them out.  Even if order messages do not contain the given id, fixgrep still needs to cache them in case it discovers and amend in the order chain which DOES contain the given id.  This should not affect other processes on the box, but it might mean that fixgrep will stop with an OutOfMemoryException if it uses all of it's allocated heap."))
 
         optionsHelp.add(OptionHelp(Option.group_by_order, "Group order messages by orderId and/or clientOrderId.", null,

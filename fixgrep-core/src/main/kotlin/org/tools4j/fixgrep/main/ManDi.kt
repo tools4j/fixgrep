@@ -10,6 +10,7 @@ import org.tools4j.fixgrep.help.ManGenerator
  */
 class ManDi(val diContext: DiContext, val outputDi: OutputDi) {
     init {
+        if(diContext.config.htmlPageFormatting) FullPageHtmlDi(diContext, outputDi)
         diContext.addRunnable { go()}
     }
 

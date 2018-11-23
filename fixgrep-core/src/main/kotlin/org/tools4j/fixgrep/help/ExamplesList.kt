@@ -6,6 +6,7 @@ import org.tools4j.fixgrep.formatting.FormatSpec
 import org.tools4j.fixgrep.formatting.WrappedFormatter
 import org.tools4j.fixgrep.texteffect.HtmlOnlyTextEffect
 import org.tools4j.fixgrep.texteffect.MiscTextEffect
+import org.tools4j.fixgrep.utils.WrappedFixGrep
 import org.tools4j.properties.ConfigImpl
 
 /**
@@ -29,20 +30,16 @@ class ExamplesList (val fixLines: List<String>, val docWriter: DocWriter) {
         if(args.isEmpty()) docWriter.writeLn("<no arguments>", HtmlOnlyTextEffect("example-arguments"))
         else docWriter.writeLn(example.args.joinToString(" "), HtmlOnlyTextEffect("example-arguments"))
 
-        val configOverrides: MutableMap<String, String> = LinkedHashMap()
-        configOverrides.put("html", ""+docWriter.isHtml())
-        configOverrides.put("input.delimiter", "|")
-        configOverrides.put("output.format.horizontal.console", "${'$'}{msgFix}")
+        val allArgs: MutableList<String> = ArrayList()
+        allArgs.add("--html"); allArgs.add(""+docWriter.isHtml())
+        allArgs.add("--input-delimiter"); allArgs.add("|")
+        allArgs.add("--output-format-horizontal-console"); allArgs.add("${'$'}{msgFix}")
+        allArgs.addAll(args)
 
-        val configAndArguments = ConfigBuilder(example.args, ConfigImpl(configOverrides)).configAndArguments
+        val result = WrappedFixGrep(args, false, false).go(fixLines.joinToString("\n"))
 
-        val spec = FormatSpec(FixGrepConfig(configAndArguments.config))
-        val formatter = WrappedFormatter(spec)
         docWriter.startSection(MiscTextEffect.Console)
-        for(line in fixLines){
-            val formattedLine = formatter.format(line)
-            if(formattedLine != null) docWriter.write(formattedLine + "\n")
-        }
+        docWriter.write(result)
         docWriter.endSection()
         return this
     }

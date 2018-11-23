@@ -1,12 +1,7 @@
 package org.tools4j.fixgrep.orders
 
 import org.tools4j.fix.ClasspathResource
-import org.tools4j.fixgrep.TestFixGrep
-import org.tools4j.fixgrep.config.ConfigAndArguments
 import org.tools4j.fixgrep.main.FixGrep
-import org.tools4j.fixgrep.TestConfigBuilder
-import org.tools4j.properties.Config
-import org.tools4j.properties.ConfigImpl
 import spock.lang.Specification
 
 /**

@@ -1,9 +1,7 @@
 package org.tools4j.fixgrep
 
-import com.sun.xml.internal.bind.v2.TODO
+
 import org.tools4j.fix.Ascii1Char
-import org.tools4j.fix.ExecType
-import org.tools4j.fixgrep.TestFixGrep
 import org.tools4j.fixgrep.main.FixGrep
 import spock.lang.Shared
 import spock.lang.Specification

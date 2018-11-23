@@ -6,7 +6,7 @@ package org.tools4j.fixgrep.config
  * Time: 9:16 AM
  */
 class FixGrepConfig(config: ConfigKeyedWithOption) {
-    val groupByGivenOrders: List<String> by lazy {config.getAsStringList(Option.group_by_given_orders, emptyList())!!}
+    val groupByGivenOrders: List<String> by lazy {config.getAsStringList(Option.group_by_orders_with_id, emptyList())!!}
     val groupByOrders: Boolean by lazy { !groupByGivenOrders.isEmpty() || config.hasPropertyAndIsNotFalse(Option.group_by_order) }
     val install: Boolean by lazy { config.getAsBoolean(Option.install, false) }
     val help: Boolean by lazy { config.getAsBoolean(Option.help, false) }
@@ -14,7 +14,6 @@ class FixGrepConfig(config: ConfigKeyedWithOption) {
     val colorDemo16: Boolean by lazy { config.getAsBoolean(Option.color_demo_16, false) }
     val colorDemo256: Boolean by lazy { config.getAsBoolean(Option.color_demo_256, false) }
     val onlineHelpUrl: String by lazy { config.getAsString(Option.online_help_url) }
-    val htmlFormatting: Boolean by lazy { config.hasPropertyAndIsNotFalse(Option.html) }
     val consoleFormatting: Boolean by lazy { !htmlFormatting }
     val debugMode: Boolean by lazy { config.getAsBoolean(Option.debug, false) }
     val fixgrepDownloadUrl: String by lazy { config.getAsString(Option.download_url) }
@@ -46,6 +45,6 @@ class FixGrepConfig(config: ConfigKeyedWithOption) {
     val outputToGivenFile: Boolean by lazy { config.hasProperty(Option.to_given_file) || outputToFileButFilenameNotGiven }
     val outputToFileButFilenameNotGiven: Boolean by lazy { config.hasProperty(Option.to_file) }
     val outputFileName: String by lazy { config.getAsString(Option.to_given_file) }
-    val outputToHtmlPage: Boolean by lazy { config.getAsString(Option.html, "") == "page" }
-    val isFullPageHtml: Boolean by lazy { config.hasProperty(Option.html) && (man || outputToGivenFile || outputToHtmlPage || launchInBrowser) }
+    val htmlFormatting: Boolean by lazy { config.hasPropertyAndIsNotFalse(Option.html) || this.htmlPageFormatting }
+    val htmlPageFormatting: Boolean by lazy { config.hasPropertyAndIsNotFalse(Option.html_page) || ((config.hasPropertyAndIsNotFalse(Option.html)) && (man || outputToGivenFile || launchInBrowser)) }
 }

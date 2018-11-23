@@ -1,9 +1,7 @@
 package org.tools4j.fixgrep.orders
 
 import org.tools4j.fix.ExecType
-import org.tools4j.fixgrep.TestFixGrep
-import org.tools4j.util.CircularBufferedReaderWriter
-import org.tools4j.utils.ArgsAsString
+import org.tools4j.fixgrep.utils.WrappedFixGrep
 import spock.lang.Shared
 import spock.lang.Specification
 
@@ -27,10 +25,10 @@ class GroupedOrdersImplFixLineHandlerHtmlTest extends Specification {
     private final static String serverToClient = "49=SERVER${a}56=CLIENT"
     private final static String clientToServer2 = "49=CLIENT2${a}56=SERVER2"
     private final static String serverToClient2 = "49=SERVER2${a}56=CLIENT2"
-    @Shared private TestFixGrep fixGrep;
+    @Shared private WrappedFixGrep fixGrep;
 
     def setupSpec() {
-        fixGrep = new TestFixGrep('--html -O')
+        fixGrep = new WrappedFixGrep('--html -O')
     }
     
     def "no order messages found"() {

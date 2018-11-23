@@ -29,9 +29,9 @@ class FixGrep(val diContext: DiContext, val inputDi: InputDi, val outputDi: Outp
         @JvmStatic
         fun main(args: Array<String>) {
             try {
-                FixGrep(args.toList()).go()
+                System.exit(FixGrep(args.toList()).go())
             } catch (e: Exception){
-                FixGrep.logger.error { e }
+                FixGrep.logger.error(e){}
                 System.err.println("Error: ${e.message}")
                 HelpGenerator(System.out).go();
                 System.exit(-1);
@@ -39,7 +39,19 @@ class FixGrep(val diContext: DiContext, val inputDi: InputDi, val outputDi: Outp
         }
     }
 
-    fun go() {
-        diContext.go()
+    fun go(): Int {
+        try {
+            diContext.go()
+            return 0
+        } catch (e: Exception){
+            FixGrep.logger.error(e){}
+            System.err.println("Error occurred: [" + e.message + "]")
+            System.err.println("Please run with -x to see stack trace, and to log with more detail in fixgrep.log.")
+            HelpGenerator(System.out).go();
+            if(diContext.config.debugMode){
+                e.printStackTrace()
+            }
+            return -1
+        }
     }
 }
