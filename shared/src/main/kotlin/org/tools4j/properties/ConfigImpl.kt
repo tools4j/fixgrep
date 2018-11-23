@@ -10,9 +10,9 @@ import kotlin.collections.LinkedHashMap
  */
 class ConfigImpl : Config {
     private val ESCAPED_VARIABLE_PATTERN = java.util.regex.Pattern.compile("\\\\(\\$\\{)")
+
     private val properties: Map<String, String?>
     constructor(repo: Config) : this(repo.asMap()) {}
-
     constructor(): this(LinkedHashMap<String, String>())
 
     constructor(properties: Map<String, String?>) {
@@ -165,6 +165,10 @@ class ConfigImpl : Config {
 
     override fun getAsString(key: String): String{
         return StringCoercer(get(key)).getAsString()
+    }
+
+    override fun getAsStringOrNull(key: String): String? {
+        return if(get(key) == null) null else getAsString(key)
     }
 
     override fun getAsDouble(key: String, default: Double): Double{

@@ -26,6 +26,7 @@ open class ConfigKeyedWithOption(val config: Config) {
     fun getAsInt(option: Option, default: Int): Int = config.getAsInt(option.key, default)
     fun getAsBoolean(option: Option, default: Boolean): Boolean = config.getAsBoolean(option.key, default)
     fun getAsString(option: Option, default: String): String = config.getAsString(option.key, default)
+    fun getAsStringOrNull(option: Option): String? = config.getAsStringOrNull(option.key)
     fun getAsDoubleList(option: Option): List<Double> = config.getAsDoubleList(option.key)
     fun getAsLongList(option: Option): List<Long> = config.getAsLongList(option.key)
     fun getAsIntList(option: Option): List<Int> = config.getAsIntList(option.key)

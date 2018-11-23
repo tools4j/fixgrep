@@ -15,18 +15,18 @@ class DefaultOutputDi(val diContext: DiContext): OutputDi {
 
     override val outputStream: OutputStream by lazy {
         val outputStream: OutputStream
-        val writingToFile = diContext.config.outputToGivenFile || diContext.config.launchInBrowser
+        val writingToFile = diContext.config.outputToFileWithGivenName || diContext.config.outputToFileWithGeneratedName || diContext.config.launchInBrowser
 
         if(writingToFile){
             logger.info { "Writing to file" }
             val outputFile: OutputFile
-            if(diContext.config.outputToFileButFilenameNotGiven){
+            if(!diContext.config.outputToFileWithGivenName){
                 val isHtml = diContext.config.htmlFormatting
                 val extension = if(isHtml) OutputFile.Extension.html else OutputFile.Extension.log
                 outputFile = OutputFile(extension)
                 logger.info { "Writing to generated filename: ${outputFile.fileObj.absolutePath}" }
             } else {
-                val toFile = diContext.config.outputFileName
+                val toFile = diContext.config.outputFileName!!
                 outputFile = OutputFile(toFile)
                 logger.info { "Writing to specified filename: $toFile" }
             }

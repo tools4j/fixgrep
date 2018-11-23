@@ -42,9 +42,9 @@ class FixGrepConfig(config: ConfigKeyedWithOption) {
     val excludeMessagesOfType: List<String> by lazy { config.getAsStringList(Option.exclude_messages_of_type) }
     val fixSpecPath: String by lazy { config.getAsString(Option.fix_spec_path) }
     val launchInBrowser: Boolean by lazy { config.hasPropertyAndIsNotFalse(Option.launch_browser) }
-    val outputToGivenFile: Boolean by lazy { config.hasProperty(Option.to_given_file) || outputToFileButFilenameNotGiven }
-    val outputToFileButFilenameNotGiven: Boolean by lazy { config.hasProperty(Option.to_file) }
-    val outputFileName: String by lazy { config.getAsString(Option.to_given_file) }
+    val outputToFileWithGivenName: Boolean by lazy { outputFileName != null }
+    val outputToFileWithGeneratedName: Boolean by lazy { config.hasProperty(Option.to_file) }
+    val outputFileName: String? by lazy { config.getAsStringOrNull(Option.to_given_file) }
     val htmlFormatting: Boolean by lazy { config.hasPropertyAndIsNotFalse(Option.html) || this.htmlPageFormatting }
-    val htmlPageFormatting: Boolean by lazy { config.hasPropertyAndIsNotFalse(Option.html_page) || ((config.hasPropertyAndIsNotFalse(Option.html)) && (man || outputToGivenFile || launchInBrowser)) }
+    val htmlPageFormatting: Boolean by lazy { config.hasPropertyAndIsNotFalse(Option.html_page) || ((config.hasPropertyAndIsNotFalse(Option.html)) && (man || outputToFileWithGivenName || launchInBrowser)) }
 }

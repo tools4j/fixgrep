@@ -31,12 +31,12 @@ class ExamplesList (val fixLines: List<String>, val docWriter: DocWriter) {
         else docWriter.writeLn(example.args.joinToString(" "), HtmlOnlyTextEffect("example-arguments"))
 
         val allArgs: MutableList<String> = ArrayList()
-        allArgs.add("--html"); allArgs.add(""+docWriter.isHtml())
+        if(docWriter.isHtml()) allArgs.add("--html");
         allArgs.add("--input-delimiter"); allArgs.add("|")
         allArgs.add("--output-format-horizontal-console"); allArgs.add("${'$'}{msgFix}")
         allArgs.addAll(args)
 
-        val result = WrappedFixGrep(args, false, false).go(fixLines.joinToString("\n"))
+        val result = WrappedFixGrep(allArgs, false, false).go(fixLines.joinToString("\n"))
 
         docWriter.startSection(MiscTextEffect.Console)
         docWriter.write(result)

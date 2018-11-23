@@ -49,6 +49,35 @@ class ManGenerator(val docWriterFactory: DocWriterFactory, val config: FixGrepCo
         )
         val verticalNonAlignedFormatExample = SingleExample(verticalNonAlignedLines, listOf("-e", "8,9", "-V"), docWriterFactory).toFormattedString()
 
+        val groupByOrderLines = listOf(
+                "35=D^A49=CLIENT^A56=SERVER^A11=ABC",
+                "35=D^A49=CLIENT2^A56=SERVER2^A11=ABC",
+                "35=8^A49=SERVER2^A56=CLIENT2^A150=0^A11=ABC^A37=123",
+                "35=8^A49=SERVER2^A56=CLIENT2^A150=1^A11=ABC^A37=123",
+                "35=8^A49=SERVER2^A56=CLIENT2^A150=1^A11=ABC",
+                "35=8^A49=SERVER^A56=CLIENT^A150=0^A11=ABC^A37=123",
+                "35=8^A49=SERVER2^A56=CLIENT2^A150=1^A37=123",
+                "35=G^A49=CLIENT2^A56=SERVER2^A41=ABC^A11=DEF^A37=123",
+                "35=8^A49=SERVER^A56=CLIENT^A150=1^A11=ABC^A37=123",
+                "35=8^A49=SERVER2^A56=CLIENT2^A150=1^A37=123",
+                "35=G^A49=CLIENT2^A56=SERVER2^A41=DEF^A11=GHI^A39=8^A434=2",
+                "35=9^A49=SERVER2^A56=CLIENT2^A41=DEF^A11=GHI",
+                "35=8^A49=SERVER^A56=CLIENT^A150=1^A37=123",
+                "35=G^A49=CLIENT^A56=SERVER^A41=ABC^A11=DEF^A37=123",
+                "35=8^A49=SERVER2^A56=CLIENT2^A150=1^A37=123",
+                "35=H^A49=CLIENT2^A56=SERVER2^A11=GHI",
+                "35=8^A49=SERVER^A56=CLIENT^A150=1=123",
+                "35=8^A49=SERVER2^A56=CLIENT2^A150=I^A37=123",
+                "35=G^A49=CLIENT^A56=SERVER^A41=DEF^A11=GHI^A39=8^A434=2",
+                "35=H^A49=CLIENT2^A56=SERVER2^A37=123",
+                "35=8^A49=SERVER2^A56=CLIENT2^A150=I^A37=123",
+                "35=9^A49=SERVER^A56=CLIENT^A41=DEF^A11=GHI",
+                "35=F^A49=CLIENT2^A56=SERVER2^A11=GHI",
+                "35=8^A49=SERVER^A56=CLIENT^A150=1^A37=123",
+                "35=8^A49=SERVER2^A56=CLIENT2^A150=4^A37=123")
+
+        val groupByOrderExample = SingleExample(groupByOrderLines, listOf("-O"), docWriterFactory).toFormattedString()
+
         val writer = docWriterFactory.createNew()
 
         with(writer) {
@@ -74,6 +103,8 @@ class ManGenerator(val docWriterFactory: DocWriterFactory, val config: FixGrepCo
             write(verticalAlignedFormatExample)
             writeHeading(3, "Vertical format (non-aligned):")
             write(verticalNonAlignedFormatExample)
+            writeHeading(3, "Group by order:")
+            write(groupByOrderExample)
             return toFormattedText()
         }
     }

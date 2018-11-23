@@ -21,9 +21,6 @@ class SingleExample (val fixLines: List<String>, val args: List<String>, val doc
         docWriter.startSection(HtmlOnlyTextEffect("example-list"))
         configOverrides.put(Option.html.key, ""+docWriter.isHtml())
         configOverrides.put(Option.input_delimiter.key, "^A")
-        val configAndArguments = ConfigBuilder(args, ConfigImpl(configOverrides)).configAndArguments
-        val spec = FormatSpec(FixGrepConfig(configAndArguments.config))
-        val formatter = WrappedFormatter(spec)
         docWriter.startSection(MiscTextEffect.Console)
         for(line in fixLines){
             val formattedLine = formatter.format(line)

@@ -68,6 +68,7 @@ class ManTest extends Specification {
         assert outputFile.exists()
         assert outputFile.text =~ "<html>"
         assert outputFile.text =~ "What is fixgrep"
+        assert outputFile.text =~ "<div class='fields'><span class='field"
         assert outputFile.delete()
 
         where:
@@ -85,6 +86,7 @@ class ManTest extends Specification {
         then:
         assert output =~ "<html>"
         assert output =~ "What is fixgrep"
+        assert output =~ "<div class='fields'><span class='field"
 
         where:
         arg           | desc
@@ -118,6 +120,7 @@ class ManTest extends Specification {
         assert outputFile.exists()
         assert outputFile.text =~ "<html>"
         assert outputFile.text =~ "What is fixgrep"
+        assert outputFile.text =~ "<div class='fields'><span class='field"
         assert outputFile.delete()
 
         where:

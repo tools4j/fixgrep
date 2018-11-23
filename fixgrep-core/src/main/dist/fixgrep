@@ -38,4 +38,4 @@ if [ "$1" = "man" ]; then
 fi
 
 # run fixgrep
-java -Dlog.dir="$FIXGREP_DIR_NATIVE" -Xmx64m -XX:+UseSerialGC -cp "$FIXGREP_DIR_NATIVE/lib/*" org.tools4j.fixgrep.main.FixGrep "$ADDITIONAL_PARAMS" "$@" <&0
+java -Dlog.dir="$FIXGREP_DIR_NATIVE" -Xmx128m -XX:+UseSerialGC -cp "$FIXGREP_DIR_NATIVE/lib/*" org.tools4j.fixgrep.main.FixGrep "$ADDITIONAL_PARAMS" "$@" <&0

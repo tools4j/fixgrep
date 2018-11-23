@@ -42,7 +42,9 @@ class WrappedFixGrep @JvmOverloads constructor(private val args: List<String>, p
     }
 
     fun go(args: List<String> = emptyList(), fix: String = ""): String {
-        val allArgs = ArrayList(args)
+        val allArgs = ArrayList(this.args)
+        allArgs.addAll(args)
+
         try {
             allArgs.addAll(this.args)
             val input = CircularBufferedReaderWriter()

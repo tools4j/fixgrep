@@ -39,6 +39,7 @@ interface Config {
     fun getAsIntList(key: String, default: List<Int>?): List<Int>?
     fun getAsBooleanList(key: String, default: List<Boolean>?): List<Boolean>?
     fun getAsStringList(key: String, default: List<String>?): List<String>?
+    fun getAsStringOrNull(key: String): String?
     fun hasProperty(key: String): Boolean
     fun toPrettyString(): String
     fun hasPropertyAndIsNotFalse(key: String): Boolean
