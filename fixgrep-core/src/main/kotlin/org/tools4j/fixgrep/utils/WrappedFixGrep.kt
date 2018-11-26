@@ -42,8 +42,11 @@ class WrappedFixGrep @JvmOverloads constructor(private val args: List<String>, p
     }
 
     fun go(args: List<String> = emptyList(), fix: String = ""): String {
-        val allArgs = ArrayList(this.args)
-        allArgs.addAll(args)
+        //Add the more specific args first (first ones take presendence)
+        val allArgs = ArrayList(args)
+
+        //Add the more 'generic' ones second
+        allArgs.addAll(this.args)
 
         try {
             allArgs.addAll(this.args)
@@ -60,7 +63,8 @@ class WrappedFixGrep @JvmOverloads constructor(private val args: List<String>, p
 
                 val argsListWithLaunchBrowserFlag = ArrayList(allArgs)
                 argsListWithLaunchBrowserFlag.add("-l")
-                FixGrep(argsListWithLaunchBrowserFlag, browserLaunchInput.inputStream, browserLaunchOutput.outputStream).go()
+                val result = FixGrep(argsListWithLaunchBrowserFlag, browserLaunchInput.inputStream, browserLaunchOutput.outputStream).go()
+                if(result != 0) throw RuntimeException("Error occurred whilst running FixGrep")
             }
 
             input.writer.write(fix)
@@ -68,7 +72,8 @@ class WrappedFixGrep @JvmOverloads constructor(private val args: List<String>, p
             input.writer.close()
 
             val fixGrep = FixGrep(allArgs, input.inputStream, output.outputStream)
-            fixGrep.go()
+            val result = fixGrep.go()
+            if(result != 0) throw RuntimeException("Error occurred whilst running FixGrep")
 
             output.outputStream.flush()
             val lines = output.readLines("\n")

@@ -36,47 +36,47 @@ class ManGenerator(val docWriterFactory: DocWriterFactory, val config: FixGrepCo
                 "8=FIX.5.2^A9=54^A35=8^A11=C28^A150=0^A151=1464820^A14=0^A44=100.02",
                 "8=FIX.5.2^A9=67^A35=G^A9=232^A11=C32^A38=1465320^A40=2^A44=100.12",
                 "8=FIX.5.2^A9=23^A35=8^A11=C32^A150=5^A151=1465320^A14=0^A44=100.12",
-                "8=FIX.5.2^A9=56^A35=8^A11=C32^A150=2^A151=1072490^A14=392830^A44=100.00")
-        val horizontalFormatExample = SingleExample(horizontalFormatLines, listOf("-e", "8,9"), docWriterFactory).toFormattedString()
+                "8=FIX.5.2^A9=56^A35=8^A11=C32^A150=F^A151=1072490^A14=392830^A44=100.00")
+        val horizontalFormatExample = SingleExample(horizontalFormatLines, "-e 8,9 -d ^A", docWriterFactory).toFormattedString()
 
         val verticalAlignedLines = listOf(
                 "8=FIX.5.2^A9=232^A35=D^A11=C28^A55=AUD/USD^A54=2^A38=1464820^A44=100.026",
                 "8=FIX.5.2^A9=54^A35=8^A11=C28^A150=0^A151=1464820^A14=0^A44=100.02")
-        val verticalAlignedFormatExample = SingleExample(verticalAlignedLines, listOf("-e", "8,9", "-V", "-A"), docWriterFactory).toFormattedString()
+        val verticalAlignedFormatExample = SingleExample(verticalAlignedLines, "-e 8,9 -V -A -d ^A", docWriterFactory).toFormattedString()
 
         val verticalNonAlignedLines = listOf(
                 "35=X^A262=ABCD^A268=3^A279=0^A269=0^A55=AUD/USD^A270=1.12345^A279=0^A269=1^A55=AUD/USD^A270=1.12355^A279=0^A269=1^A55=AUD/USD^A270=1.12355^A1022=FeedA^A"
         )
-        val verticalNonAlignedFormatExample = SingleExample(verticalNonAlignedLines, listOf("-e", "8,9", "-V"), docWriterFactory).toFormattedString()
+        val verticalNonAlignedFormatExample = SingleExample(verticalNonAlignedLines, "-e 8,9 -V -d ^A", docWriterFactory).toFormattedString()
 
         val groupByOrderLines = listOf(
                 "35=D^A49=CLIENT^A56=SERVER^A11=ABC",
                 "35=D^A49=CLIENT2^A56=SERVER2^A11=ABC",
                 "35=8^A49=SERVER2^A56=CLIENT2^A150=0^A11=ABC^A37=123",
-                "35=8^A49=SERVER2^A56=CLIENT2^A150=1^A11=ABC^A37=123",
-                "35=8^A49=SERVER2^A56=CLIENT2^A150=1^A11=ABC",
+                "35=8^A49=SERVER2^A56=CLIENT2^A150=F^A11=ABC^A37=123",
+                "35=8^A49=SERVER2^A56=CLIENT2^A150=F^A11=ABC",
                 "35=8^A49=SERVER^A56=CLIENT^A150=0^A11=ABC^A37=123",
-                "35=8^A49=SERVER2^A56=CLIENT2^A150=1^A37=123",
+                "35=8^A49=SERVER2^A56=CLIENT2^A150=F^A37=123",
                 "35=G^A49=CLIENT2^A56=SERVER2^A41=ABC^A11=DEF^A37=123",
-                "35=8^A49=SERVER^A56=CLIENT^A150=1^A11=ABC^A37=123",
-                "35=8^A49=SERVER2^A56=CLIENT2^A150=1^A37=123",
+                "35=8^A49=SERVER^A56=CLIENT^A150=F^A11=ABC^A37=123",
+                "35=8^A49=SERVER2^A56=CLIENT2^A150=F^A37=123",
                 "35=G^A49=CLIENT2^A56=SERVER2^A41=DEF^A11=GHI^A39=8^A434=2",
                 "35=9^A49=SERVER2^A56=CLIENT2^A41=DEF^A11=GHI",
-                "35=8^A49=SERVER^A56=CLIENT^A150=1^A37=123",
+                "35=8^A49=SERVER^A56=CLIENT^A150=F^A37=123",
                 "35=G^A49=CLIENT^A56=SERVER^A41=ABC^A11=DEF^A37=123",
-                "35=8^A49=SERVER2^A56=CLIENT2^A150=1^A37=123",
+                "35=8^A49=SERVER2^A56=CLIENT2^A150=F^A37=123",
                 "35=H^A49=CLIENT2^A56=SERVER2^A11=GHI",
-                "35=8^A49=SERVER^A56=CLIENT^A150=1=123",
+                "35=8^A49=SERVER^A56=CLIENT^A150=F=123",
                 "35=8^A49=SERVER2^A56=CLIENT2^A150=I^A37=123",
                 "35=G^A49=CLIENT^A56=SERVER^A41=DEF^A11=GHI^A39=8^A434=2",
                 "35=H^A49=CLIENT2^A56=SERVER2^A37=123",
                 "35=8^A49=SERVER2^A56=CLIENT2^A150=I^A37=123",
                 "35=9^A49=SERVER^A56=CLIENT^A41=DEF^A11=GHI",
                 "35=F^A49=CLIENT2^A56=SERVER2^A11=GHI",
-                "35=8^A49=SERVER^A56=CLIENT^A150=1^A37=123",
+                "35=8^A49=SERVER^A56=CLIENT^A150=F^A37=123",
                 "35=8^A49=SERVER2^A56=CLIENT2^A150=4^A37=123")
 
-        val groupByOrderExample = SingleExample(groupByOrderLines, listOf("-O"), docWriterFactory).toFormattedString()
+        val groupedByOrderExample = SingleExample(groupByOrderLines, "-O -d ^A", docWriterFactory).toFormattedString()
 
         val writer = docWriterFactory.createNew()
 
@@ -96,15 +96,15 @@ class ManGenerator(val docWriterFactory: DocWriterFactory, val config: FixGrepCo
             listItem("Output to text or html format")
             listItem("Customization of input/output delimiters.")
             endList()
-            writeHeading(2, "Some brief examples")
+            writeHeading(2, "Some introductory examples")
             writeHeading(3, "Horizontal format:")
             write(horizontalFormatExample)
             writeHeading(3, "Vertical format (aligned):")
             write(verticalAlignedFormatExample)
             writeHeading(3, "Vertical format (non-aligned):")
             write(verticalNonAlignedFormatExample)
-            writeHeading(3, "Group by order:")
-            write(groupByOrderExample)
+            writeHeading(3, "Grouped by order:")
+            write(groupedByOrderExample)
             return toFormattedText()
         }
     }

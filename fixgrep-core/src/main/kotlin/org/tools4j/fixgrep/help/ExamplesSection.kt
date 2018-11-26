@@ -16,7 +16,7 @@ class ExamplesSection(val docWriterFactory: DocWriterFactory) {
                 "35=8|11=C28|150=0|151=1464820|14=0|44=100.02",
                 "35=G|11=C32|38=1465320|40=2|44=100.12",
                 "35=8|11=C32|150=5|151=1465320|14=0|44=100.12",
-                "35=8|11=C32|150=2|151=1072490|14=392830|44=100.00")
+                "35=8|11=C32|150=F|151=1072490|14=392830|44=100.00")
 
         val docWriter = docWriterFactory.createNew()
         docWriter
@@ -79,7 +79,7 @@ class ExamplesSection(val docWriterFactory: DocWriterFactory) {
                 "2018-05-30T07:22:12.350 Thread-06 gbfix001 35=G|11=C32|38=1465320|40=2|44=100.12",
                 "2018-05-30T07:12:35.101 Thread-06 gbfix002 Amend request recieved for OrderId=O26",
                 "2018-05-30T07:22:13.670 Thread-01 gbfix002 35=8|11=C32|150=5|151=1465320|14=0|44=100.12",
-                "2018-05-30T07:34:34.060 Thread-13 gbfix002 35=8|11=C32|150=2|151=1072490|14=392830|44=100.00")
+                "2018-05-30T07:34:34.060 Thread-13 gbfix002 35=8|11=C32|150=F|151=1072490|14=392830|44=100.00")
 
         examplesList = ExamplesList(lines2, docWriter)
 
@@ -145,29 +145,29 @@ class ExamplesSection(val docWriterFactory: DocWriterFactory) {
             "35=D|49=CLIENT|56=SERVER|11=ABC",
             "35=D|49=CLIENT2|56=SERVER2|11=ABC",
             "35=8|49=SERVER2|56=CLIENT2|150=0|11=ABC|37=123",
-            "35=8|49=SERVER2|56=CLIENT2|150=1|11=ABC|37=123",
-            "35=8|49=SERVER2|56=CLIENT2|150=1|11=ABC",
+            "35=8|49=SERVER2|56=CLIENT2|150=F|11=ABC|37=123",
+            "35=8|49=SERVER2|56=CLIENT2|150=F|11=ABC",
             "35=8|49=SERVER|56=CLIENT|150=0|11=ABC|37=123",
-            "35=8|49=SERVER2|56=CLIENT2|150=1|37=123",
+            "35=8|49=SERVER2|56=CLIENT2|150=F|37=123",
             "35=G|49=CLIENT2|56=SERVER2|41=ABC|11=DEF|37=123",
-            "35=8|49=SERVER|56=CLIENT|150=1|11=ABC|37=123",
-            "35=8|49=SERVER2|56=CLIENT2|150=1|37=123",
+            "35=8|49=SERVER|56=CLIENT|150=F|11=ABC|37=123",
+            "35=8|49=SERVER2|56=CLIENT2|150=F|37=123",
             "35=G|49=CLIENT2|56=SERVER2|41=DEF|11=GHI|39=8|434=2",
             "35=9|49=SERVER2|56=CLIENT2|41=DEF|11=GHI",
             "35=9|49=SERVER2|56=CLIENT2|41=ORPHAN1|11=ORPHAN1",
-            "35=8|49=SERVER|56=CLIENT|150=1|37=123",
+            "35=8|49=SERVER|56=CLIENT|150=F|37=123",
             "35=G|49=CLIENT|56=SERVER|41=ABC|11=DEF|37=123",
-            "35=8|49=SERVER2|56=CLIENT2|150=1|37=123",
+            "35=8|49=SERVER2|56=CLIENT2|150=F|37=123",
             "35=H|49=CLIENT2|56=SERVER2|11=GHI",
             "35=9|49=SERVER2|56=CLIENT2|41=ORPHAN2|11=ORPHAN2",
-            "35=8|49=SERVER|56=CLIENT|150=1=123",
+            "35=8|49=SERVER|56=CLIENT|150=F=123",
             "35=8|49=SERVER2|56=CLIENT2|150=I|37=123",
             "35=G|49=CLIENT|56=SERVER|41=DEF|11=GHI|39=8|434=2",
             "35=H|49=CLIENT2|56=SERVER2|37=123",
             "35=8|49=SERVER2|56=CLIENT2|150=I|37=123",
             "35=9|49=SERVER|56=CLIENT|41=DEF|11=GHI",
             "35=F|49=CLIENT2|56=SERVER2|11=GHI",
-            "35=8|49=SERVER|56=CLIENT|150=1|37=123",
+            "35=8|49=SERVER|56=CLIENT|150=F|37=123",
             "35=8|49=SERVER2|56=CLIENT2|150=4|37=123")
 
         examplesList = ExamplesList(lines4, docWriter)

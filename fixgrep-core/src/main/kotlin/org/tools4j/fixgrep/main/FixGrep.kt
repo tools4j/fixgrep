@@ -47,6 +47,7 @@ class FixGrep(val diContext: DiContext, val inputDi: InputDi, val outputDi: Outp
             FixGrep.logger.error(e){}
             System.err.println("Error occurred: [" + e.message + "]")
             System.err.println("Please run with -x to see stack trace, and to log with more detail in fixgrep.log.")
+            diContext.runShutdowns()
             HelpGenerator(System.out).go();
             if(diContext.config.debugMode){
                 e.printStackTrace()

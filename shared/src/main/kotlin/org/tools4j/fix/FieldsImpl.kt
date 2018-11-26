@@ -1,5 +1,6 @@
 package org.tools4j.fix
 
+import java.lang.IllegalStateException
 import java.util.stream.Collectors
 
 /**
@@ -120,6 +121,7 @@ open class FieldsImpl(val fields: List<Field>) : ArrayList<Field>(fields), Field
     }
 
     override val msgTypeCode: String by lazy {
+        if(!exists(35)) throw IllegalStateException("No field 35 found. Found [$size] fields. Fields: " + this.toDelimitedString())
         getField(35)!!.stringValue()
     }
 

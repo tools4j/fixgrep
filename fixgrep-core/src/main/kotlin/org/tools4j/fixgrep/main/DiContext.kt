@@ -8,6 +8,7 @@ import org.tools4j.fixgrep.config.FixGrepConfig
 import org.tools4j.fixgrep.help.HelpGenerator
 import org.tools4j.fixgrep.main.FixGrep.Companion.logger
 import org.tools4j.utils.Logging
+import java.lang.IllegalStateException
 
 /**
  * User: benjw
@@ -31,7 +32,7 @@ class DiContext(private val configAndArguments: ConfigAndArguments) {
         logger.info{"Running services"}
         services.forEach { it() }
         logger.info{"Running shutdowns"}
-        shutdowns.forEach { it() }
+        runShutdowns()
         logger.info{"Finished, exiting"}
     }
 
@@ -45,5 +46,18 @@ class DiContext(private val configAndArguments: ConfigAndArguments) {
 
     fun addShutdown(shutdown: () -> Unit) {
         shutdowns.add(shutdown)
+    }
+
+    fun runShutdowns() {
+        var lastErrorOccurringDuringShutdown: Throwable? = null
+        shutdowns.forEach {
+            try {
+                it()
+            } catch (e: Exception) {
+                lastErrorOccurringDuringShutdown = e
+                logger.error("Error occurred during shutdown", e)
+            }
+        }
+        if(lastErrorOccurringDuringShutdown != null) throw IllegalStateException("One or more errors occurred during shutdown.  Last error incurred: ", lastErrorOccurringDuringShutdown)
     }
 }
