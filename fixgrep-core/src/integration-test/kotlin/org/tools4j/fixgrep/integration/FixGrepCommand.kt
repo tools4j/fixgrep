@@ -37,7 +37,7 @@ class FixGrepCommand(val timeoutMs: Long, val command: String) {
         val logger = KotlinLogging.logger {}
 
         init {
-            println("NOTE: the integration tests run against an unzipped version of FixGrep.  If your tests are failing, or, if your tests seem to be testing against old code, then be sure to run the integrationTest gradle task in order to ensure that the FixGrep zip file being used is up-to-date")
+            logger.info("NOTE: the integration tests run against an unzipped version of FixGrep.  If your tests are failing, or, if your tests seem to be testing against old code, then be sure to run the integrationTest gradle task in order to ensure that the FixGrep zip file being used is up-to-date")
         }
 
         val HELP_CONTENT = """Usage: fixgrep [options] [files ...]

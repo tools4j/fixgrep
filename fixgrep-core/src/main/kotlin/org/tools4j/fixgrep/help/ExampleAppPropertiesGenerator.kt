@@ -1,5 +1,6 @@
 package org.tools4j.fixgrep.help
 
+import mu.KotlinLogging
 import org.tools4j.fixgrep.config.Option
 
 /**
@@ -26,9 +27,10 @@ class ExampleAppPropertiesGenerator {
     }
 
     companion object {
+        val logger = KotlinLogging.logger {}
         @JvmStatic
         fun main(args: Array<String>) {
-            println(ExampleAppPropertiesGenerator().content)
+            logger.info(ExampleAppPropertiesGenerator().content)
         }
     }
 }

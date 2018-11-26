@@ -1,5 +1,6 @@
 package org.tools4j.fixgrep.help
 
+import mu.KotlinLogging
 import org.tools4j.fixgrep.texteffect.*
 
 /**
@@ -43,10 +44,11 @@ class Color256HtmlDemo(val docWriterFactory: DocWriterFactory) {
     }
 
     companion object {
+        val logger = KotlinLogging.logger {}
         @JvmStatic
         fun main(args: Array<String>) {
             val demo = Color256HtmlDemo(DocWriterFactory.Html)
-            println(demo.toFormattedText())
+            logger.info(demo.toFormattedText())
         }
     }
 }

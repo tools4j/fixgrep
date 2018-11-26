@@ -1,5 +1,6 @@
 package org.tools4j.fixgrep.help
 
+import mu.KotlinLogging
 import org.tools4j.fixgrep.config.Option
 import org.tools4j.fixgrep.help.HelpGenerator.Companion.fix
 import org.tools4j.fixgrep.texteffect.Ansi256Color
@@ -275,9 +276,10 @@ the less 'interesting' fix fields, such as BeginString, BodyLength or Checksum. 
     }
 
     companion object {
+        val logger = KotlinLogging.logger {}
         @JvmStatic
         fun main(args: Array<String>) {
-            println(OptionsHelp(DocWriterFactory.Html).toFormattedText())
+            logger.info(OptionsHelp(DocWriterFactory.Html).toFormattedText())
         }
     }
 }

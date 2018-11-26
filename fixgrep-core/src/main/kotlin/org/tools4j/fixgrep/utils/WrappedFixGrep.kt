@@ -85,8 +85,6 @@ class WrappedFixGrep @JvmOverloads constructor(private val args: List<String>, p
                 ResourceGroovyMethods.append(RESULTS_FILE, "\n")
                 ResourceGroovyMethods.append(RESULTS_FILE, "\n")
             }
-
-            DefaultGroovyMethods.println(this, lines)
             return lines
 
         } catch (e: IOException) {

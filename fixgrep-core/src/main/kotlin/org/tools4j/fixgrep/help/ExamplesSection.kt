@@ -1,5 +1,6 @@
 package org.tools4j.fixgrep.help
 
+import mu.KotlinLogging
 import org.tools4j.fixgrep.texteffect.HtmlOnlyTextEffect
 import org.tools4j.fixgrep.texteffect.MiscTextEffect
 import org.tools4j.fixgrep.utils.Constants.Companion.DOLLAR
@@ -178,9 +179,10 @@ class ExamplesSection(val docWriterFactory: DocWriterFactory) {
     }
 
     companion object {
+        val logger = KotlinLogging.logger {}
         @JvmStatic
         fun main(args: Array<String>) {
-            println(ExamplesSection(DocWriterFactory.ConsoleText).toFormattedText())
+            logger.info(ExamplesSection(DocWriterFactory.ConsoleText).toFormattedText())
         }
     }
 }

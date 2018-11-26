@@ -26,7 +26,7 @@ class BashCommand(val timeoutMs: Long, val command: String) {
         if(cygBinPath == null){
             throw IllegalStateException("Cannot find environment variable CYGWIN_BIN_PATH.  Please ensure this is configured before running any Bash tests")
         }
-        println("CYGWIN_BIN_PATH: $cygBinPath")
+        logger.info("CYGWIN_BIN_PATH: $cygBinPath")
         val env = arrayOf("PATH=$path;$cygBinPath")
         val args = listOf("${cygBinPath}/bash.exe", "-l", "-c", "\"" + command + "\"")
 

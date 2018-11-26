@@ -25,33 +25,13 @@ class FixSpecParser(private val specInputStream: InputStream) {
             val after = System.currentTimeMillis()
             println(after - before)
             println(fixSpec.printMessagesAndGroups())
-
-
-//            for(field in fixSpec.fieldsByName.values){
-//                val inGroups = ArrayList<SpecGroup>()
-//                val inMessages = ArrayList<SpecMessage>()
-//                for(group in fixSpec.groupsByName.values){
-//                    if(group.fields.contains(field)){
-//                        inGroups.add(group)
-//                    }
-//                }
-//                for(message in fixSpec.messagesByName.values){
-//                    if(message.fields.contains(field)){
-//                        inMessages.add(message)
-//                    }
-//                }
-//                if(inGroups.size > 2) println("Field ${field.name} in multiple groups: " + inGroups.map { it.name }.joinToString(","))
-//                if(inGroups.size == 1 && !inMessages.isEmpty()) println("Field ${field.name} in group: " + inGroups.map { it.name }.joinToString(",") + ", and in messages: " + inMessages.map { it.name }.joinToString(","))
-//            }
         }
     }
 
     fun parseSpec(): FixSpecDefinition{
         val timeMsStart = System.currentTimeMillis()
         val xmlDoc: Document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(specInputStream)
-        //println("After initial xml parse: " + (System.currentTimeMillis() - timeMsStart))
         xmlDoc.documentElement.normalize()
-        //println("After normalize: " + (System.currentTimeMillis() - timeMsStart))
 
         //FIELDS
         val fieldList: NodeList = xmlDoc.getElementsByTagName("fields").item(0).childNodes
