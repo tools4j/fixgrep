@@ -32,7 +32,7 @@ if command -v cygpath >/dev/null 2>&1; then
 fi
 
 # check if wanting to view man page
-if [ "$1" = "man" ]; then
+if [ "$*" = "man" ]; then
     less -R $FIXGREP_DIR_ABSOLUTE/man.txt
     exit 0
 fi

@@ -40,7 +40,6 @@ class OutputToFileTest extends Specification {
 
 
 """
-        cleanup:
         if(inputFile.exists()){assert inputFile.delete()}
         if(outputFile.exists()){assert outputFile.delete()}
     }
@@ -85,9 +84,9 @@ class OutputToFileTest extends Specification {
 
 
 """
-        cleanup:
         assert outputFile.delete()
+
+        cleanup:
         System.out = originalSystemOut
-        println output
     }
 }

@@ -1,13 +1,10 @@
 package org.tools4j.fixgrep.help
 
-import org.tools4j.fixgrep.config.ConfigBuilder
-import org.tools4j.fixgrep.config.FixGrepConfig
-import org.tools4j.fixgrep.formatting.FormatSpec
-import org.tools4j.fixgrep.formatting.WrappedFormatter
+import org.tools4j.fixgrep.texteffect.CompositeTextEffect
+import org.tools4j.fixgrep.texteffect.ConsoleOnlyTextEffect
 import org.tools4j.fixgrep.texteffect.HtmlOnlyTextEffect
 import org.tools4j.fixgrep.texteffect.MiscTextEffect
 import org.tools4j.fixgrep.utils.WrappedFixGrep
-import org.tools4j.properties.ConfigImpl
 
 /**
  * User: ben
@@ -26,9 +23,9 @@ class ExamplesList (val fixLines: List<String>, val docWriter: DocWriter) {
 
     fun add(args: List<String>, description: String): ExamplesList {
         val example = Example(description, args)
-        docWriter.writeLn(example.description, HtmlOnlyTextEffect("example-description"))
-        if(args.isEmpty()) docWriter.writeLn("<no arguments>", HtmlOnlyTextEffect("example-arguments"))
-        else docWriter.writeLn(example.args.joinToString(" "), HtmlOnlyTextEffect("example-arguments"))
+        docWriter.writeLn(example.description, CompositeTextEffect(ConsoleOnlyTextEffect.BlankLineBefore, HtmlOnlyTextEffect("example-description")))
+        if(args.isEmpty()) docWriter.writeLn("<no arguments>", CompositeTextEffect(listOf(ConsoleOnlyTextEffect.BlankLineBefore, ConsoleOnlyTextEffect.BlankLineAfter, ConsoleOnlyTextEffect.Bold, HtmlOnlyTextEffect("example-arguments"))))
+        else docWriter.writeLn(example.args.joinToString(" "), CompositeTextEffect(listOf(ConsoleOnlyTextEffect.BlankLineBefore, ConsoleOnlyTextEffect.BlankLineAfter, ConsoleOnlyTextEffect.Bold, HtmlOnlyTextEffect("example-arguments"))))
 
         val allArgs: MutableList<String> = ArrayList()
         if(docWriter.isHtml()) allArgs.add("--html");

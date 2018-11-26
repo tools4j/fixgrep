@@ -141,6 +141,7 @@ class ExamplesSection(val docWriterFactory: DocWriterFactory) {
                 .listItem("Messages are cached until fixgrep has finished parsing the entire input, then the formatted messages are output.")
                 .listItem("fixgrep does it's best to link messages together by clientOrderId, origClientOrderId and orderId.")
                 .listItem("Using the following input fix:")
+                .endList()
 
         val lines4 = listOf(
             "35=D|49=CLIENT|56=SERVER|11=ABC",

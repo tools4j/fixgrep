@@ -1430,22 +1430,24 @@ Each of these properties is a specification of how each fix message should be di
 <tr><td>${n}</td><td>displays the value of that fix tag.  e.g. for a NewOrderSingle ${35} would print 'D'</td></tr>
 <tr><td>$n</td><td>(note, no braces), will print the captured regex group 'n' from the regex specified in the parameter input-line-format (or property input.line.format).</td></tr>
 </table>
-Below you can see the default values for these settings.  They can be overridden in the application.properties file that ships with fixgrep.<br/><table class='doc-table'>
-<tr><td>output.format.horizontal.console</td><td><xmp>${msgFix}</xmp></td></tr>
-<tr><td>output.format.horizontal.html</td><td><xmp>${msgFix}</xmp></td></tr>
-<tr><td>output.format.vertical.console</td><td><xmp>================================================================================
+Below you can see the default values for these settings.  They can be overridden in the application.properties file that ships with fixgrep.<br/><h2 id='output.format.horizontal.console'>output.format.horizontal.console</h2>
+<xmp>${msgFix}
+</xmp><h2 id='output.format.horizontal.html'>output.format.horizontal.html</h2>
+<xmp>${msgFix}
+</xmp><h2 id='output.format.vertical.console'>output.format.vertical.console</h2>
+<xmp>================================================================================
 ${msgColor}${msgTypeName}${colorReset}
 ================================================================================
-${msgFix}</xmp></td></tr>
-<tr><td>output.format.vertical.html</td><td><xmp><div class='msg-header'>
+${msgFix}
+</xmp><h2 id='output.format.vertical.html'>output.format.vertical.html</h2>
+<xmp><div class='msg-header'>
 ================================================================================</br>
 ${msgColor}${msgTypeName}${colorReset}<br/>
 ================================================================================
 </div>
 ${msgFix}
-<br/></xmp></td></tr>
-</table>
-<h1 id='Examples'>Examples</h1>
+<br/>
+</xmp><h1 id='Examples'>Examples</h1>
 Examples are being applied to the following lines of fix.  I have purposefully over simplied these FIX messages and stripped them down so that they might fit horizontally on a console: <br/><div class='console'>
 <div class='line'>
 35=D|11=C28|55=AUD/USD|54=2|38=1464820|44=100.026</div>
@@ -2138,6 +2140,7 @@ Order grouping allows the grouping of order messages by order.  When using Order
 <li>Messages are cached until fixgrep has finished parsing the entire input, then the formatted messages are output.</li>
 <li>fixgrep does it's best to link messages together by clientOrderId, origClientOrderId and orderId.</li>
 <li>Using the following input fix:</li>
+</ul>
 <div class='example-list'>
 <div class='example-description'>
 These messages are grouped by order.
@@ -2190,7 +2193,9 @@ ORPHAN MESSAGES:<br/>
 <h2 id='General'>General</h2>
 <h3 id='Is-fixgrep-free-to-use-in-a-commercial-environment'>Is fixgrep free to use in a commercial environment</h3>
 Yes.  Fixgrep is released under the MIT licence which allows usage free-of-charge in a commercial environment.<br/><h3 id='Does-fixgrep-run-under-windows.'>Does fixgrep run under windows.</h3>
-Yes.  Fixgrep will run under any OS that has a JVM greater than or equal to Java 1.8.  The most convenient way to run fixgrep is by using the fixgrep bash command.  To run this under windows you will need to be running a bash prompt, e.g. cygwin.  Currently there is no fixgrep.bat script written.  At the moment I have no immediate intention to create one, but please feel free to submit a proposal.<br/><h2 id='Performance'>Performance</h2>
+Yes.  Fixgrep will run under any OS that has a JVM greater than or equal to Java 1.8.  The most convenient way to run fixgrep is by using the fixgrep bash command.  To run this under windows you will need to be running a bash prompt, e.g. cygwin.  Currently there is no fixgrep.bat script written.  At the moment I have no immediate intention to create one, but please feel free to submit a proposal.<br/><h2 id='Formatting'>Formatting</h2>
+<h3 id='Why-do-I-lose-color-formatting-when-piping-fixgrep-results-to-'less'?'>Why do I lose color formatting when piping fixgrep results to 'less'?</h3>
+Indeed, some commands will not retain color formatting.  For less, use the -R option<br/><h2 id='Performance'>Performance</h2>
 <h3 id='Can-gixgrep-be-used-as-an-alternative-to-grep-when-filtering-large-files.'>Can gixgrep be used as an alternative to grep when filtering large files.</h3>
 It depends.  Fixgrep will be much slower than grep, and will consume more CPU.  For example running on my mac laptop, grep is roughly 5 times faster than fixgrep for searching for messages. If you don't want to wait too long and/or you are concerned about impact on CPU, best to use conventional grep commands to filter first and then pipe into fixgrep.<br/><h3 id='Can-fixgrep-be-used-as-an-alternative-to-'more'-or-'less'-to-view-large-FIX-log-files.'>Can fixgrep be used as an alternative to 'more' or 'less' to view large FIX log files.</h3>
 It depends.  Applications such as 'more' or 'less' don't need to read an entire file during viewing.  Whereas fixgrep does.<br/>For large files (>100MB) it would be prudent to first extract the lines you wish to view (using grep or whatever), and pipe those lines into fixgrep.<br/><h3 id='How-much-memory-does-fixgrep-use?'>How much memory does fixgrep use?</h3>
