@@ -44,7 +44,7 @@ class ReplacedAnnotationHtmlTest extends Specification {
 </div>
 <table class='fields'>
 <tr class='field annotatedField'><td class='tag annotation' colspan='2'>MsgType</td><td class='equals'>=</td><td class='value annotation' colspan='2'>EXECUTIONREPORT</td></tr>
-<tr class='field annotatedField'><td class='tag annotation' colspan='2'>ExecType</td><td class='equals'>=</td><td class='value annotation' colspan='2'>TRADE_PARTIAL_FILL_OR_FILL</td></tr>
+<tr class='field annotatedField'><td class='tag annotation' colspan='2'>ExecType</td><td class='equals'>=</td><td class='value annotation' colspan='2'>FILL</td></tr>
 <tr class='field annotatedField'><td class='tag annotation' colspan='2'>Symbol</td><td class='equals'>=</td><td class='value raw' colspan='2'>AUD/USD</td></tr>
 </table>
 
@@ -78,7 +78,7 @@ class ReplacedAnnotationHtmlTest extends Specification {
 </div>
 <div class='fields'>
 <div class='field annotatedField'><!--uid:0--><span class='tag annotation'>MsgType</span><span class='equals'>=</span><span class='value annotation'>EXECUTIONREPORT</span></div><!--uid:1-->
-<div class='field annotatedField'><!--uid:2--><span class='tag annotation'>ExecType</span><span class='equals'>=</span><span class='value annotation'>TRADE_PARTIAL_FILL_OR_FILL</span></div><!--uid:3-->
+<div class='field annotatedField'><!--uid:2--><span class='tag annotation'>ExecType</span><span class='equals'>=</span><span class='value annotation'>FILL</span></div><!--uid:3-->
 <div class='field annotatedField'><!--uid:4--><span class='tag annotation'>Symbol</span><span class='equals'>=</span><span class='value raw'>AUD/USD</span></div><!--uid:5-->
 </div>
 

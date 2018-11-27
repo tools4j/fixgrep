@@ -50,9 +50,10 @@ class DiContext(private val configAndArguments: ConfigAndArguments) {
 
     fun runShutdowns() {
         var lastErrorOccurringDuringShutdown: Throwable? = null
-        shutdowns.forEach {
+        val shutdowns = ArrayList(shutdowns)
+        for (shutdown in shutdowns) {
             try {
-                it()
+                shutdown()
             } catch (e: Exception) {
                 lastErrorOccurringDuringShutdown = e
                 logger.error("Error occurred during shutdown", e)

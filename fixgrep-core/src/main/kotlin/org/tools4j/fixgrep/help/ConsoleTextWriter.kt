@@ -149,7 +149,7 @@ class ConsoleTextWriter(): DocWriter {
 
     override fun writeHeading(level: Int, content: String): ConsoleTextWriter {
         if(level == 1){
-            writeBoldLn("")
+            writeLn("")
             writeBoldLn("========================================================================================================")
             writeBoldLn(content.toUpperCase())
             writeBoldLn("========================================================================================================")

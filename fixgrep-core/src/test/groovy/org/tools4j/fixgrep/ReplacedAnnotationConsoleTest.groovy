@@ -92,9 +92,9 @@ MDFeedType=asdf
 ================================================================================
 \u001B[32mExec.Trade\u001B[0m
 ================================================================================
-  MsgType = EXECUTIONREPORT            
- ExecType = TRADE_PARTIAL_FILL_OR_FILL 
-   Symbol = AUD/USD                    
+  MsgType = EXECUTIONREPORT 
+ ExecType = FILL            
+   Symbol = AUD/USD         
 
 """
     }

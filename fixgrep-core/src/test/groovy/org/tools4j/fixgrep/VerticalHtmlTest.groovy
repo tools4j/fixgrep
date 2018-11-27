@@ -44,7 +44,7 @@ class VerticalHtmlTest extends Specification {
 </div>
 <table class='fields'>
 <tr class='field annotatedField'><td class='tag annotation'>MsgType</td><td class='tag raw bold'>35</td><td class='equals bold'>=</td><td class='value raw bold'>8</td><td class='value annotation'>EXECUTIONREPORT</td></tr>
-<tr class='field annotatedField'><td class='tag annotation'>ExecType</td><td class='tag raw bold'>150</td><td class='equals bold'>=</td><td class='value raw bold'>F</td><td class='value annotation'>TRADE_PARTIAL_FILL_OR_FILL</td></tr>
+<tr class='field annotatedField'><td class='tag annotation'>ExecType</td><td class='tag raw bold'>150</td><td class='equals bold'>=</td><td class='value raw bold'>F</td><td class='value annotation'>FILL</td></tr>
 <tr class='field annotatedField'><td class='tag annotation'>Symbol</td><td class='tag raw bold'>55</td><td class='equals bold'>=</td><td class='value raw bold' colspan='2'>AUD/USD</td></tr>
 </table>
 
@@ -78,7 +78,7 @@ class VerticalHtmlTest extends Specification {
 </div>
 <div class='fields'>
 <div class='field annotatedField'><!--uid:0--><span class='tag annotation'>[MsgType]</span><span class='tag raw bold'>35</span><span class='equals bold'>=</span><span class='value raw bold'>8</span><span class='value annotation'>[EXECUTIONREPORT]</span></div><!--uid:1-->
-<div class='field annotatedField'><!--uid:2--><span class='tag annotation'>[ExecType]</span><span class='tag raw bold'>150</span><span class='equals bold'>=</span><span class='value raw bold'>F</span><span class='value annotation'>[TRADE_PARTIAL_FILL_OR_FILL]</span></div><!--uid:3-->
+<div class='field annotatedField'><!--uid:2--><span class='tag annotation'>[ExecType]</span><span class='tag raw bold'>150</span><span class='equals bold'>=</span><span class='value raw bold'>F</span><span class='value annotation'>[FILL]</span></div><!--uid:3-->
 <div class='field annotatedField'><!--uid:4--><span class='tag annotation'>[Symbol]</span><span class='tag raw bold'>55</span><span class='equals bold'>=</span><span class='value raw bold'>AUD/USD</span></div><!--uid:5-->
 </div>
 

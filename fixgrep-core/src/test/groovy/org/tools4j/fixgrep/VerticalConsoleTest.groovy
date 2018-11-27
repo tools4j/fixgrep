@@ -35,9 +35,9 @@ class VerticalConsoleTest extends Specification {
 ================================================================================
 \u001B[32mExec.Trade\u001B[0m
 ================================================================================
-   [MsgType]\u001B[1m35\u001B[22m \u001B[1m=\u001B[22m \u001B[1m8\u001B[22m[EXECUTIONREPORT]            
- [ExecType]\u001B[1m150\u001B[22m \u001B[1m=\u001B[22m \u001B[1mF\u001B[22m[TRADE_PARTIAL_FILL_OR_FILL] 
-    [Symbol]\u001B[1m55\u001B[22m \u001B[1m=\u001B[22m \u001B[1mAUD/USD\u001B[22m                       
+   [MsgType]\u001B[1m35\u001B[22m \u001B[1m=\u001B[22m \u001B[1m8\u001B[22m[EXECUTIONREPORT] 
+ [ExecType]\u001B[1m150\u001B[22m \u001B[1m=\u001B[22m \u001B[1mF\u001B[22m[FILL]            
+    [Symbol]\u001B[1m55\u001B[22m \u001B[1m=\u001B[22m \u001B[1mAUD/USD\u001B[22m            
 
 """
     }
@@ -60,9 +60,9 @@ class VerticalConsoleTest extends Specification {
 ================================================================================
 \u001B[32mExec.Trade\u001B[0m
 ================================================================================
-\u001B[31m   [MsgType]\u001B[1m35\u001B[22m \u001B[1m=\u001B[22m \u001B[1m8\u001B[22m[EXECUTIONREPORT]            \u001B[0m
- [ExecType]\u001B[1m150\u001B[22m \u001B[1m=\u001B[22m \u001B[1mF\u001B[22m[TRADE_PARTIAL_FILL_OR_FILL] 
-    [Symbol]\u001B[1m55\u001B[22m \u001B[1m=\u001B[22m \u001B[1mAUD/USD\u001B[22m                       
+\u001B[31m   [MsgType]\u001B[1m35\u001B[22m \u001B[1m=\u001B[22m \u001B[1m8\u001B[22m[EXECUTIONREPORT] \u001B[0m
+ [ExecType]\u001B[1m150\u001B[22m \u001B[1m=\u001B[22m \u001B[1mF\u001B[22m[FILL]            
+    [Symbol]\u001B[1m55\u001B[22m \u001B[1m=\u001B[22m \u001B[1mAUD/USD\u001B[22m            
 
 """
     }
@@ -84,9 +84,9 @@ class VerticalConsoleTest extends Specification {
 ================================================================================
 \u001B[32mExec.Trade\u001B[0m
 ================================================================================
-\u001B[31m   [MsgType]\u001B[1m35\u001B[22m \u001B[1m=\u001B[22m \u001B[1m8\u001B[22m[EXECUTIONREPORT]            \u001B[0m
-\u001B[31m [ExecType]\u001B[1m150\u001B[22m \u001B[1m=\u001B[22m \u001B[1mF\u001B[22m[TRADE_PARTIAL_FILL_OR_FILL] \u001B[0m
-\u001B[31m    [Symbol]\u001B[1m55\u001B[22m \u001B[1m=\u001B[22m \u001B[1mAUD/USD\u001B[22m                       \u001B[0m
+\u001B[31m   [MsgType]\u001B[1m35\u001B[22m \u001B[1m=\u001B[22m \u001B[1m8\u001B[22m[EXECUTIONREPORT] \u001B[0m
+\u001B[31m [ExecType]\u001B[1m150\u001B[22m \u001B[1m=\u001B[22m \u001B[1mF\u001B[22m[FILL]            \u001B[0m
+\u001B[31m    [Symbol]\u001B[1m55\u001B[22m \u001B[1m=\u001B[22m \u001B[1mAUD/USD\u001B[22m            \u001B[0m
 
 """
     }
@@ -108,7 +108,7 @@ class VerticalConsoleTest extends Specification {
 \u001B[32mExec.Trade\u001B[0m
 ================================================================================
 [MsgType]\u001B[1m35\u001B[22m\u001B[1m=\u001B[22m\u001B[1m8\u001B[22m[EXECUTIONREPORT]
-[ExecType]\u001B[1m150\u001B[22m\u001B[1m=\u001B[22m\u001B[1mF\u001B[22m[TRADE_PARTIAL_FILL_OR_FILL]
+[ExecType]\u001B[1m150\u001B[22m\u001B[1m=\u001B[22m\u001B[1mF\u001B[22m[FILL]
 [Symbol]\u001B[1m55\u001B[22m\u001B[1m=\u001B[22m\u001B[1mAUD/USD\u001B[22m
 """
     }

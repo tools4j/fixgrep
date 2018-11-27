@@ -53,6 +53,9 @@ class BashCommand(val timeoutMs: Long, val command: String) {
         logger.info { "Completed running of command" }
         stdErr = errGobbler.getOutput()
         stdOut = outGobbler.getOutput()
+        if(!stdErr.isBlank()){
+            System.err.println(stdErr)
+        }
         return this
     }
 

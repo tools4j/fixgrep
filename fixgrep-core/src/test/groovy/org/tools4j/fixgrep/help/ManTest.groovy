@@ -2,6 +2,7 @@ package org.tools4j.fixgrep.help
 
 import org.tools4j.fixgrep.utils.WrappedFixGrep
 import org.tools4j.fixgrep.main.FixGrep
+import spock.lang.Ignore
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -127,5 +128,15 @@ class ManTest extends Specification {
         arg           | desc
         "--html"      | "With html flag, because we are printing out man, should still appear in full html page"
         "--html-page" | "With full page specified"
+    }
+
+    @Ignore
+    @Unroll
+    def "Generate html man to file and launch browser - for manual testing purposes"() {
+        when:
+        new FixGrep(Arrays.asList("--man", "--html", "-l")).go()
+
+        then:
+        assert 1 == (1+1)
     }
 }

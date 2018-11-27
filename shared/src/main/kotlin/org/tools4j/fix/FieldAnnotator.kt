@@ -7,7 +7,8 @@ import org.tools4j.fix.spec.FixSpecDefinition
  * Date: 11/7/17
  * Time: 5:19 PM
  */
-class FieldAnnotator(val fixSpec: FixSpecDefinition){
+class FieldAnnotator(val fixSpec: FixSpecDefinition, val fieldEnumAnnotationAugmenter: FieldEnumAnnotationAugmenter){
+    constructor(fixSpec: FixSpecDefinition): this(fixSpec, DefaultFieldEnumAugmentor())
 
     fun getField(field: Field): Field {
         return FieldImpl(getTag(field.tag), getValue(field.tag, field.value))
@@ -23,9 +24,10 @@ class FieldAnnotator(val fixSpec: FixSpecDefinition){
     }
 
     private fun getValue(tag: Tag, value: Value): Value {
-        val fieldName = fixSpec.fieldsByNumber.get(tag.number)?.enumsByCode?.get(value.valueRaw)
-        return if (fieldName != null) {
-            AnnotatedValue(value.valueRaw, fieldName)
+        val enumAnnotation = fieldEnumAnnotationAugmenter.lookupEnumOverride(tag.number, value.valueRaw)
+                                    ?: fixSpec.fieldsByNumber.get(tag.number)?.enumsByCode?.get(value.valueRaw)
+        return if (enumAnnotation != null) {
+            AnnotatedValue(value.valueRaw, fieldEnumAnnotationAugmenter.augmentEnum(enumAnnotation))
         } else {
             value
         }

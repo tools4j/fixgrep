@@ -8,6 +8,4 @@ data class FieldSpec(val name: String, val number: Int, val type: String, val en
     override fun toString(): String {
         return "Field:$number:$name"
     }
-
-
 }
