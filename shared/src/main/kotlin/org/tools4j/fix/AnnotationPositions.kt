@@ -33,18 +33,22 @@ class AnnotationPositions(val tagAnnotationPosition: AnnotationPosition, val val
         val LEFT_ANNOTATED = AnnotationPositions(BEFORE, BEFORE)
         val REPLACED = AnnotationPositions(REPLACE, REPLACE)
         val NO_ANNOTATION = AnnotationPositions(NONE, NONE)
+        val OUTSIDE_ANNOTATED_STR = "outsideAnnotated"
+        val INSIDE_ANNOTATED_STR = "insideAnnotated"
+        val REPLACED_STR = "replaced"
+        val NONE_STR = "none"
 
         init{
-            specs["outsideAnnotated"] = AnnotationPositions(BEFORE, AFTER)
-            specs["insideAnnotated"] = AnnotationPositions(AFTER, BEFORE)
-            specs["replaced"] = AnnotationPositions(REPLACE, REPLACE)
+            specs[OUTSIDE_ANNOTATED_STR] = AnnotationPositions(BEFORE, AFTER)
+            specs[INSIDE_ANNOTATED_STR] = AnnotationPositions(AFTER, BEFORE)
+            specs[REPLACED_STR] = AnnotationPositions(REPLACE, REPLACE)
             for(firstSymbol in AnnotationPosition.values()){
                 for(secondSymbol in AnnotationPosition.values()){
                     specs["${firstSymbol.abbrev}${secondSymbol.abbrev}"] = AnnotationPositions(firstSymbol, secondSymbol)
                 }
                 specs["${firstSymbol.abbrev}"] = AnnotationPositions(firstSymbol, firstSymbol)
             }
-            specs["none"] = NO_ANNOTATION
+            specs[NONE_STR] = NO_ANNOTATION
         }
 
         @JvmStatic

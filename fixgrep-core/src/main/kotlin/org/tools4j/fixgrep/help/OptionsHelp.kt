@@ -1,12 +1,14 @@
 package org.tools4j.fixgrep.help
 
 import mu.KotlinLogging
+import org.tools4j.fix.AnnotationPositions
 import org.tools4j.fixgrep.config.Option
 import org.tools4j.fixgrep.help.HelpGenerator.Companion.fix
 import org.tools4j.fixgrep.texteffect.Ansi256Color
 import org.tools4j.fixgrep.texteffect.AnsiForegroundBackground
 import org.tools4j.fixgrep.texteffect.HtmlOnlyTextEffect
 import org.tools4j.fixgrep.texteffect.MiscTextEffect
+import javax.jws.soap.SOAPBinding
 
 /**
  * User: ben
@@ -32,39 +34,62 @@ class OptionsHelp(val docWriterFactory: DocWriterFactory) {
         optionsHelp.add(OptionHelp(
                 Option.tag_annotations,
                 "Defines the format of annotations to use when printing fields.",
-                "outsideAnnotations",
-                docWriterFactory.createNew().write("Using the built in fix spec it is possible to annotate FIX tags with information to make them more human readable. e.g. the fix message '35=D^A11=ABC^A55=AUD/USD' can be made much more readable when presented with the tag and/or value descriptions.  e.g. '[MsgType]")
+                "ba",
+                docWriterFactory.createNew().write("Using the built in fix spec it is possible to annotate fix tags with information to make them more human readable. e.g. the fix message '35=D^A11=ABC^A55=AUD/USD' can be made much more readable when presented with the tag and/or value descriptions.  e.g. '[MsgType]")
                         .writeBold("35=D")
                         .write("[NEWORDERSINGLE]|[ClOrdID]")
                         .writeBold("11=ABC")
                         .write("|[Symbol]")
                         .writeBold("55=AUD/USD")
-                        .writeLn("'.  The default format is called 'outsideAnnotations' which means that the annotations sit on the outside of the tag=value pair.  e.g. [tagAnnotation]tag=value[valueAnnotation]. The other way of specifying this format is 'ba', which is the abbreviation of 'before-after', which means the tag annotation is placed _before_ the tag, and the value annotation is placed _after_ the value.")
-                        .writeBoldLn("All the possible values for this option:")
-                .addTable()
-                .startNewRow().addTableHeaderCell("format").addTableHeaderCell("example")
-                .startNewRow().addCell("outsideAnnotations").addCell("[MsgType]35=D[NEWORDERSINGLE]")
-                .startNewRow().addCell("ba").addCell("[MsgType]35=D[NEWORDERSINGLE]")
-                .startNewRow().addCell("insideAnnotations").addCell("35[MsgType]=[NEWORDERSINGLE]D")
-                .startNewRow().addCell("ab").addCell("35[MsgType]=[NEWORDERSINGLE]D")
-                .startNewRow().addCell("bb").addCell("[MsgType]35=[NEWORDERSINGLE]D")
-                .startNewRow().addCell("aa").addCell("35[MsgType]=D[NEWORDERSINGLE]")
-                .startNewRow().addCell("a_").addCell("35[MsgType]=D")
-                .startNewRow().addCell("_a").addCell("35=D[NEWORDERSINGLE]")
-                .startNewRow().addCell("b_").addCell("[MsgType]35=D")
-                .startNewRow().addCell("_b").addCell("35=[NEWORDERSINGLE]D")
-                .startNewRow().addCell("__").addCell("35=D")
-                .startNewRow().addCell("none").addCell("35=D")
-                .endTable()
-                .toFormattedText()))
+                        .writeLn("'.  The default format is called 'outsideAnnotated' which means that the annotations sit on the " +
+                                "outside of the tag=value pair.  e.g. [tagAnnotation]tag=value[valueAnnotation].")
+                        .writeLn("Specified using this method, these are the possible option values:")
+                        .addTable()
+                        .startNewRow().addTableHeaderCell("format").addTableHeaderCell("example")
+                        .startNewRow().addCell(AnnotationPositions.OUTSIDE_ANNOTATED_STR).addCell("[MsgType]35=D[NEWORDERSINGLE]")
+                        .startNewRow().addCell(AnnotationPositions.INSIDE_ANNOTATED_STR).addCell("35[MsgType]=[NEWORDERSINGLE]D")
+                        .startNewRow().addCell(AnnotationPositions.REPLACED_STR).addCell("MsgType=NEWORDERSINGLE")
+                        .startNewRow().addCell(AnnotationPositions.NONE_STR).addCell("35=D")
+                        .endTable()
+                        .writeLn("You can also specify the annotation format using codes.  The first code for the tag annotation position, " +
+                                "the second code for the value annotation position. Or, just specify one code to apply to both the tag and value annotation positions.  " +
+                                "Codes are:")
+                        .addTable()
+                        .startNewRow().addTableHeaderCell("code").addTableHeaderCell("description")
+                        .startNewRow().addCell("b").addCell("Annotation will appear BEFORE the tag or value")
+                        .startNewRow().addCell("a").addCell("Annotation will appear AFTER the tag or value")
+                        .startNewRow().addCell("r").addCell("Annotation will REPLACE the tag or value")
+                        .startNewRow().addCell("_").addCell("No annotation will be displayed")
+                        .endTable()
+                        .writeLn("Any combination of 'b','a','r','_' is valid.")
+                        .writeLn("Examples:")
+                        .addTable()
+                        .startNewRow().addTableHeaderCell("codes").addTableHeaderCell("example")
+                        .startNewRow().addCell("ba").addCell("[MsgType]35=D[NEWORDERSINGLE]")
+                        .startNewRow().addCell("ab").addCell("35[MsgType]=[NEWORDERSINGLE]D")
+                        .startNewRow().addCell("bb").addCell("[MsgType]35=[NEWORDERSINGLE]D")
+                        .startNewRow().addCell("b").addCell("[MsgType]35=[NEWORDERSINGLE]D")
+                        .startNewRow().addCell("aa").addCell("35[MsgType]=D[NEWORDERSINGLE]")
+                        .startNewRow().addCell("a").addCell("35[MsgType]=D[NEWORDERSINGLE]")
+                        .startNewRow().addCell("a_").addCell("35[MsgType]=D")
+                        .startNewRow().addCell("_a").addCell("35=D[NEWORDERSINGLE]")
+                        .startNewRow().addCell("b_").addCell("[MsgType]35=D")
+                        .startNewRow().addCell("_b").addCell("35=[NEWORDERSINGLE]D")
+                        .startNewRow().addCell("rr").addCell("MsgType=NEWORDERSINGLE")
+                        .startNewRow().addCell("r").addCell("MsgType=NEWORDERSINGLE")
+                        .startNewRow().addCell("r_").addCell("MsgType=D")
+                        .startNewRow().addCell("__").addCell("35=D")
+                        .startNewRow().addCell("none").addCell("35=D")
+                        .endTable()
+                        .toFormattedText()))
 
         optionsHelp.add(OptionHelp(Option.align_vertical_columns, "Aligns tags, values and annotations when viewing messages in vertical format.", null, null))
 
-        optionsHelp.add(OptionHelp(Option.input_delimiter, "Defines the FIX delimiter used in the input fix messages.  Default to control character 1, i.e. \\u0001", ":", null))
+        optionsHelp.add(OptionHelp(Option.input_delimiter, "Defines the fix delimiter used in the input fix messages.  Default to control character 1, i.e. \\u0001", ":", null))
 
-        optionsHelp.add(OptionHelp(Option.output_delimiter, "Defines the delimiter to print between FIX tags in the formatted output.", ";", null))
+        optionsHelp.add(OptionHelp(Option.output_delimiter, "Defines the delimiter to print between fix tags in the formatted output.", ";", null))
 
-        optionsHelp.add(OptionHelp(Option.exclude_tags, "Tags to exclude from the formatted FIX.", "22,33", """A comma separated list of tags which should not be displayed in the output 'formatted' fix.
+        optionsHelp.add(OptionHelp(Option.exclude_tags, "Tags to exclude from the formatted fix.", "22,33", """A comma separated list of tags which should not be displayed in the output 'formatted' fix.
 e.g. '--exclude-tags 22,33' would hide tags 22 and 33 from being displayed.  Can be useful for hiding some of
 the less 'interesting' fix fields, such as BeginString, BodyLength or Checksum.  Yawn!"""))
 
@@ -186,25 +211,34 @@ the less 'interesting' fix fields, such as BeginString, BodyLength or Checksum. 
                 Option.input_line_format,
                 "Defines the regex to use, when parsing input lines.", 
                 "\\d\\d\\d\\d-\\d\\d-\\d\\d \\[(\\d)\\] (\\d+=.*)",
-                docWriterFactory.createNew().write("Although FIX messages appear in some logs as 'pure' FIX, they can also be displayed as part of an application's normal logging, and may have text appearing before/after the FIX message.  Such as timestamps, thread identifiers, etc.  This line can be customized for your application so that fixgrep knows where to find the actual FIX message in each log line.  Use in conjunction with the parameter 'line-regexgroup-for-fix' to tell fixgrep, which regex 'group' to use.  The default value for this is ").writeBold("^(\\d{4}-[01]\\d-[0-3]\\d[T\\s][0-2]\\d:[0-5]\\d:[0-5]\\d[\\.,]\\d+)?.*?(\\d+=.*${'$'})")
-                        .writeLn(", which looks for an optional ISO timestamp followed by any characters, followed by any number of tag=value pairs which make up the FIX message.  The regex 'group' that contains the FIX message is number 2, as the second set of capturing brackets (\\d+=.*${'$'}) is where we'd expect to find the fix tag.  This default format should match against most variations of FIX logging formats, however you might want to modify it if there is any additional information that you wish to 'capture' and print back out by modifying the line=format parameter, and specifying ${'$'}n tokens.  Or if you wish to optimize the searching.  For example, if your logs contain just FIX messages (no other text), input-line-format could be defined as '.*' and line-regexgroup-for-fix defined as zero 0.  (In regex group 0 is a 'special' group which returns the entire match.)")
-                        .writeBold("NOTE: Running this regex is the single biggest user of CPU in fixgrep ").write("because the regex is run against every line in the file/pipe being processed.  So it pays to experiment with different regexes to find one that is fastest.  The regex does not need to match the _whole_ line, just the part of the line that indicates it's a line of FIX, and a regex group (brackets) which captures the FIX message.")
+                docWriterFactory.createNew().write("Although fix messages appear in some logs as 'pure' fix, they can also be displayed as part of an application's " +
+                                "normal logging, and may have text appearing before/after the fix message (such as timestamps, thread identifiers, etc.)  This pattern can be customized " +
+                                "for your application so that fixgrep knows where to find the actual fix message in each log line.")
+                        .writeBold("^(\\d{4}-[01]\\d-[0-3]\\d[T\\s][0-2]\\d:[0-5]\\d:[0-5]\\d[\\.,]\\d+)?.*?(\\d+=.*\$)")
+                        .writeLn(", which looks for an optional ISO timestamp followed by any characters, followed by any number of tag=value pairs which make up the fix message.")
+                        .writeLn("This option can be used in conjunction with the parameter '${Option.line_regexgroup_for_fix.longForm}' to tell fixgrep, which regex 'group' to use.  The default value for this is " +
+                                "In the example above, the regex 'group' that contains the fix message is number 2, as the second set of capturing brackets (\\d+=.*${'$'}) is where we'd expect to find the " +
+                                "fix tag.  This default format should match against most variations of fix logging formats, however you might want to modify it if there is any additional " +
+                                "information that you wish to 'capture' and print back out by modifying the line=format parameter, and specifying ${'$'}n tokens.  Or if you wish to " +
+                                "optimize the searching.  For example, if your logs contain just fix messages (no other text), input-line-format could be defined as '.*' and " +
+                                "line-regexgroup-for-fix defined as zero 0.  (In regex group 0 is a 'special' group which returns the entire match.)")
+                        .writeBold("NOTE: Running this regex is the single biggest user of CPU in fixgrep ").write("because the regex is run against every line in the file/pipe being processed.  So it pays to experiment with different regexes to find one that is fastest.  The regex does not need to match the _whole_ line, just the part of the line that indicates it's a line of fix, and a regex group (brackets) which captures the fix message.")
                         .toFormattedText()))
 
-        optionsHelp.add(OptionHelp(Option.sort_by_tags, "Defines the preferred order of the FIX tags in the formatted output.", "35,11", "Let's face it, some tags are more interesting than others.  This parameter allows you to display the more 'interesting' tags at the front of the outputted message."))
+        optionsHelp.add(OptionHelp(Option.sort_by_tags, "Defines the preferred order of the fix tags in the formatted output.", "35,11", "Let's face it, some tags are more interesting than others.  This parameter allows you to display the more 'interesting' tags at the front of the outputted message."))
 
-        optionsHelp.add(OptionHelp(Option.only_include_tags, "Tags to include in the formatted fix.", "35,55,11", """A comma separated list of tags numbers to include in the output FIX.  Any other fields are discarded."""))
+        optionsHelp.add(OptionHelp(Option.only_include_tags, "Tags to include in the formatted fix.", "35,55,11", """A comma separated list of tags numbers to include in the output fix.  Any other fields are discarded."""))
 
         optionsHelp.add(OptionHelp(Option.exclude_messages_of_type, "Comma separated list of msgType codes.  Can be used to hide messages of certain types from being displayed.", "A,O", "e.g. To 'hide' Logon and Heartbeat messages, this parameter could be defined as 'A,0'"))
 
-        optionsHelp.add(OptionHelp(Option.vertical_format, "View messages in vertical format.  Default is false (horizontal).", null, null))
+        optionsHelp.add(OptionHelp(Option.vertical_format, "View messages in vertical format.  Turned off by default.", null, null))
 
         optionsHelp.add(OptionHelp(Option.suppress_indent_group_repeats, "Suppress indenting of group repeats in vertical format.", null,
                 """Often when viewing messages which have a lot of repeating groups e.g. prices, it is useful to see the repeating groups indented.  By default,
                     |groups will be indented in vertical formatting. Use this option to suppress this behaviour.  Has no effect when viewing messages in the default horizontal format.
                     |Note, indentation will also be suppressed if the user is attempting to sort tags.""".trimMargin()))
 
-        optionsHelp.add(OptionHelp(Option.debug, "Run in debug mode.", null, null))
+        optionsHelp.add(OptionHelp(Option.debug, "Run in debug mode.  Stack traces are displayed.  Logging is written to fixgrep.log in the fixgrep directory.", null, null))
 
         optionsHelp.add(OptionHelp(Option.help, "Displays help text", "",null))
 
@@ -225,7 +259,7 @@ the less 'interesting' fix fields, such as BeginString, BodyLength or Checksum. 
 
         optionsHelp.add(OptionHelp(Option.gimme_css, "Downloads a copy of the default fixgrep.css file to use with any fixgrep output formatted in HTML.", null,null))
 
-        optionsHelp.add(OptionHelp(Option.fix_spec_path, "Specifies an alternative fixspec definition to use.  Spec must be in the format used by quickfix.  Default spec is 5.0-SP2.", "FIX40_modified.xml","FixGrep first looks for the file relative to the current working directory.  If it is not found there, then FixGrep will look on the classpath.  Examples:\nmy-fix-spec.xml\npath/to/my-fix-spec.xml\n/package/path/to/my-fix-spec.xml"))
+        optionsHelp.add(OptionHelp(Option.fix_spec_path, "Specifies an alternative fixspec definition to use.  Spec must be in the format used by quickfix.  Default spec is 5.0-SP2.", "fix40_modified.xml","FixGrep first looks for the file relative to the current working directory.  If it is not found there, then FixGrep will look on the classpath.  Examples:\nmy-fix-spec.xml\npath/to/my-fix-spec.xml\n/package/path/to/my-fix-spec.xml"))
 
         //Verify we have all the options
         val optionsThatHaveHelpDefined = optionsHelp.map { it.option }
@@ -248,6 +282,12 @@ the less 'interesting' fix fields, such as BeginString, BodyLength or Checksum. 
             writer.startSection(HtmlOnlyTextEffect("option"))
                     .writeHeading(2, option.optionVariationsWithDashPrefixesAsCommaDelimitedString)
                     .writeLn(tagline, HtmlOnlyTextEffect("tagline"))
+            if(exampleValue != null){
+                writer.startSection(HtmlOnlyTextEffect("option-example"))
+                writer.write("Example usage:");
+                writer.writeCode("fixgrep ${option.abbreviationOrLongFormWithDashes} $exampleValue")
+                writer.endSection()
+            }
             if(description != null) writer.write(description, HtmlOnlyTextEffect("description"))
             return writer.endSection().toFormattedText()
         }

@@ -86,7 +86,7 @@ table.doc-table td, table.doc-table th {
 table.doc-table th {
     font-weight: bold;
     font-family: varela round,sans-serif;
-    font-size: 1.2em;
+    font-size: 1.1em;
 }
 
 table.color256-table td {
@@ -184,6 +184,14 @@ div.example-arguments, div.option h2, div.option h2 a{
     text-rendering: optimizelegibility;
     font-weight: bold;
     line-height: 2em;
+}
+
+div.option-example xmp {
+    white-space: nowrap;
+    #unicode-bidi: embed;
+    color: blue;
+    font-weight: 300;
+    text-rendering: optimizelegibility;
 }
 
 div.example-list h2, div.example-list h2 a{

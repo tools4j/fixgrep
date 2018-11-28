@@ -77,6 +77,10 @@ enum class Option(val abbreviation: String?, val longForm: String, val otherForm
         }
     }
 
+    val abbreviationOrLongFormWithDashes: String by lazy {
+        if(abbreviation != null) "-${abbreviation}" else "--${longForm}"
+    }
+
     val optionVariations: List<String> by lazy {
         val options = ArrayList<String>()
         if(abbreviation != null) options.add(abbreviation)

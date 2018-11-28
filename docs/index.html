@@ -90,7 +90,7 @@ table.doc-table td, table.doc-table th {
 table.doc-table th {
     font-weight: bold;
     font-family: varela round,sans-serif;
-    font-size: 1.2em;
+    font-size: 1.1em;
 }
 
 table.color256-table td {
@@ -188,6 +188,14 @@ div.example-arguments, div.option h2, div.option h2 a{
     text-rendering: optimizelegibility;
     font-weight: bold;
     line-height: 2em;
+}
+
+div.option-example xmp {
+    white-space: nowrap;
+    #unicode-bidi: embed;
+    color: blue;
+    font-weight: 300;
+    text-rendering: optimizelegibility;
 }
 
 div.example-list h2, div.example-list h2 a{
@@ -865,12 +873,14 @@ function TableOfContents(container, output) {
 fixgrep is a command line utility for making FIX protocol messages more readable.<br/><h2 id='fixgrep-features:'>fixgrep features:</h2>
 <ul>
 <li>Annotated fix tags and values.</li>
+<li>Horizontal (message per line) and vertical (field per line) formatting.</li>
 <li>Highlighting of tags and lines matching specified criteria.</li>
+<li>Grouping of messages by order chain.</li>
 <li>Indenting of repeating groups (when in vertical format)</li>
-<li>'Hiding' of 'uninteresting' tags.</li>
 <li>Coloring of message by type.</li>
 <li>Customized regex for extraction of FIX message from your logs.</li>
 <li>Sort by tags to bring more important tags to the front of the message.</li>
+<li>Exclusion of 'uninteresting' tags from the outputted FIX.</li>
 <li>Exclusion of 'uninteresting' messages from the outputted FIX</li>
 <li>Output to text or html format</li>
 <li>Customization of input/output delimiters.</li>
@@ -966,46 +976,28 @@ fixgrep is a command line utility for making FIX protocol messages more readable
 <div class='console'>
 <div class='order-header'>
 =================================================================================<br/>
-ORDER orderId:123 clOrdId:ABC<br/>
+ORDER orderId:ABC clOrdId:C123<br/>
 ================================================================================</div>
-<div class='msg order-request'><div class='fields'><span class='field annotatedField'><span class='tag annotation'>[MsgType]</span><span class='tag raw bold'>35</span><span class='equals bold'>=</span><span class='value raw bold'>D</span><span class='value annotation'>[NEWORDERSINGLE]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[SenderCompID]</span><span class='tag raw bold'>49</span><span class='equals bold'>=</span><span class='value raw bold'>CLIENT</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[TargetCompID]</span><span class='tag raw bold'>56</span><span class='equals bold'>=</span><span class='value raw bold'>SERVER</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[ClOrdID]</span><span class='tag raw bold'>11</span><span class='equals bold'>=</span><span class='value raw bold'>ABC</span></span></div></div>
-<div class='msg order-response'><div class='fields'><span class='field annotatedField'><span class='tag annotation'>[MsgType]</span><span class='tag raw bold'>35</span><span class='equals bold'>=</span><span class='value raw bold'>8</span><span class='value annotation'>[EXECUTIONREPORT]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[SenderCompID]</span><span class='tag raw bold'>49</span><span class='equals bold'>=</span><span class='value raw bold'>SERVER</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[TargetCompID]</span><span class='tag raw bold'>56</span><span class='equals bold'>=</span><span class='value raw bold'>CLIENT</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[ExecType]</span><span class='tag raw bold'>150</span><span class='equals bold'>=</span><span class='value raw bold'>0</span><span class='value annotation'>[NEW]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[ClOrdID]</span><span class='tag raw bold'>11</span><span class='equals bold'>=</span><span class='value raw bold'>ABC</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[OrderID]</span><span class='tag raw bold'>37</span><span class='equals bold'>=</span><span class='value raw bold'>123</span></span></div></div>
-<div class='msg order-response'><div class='fields'><span class='field annotatedField'><span class='tag annotation'>[MsgType]</span><span class='tag raw bold'>35</span><span class='equals bold'>=</span><span class='value raw bold'>8</span><span class='value annotation'>[EXECUTIONREPORT]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[SenderCompID]</span><span class='tag raw bold'>49</span><span class='equals bold'>=</span><span class='value raw bold'>SERVER</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[TargetCompID]</span><span class='tag raw bold'>56</span><span class='equals bold'>=</span><span class='value raw bold'>CLIENT</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[ExecType]</span><span class='tag raw bold'>150</span><span class='equals bold'>=</span><span class='value raw bold'>F</span><span class='value annotation'>[FILL]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[ClOrdID]</span><span class='tag raw bold'>11</span><span class='equals bold'>=</span><span class='value raw bold'>ABC</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[OrderID]</span><span class='tag raw bold'>37</span><span class='equals bold'>=</span><span class='value raw bold'>123</span></span></div></div>
-<div class='msg order-response'><div class='fields'><span class='field annotatedField'><span class='tag annotation'>[MsgType]</span><span class='tag raw bold'>35</span><span class='equals bold'>=</span><span class='value raw bold'>8</span><span class='value annotation'>[EXECUTIONREPORT]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[SenderCompID]</span><span class='tag raw bold'>49</span><span class='equals bold'>=</span><span class='value raw bold'>SERVER</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[TargetCompID]</span><span class='tag raw bold'>56</span><span class='equals bold'>=</span><span class='value raw bold'>CLIENT</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[ExecType]</span><span class='tag raw bold'>150</span><span class='equals bold'>=</span><span class='value raw bold'>F</span><span class='value annotation'>[FILL]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[OrderID]</span><span class='tag raw bold'>37</span><span class='equals bold'>=</span><span class='value raw bold'>123</span></span></div></div>
-<div class='msg order-request'><div class='fields'><span class='field annotatedField'><span class='tag annotation'>[MsgType]</span><span class='tag raw bold'>35</span><span class='equals bold'>=</span><span class='value raw bold'>G</span><span class='value annotation'>[ORDERCANCELREPLACEREQUEST]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[SenderCompID]</span><span class='tag raw bold'>49</span><span class='equals bold'>=</span><span class='value raw bold'>CLIENT</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[TargetCompID]</span><span class='tag raw bold'>56</span><span class='equals bold'>=</span><span class='value raw bold'>SERVER</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[OrigClOrdID]</span><span class='tag raw bold'>41</span><span class='equals bold'>=</span><span class='value raw bold'>ABC</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[ClOrdID]</span><span class='tag raw bold'>11</span><span class='equals bold'>=</span><span class='value raw bold'>DEF</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[OrderID]</span><span class='tag raw bold'>37</span><span class='equals bold'>=</span><span class='value raw bold'>123</span></span></div></div>
-<div class='msg order-request'><div class='fields'><span class='field annotatedField'><span class='tag annotation'>[MsgType]</span><span class='tag raw bold'>35</span><span class='equals bold'>=</span><span class='value raw bold'>G</span><span class='value annotation'>[ORDERCANCELREPLACEREQUEST]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[SenderCompID]</span><span class='tag raw bold'>49</span><span class='equals bold'>=</span><span class='value raw bold'>CLIENT</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[TargetCompID]</span><span class='tag raw bold'>56</span><span class='equals bold'>=</span><span class='value raw bold'>SERVER</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[OrigClOrdID]</span><span class='tag raw bold'>41</span><span class='equals bold'>=</span><span class='value raw bold'>DEF</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[ClOrdID]</span><span class='tag raw bold'>11</span><span class='equals bold'>=</span><span class='value raw bold'>GHI</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[OrdStatus]</span><span class='tag raw bold'>39</span><span class='equals bold'>=</span><span class='value raw bold'>8</span><span class='value annotation'>[REJECTED]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[CxlRejResponseTo]</span><span class='tag raw bold'>434</span><span class='equals bold'>=</span><span class='value raw bold'>2</span><span class='value annotation'>[ORDER_CANCELREPLACE_REQUEST]</span></span></div></div>
-<div class='msg order-response'><div class='fields'><span class='field annotatedField'><span class='tag annotation'>[MsgType]</span><span class='tag raw bold'>35</span><span class='equals bold'>=</span><span class='value raw bold'>9</span><span class='value annotation'>[ORDERCANCELREJECT]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[SenderCompID]</span><span class='tag raw bold'>49</span><span class='equals bold'>=</span><span class='value raw bold'>SERVER</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[TargetCompID]</span><span class='tag raw bold'>56</span><span class='equals bold'>=</span><span class='value raw bold'>CLIENT</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[OrigClOrdID]</span><span class='tag raw bold'>41</span><span class='equals bold'>=</span><span class='value raw bold'>DEF</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[ClOrdID]</span><span class='tag raw bold'>11</span><span class='equals bold'>=</span><span class='value raw bold'>GHI</span></span></div></div>
-<div class='msg order-response'><div class='fields'><span class='field annotatedField'><span class='tag annotation'>[MsgType]</span><span class='tag raw bold'>35</span><span class='equals bold'>=</span><span class='value raw bold'>8</span><span class='value annotation'>[EXECUTIONREPORT]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[SenderCompID]</span><span class='tag raw bold'>49</span><span class='equals bold'>=</span><span class='value raw bold'>SERVER</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[TargetCompID]</span><span class='tag raw bold'>56</span><span class='equals bold'>=</span><span class='value raw bold'>CLIENT</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[ExecType]</span><span class='tag raw bold'>150</span><span class='equals bold'>=</span><span class='value raw bold'>F</span><span class='value annotation'>[FILL]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[OrderID]</span><span class='tag raw bold'>37</span><span class='equals bold'>=</span><span class='value raw bold'>123</span></span></div></div>
+<div class='msg order-request'><div class='fields'><span class='field annotatedField'><span class='tag annotation'>[MsgType]</span><span class='tag raw bold'>35</span><span class='equals bold'>=</span><span class='value raw bold'>D</span><span class='value annotation'>[NEWORDERSINGLE]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[ClOrdID]</span><span class='tag raw bold'>11</span><span class='equals bold'>=</span><span class='value raw bold'>C123</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[Symbol]</span><span class='tag raw bold'>55</span><span class='equals bold'>=</span><span class='value raw bold'>AUD/USD</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[Side]</span><span class='tag raw bold'>54</span><span class='equals bold'>=</span><span class='value raw bold'>2</span><span class='value annotation'>[SELL]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[OrderQty]</span><span class='tag raw bold'>38</span><span class='equals bold'>=</span><span class='value raw bold'>269440</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[OrdType]</span><span class='tag raw bold'>40</span><span class='equals bold'>=</span><span class='value raw bold'>2</span><span class='value annotation'>[LIMIT]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[Price]</span><span class='tag raw bold'>44</span><span class='equals bold'>=</span><span class='value raw bold'>99.98</span></span></div></div>
+<div class='msg order-response'><div class='fields'><span class='field annotatedField'><span class='tag annotation'>[MsgType]</span><span class='tag raw bold'>35</span><span class='equals bold'>=</span><span class='value raw bold'>8</span><span class='value annotation'>[EXECUTIONREPORT]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[OrderID]</span><span class='tag raw bold'>37</span><span class='equals bold'>=</span><span class='value raw bold'>ABC</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[ClOrdID]</span><span class='tag raw bold'>11</span><span class='equals bold'>=</span><span class='value raw bold'>C123</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[OrigClOrdID]</span><span class='tag raw bold'>41</span><span class='equals bold'>=</span><span class='value raw bold'>C123</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[Symbol]</span><span class='tag raw bold'>55</span><span class='equals bold'>=</span><span class='value raw bold'>AUD/USD</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[Side]</span><span class='tag raw bold'>54</span><span class='equals bold'>=</span><span class='value raw bold'>2</span><span class='value annotation'>[SELL]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[ExecType]</span><span class='tag raw bold'>150</span><span class='equals bold'>=</span><span class='value raw bold'>0</span><span class='value annotation'>[NEW]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[LeavesQty]</span><span class='tag raw bold'>151</span><span class='equals bold'>=</span><span class='value raw bold'>269440</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[Price]</span><span class='tag raw bold'>44</span><span class='equals bold'>=</span><span class='value raw bold'>99.98</span></span></div></div>
+<div class='msg order-response'><div class='fields'><span class='field annotatedField'><span class='tag annotation'>[MsgType]</span><span class='tag raw bold'>35</span><span class='equals bold'>=</span><span class='value raw bold'>8</span><span class='value annotation'>[EXECUTIONREPORT]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[OrderID]</span><span class='tag raw bold'>37</span><span class='equals bold'>=</span><span class='value raw bold'>ABC</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[ClOrdID]</span><span class='tag raw bold'>11</span><span class='equals bold'>=</span><span class='value raw bold'>C123</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[OrigClOrdID]</span><span class='tag raw bold'>41</span><span class='equals bold'>=</span><span class='value raw bold'>C123</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[Symbol]</span><span class='tag raw bold'>55</span><span class='equals bold'>=</span><span class='value raw bold'>AUD/USD</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[Side]</span><span class='tag raw bold'>54</span><span class='equals bold'>=</span><span class='value raw bold'>2</span><span class='value annotation'>[SELL]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[ExecType]</span><span class='tag raw bold'>150</span><span class='equals bold'>=</span><span class='value raw bold'>F</span><span class='value annotation'>[FILL]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[LeavesQty]</span><span class='tag raw bold'>151</span><span class='equals bold'>=</span><span class='value raw bold'>142770</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[LastQty]</span><span class='tag raw bold'>32</span><span class='equals bold'>=</span><span class='value raw bold'>126670</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[Price]</span><span class='tag raw bold'>44</span><span class='equals bold'>=</span><span class='value raw bold'>99.98</span></span></div></div>
+<div class='msg order-response'><div class='fields'><span class='field annotatedField'><span class='tag annotation'>[MsgType]</span><span class='tag raw bold'>35</span><span class='equals bold'>=</span><span class='value raw bold'>8</span><span class='value annotation'>[EXECUTIONREPORT]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[OrderID]</span><span class='tag raw bold'>37</span><span class='equals bold'>=</span><span class='value raw bold'>ABC</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[ClOrdID]</span><span class='tag raw bold'>11</span><span class='equals bold'>=</span><span class='value raw bold'>C123</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[OrigClOrdID]</span><span class='tag raw bold'>41</span><span class='equals bold'>=</span><span class='value raw bold'>C123</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[Symbol]</span><span class='tag raw bold'>55</span><span class='equals bold'>=</span><span class='value raw bold'>AUD/USD</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[Side]</span><span class='tag raw bold'>54</span><span class='equals bold'>=</span><span class='value raw bold'>2</span><span class='value annotation'>[SELL]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[ExecType]</span><span class='tag raw bold'>150</span><span class='equals bold'>=</span><span class='value raw bold'>F</span><span class='value annotation'>[FILL]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[LeavesQty]</span><span class='tag raw bold'>151</span><span class='equals bold'>=</span><span class='value raw bold'>0</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[LastQty]</span><span class='tag raw bold'>32</span><span class='equals bold'>=</span><span class='value raw bold'>142770</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[Price]</span><span class='tag raw bold'>44</span><span class='equals bold'>=</span><span class='value raw bold'>99.98</span></span></div></div>
 <br/>
 <div class='order-header'>
 =================================================================================<br/>
-ORDER orderId:123 clOrdId:ABC<br/>
+ORDER orderId:DEF clOrdId:C456<br/>
 ================================================================================</div>
-<div class='msg order-request'><div class='fields'><span class='field annotatedField'><span class='tag annotation'>[MsgType]</span><span class='tag raw bold'>35</span><span class='equals bold'>=</span><span class='value raw bold'>D</span><span class='value annotation'>[NEWORDERSINGLE]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[SenderCompID]</span><span class='tag raw bold'>49</span><span class='equals bold'>=</span><span class='value raw bold'>CLIENT2</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[TargetCompID]</span><span class='tag raw bold'>56</span><span class='equals bold'>=</span><span class='value raw bold'>SERVER2</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[ClOrdID]</span><span class='tag raw bold'>11</span><span class='equals bold'>=</span><span class='value raw bold'>ABC</span></span></div></div>
-<div class='msg order-response'><div class='fields'><span class='field annotatedField'><span class='tag annotation'>[MsgType]</span><span class='tag raw bold'>35</span><span class='equals bold'>=</span><span class='value raw bold'>8</span><span class='value annotation'>[EXECUTIONREPORT]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[SenderCompID]</span><span class='tag raw bold'>49</span><span class='equals bold'>=</span><span class='value raw bold'>SERVER2</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[TargetCompID]</span><span class='tag raw bold'>56</span><span class='equals bold'>=</span><span class='value raw bold'>CLIENT2</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[ExecType]</span><span class='tag raw bold'>150</span><span class='equals bold'>=</span><span class='value raw bold'>0</span><span class='value annotation'>[NEW]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[ClOrdID]</span><span class='tag raw bold'>11</span><span class='equals bold'>=</span><span class='value raw bold'>ABC</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[OrderID]</span><span class='tag raw bold'>37</span><span class='equals bold'>=</span><span class='value raw bold'>123</span></span></div></div>
-<div class='msg order-response'><div class='fields'><span class='field annotatedField'><span class='tag annotation'>[MsgType]</span><span class='tag raw bold'>35</span><span class='equals bold'>=</span><span class='value raw bold'>8</span><span class='value annotation'>[EXECUTIONREPORT]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[SenderCompID]</span><span class='tag raw bold'>49</span><span class='equals bold'>=</span><span class='value raw bold'>SERVER2</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[TargetCompID]</span><span class='tag raw bold'>56</span><span class='equals bold'>=</span><span class='value raw bold'>CLIENT2</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[ExecType]</span><span class='tag raw bold'>150</span><span class='equals bold'>=</span><span class='value raw bold'>F</span><span class='value annotation'>[FILL]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[ClOrdID]</span><span class='tag raw bold'>11</span><span class='equals bold'>=</span><span class='value raw bold'>ABC</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[OrderID]</span><span class='tag raw bold'>37</span><span class='equals bold'>=</span><span class='value raw bold'>123</span></span></div></div>
-<div class='msg order-response'><div class='fields'><span class='field annotatedField'><span class='tag annotation'>[MsgType]</span><span class='tag raw bold'>35</span><span class='equals bold'>=</span><span class='value raw bold'>8</span><span class='value annotation'>[EXECUTIONREPORT]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[SenderCompID]</span><span class='tag raw bold'>49</span><span class='equals bold'>=</span><span class='value raw bold'>SERVER2</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[TargetCompID]</span><span class='tag raw bold'>56</span><span class='equals bold'>=</span><span class='value raw bold'>CLIENT2</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[ExecType]</span><span class='tag raw bold'>150</span><span class='equals bold'>=</span><span class='value raw bold'>F</span><span class='value annotation'>[FILL]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[ClOrdID]</span><span class='tag raw bold'>11</span><span class='equals bold'>=</span><span class='value raw bold'>ABC</span></span></div></div>
-<div class='msg order-response'><div class='fields'><span class='field annotatedField'><span class='tag annotation'>[MsgType]</span><span class='tag raw bold'>35</span><span class='equals bold'>=</span><span class='value raw bold'>8</span><span class='value annotation'>[EXECUTIONREPORT]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[SenderCompID]</span><span class='tag raw bold'>49</span><span class='equals bold'>=</span><span class='value raw bold'>SERVER2</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[TargetCompID]</span><span class='tag raw bold'>56</span><span class='equals bold'>=</span><span class='value raw bold'>CLIENT2</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[ExecType]</span><span class='tag raw bold'>150</span><span class='equals bold'>=</span><span class='value raw bold'>F</span><span class='value annotation'>[FILL]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[OrderID]</span><span class='tag raw bold'>37</span><span class='equals bold'>=</span><span class='value raw bold'>123</span></span></div></div>
-<div class='msg order-request'><div class='fields'><span class='field annotatedField'><span class='tag annotation'>[MsgType]</span><span class='tag raw bold'>35</span><span class='equals bold'>=</span><span class='value raw bold'>G</span><span class='value annotation'>[ORDERCANCELREPLACEREQUEST]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[SenderCompID]</span><span class='tag raw bold'>49</span><span class='equals bold'>=</span><span class='value raw bold'>CLIENT2</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[TargetCompID]</span><span class='tag raw bold'>56</span><span class='equals bold'>=</span><span class='value raw bold'>SERVER2</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[OrigClOrdID]</span><span class='tag raw bold'>41</span><span class='equals bold'>=</span><span class='value raw bold'>ABC</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[ClOrdID]</span><span class='tag raw bold'>11</span><span class='equals bold'>=</span><span class='value raw bold'>DEF</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[OrderID]</span><span class='tag raw bold'>37</span><span class='equals bold'>=</span><span class='value raw bold'>123</span></span></div></div>
-<div class='msg order-response'><div class='fields'><span class='field annotatedField'><span class='tag annotation'>[MsgType]</span><span class='tag raw bold'>35</span><span class='equals bold'>=</span><span class='value raw bold'>8</span><span class='value annotation'>[EXECUTIONREPORT]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[SenderCompID]</span><span class='tag raw bold'>49</span><span class='equals bold'>=</span><span class='value raw bold'>SERVER2</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[TargetCompID]</span><span class='tag raw bold'>56</span><span class='equals bold'>=</span><span class='value raw bold'>CLIENT2</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[ExecType]</span><span class='tag raw bold'>150</span><span class='equals bold'>=</span><span class='value raw bold'>F</span><span class='value annotation'>[FILL]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[OrderID]</span><span class='tag raw bold'>37</span><span class='equals bold'>=</span><span class='value raw bold'>123</span></span></div></div>
-<div class='msg order-request'><div class='fields'><span class='field annotatedField'><span class='tag annotation'>[MsgType]</span><span class='tag raw bold'>35</span><span class='equals bold'>=</span><span class='value raw bold'>G</span><span class='value annotation'>[ORDERCANCELREPLACEREQUEST]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[SenderCompID]</span><span class='tag raw bold'>49</span><span class='equals bold'>=</span><span class='value raw bold'>CLIENT2</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[TargetCompID]</span><span class='tag raw bold'>56</span><span class='equals bold'>=</span><span class='value raw bold'>SERVER2</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[OrigClOrdID]</span><span class='tag raw bold'>41</span><span class='equals bold'>=</span><span class='value raw bold'>DEF</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[ClOrdID]</span><span class='tag raw bold'>11</span><span class='equals bold'>=</span><span class='value raw bold'>GHI</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[OrdStatus]</span><span class='tag raw bold'>39</span><span class='equals bold'>=</span><span class='value raw bold'>8</span><span class='value annotation'>[REJECTED]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[CxlRejResponseTo]</span><span class='tag raw bold'>434</span><span class='equals bold'>=</span><span class='value raw bold'>2</span><span class='value annotation'>[ORDER_CANCELREPLACE_REQUEST]</span></span></div></div>
-<div class='msg order-response'><div class='fields'><span class='field annotatedField'><span class='tag annotation'>[MsgType]</span><span class='tag raw bold'>35</span><span class='equals bold'>=</span><span class='value raw bold'>9</span><span class='value annotation'>[ORDERCANCELREJECT]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[SenderCompID]</span><span class='tag raw bold'>49</span><span class='equals bold'>=</span><span class='value raw bold'>SERVER2</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[TargetCompID]</span><span class='tag raw bold'>56</span><span class='equals bold'>=</span><span class='value raw bold'>CLIENT2</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[OrigClOrdID]</span><span class='tag raw bold'>41</span><span class='equals bold'>=</span><span class='value raw bold'>DEF</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[ClOrdID]</span><span class='tag raw bold'>11</span><span class='equals bold'>=</span><span class='value raw bold'>GHI</span></span></div></div>
-<div class='msg order-response'><div class='fields'><span class='field annotatedField'><span class='tag annotation'>[MsgType]</span><span class='tag raw bold'>35</span><span class='equals bold'>=</span><span class='value raw bold'>8</span><span class='value annotation'>[EXECUTIONREPORT]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[SenderCompID]</span><span class='tag raw bold'>49</span><span class='equals bold'>=</span><span class='value raw bold'>SERVER2</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[TargetCompID]</span><span class='tag raw bold'>56</span><span class='equals bold'>=</span><span class='value raw bold'>CLIENT2</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[ExecType]</span><span class='tag raw bold'>150</span><span class='equals bold'>=</span><span class='value raw bold'>F</span><span class='value annotation'>[FILL]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[OrderID]</span><span class='tag raw bold'>37</span><span class='equals bold'>=</span><span class='value raw bold'>123</span></span></div></div>
-<div class='msg order-request'><div class='fields'><span class='field annotatedField'><span class='tag annotation'>[MsgType]</span><span class='tag raw bold'>35</span><span class='equals bold'>=</span><span class='value raw bold'>H</span><span class='value annotation'>[ORDERSTATUSREQUEST]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[SenderCompID]</span><span class='tag raw bold'>49</span><span class='equals bold'>=</span><span class='value raw bold'>CLIENT2</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[TargetCompID]</span><span class='tag raw bold'>56</span><span class='equals bold'>=</span><span class='value raw bold'>SERVER2</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[ClOrdID]</span><span class='tag raw bold'>11</span><span class='equals bold'>=</span><span class='value raw bold'>GHI</span></span></div></div>
-<div class='msg order-response'><div class='fields'><span class='field annotatedField'><span class='tag annotation'>[MsgType]</span><span class='tag raw bold'>35</span><span class='equals bold'>=</span><span class='value raw bold'>8</span><span class='value annotation'>[EXECUTIONREPORT]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[SenderCompID]</span><span class='tag raw bold'>49</span><span class='equals bold'>=</span><span class='value raw bold'>SERVER2</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[TargetCompID]</span><span class='tag raw bold'>56</span><span class='equals bold'>=</span><span class='value raw bold'>CLIENT2</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[ExecType]</span><span class='tag raw bold'>150</span><span class='equals bold'>=</span><span class='value raw bold'>I</span><span class='value annotation'>[ORDER_STATUS]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[OrderID]</span><span class='tag raw bold'>37</span><span class='equals bold'>=</span><span class='value raw bold'>123</span></span></div></div>
-<div class='msg order-request'><div class='fields'><span class='field annotatedField'><span class='tag annotation'>[MsgType]</span><span class='tag raw bold'>35</span><span class='equals bold'>=</span><span class='value raw bold'>H</span><span class='value annotation'>[ORDERSTATUSREQUEST]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[SenderCompID]</span><span class='tag raw bold'>49</span><span class='equals bold'>=</span><span class='value raw bold'>CLIENT2</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[TargetCompID]</span><span class='tag raw bold'>56</span><span class='equals bold'>=</span><span class='value raw bold'>SERVER2</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[OrderID]</span><span class='tag raw bold'>37</span><span class='equals bold'>=</span><span class='value raw bold'>123</span></span></div></div>
-<div class='msg order-response'><div class='fields'><span class='field annotatedField'><span class='tag annotation'>[MsgType]</span><span class='tag raw bold'>35</span><span class='equals bold'>=</span><span class='value raw bold'>8</span><span class='value annotation'>[EXECUTIONREPORT]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[SenderCompID]</span><span class='tag raw bold'>49</span><span class='equals bold'>=</span><span class='value raw bold'>SERVER2</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[TargetCompID]</span><span class='tag raw bold'>56</span><span class='equals bold'>=</span><span class='value raw bold'>CLIENT2</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[ExecType]</span><span class='tag raw bold'>150</span><span class='equals bold'>=</span><span class='value raw bold'>I</span><span class='value annotation'>[ORDER_STATUS]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[OrderID]</span><span class='tag raw bold'>37</span><span class='equals bold'>=</span><span class='value raw bold'>123</span></span></div></div>
-<div class='msg order-request'><div class='fields'><span class='field annotatedField'><span class='tag annotation'>[MsgType]</span><span class='tag raw bold'>35</span><span class='equals bold'>=</span><span class='value raw bold'>F</span><span class='value annotation'>[ORDERCANCELREQUEST]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[SenderCompID]</span><span class='tag raw bold'>49</span><span class='equals bold'>=</span><span class='value raw bold'>CLIENT2</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[TargetCompID]</span><span class='tag raw bold'>56</span><span class='equals bold'>=</span><span class='value raw bold'>SERVER2</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[ClOrdID]</span><span class='tag raw bold'>11</span><span class='equals bold'>=</span><span class='value raw bold'>GHI</span></span></div></div>
-<div class='msg order-response'><div class='fields'><span class='field annotatedField'><span class='tag annotation'>[MsgType]</span><span class='tag raw bold'>35</span><span class='equals bold'>=</span><span class='value raw bold'>8</span><span class='value annotation'>[EXECUTIONREPORT]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[SenderCompID]</span><span class='tag raw bold'>49</span><span class='equals bold'>=</span><span class='value raw bold'>SERVER2</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[TargetCompID]</span><span class='tag raw bold'>56</span><span class='equals bold'>=</span><span class='value raw bold'>CLIENT2</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[ExecType]</span><span class='tag raw bold'>150</span><span class='equals bold'>=</span><span class='value raw bold'>4</span><span class='value annotation'>[CANCELED]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[OrderID]</span><span class='tag raw bold'>37</span><span class='equals bold'>=</span><span class='value raw bold'>123</span></span></div></div>
-<br/>
-<br/>
-ORPHAN MESSAGES:<br/>
-<div class='msg orphan-message'><div class='fields'><span class='field annotatedField'><span class='tag annotation'>[MsgType]</span><span class='tag raw bold'>35</span><span class='equals bold'>=</span><span class='value raw bold'>8</span><span class='value annotation'>[EXECUTIONREPORT]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[SenderCompID]</span><span class='tag raw bold'>49</span><span class='equals bold'>=</span><span class='value raw bold'>SERVER</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[TargetCompID]</span><span class='tag raw bold'>56</span><span class='equals bold'>=</span><span class='value raw bold'>CLIENT</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[ExecType]</span><span class='tag raw bold'>150</span><span class='equals bold'>=</span><span class='value raw bold'>F=123</span></span></div></div></div>
+<div class='msg order-request'><div class='fields'><span class='field annotatedField'><span class='tag annotation'>[MsgType]</span><span class='tag raw bold'>35</span><span class='equals bold'>=</span><span class='value raw bold'>D</span><span class='value annotation'>[NEWORDERSINGLE]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[ClOrdID]</span><span class='tag raw bold'>11</span><span class='equals bold'>=</span><span class='value raw bold'>C456</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[Symbol]</span><span class='tag raw bold'>55</span><span class='equals bold'>=</span><span class='value raw bold'>AUD/USD</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[Side]</span><span class='tag raw bold'>54</span><span class='equals bold'>=</span><span class='value raw bold'>1</span><span class='value annotation'>[BUY]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[OrderQty]</span><span class='tag raw bold'>38</span><span class='equals bold'>=</span><span class='value raw bold'>902070</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[OrdType]</span><span class='tag raw bold'>40</span><span class='equals bold'>=</span><span class='value raw bold'>2</span><span class='value annotation'>[LIMIT]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[Price]</span><span class='tag raw bold'>44</span><span class='equals bold'>=</span><span class='value raw bold'>99.98</span></span></div></div>
+<div class='msg order-response'><div class='fields'><span class='field annotatedField'><span class='tag annotation'>[MsgType]</span><span class='tag raw bold'>35</span><span class='equals bold'>=</span><span class='value raw bold'>8</span><span class='value annotation'>[EXECUTIONREPORT]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[OrderID]</span><span class='tag raw bold'>37</span><span class='equals bold'>=</span><span class='value raw bold'>DEF</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[ClOrdID]</span><span class='tag raw bold'>11</span><span class='equals bold'>=</span><span class='value raw bold'>C456</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[OrigClOrdID]</span><span class='tag raw bold'>41</span><span class='equals bold'>=</span><span class='value raw bold'>C456</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[Symbol]</span><span class='tag raw bold'>55</span><span class='equals bold'>=</span><span class='value raw bold'>AUD/USD</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[Side]</span><span class='tag raw bold'>54</span><span class='equals bold'>=</span><span class='value raw bold'>1</span><span class='value annotation'>[BUY]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[ExecType]</span><span class='tag raw bold'>150</span><span class='equals bold'>=</span><span class='value raw bold'>0</span><span class='value annotation'>[NEW]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[LeavesQty]</span><span class='tag raw bold'>151</span><span class='equals bold'>=</span><span class='value raw bold'>902070</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[Price]</span><span class='tag raw bold'>44</span><span class='equals bold'>=</span><span class='value raw bold'>99.98</span></span></div></div>
+<div class='msg order-request'><div class='fields'><span class='field annotatedField'><span class='tag annotation'>[MsgType]</span><span class='tag raw bold'>35</span><span class='equals bold'>=</span><span class='value raw bold'>G</span><span class='value annotation'>[ORDERCANCELREPLACEREQUEST]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[OrigClOrdID]</span><span class='tag raw bold'>41</span><span class='equals bold'>=</span><span class='value raw bold'>C456</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[ClOrdID]</span><span class='tag raw bold'>11</span><span class='equals bold'>=</span><span class='value raw bold'>C789</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[Symbol]</span><span class='tag raw bold'>55</span><span class='equals bold'>=</span><span class='value raw bold'>AUD/USD</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[Side]</span><span class='tag raw bold'>54</span><span class='equals bold'>=</span><span class='value raw bold'>1</span><span class='value annotation'>[BUY]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[OrderQty]</span><span class='tag raw bold'>38</span><span class='equals bold'>=</span><span class='value raw bold'>902870</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[OrdType]</span><span class='tag raw bold'>40</span><span class='equals bold'>=</span><span class='value raw bold'>2</span><span class='value annotation'>[LIMIT]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[Price]</span><span class='tag raw bold'>44</span><span class='equals bold'>=</span><span class='value raw bold'>99.88</span></span></div></div>
+<div class='msg order-response'><div class='fields'><span class='field annotatedField'><span class='tag annotation'>[MsgType]</span><span class='tag raw bold'>35</span><span class='equals bold'>=</span><span class='value raw bold'>8</span><span class='value annotation'>[EXECUTIONREPORT]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[OrderID]</span><span class='tag raw bold'>37</span><span class='equals bold'>=</span><span class='value raw bold'>DEF</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[ClOrdID]</span><span class='tag raw bold'>11</span><span class='equals bold'>=</span><span class='value raw bold'>C789</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[OrigClOrdID]</span><span class='tag raw bold'>41</span><span class='equals bold'>=</span><span class='value raw bold'>C456</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[Symbol]</span><span class='tag raw bold'>55</span><span class='equals bold'>=</span><span class='value raw bold'>AUD/USD</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[Side]</span><span class='tag raw bold'>54</span><span class='equals bold'>=</span><span class='value raw bold'>1</span><span class='value annotation'>[BUY]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[ExecType]</span><span class='tag raw bold'>150</span><span class='equals bold'>=</span><span class='value raw bold'>5</span><span class='value annotation'>[REPLACED]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[LeavesQty]</span><span class='tag raw bold'>151</span><span class='equals bold'>=</span><span class='value raw bold'>902870</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[Price]</span><span class='tag raw bold'>44</span><span class='equals bold'>=</span><span class='value raw bold'>99.88</span></span></div></div>
+<div class='msg order-response'><div class='fields'><span class='field annotatedField'><span class='tag annotation'>[MsgType]</span><span class='tag raw bold'>35</span><span class='equals bold'>=</span><span class='value raw bold'>8</span><span class='value annotation'>[EXECUTIONREPORT]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[OrderID]</span><span class='tag raw bold'>37</span><span class='equals bold'>=</span><span class='value raw bold'>DEF</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[ClOrdID]</span><span class='tag raw bold'>11</span><span class='equals bold'>=</span><span class='value raw bold'>C789</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[OrigClOrdID]</span><span class='tag raw bold'>41</span><span class='equals bold'>=</span><span class='value raw bold'>C456</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[Symbol]</span><span class='tag raw bold'>55</span><span class='equals bold'>=</span><span class='value raw bold'>AUD/USD</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[Side]</span><span class='tag raw bold'>54</span><span class='equals bold'>=</span><span class='value raw bold'>1</span><span class='value annotation'>[BUY]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[ExecType]</span><span class='tag raw bold'>150</span><span class='equals bold'>=</span><span class='value raw bold'>F</span><span class='value annotation'>[FILL]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[LeavesQty]</span><span class='tag raw bold'>151</span><span class='equals bold'>=</span><span class='value raw bold'>0</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[LastQty]</span><span class='tag raw bold'>32</span><span class='equals bold'>=</span><span class='value raw bold'>902870</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[Price]</span><span class='tag raw bold'>44</span><span class='equals bold'>=</span><span class='value raw bold'>99.88</span></span></div></div>
+<br/></div>
 </div>
 <h1 id='How-to-get'>How to get</h1>
 Download the latest version from <a href='https://github.com/tools4j/fixgrep/tree/master/fixgrep-core/releases'>here</a><br/>GitHub project can be found <a href='https://github.com/tools4j/fixgrep/'>here</a><br/><h1 id='How-to-install'>How to install</h1>
 <ul>
-<li>You will need to install a version of java (you only need a jre, although a jdk will also work fine.)  Version must be version Java 8 for higher.  (Java jre/jdk 1.8 or higher).</li>
+<li>You will need to install a version of java (jre or jdk), Java 8 or higher.</li>
 <li>Download the fixgrep zip file</li>
 <li>Unzip into a directory from where you wish to run fixgrep</li>
 <li>Add execute permissions to the fixgrep bash script.  e.g. chmod u+x fixgrep</li>
@@ -1015,7 +1007,7 @@ Download the latest version from <a href='https://github.com/tools4j/fixgrep/tre
 <ul>
 <li>Online <a href='https://tools4j.github.io/fixgrep/index.html'>here</a></li>
 <li>Running 'fixgrep man online' (no dashes) will open this page in your default browser.</li>
-<li>Running 'fixgrep man' (no dashes) will display the fixgrep man page.</li>
+<li>Running 'fixgrep man' (no dashes) will display the fixgrep man page in 'less'.</li>
 <li>Running 'fixgrep --man' (with dashes) will display the fixgrep man page in raw format without scrolling.</li>
 <li>Running 'fixgrep -?' will print a list of options.</li>
 </ul>
@@ -1036,40 +1028,40 @@ Command options.
 <li><span class='bold'>
 application.properties.
 </span>
-If you wish to configure fixgrep to behave in a certain way every time you run it, then it is better to add your configuration to ~/.fixgrep/application.properties. If using the provided .sh file, when running fixgrep for the first time, it should have created a ~/.fixgrep folder, and will add that to your path when running fixgrep.  If fixgrep fails to create a ~/.fixgrep folder, then as a fallback it will create a properties file in the same directory as the .sh script file.</li>
+If you wish to configure fixgrep to behave in a certain way every time you run it, then it is better to add your configuration to ~/.fixgrep/application.properties.  You can install the default application.properties file at this location by running fixgrep --install.</li>
 </ul>
 <h2 id='Differences-between-command-line-options,-and-properties-configuration'>Differences between command-line options, and properties configuration</h2>
 Command-line options (usually) provide at least two different options which configure the same parameter.  Usually a short single character option, and a more descriptive option.  e.g. -o, --output-delimiter both configure the output delimiter.  However when configuring via the properties file only one option is available to use.  That is the longest command-line option, with dashes replaced with dots.  e.g. to configure the output delimiter in the properties file, you would need to use output.delimiter option.  e.g. output.delimiter=|  Below is a table listing the command line options, and on the right the equivalent properties to use in properties file configuration.<br/><table class='doc-table'>
 <table class='doc-table options-to-properties-table'>
 <tr><th>option variations</th><th>equivalent properties key</th></tr>
-<tr><td>A,align-vertical-columns,align</td><td>align.vertical.columns</td></tr>
-<tr><td>D,output-delimiter,output-delim</td><td>output.delimiter</td></tr>
-<tr><td>G,suppress-indent-group-repeats</td><td>suppress.indent.group.repeats</td></tr>
-<tr><td>O,group-by-order</td><td>group.by.order</td></tr>
-<tr><td>V,vertical-format</td><td>vertical.format</td></tr>
-<tr><td>a,tag-annotations</td><td>tag.annotations</td></tr>
-<tr><td>d,input-delimiter,input-delim</td><td>input.delimiter</td></tr>
-<tr><td>download-url</td><td>download.url</td></tr>
-<tr><td>e,exclude-tags</td><td>exclude.tags</td></tr>
-<tr><td>fix-spec-path,fix-spec</td><td>fix.spec.path</td></tr>
-<tr><td>g,line-regexgroup-for-fix</td><td>line.regexgroup.for.fix</td></tr>
-<tr><td>h,highlights,highlight</td><td>highlights</td></tr>
-<tr><td>m,include-only-messages-of-type</td><td>include.only.messages.of.type</td></tr>
-<tr><td>n,suppress-colors,no-color</td><td>suppress.colors</td></tr>
-<tr><td>o,group-by-orders-with-id</td><td>group.by.orders.with.id</td></tr>
-<tr><td>online-help-url</td><td>online.help.url</td></tr>
-<tr><td>output-format-grouped-order-header-console</td><td>output.format.grouped.order.header.console</td></tr>
-<tr><td>output-format-grouped-order-header-html</td><td>output.format.grouped.order.header.html</td></tr>
-<tr><td>output-format-horizontal-console</td><td>output.format.horizontal.console</td></tr>
-<tr><td>output-format-horizontal-html</td><td>output.format.horizontal.html</td></tr>
-<tr><td>output-format-vertical-console</td><td>output.format.vertical.console</td></tr>
-<tr><td>output-format-vertical-html</td><td>output.format.vertical.html</td></tr>
-<tr><td>q,suppress-bold-tags-and-values</td><td>suppress.bold.tags.and.values</td></tr>
-<tr><td>r,input-line-format</td><td>input.line.format</td></tr>
-<tr><td>s,sort-by-tags</td><td>sort.by.tags</td></tr>
-<tr><td>t,only-include-tags</td><td>only.include.tags</td></tr>
-<tr><td>v,exclude-messages-of-type</td><td>exclude.messages.of.type</td></tr>
-<tr><td>vcs-home-url</td><td>vcs.home.url</td></tr>
+<tr><td>-A,--align-vertical-columns,--align</td><td>align.vertical.columns</td></tr>
+<tr><td>-D,--output-delimiter,--output-delim</td><td>output.delimiter</td></tr>
+<tr><td>-G,--suppress-indent-group-repeats</td><td>suppress.indent.group.repeats</td></tr>
+<tr><td>-O,--group-by-order</td><td>group.by.order</td></tr>
+<tr><td>-V,--vertical-format</td><td>vertical.format</td></tr>
+<tr><td>-a,--tag-annotations</td><td>tag.annotations</td></tr>
+<tr><td>-d,--input-delimiter,--input-delim</td><td>input.delimiter</td></tr>
+<tr><td>--download-url</td><td>download.url</td></tr>
+<tr><td>-e,--exclude-tags</td><td>exclude.tags</td></tr>
+<tr><td>--fix-spec-path,--fix-spec</td><td>fix.spec.path</td></tr>
+<tr><td>-g,--line-regexgroup-for-fix</td><td>line.regexgroup.for.fix</td></tr>
+<tr><td>-h,--highlights,--highlight</td><td>highlights</td></tr>
+<tr><td>-m,--include-only-messages-of-type</td><td>include.only.messages.of.type</td></tr>
+<tr><td>-n,--suppress-colors,--no-color</td><td>suppress.colors</td></tr>
+<tr><td>-o,--group-by-orders-with-id</td><td>group.by.orders.with.id</td></tr>
+<tr><td>--online-help-url</td><td>online.help.url</td></tr>
+<tr><td>--output-format-grouped-order-header-console</td><td>output.format.grouped.order.header.console</td></tr>
+<tr><td>--output-format-grouped-order-header-html</td><td>output.format.grouped.order.header.html</td></tr>
+<tr><td>--output-format-horizontal-console</td><td>output.format.horizontal.console</td></tr>
+<tr><td>--output-format-horizontal-html</td><td>output.format.horizontal.html</td></tr>
+<tr><td>--output-format-vertical-console</td><td>output.format.vertical.console</td></tr>
+<tr><td>--output-format-vertical-html</td><td>output.format.vertical.html</td></tr>
+<tr><td>-q,--suppress-bold-tags-and-values</td><td>suppress.bold.tags.and.values</td></tr>
+<tr><td>-r,--input-line-format</td><td>input.line.format</td></tr>
+<tr><td>-s,--sort-by-tags</td><td>sort.by.tags</td></tr>
+<tr><td>-t,--only-include-tags</td><td>only.include.tags</td></tr>
+<tr><td>-v,--exclude-messages-of-type</td><td>exclude.messages.of.type</td></tr>
+<tr><td>--vcs-home-url</td><td>vcs.home.url</td></tr>
 </table>
 <h1 id='Options'>Options</h1>
 <div class='option'>
@@ -1077,7 +1069,9 @@ Command-line options (usually) provide at least two different options which conf
 <div class='tagline'>
 Defines the format of annotations to use when printing fields.
 </div>
-<span class='description'>Using the built in fix spec it is possible to annotate FIX tags with information to make them more human readable. e.g. the fix message '35=D^A11=ABC^A55=AUD/USD' can be made much more readable when presented with the tag and/or value descriptions.  e.g. '[MsgType]<span class='bold'>
+<div class='option-example'>
+Example usage:<xmp>fixgrep -a ba</xmp></div>
+<span class='description'>Using the built in fix spec it is possible to annotate fix tags with information to make them more human readable. e.g. the fix message '35=D^A11=ABC^A55=AUD/USD' can be made much more readable when presented with the tag and/or value descriptions.  e.g. '[MsgType]<span class='bold'>
 35=D
 </span>
 [NEWORDERSINGLE]|[ClOrdID]<span class='bold'>
@@ -1086,21 +1080,35 @@ Defines the format of annotations to use when printing fields.
 |[Symbol]<span class='bold'>
 55=AUD/USD
 </span>
-'.  The default format is called 'outsideAnnotations' which means that the annotations sit on the outside of the tag=value pair.  e.g. [tagAnnotation]tag=value[valueAnnotation]. The other way of specifying this format is 'ba', which is the abbreviation of 'before-after', which means the tag annotation is placed _before_ the tag, and the value annotation is placed _after_ the value.<br/><div class='bold'>
-All the possible values for this option:
-</div>
-<table class='doc-table'>
+'.  The default format is called 'outsideAnnotated' which means that the annotations sit on the outside of the tag=value pair.  e.g. [tagAnnotation]tag=value[valueAnnotation].<br/>Specified using this method, these are the possible option values:<br/><table class='doc-table'>
 <tr><th>format</th><th>example</th></tr>
-<tr><td>outsideAnnotations</td><td>[MsgType]35=D[NEWORDERSINGLE]</td></tr>
+<tr><td>outsideAnnotated</td><td>[MsgType]35=D[NEWORDERSINGLE]</td></tr>
+<tr><td>insideAnnotated</td><td>35[MsgType]=[NEWORDERSINGLE]D</td></tr>
+<tr><td>replaced</td><td>MsgType=NEWORDERSINGLE</td></tr>
+<tr><td>none</td><td>35=D</td></tr>
+</table>
+You can also specify the annotation format using codes.  The first code for the tag annotation position, the second code for the value annotation position. Or, just specify one code to apply to both the tag and value annotation positions.  Codes are:<br/><table class='doc-table'>
+<tr><th>code</th><th>description</th></tr>
+<tr><td>b</td><td>Annotation will appear BEFORE the tag or value</td></tr>
+<tr><td>a</td><td>Annotation will appear AFTER the tag or value</td></tr>
+<tr><td>r</td><td>Annotation will REPLACE the tag or value</td></tr>
+<tr><td>_</td><td>No annotation will be displayed</td></tr>
+</table>
+Any combination of 'b','a','r','_' is valid.<br/>Examples:<br/><table class='doc-table'>
+<tr><th>codes</th><th>example</th></tr>
 <tr><td>ba</td><td>[MsgType]35=D[NEWORDERSINGLE]</td></tr>
-<tr><td>insideAnnotations</td><td>35[MsgType]=[NEWORDERSINGLE]D</td></tr>
 <tr><td>ab</td><td>35[MsgType]=[NEWORDERSINGLE]D</td></tr>
 <tr><td>bb</td><td>[MsgType]35=[NEWORDERSINGLE]D</td></tr>
+<tr><td>b</td><td>[MsgType]35=[NEWORDERSINGLE]D</td></tr>
 <tr><td>aa</td><td>35[MsgType]=D[NEWORDERSINGLE]</td></tr>
+<tr><td>a</td><td>35[MsgType]=D[NEWORDERSINGLE]</td></tr>
 <tr><td>a_</td><td>35[MsgType]=D</td></tr>
 <tr><td>_a</td><td>35=D[NEWORDERSINGLE]</td></tr>
 <tr><td>b_</td><td>[MsgType]35=D</td></tr>
 <tr><td>_b</td><td>35=[NEWORDERSINGLE]D</td></tr>
+<tr><td>rr</td><td>MsgType=NEWORDERSINGLE</td></tr>
+<tr><td>r</td><td>MsgType=NEWORDERSINGLE</td></tr>
+<tr><td>r_</td><td>MsgType=D</td></tr>
 <tr><td>__</td><td>35=D</td></tr>
 <tr><td>none</td><td>35=D</td></tr>
 </table>
@@ -1114,20 +1122,26 @@ Aligns tags, values and annotations when viewing messages in vertical format.
 <div class='option'>
 <h2 id='-d,--input-delimiter,--input-delim'>-d,--input-delimiter,--input-delim</h2>
 <div class='tagline'>
-Defines the FIX delimiter used in the input fix messages.  Default to control character 1, i.e. \u0001
+Defines the fix delimiter used in the input fix messages.  Default to control character 1, i.e. \u0001
 </div>
+<div class='option-example'>
+Example usage:<xmp>fixgrep -d :</xmp></div>
 </div>
 <div class='option'>
 <h2 id='-D,--output-delimiter,--output-delim'>-D,--output-delimiter,--output-delim</h2>
 <div class='tagline'>
-Defines the delimiter to print between FIX tags in the formatted output.
+Defines the delimiter to print between fix tags in the formatted output.
 </div>
+<div class='option-example'>
+Example usage:<xmp>fixgrep -D ;</xmp></div>
 </div>
 <div class='option'>
 <h2 id='-e,--exclude-tags'>-e,--exclude-tags</h2>
 <div class='tagline'>
-Tags to exclude from the formatted FIX.
+Tags to exclude from the formatted fix.
 </div>
+<div class='option-example'>
+Example usage:<xmp>fixgrep -e 22,33</xmp></div>
 <span class='description'>A comma separated list of tags which should not be displayed in the output 'formatted' fix.
 e.g. '--exclude-tags 22,33' would hide tags 22 and 33 from being displayed.  Can be useful for hiding some of
 the less 'interesting' fix fields, such as BeginString, BodyLength or Checksum.  Yawn!</span></div>
@@ -1142,6 +1156,8 @@ Send output to a file with a generated filename.  Filename is printed to std out
 <div class='tagline'>
 Send output to a given file.
 </div>
+<div class='option-example'>
+Example usage:<xmp>fixgrep -F output.txt</xmp></div>
 <span class='description'>Output is printed to the specified file.</span></div>
 <div class='option'>
 <h2 id='-o,--group-by-orders-with-id'>-o,--group-by-orders-with-id</h2>
@@ -1160,6 +1176,8 @@ Group order messages by orderId and/or clientOrderId.
 <div class='tagline'>
 Highlight fields or lines using color or console text effects.
 </div>
+<div class='option-example'>
+Example usage:<xmp>fixgrep -h 35,55</xmp></div>
 <span class='description'>Format: <span class='bold'>
 criteria[:texteffect1][:texteffect2][:scope]
 </span>
@@ -1226,30 +1244,40 @@ Allows you to specify whatever codes you want. e.g. RGB colors in the format<spa
 <div class='tagline'>
 The format of each message when displaying fix on the console in horizontal format.
 </div>
+<div class='option-example'>
+Example usage:<xmp>fixgrep --output-format-horizontal-console Thread:$1 ${msgFix}</xmp></div>
 <span class='description'>See the section on 'Output Formatting' for more information.<br/></span></div>
 <div class='option'>
 <h2 id='--output-format-vertical-console'>--output-format-vertical-console</h2>
 <div class='tagline'>
 The format of each message when displaying fix in html in horizontal format.
 </div>
+<div class='option-example'>
+Example usage:<xmp>fixgrep --output-format-vertical-console ==========\n${msgColor}${msgTypeName}${colorReset}\n==========\n${msgFix}</xmp></div>
 <span class='description'>See the section on 'Output Formatting' for more information.<br/></span></div>
 <div class='option'>
 <h2 id='--output-format-horizontal-html'>--output-format-horizontal-html</h2>
 <div class='tagline'>
 The format of each message when displaying fix on the console in horizontal format.
 </div>
+<div class='option-example'>
+Example usage:<xmp>fixgrep --output-format-horizontal-html <b>Thread:</b>$1 ${msgFix}</xmp></div>
 <span class='description'>See the section on 'Output Formatting' for more information.<br/></span></div>
 <div class='option'>
 <h2 id='--output-format-vertical-html'>--output-format-vertical-html</h2>
 <div class='tagline'>
 The format of each line when displaying fix on the console in horizontal format.
 </div>
+<div class='option-example'>
+Example usage:<xmp>fixgrep --output-format-vertical-html <div class='msg-header'>\n==========</br>\n${msgColor}${msgTypeName}${colorReset}<br/>\n==========\n</div>\n${msgFix}\n<br/></xmp></div>
 <span class='description'>See the section on 'Output Formatting' for more information.<br/></span></div>
 <div class='option'>
 <h2 id='-g,--line-regexgroup-for-fix'>-g,--line-regexgroup-for-fix</h2>
 <div class='tagline'>
 Combined with the 'input-line-format' parameter, is used to specify which 'capturing group' of the regex contains the actual fix message.
 </div>
+<div class='option-example'>
+Example usage:<xmp>fixgrep -g 2</xmp></div>
 </div>
 <div class='option'>
 <h2 id='--install'>--install</h2>
@@ -1268,18 +1296,24 @@ Will launch a browser containing the output log file.
 <div class='tagline'>
 A comma separated list of msg types to display.
 </div>
+<div class='option-example'>
+Example usage:<xmp>fixgrep -m D,8</xmp></div>
 <span class='description'>e.g. to display only NewOrderSingles and ExecutionReports, use 35,8</span></div>
 <div class='option'>
 <h2 id='-n,--suppress-colors,--no-color'>-n,--suppress-colors,--no-color</h2>
 <div class='tagline'>
 Suppresses any colorization in lines.
 </div>
+<div class='option-example'>
+Example usage:<xmp>fixgrep -n true</xmp></div>
 <span class='description'>Note, see the 'suppress-bold-tags-and-values' parameter to also suppress usage of bold text effect on formatted lines</span></div>
 <div class='option'>
 <h2 id='-q,--suppress-bold-tags-and-values'>-q,--suppress-bold-tags-and-values</h2>
 <div class='tagline'>
 Suppresses the bold formatting of tags and values.
 </div>
+<div class='option-example'>
+Example usage:<xmp>fixgrep -q true</xmp></div>
 <span class='description'>By default tags and values are displayed in bold. E.g.: '[MsgType]<span class='bold'>
 35=D
 </span>
@@ -1295,35 +1329,43 @@ Suppresses the bold formatting of tags and values.
 <div class='tagline'>
 Defines the regex to use, when parsing input lines.
 </div>
-<span class='description'>Although FIX messages appear in some logs as 'pure' FIX, they can also be displayed as part of an application's normal logging, and may have text appearing before/after the FIX message.  Such as timestamps, thread identifiers, etc.  This line can be customized for your application so that fixgrep knows where to find the actual FIX message in each log line.  Use in conjunction with the parameter 'line-regexgroup-for-fix' to tell fixgrep, which regex 'group' to use.  The default value for this is <span class='bold'>
+<div class='option-example'>
+Example usage:<xmp>fixgrep -r \d\d\d\d-\d\d-\d\d \[(\d)\] (\d+=.*)</xmp></div>
+<span class='description'>Although fix messages appear in some logs as 'pure' fix, they can also be displayed as part of an application's normal logging, and may have text appearing before/after the fix message (such as timestamps, thread identifiers, etc.)  This pattern can be customized for your application so that fixgrep knows where to find the actual fix message in each log line.<span class='bold'>
 ^(\d{4}-[01]\d-[0-3]\d[T\s][0-2]\d:[0-5]\d:[0-5]\d[\.,]\d+)?.*?(\d+=.*$)
 </span>
-, which looks for an optional ISO timestamp followed by any characters, followed by any number of tag=value pairs which make up the FIX message.  The regex 'group' that contains the FIX message is number 2, as the second set of capturing brackets (\d+=.*$) is where we'd expect to find the fix tag.  This default format should match against most variations of FIX logging formats, however you might want to modify it if there is any additional information that you wish to 'capture' and print back out by modifying the line=format parameter, and specifying $n tokens.  Or if you wish to optimize the searching.  For example, if your logs contain just FIX messages (no other text), input-line-format could be defined as '.*' and line-regexgroup-for-fix defined as zero 0.  (In regex group 0 is a 'special' group which returns the entire match.)<br/><span class='bold'>
+, which looks for an optional ISO timestamp followed by any characters, followed by any number of tag=value pairs which make up the fix message.<br/>This option can be used in conjunction with the parameter 'line-regexgroup-for-fix' to tell fixgrep, which regex 'group' to use.  The default value for this is In the example above, the regex 'group' that contains the fix message is number 2, as the second set of capturing brackets (\d+=.*$) is where we'd expect to find the fix tag.  This default format should match against most variations of fix logging formats, however you might want to modify it if there is any additional information that you wish to 'capture' and print back out by modifying the line=format parameter, and specifying $n tokens.  Or if you wish to optimize the searching.  For example, if your logs contain just fix messages (no other text), input-line-format could be defined as '.*' and line-regexgroup-for-fix defined as zero 0.  (In regex group 0 is a 'special' group which returns the entire match.)<br/><span class='bold'>
 NOTE: Running this regex is the single biggest user of CPU in fixgrep 
 </span>
-because the regex is run against every line in the file/pipe being processed.  So it pays to experiment with different regexes to find one that is fastest.  The regex does not need to match the _whole_ line, just the part of the line that indicates it's a line of FIX, and a regex group (brackets) which captures the FIX message.</span></div>
+because the regex is run against every line in the file/pipe being processed.  So it pays to experiment with different regexes to find one that is fastest.  The regex does not need to match the _whole_ line, just the part of the line that indicates it's a line of fix, and a regex group (brackets) which captures the fix message.</span></div>
 <div class='option'>
 <h2 id='-s,--sort-by-tags'>-s,--sort-by-tags</h2>
 <div class='tagline'>
-Defines the preferred order of the FIX tags in the formatted output.
+Defines the preferred order of the fix tags in the formatted output.
 </div>
+<div class='option-example'>
+Example usage:<xmp>fixgrep -s 35,11</xmp></div>
 <span class='description'>Let's face it, some tags are more interesting than others.  This parameter allows you to display the more 'interesting' tags at the front of the outputted message.</span></div>
 <div class='option'>
 <h2 id='-t,--only-include-tags'>-t,--only-include-tags</h2>
 <div class='tagline'>
 Tags to include in the formatted fix.
 </div>
-<span class='description'>A comma separated list of tags numbers to include in the output FIX.  Any other fields are discarded.</span></div>
+<div class='option-example'>
+Example usage:<xmp>fixgrep -t 35,55,11</xmp></div>
+<span class='description'>A comma separated list of tags numbers to include in the output fix.  Any other fields are discarded.</span></div>
 <div class='option'>
 <h2 id='-v,--exclude-messages-of-type'>-v,--exclude-messages-of-type</h2>
 <div class='tagline'>
 Comma separated list of msgType codes.  Can be used to hide messages of certain types from being displayed.
 </div>
+<div class='option-example'>
+Example usage:<xmp>fixgrep -v A,O</xmp></div>
 <span class='description'>e.g. To 'hide' Logon and Heartbeat messages, this parameter could be defined as 'A,0'</span></div>
 <div class='option'>
 <h2 id='-V,--vertical-format'>-V,--vertical-format</h2>
 <div class='tagline'>
-View messages in vertical format.  Default is false (horizontal).
+View messages in vertical format.  Turned off by default.
 </div>
 </div>
 <div class='option'>
@@ -1337,7 +1379,7 @@ Note, indentation will also be suppressed if the user is attempting to sort tags
 <div class='option'>
 <h2 id='-x,--debug'>-x,--debug</h2>
 <div class='tagline'>
-Run in debug mode.
+Run in debug mode.  Stack traces are displayed.  Logging is written to fixgrep.log in the fixgrep directory.
 </div>
 </div>
 <div class='option'>
@@ -1345,6 +1387,8 @@ Run in debug mode.
 <div class='tagline'>
 Displays help text
 </div>
+<div class='option-example'>
+Example usage:<xmp>fixgrep -? </xmp></div>
 </div>
 <div class='option'>
 <h2 id='--256-color-demo'>--256-color-demo</h2>
@@ -1405,6 +1449,8 @@ Downloads a copy of the default fixgrep.css file to use with any fixgrep output 
 <div class='tagline'>
 Specifies an alternative fixspec definition to use.  Spec must be in the format used by quickfix.  Default spec is 5.0-SP2.
 </div>
+<div class='option-example'>
+Example usage:<xmp>fixgrep --fix-spec-path fix40_modified.xml</xmp></div>
 <span class='description'>FixGrep first looks for the file relative to the current working directory.  If it is not found there, then FixGrep will look on the classpath.  Examples:
 my-fix-spec.xml
 path/to/my-fix-spec.xml

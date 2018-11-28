@@ -49,32 +49,15 @@ class ManGenerator(val docWriterFactory: DocWriterFactory, val config: FixGrepCo
         )
         val verticalNonAlignedFormatExample = SingleExample(verticalNonAlignedLines, "-e 8,9 -V -d ^A", docWriterFactory).toFormattedString()
 
-        val groupByOrderLines = listOf(
-                "35=D^A49=CLIENT^A56=SERVER^A11=ABC",
-                "35=D^A49=CLIENT2^A56=SERVER2^A11=ABC",
-                "35=8^A49=SERVER2^A56=CLIENT2^A150=0^A11=ABC^A37=123",
-                "35=8^A49=SERVER2^A56=CLIENT2^A150=F^A11=ABC^A37=123",
-                "35=8^A49=SERVER2^A56=CLIENT2^A150=F^A11=ABC",
-                "35=8^A49=SERVER^A56=CLIENT^A150=0^A11=ABC^A37=123",
-                "35=8^A49=SERVER2^A56=CLIENT2^A150=F^A37=123",
-                "35=G^A49=CLIENT2^A56=SERVER2^A41=ABC^A11=DEF^A37=123",
-                "35=8^A49=SERVER^A56=CLIENT^A150=F^A11=ABC^A37=123",
-                "35=8^A49=SERVER2^A56=CLIENT2^A150=F^A37=123",
-                "35=G^A49=CLIENT2^A56=SERVER2^A41=DEF^A11=GHI^A39=8^A434=2",
-                "35=9^A49=SERVER2^A56=CLIENT2^A41=DEF^A11=GHI",
-                "35=8^A49=SERVER^A56=CLIENT^A150=F^A37=123",
-                "35=G^A49=CLIENT^A56=SERVER^A41=ABC^A11=DEF^A37=123",
-                "35=8^A49=SERVER2^A56=CLIENT2^A150=F^A37=123",
-                "35=H^A49=CLIENT2^A56=SERVER2^A11=GHI",
-                "35=8^A49=SERVER^A56=CLIENT^A150=F=123",
-                "35=8^A49=SERVER2^A56=CLIENT2^A150=I^A37=123",
-                "35=G^A49=CLIENT^A56=SERVER^A41=DEF^A11=GHI^A39=8^A434=2",
-                "35=H^A49=CLIENT2^A56=SERVER2^A37=123",
-                "35=8^A49=SERVER2^A56=CLIENT2^A150=I^A37=123",
-                "35=9^A49=SERVER^A56=CLIENT^A41=DEF^A11=GHI",
-                "35=F^A49=CLIENT2^A56=SERVER2^A11=GHI",
-                "35=8^A49=SERVER^A56=CLIENT^A150=F^A37=123",
-                "35=8^A49=SERVER2^A56=CLIENT2^A150=4^A37=123")
+        val groupByOrderLines = listOf("35=D^A11=C123^A55=AUD/USD^A54=2^A38=269440^A40=2^A44=99.98",
+            "35=8^A37=ABC^A11=C123^A41=C123^A55=AUD/USD^A54=2^A150=0^A151=269440^A44=99.98",
+            "35=8^A37=ABC^A11=C123^A41=C123^A55=AUD/USD^A54=2^A150=F^A151=142770^A32=126670^A44=99.98",
+            "35=8^A37=ABC^A11=C123^A41=C123^A55=AUD/USD^A54=2^A150=F^A151=0^A32=142770^A44=99.98",
+            "35=D^A11=C456^A55=AUD/USD^A54=1^A38=902070^A40=2^A44=99.98",
+            "35=8^A37=DEF^A11=C456^A41=C456^A55=AUD/USD^A54=1^A150=0^A151=902070^A44=99.98",
+            "35=G^A41=C456^A11=C789^A55=AUD/USD^A54=1^A38=902870^A40=2^A44=99.88",
+            "35=8^A37=DEF^A11=C789^A41=C456^A55=AUD/USD^A54=1^A150=5^A151=902870^A44=99.88",
+            "35=8^A37=DEF^A11=C789^A41=C456^A55=AUD/USD^A54=1^A150=F^A151=0^A32=902870^A44=99.88")
 
         val groupedByOrderExample = SingleExample(groupByOrderLines, "-O -d ^A", docWriterFactory).toFormattedString()
 
@@ -86,12 +69,14 @@ class ManGenerator(val docWriterFactory: DocWriterFactory, val config: FixGrepCo
             writeHeading(2, "fixgrep features:")
             startList()
             listItem("Annotated fix tags and values.")
+            listItem("Horizontal (message per line) and vertical (field per line) formatting.")
             listItem("Highlighting of tags and lines matching specified criteria.")
+            listItem("Grouping of messages by order chain.")
             listItem("Indenting of repeating groups (when in vertical format)")
-            listItem("'Hiding' of 'uninteresting' tags.")
             listItem("Coloring of message by type.")
             listItem("Customized regex for extraction of FIX message from your logs.")
             listItem("Sort by tags to bring more important tags to the front of the message.")
+            listItem("Exclusion of 'uninteresting' tags from the outputted FIX.")
             listItem("Exclusion of 'uninteresting' messages from the outputted FIX")
             listItem("Output to text or html format")
             listItem("Customization of input/output delimiters.")
@@ -129,7 +114,7 @@ class ManGenerator(val docWriterFactory: DocWriterFactory, val config: FixGrepCo
             startList()
             startListItem().write("Online ").writeLink("here", fixgrepHelpUrl).endListItem()
             listItem("Running 'fixgrep man online' (no dashes) will open this page in your default browser.")
-                    .listItem("Running 'fixgrep man' (no dashes) will display the fixgrep man page.")
+                    .listItem("Running 'fixgrep man' (no dashes) will display the fixgrep man page in 'less'.")
                     .listItem("Running 'fixgrep --man' (with dashes) will display the fixgrep man page in raw format without scrolling.")
                     .listItem("Running 'fixgrep -?' will print a list of options.")
                     .endList()
@@ -142,7 +127,7 @@ class ManGenerator(val docWriterFactory: DocWriterFactory, val config: FixGrepCo
         with(writer) {
             writeHeading(1, "How to install")
             startList()
-            listItem("You will need to install a version of java (you only need a jre, although a jdk will also work fine.)  Version must be version Java 8 for higher.  (Java jre/jdk 1.8 or higher).")
+            listItem("You will need to install a version of java (jre or jdk), Java 8 or higher.")
             listItem("Download the fixgrep zip file")
             listItem("Unzip into a directory from where you wish to run fixgrep")
             listItem("Add execute permissions to the fixgrep bash script.  e.g. chmod u+x fixgrep")
@@ -219,16 +204,27 @@ class ManGenerator(val docWriterFactory: DocWriterFactory, val config: FixGrepCo
             writeHeading(1, "Ways to configure fixgrep")
             writeHeading(2, "Fixgrep can be configured via three methods.")
             startList()
-                    .startListItem().writeBold("Command options.").write(" These are specified as POSIX style options after the fixgrep command.  e.g. fixgrep --highlights 35 will highlight any MsgType tag/values.  It is best to use command line options if your configuration is a once off, or is specific to the context you are running in.").endListItem()
-                    .startListItem().writeBold("application.properties.").write("If you wish to configure fixgrep to behave in a certain way every time you run it, then it is better to add your configuration to ~/.fixgrep/application.properties. If using the provided .sh file, when running fixgrep for the first time, it should have created a ~/.fixgrep folder, and will add that to your path when running fixgrep.  If fixgrep fails to create a ~/.fixgrep folder, then as a fallback it will create a properties file in the same directory as the .sh script file.").endListItem()
+                    .startListItem().writeBold("Command options.").write(" These are specified as POSIX style options after the fixgrep command.  " +
+                            "e.g. fixgrep --highlights 35 will highlight any MsgType tag/values.  It is best to use command line options if your configuration is " +
+                            "a once off, or is specific to the context you are running in.").endListItem()
+
+                    .startListItem().writeBold("application.properties.").write("If you wish to configure fixgrep to behave in a certain way every time you run it, " +
+                            "then it is better to add your configuration to ~/.fixgrep/application.properties.  You can install the default application.properties file at this" +
+                            " location by running fixgrep --install.").endListItem()
+
                     .endList()
             writeHeading(2, "Differences between command-line options, and properties configuration")
-            writeLn("Command-line options (usually) provide at least two different options which configure the same parameter.  Usually a short single character option, and a more descriptive option.  e.g. -o, --output-delimiter both configure the output delimiter.  However when configuring via the properties file only one option is available to use.  That is the longest command-line option, with dashes replaced with dots.  e.g. to configure the output delimiter in the properties file, you would need to use output.delimiter option.  e.g. output.delimiter=|  Below is a table listing the command line options, and on the right the equivalent properties to use in properties file configuration.")
+            writeLn("Command-line options (usually) provide at least two different options which configure the same parameter.  Usually a short single " +
+                    "character option, and a more descriptive option.  e.g. -o, --output-delimiter both configure the output delimiter.  However when configuring " +
+                    "via the properties file only one option is available to use.  That is the longest command-line option, with dashes replaced with " +
+                    "dots.  e.g. to configure the output delimiter in the properties file, you would need to use output.delimiter option.  e.g. " +
+                    "output.delimiter=|  Below is a table listing the command line options, and on the right the equivalent properties to use in properties " +
+                    "file configuration.")
             val tableBuilder = writer.addTable()
             tableBuilder.startNewTable(HtmlOnlyTextEffect("options-to-properties-table"))
             tableBuilder.startNewRow().addTableHeaderCell("option variations").addTableHeaderCell("equivalent properties key")
             for (option in Option.values().filter { it.canHaveEquivalentPropertyInPropertiesFile }.sortedBy { it.optionVariationsAsCommaDelimitedString }) {
-                tableBuilder.startNewRow().addCell(option.optionVariationsAsCommaDelimitedString).addCell(option.key)
+                tableBuilder.startNewRow().addCell(option.optionVariationsWithDashPrefixesAsCommaDelimitedString).addCell(option.key)
             }
             tableBuilder.endTable()
             return toFormattedText()

@@ -151,7 +151,14 @@ task copyFromLibsToDistLib(type: Copy) {
 task createHtmlManPage(type:JavaExec) {
     main = "org.tools4j.fixgrep.main.FixGrep"
     classpath = sourceSets.main.runtimeClasspath
-    args = ["--man", "--html-page", "--to-given-file", "../docs/index.html"]
+    args = ["--man", "--html-page", "--to-given-file", "${buildDir.parentFile.parentFile.absolutePath}/docs/index.html"]
+    environment("FIXGREP_VERSION", "$fullVersion")
+}
+
+task createHtmlManPageAndLaunchInBrowser(type:JavaExec) {
+    main = "org.tools4j.fixgrep.main.FixGrep"
+    classpath = sourceSets.main.runtimeClasspath
+    args = ["--man", "--html-page", "-l", "-x", "--to-given-file", "${buildDir.parentFile.parentFile.absolutePath}/docs/index.html"]
     environment("FIXGREP_VERSION", "$fullVersion")
 }
 
