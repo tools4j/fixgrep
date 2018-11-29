@@ -93,12 +93,19 @@ class OptionsHelp(val docWriterFactory: DocWriterFactory) {
 e.g. '--exclude-tags 22,33' would hide tags 22 and 33 from being displayed.  Can be useful for hiding some of
 the less 'interesting' fix fields, such as BeginString, BodyLength or Checksum.  Yawn!"""))
 
-        optionsHelp.add(OptionHelp(Option.to_file, "Send output to a file with a generated filename.  Filename is printed to std out after being written..", null, """A random file-htmlClass will be generated, with the prefix 'fixgrep-'.  And an extension of '.log' if in normal console mode, or an extension of '.html' if output is in html."""))
+        optionsHelp.add(OptionHelp(Option.to_file, "Send output to a file with a generated filename.  Filename is printed to std out after being written..", null, """A random file will be generated, with the prefix 'fixgrep-'.  And an extension of '.log' or '.html'."""))
 
         optionsHelp.add(OptionHelp(Option.to_given_file, "Send output to a given file.", "output.txt", """Output is printed to the specified file."""))
 
-        optionsHelp.add(OptionHelp(Option.group_by_orders_with_id, "Group order messages by orderId and/or clientOrderId.  Only orders which have an id containing the given text will be matched.", null,
-                "Using this option changes the 'mode' of fixgrep to discard any non-order messages, and to group the messages by order. fixgrep will attempt to keep track of 'order chains' when amends and cancels change the clOrdId, even if the orderId is not present on every message.  Using this option can increase the memory used by fixgrep, as fixgrep will need to cache all order messages before printing them out.  Even if order messages do not contain the given id, fixgrep still needs to cache them in case it discovers and amend in the order chain which DOES contain the given id.  This should not affect other processes on the box, but it might mean that fixgrep will stop with an OutOfMemoryException if it uses all of it's allocated heap."))
+        optionsHelp.add(OptionHelp(Option.group_by_orders_with_id, "Group order messages by orderId and/or clientOrderId which have an " +
+                "id containing the given text/regex expressions.", "abc,def\\d\\d\\d",
+                "Using this option changes the 'mode' of fixgrep to discard any non-order messages, and to group the messages by order. fixgrep " +
+                        "will attempt to keep track of 'order chains' when amends and cancels change the clOrdId, even if the orderId is not present on every message." +
+                        "  Using this option can increase the memory used by fixgrep, as fixgrep will need to cache all order messages before printing them out.  " +
+                        "Even if order messages do not have ids which match the given expression(s), fixgrep still needs to cache them in case it discovers an amend or cancel" +
+                        " in the order chain which DOES contain a match.  Because fixgrep memory is limited to 128MG fixgrep _might_ stop with an OutOfMemoryException " +
+                        "if it uses all of it's allocated heap.  During matching; clientId, origClientId & orderId are scanned for text that contains the given " +
+                        "expression(s) either literally, or as a regex."))
 
         optionsHelp.add(OptionHelp(Option.group_by_order, "Group order messages by orderId and/or clientOrderId.", null,
                 "Using this option changes the 'mode' of fixgrep to discard any non-order messages, and to group the messages by order. fixgrep will attempt to keep track of 'order chains' when amends and cancels change the clOrdId, even if the orderId is not present on every message.  Using this option can increase the memory used by fixgrep, as fixgrep will need to cache all order messages before printing them out.  This should not affect other processes on the box, but it might mean that fixgrep will stop with an OutOfMemoryException if it uses all of it's allocated heap."))
@@ -283,12 +290,10 @@ the less 'interesting' fix fields, such as BeginString, BodyLength or Checksum. 
                     .writeHeading(2, option.optionVariationsWithDashPrefixesAsCommaDelimitedString)
                     .writeLn(tagline, HtmlOnlyTextEffect("tagline"))
             if(exampleValue != null){
-                writer.startSection(HtmlOnlyTextEffect("option-example"))
                 writer.write("Example usage:");
-                writer.writeCode("fixgrep ${option.abbreviationOrLongFormWithDashes} $exampleValue")
-                writer.endSection()
+                writer.writeLn("fixgrep ${option.abbreviationOrLongFormWithDashes} $exampleValue", HtmlOnlyTextEffect("option-example"))
             }
-            if(description != null) writer.write(description, HtmlOnlyTextEffect("description"))
+            if(description != null) writer.writeLn(description, HtmlOnlyTextEffect("description"))
             return writer.endSection().toFormattedText()
         }
 

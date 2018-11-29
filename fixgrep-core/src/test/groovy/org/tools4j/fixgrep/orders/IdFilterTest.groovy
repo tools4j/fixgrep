@@ -28,6 +28,17 @@ class IdFilterTest extends Specification {
         assert idFilter.matchesFilter("asdfblahasdf")
     }
 
+    def "MatchesFilter - single filter entry - using regex"() {
+        when:
+        final IdFilter idFilter = new IdFilter(["blah\\w"])
+
+        then:
+        assert !idFilter.matchesFilter("asdf")
+        assert !idFilter.matchesFilter("")
+        assert !idFilter.matchesFilter("blah")
+        assert idFilter.matchesFilter("asdfblahasdf")
+    }
+
     def "MatchesFilter - multiple filter entry - matching against strings"() {
         when:
         final IdFilter idFilter = new IdFilter(["blah", "asdf"])
@@ -116,28 +127,4 @@ class IdFilterTest extends Specification {
         )
     }
 
-
-//
-//    def "MatchesFilter - single filter entry - matching against messages"() {
-//        when:
-//        final IdFilter idFilter = new IdFilter(["blah"])
-//
-//        then:
-//        assert !idFilter.matchesFilter("asdf")
-//        assert !idFilter.matchesFilter("")
-//        assert idFilter.matchesFilter("blah")
-//        assert idFilter.matchesFilter("asdfblahasdf")
-//    }
-//
-//    def "MatchesFilter - multiple filter entry - matching against messages"() {
-//        when:
-//        final IdFilter idFilter = new IdFilter(["blah", "asdf"])
-//
-//        then:
-//        assert !idFilter.matchesFilter("")
-//        assert !idFilter.matchesFilter("xxx")
-//        assert idFilter.matchesFilter("asdf")
-//        assert idFilter.matchesFilter("blah")
-//        assert idFilter.matchesFilter("asdfblahasdf")
-//    }
 }

@@ -178,7 +178,7 @@ div.example-description {
     padding-top: 0.5em;
 }
 
-div.example-arguments, div.option h2, div.option h2 a{
+div.example-arguments, div.option-example, div.option h2, div.option h2 a{
     font-size: 14px;
     text-transform: none;
     text-rendering: optimizelegibility;
@@ -186,12 +186,10 @@ div.example-arguments, div.option h2, div.option h2 a{
     line-height: 2em;
 }
 
-div.option-example xmp {
-    white-space: nowrap;
-    #unicode-bidi: embed;
-    color: blue;
-    font-weight: 300;
-    text-rendering: optimizelegibility;
+div.option-example {
+    display: inline;
+    font-size: 12px;
+    color: #6da64a;
 }
 
 div.example-list h2, div.example-list h2 a{

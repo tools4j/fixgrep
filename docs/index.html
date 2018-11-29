@@ -182,7 +182,7 @@ div.example-description {
     padding-top: 0.5em;
 }
 
-div.example-arguments, div.option h2, div.option h2 a{
+div.example-arguments, div.option-example, div.option h2, div.option h2 a{
     font-size: 14px;
     text-transform: none;
     text-rendering: optimizelegibility;
@@ -190,12 +190,10 @@ div.example-arguments, div.option h2, div.option h2 a{
     line-height: 2em;
 }
 
-div.option-example xmp {
-    white-space: nowrap;
-    #unicode-bidi: embed;
-    color: blue;
-    font-weight: 300;
-    text-rendering: optimizelegibility;
+div.option-example {
+    display: inline;
+    font-size: 12px;
+    color: #6da64a;
 }
 
 div.example-list h2, div.example-list h2 a{
@@ -1069,9 +1067,11 @@ Command-line options (usually) provide at least two different options which conf
 <div class='tagline'>
 Defines the format of annotations to use when printing fields.
 </div>
-<div class='option-example'>
-Example usage:<xmp>fixgrep -a ba</xmp></div>
-<span class='description'>Using the built in fix spec it is possible to annotate fix tags with information to make them more human readable. e.g. the fix message '35=D^A11=ABC^A55=AUD/USD' can be made much more readable when presented with the tag and/or value descriptions.  e.g. '[MsgType]<span class='bold'>
+Example usage:<div class='option-example'>
+fixgrep -a ba
+</div>
+<div class='description'>
+Using the built in fix spec it is possible to annotate fix tags with information to make them more human readable. e.g. the fix message '35=D^A11=ABC^A55=AUD/USD' can be made much more readable when presented with the tag and/or value descriptions.  e.g. '[MsgType]<span class='bold'>
 35=D
 </span>
 [NEWORDERSINGLE]|[ClOrdID]<span class='bold'>
@@ -1112,7 +1112,9 @@ Any combination of 'b','a','r','_' is valid.<br/>Examples:<br/><table class='doc
 <tr><td>__</td><td>35=D</td></tr>
 <tr><td>none</td><td>35=D</td></tr>
 </table>
-</span></div>
+
+</div>
+</div>
 <div class='option'>
 <h2 id='-A,--align-vertical-columns,--align'>-A,--align-vertical-columns,--align</h2>
 <div class='tagline'>
@@ -1124,61 +1126,85 @@ Aligns tags, values and annotations when viewing messages in vertical format.
 <div class='tagline'>
 Defines the fix delimiter used in the input fix messages.  Default to control character 1, i.e. \u0001
 </div>
-<div class='option-example'>
-Example usage:<xmp>fixgrep -d :</xmp></div>
+Example usage:<div class='option-example'>
+fixgrep -d :
+</div>
 </div>
 <div class='option'>
 <h2 id='-D,--output-delimiter,--output-delim'>-D,--output-delimiter,--output-delim</h2>
 <div class='tagline'>
 Defines the delimiter to print between fix tags in the formatted output.
 </div>
-<div class='option-example'>
-Example usage:<xmp>fixgrep -D ;</xmp></div>
+Example usage:<div class='option-example'>
+fixgrep -D ;
+</div>
 </div>
 <div class='option'>
 <h2 id='-e,--exclude-tags'>-e,--exclude-tags</h2>
 <div class='tagline'>
 Tags to exclude from the formatted fix.
 </div>
-<div class='option-example'>
-Example usage:<xmp>fixgrep -e 22,33</xmp></div>
-<span class='description'>A comma separated list of tags which should not be displayed in the output 'formatted' fix.
+Example usage:<div class='option-example'>
+fixgrep -e 22,33
+</div>
+<div class='description'>
+A comma separated list of tags which should not be displayed in the output 'formatted' fix.
 e.g. '--exclude-tags 22,33' would hide tags 22 and 33 from being displayed.  Can be useful for hiding some of
-the less 'interesting' fix fields, such as BeginString, BodyLength or Checksum.  Yawn!</span></div>
+the less 'interesting' fix fields, such as BeginString, BodyLength or Checksum.  Yawn!
+</div>
+</div>
 <div class='option'>
 <h2 id='-f,--to-file'>-f,--to-file</h2>
 <div class='tagline'>
 Send output to a file with a generated filename.  Filename is printed to std out after being written..
 </div>
-<span class='description'>A random file-htmlClass will be generated, with the prefix 'fixgrep-'.  And an extension of '.log' if in normal console mode, or an extension of '.html' if output is in html.</span></div>
+<div class='description'>
+A random file will be generated, with the prefix 'fixgrep-'.  And an extension of '.log' or '.html'.
+</div>
+</div>
 <div class='option'>
 <h2 id='-F,--to-given-file'>-F,--to-given-file</h2>
 <div class='tagline'>
 Send output to a given file.
 </div>
-<div class='option-example'>
-Example usage:<xmp>fixgrep -F output.txt</xmp></div>
-<span class='description'>Output is printed to the specified file.</span></div>
+Example usage:<div class='option-example'>
+fixgrep -F output.txt
+</div>
+<div class='description'>
+Output is printed to the specified file.
+</div>
+</div>
 <div class='option'>
 <h2 id='-o,--group-by-orders-with-id'>-o,--group-by-orders-with-id</h2>
 <div class='tagline'>
-Group order messages by orderId and/or clientOrderId.  Only orders which have an id containing the given text will be matched.
+Group order messages by orderId and/or clientOrderId which have an id containing the given text/regex expressions.
 </div>
-<span class='description'>Using this option changes the 'mode' of fixgrep to discard any non-order messages, and to group the messages by order. fixgrep will attempt to keep track of 'order chains' when amends and cancels change the clOrdId, even if the orderId is not present on every message.  Using this option can increase the memory used by fixgrep, as fixgrep will need to cache all order messages before printing them out.  Even if order messages do not contain the given id, fixgrep still needs to cache them in case it discovers and amend in the order chain which DOES contain the given id.  This should not affect other processes on the box, but it might mean that fixgrep will stop with an OutOfMemoryException if it uses all of it's allocated heap.</span></div>
+Example usage:<div class='option-example'>
+fixgrep -o abc,def\d\d\d
+</div>
+<div class='description'>
+Using this option changes the 'mode' of fixgrep to discard any non-order messages, and to group the messages by order. fixgrep will attempt to keep track of 'order chains' when amends and cancels change the clOrdId, even if the orderId is not present on every message.  Using this option can increase the memory used by fixgrep, as fixgrep will need to cache all order messages before printing them out.  Even if order messages do not have ids which match the given expression(s), fixgrep still needs to cache them in case it discovers an amend or cancel in the order chain which DOES contain a match.  Because fixgrep memory is limited to 128MG fixgrep _might_ stop with an OutOfMemoryException if it uses all of it's allocated heap.  During matching; clientId, origClientId & orderId are scanned for text that contains the given expression(s) either literally, or as a regex.
+</div>
+</div>
 <div class='option'>
 <h2 id='-O,--group-by-order'>-O,--group-by-order</h2>
 <div class='tagline'>
 Group order messages by orderId and/or clientOrderId.
 </div>
-<span class='description'>Using this option changes the 'mode' of fixgrep to discard any non-order messages, and to group the messages by order. fixgrep will attempt to keep track of 'order chains' when amends and cancels change the clOrdId, even if the orderId is not present on every message.  Using this option can increase the memory used by fixgrep, as fixgrep will need to cache all order messages before printing them out.  This should not affect other processes on the box, but it might mean that fixgrep will stop with an OutOfMemoryException if it uses all of it's allocated heap.</span></div>
+<div class='description'>
+Using this option changes the 'mode' of fixgrep to discard any non-order messages, and to group the messages by order. fixgrep will attempt to keep track of 'order chains' when amends and cancels change the clOrdId, even if the orderId is not present on every message.  Using this option can increase the memory used by fixgrep, as fixgrep will need to cache all order messages before printing them out.  This should not affect other processes on the box, but it might mean that fixgrep will stop with an OutOfMemoryException if it uses all of it's allocated heap.
+</div>
+</div>
 <div class='option'>
 <h2 id='-h,--highlights,--highlight'>-h,--highlights,--highlight</h2>
 <div class='tagline'>
 Highlight fields or lines using color or console text effects.
 </div>
-<div class='option-example'>
-Example usage:<xmp>fixgrep -h 35,55</xmp></div>
-<span class='description'>Format: <span class='bold'>
+Example usage:<div class='option-example'>
+fixgrep -h 35,55
+</div>
+<div class='description'>
+Format: <span class='bold'>
 criteria[:texteffect1][:texteffect2][:scope]
 </span>
  (criteria is mandatory, texteffect and scope are optional.)<br/><h3 id='criteria'>criteria</h3>
@@ -1238,83 +1264,118 @@ Allows you to specify whatever codes you want. e.g. RGB colors in the format<spa
 <tr><td>-h 35=D:Fg176,55=AUD&&11=AB:FgBlue:BgBrightYellow</td><td class='console'><div class='fields'><span class='field annotatedField Fg176'><span class='tag annotation'>[MsgType]</span><span class='tag raw bold'>35</span><span class='equals bold'>=</span><span class='value raw bold'>D</span><span class='value annotation'>[NEWORDERSINGLE]</span></span><span class='delim'>|</span><span class='field annotatedField FgBlue BgBrightYellow'><span class='tag annotation'>[ClOrdID]</span><span class='tag raw bold'>11</span><span class='equals bold'>=</span><span class='value raw bold'>ABC</span></span><span class='delim'>|</span><span class='field annotatedField FgBlue BgBrightYellow'><span class='tag annotation'>[Symbol]</span><span class='tag raw bold'>55</span><span class='equals bold'>=</span><span class='value raw bold'>AUD/USD</span></span></div></td></tr>
 <tr><td>-h 35=D:Fg176:Msg,55=AUD:BgBrightGreen</td><td class='console'><div class='fields Fg176'><span class='field annotatedField'><span class='tag annotation'>[MsgType]</span><span class='tag raw bold'>35</span><span class='equals bold'>=</span><span class='value raw bold'>D</span><span class='value annotation'>[NEWORDERSINGLE]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[ClOrdID]</span><span class='tag raw bold'>11</span><span class='equals bold'>=</span><span class='value raw bold'>ABC</span></span><span class='delim'>|</span><span class='field annotatedField BgBrightGreen'><span class='tag annotation'>[Symbol]</span><span class='tag raw bold'>55</span><span class='equals bold'>=</span><span class='value raw bold'>AUD/USD</span></span></div></td></tr>
 </table>
-</span></div>
+
+</div>
+</div>
 <div class='option'>
 <h2 id='--output-format-horizontal-console'>--output-format-horizontal-console</h2>
 <div class='tagline'>
 The format of each message when displaying fix on the console in horizontal format.
 </div>
-<div class='option-example'>
-Example usage:<xmp>fixgrep --output-format-horizontal-console Thread:$1 ${msgFix}</xmp></div>
-<span class='description'>See the section on 'Output Formatting' for more information.<br/></span></div>
+Example usage:<div class='option-example'>
+fixgrep --output-format-horizontal-console Thread:$1 ${msgFix}
+</div>
+<div class='description'>
+See the section on 'Output Formatting' for more information.<br/>
+</div>
+</div>
 <div class='option'>
 <h2 id='--output-format-vertical-console'>--output-format-vertical-console</h2>
 <div class='tagline'>
 The format of each message when displaying fix in html in horizontal format.
 </div>
-<div class='option-example'>
-Example usage:<xmp>fixgrep --output-format-vertical-console ==========\n${msgColor}${msgTypeName}${colorReset}\n==========\n${msgFix}</xmp></div>
-<span class='description'>See the section on 'Output Formatting' for more information.<br/></span></div>
+Example usage:<div class='option-example'>
+fixgrep --output-format-vertical-console ==========\n${msgColor}${msgTypeName}${colorReset}\n==========\n${msgFix}
+</div>
+<div class='description'>
+See the section on 'Output Formatting' for more information.<br/>
+</div>
+</div>
 <div class='option'>
 <h2 id='--output-format-horizontal-html'>--output-format-horizontal-html</h2>
 <div class='tagline'>
 The format of each message when displaying fix on the console in horizontal format.
 </div>
-<div class='option-example'>
-Example usage:<xmp>fixgrep --output-format-horizontal-html <b>Thread:</b>$1 ${msgFix}</xmp></div>
-<span class='description'>See the section on 'Output Formatting' for more information.<br/></span></div>
+Example usage:<div class='option-example'>
+fixgrep --output-format-horizontal-html <b>Thread:</b>$1 ${msgFix}
+</div>
+<div class='description'>
+See the section on 'Output Formatting' for more information.<br/>
+</div>
+</div>
 <div class='option'>
 <h2 id='--output-format-vertical-html'>--output-format-vertical-html</h2>
 <div class='tagline'>
 The format of each line when displaying fix on the console in horizontal format.
 </div>
-<div class='option-example'>
-Example usage:<xmp>fixgrep --output-format-vertical-html <div class='msg-header'>\n==========</br>\n${msgColor}${msgTypeName}${colorReset}<br/>\n==========\n</div>\n${msgFix}\n<br/></xmp></div>
-<span class='description'>See the section on 'Output Formatting' for more information.<br/></span></div>
+Example usage:<div class='option-example'>
+fixgrep --output-format-vertical-html <div class='msg-header'>\n==========</br>\n${msgColor}${msgTypeName}${colorReset}<br/>\n==========\n</div>\n${msgFix}\n<br/>
+</div>
+<div class='description'>
+See the section on 'Output Formatting' for more information.<br/>
+</div>
+</div>
 <div class='option'>
 <h2 id='-g,--line-regexgroup-for-fix'>-g,--line-regexgroup-for-fix</h2>
 <div class='tagline'>
 Combined with the 'input-line-format' parameter, is used to specify which 'capturing group' of the regex contains the actual fix message.
 </div>
-<div class='option-example'>
-Example usage:<xmp>fixgrep -g 2</xmp></div>
+Example usage:<div class='option-example'>
+fixgrep -g 2
+</div>
 </div>
 <div class='option'>
 <h2 id='--install'>--install</h2>
 <div class='tagline'>
 Create a customizable application.properties file in the ~/.fixgrep directory
 </div>
-<span class='description'>Fixgrep will try to create a folder in the users home directory called '.fixgrep', and inside that folder fixgrep will try to create an application.properties file that the user can customize.</span></div>
+<div class='description'>
+Fixgrep will try to create a folder in the users home directory called '.fixgrep', and inside that folder fixgrep will try to create an application.properties file that the user can customize.
+</div>
+</div>
 <div class='option'>
 <h2 id='-l,--launch-browser'>-l,--launch-browser</h2>
 <div class='tagline'>
 Will launch a browser containing the output log file.
 </div>
-<span class='description'>Will open the output file in the system browser.  Can only be used if the -f or --to-file option has been given.</span></div>
+<div class='description'>
+Will open the output file in the system browser.  Can only be used if the -f or --to-file option has been given.
+</div>
+</div>
 <div class='option'>
 <h2 id='-m,--include-only-messages-of-type'>-m,--include-only-messages-of-type</h2>
 <div class='tagline'>
 A comma separated list of msg types to display.
 </div>
-<div class='option-example'>
-Example usage:<xmp>fixgrep -m D,8</xmp></div>
-<span class='description'>e.g. to display only NewOrderSingles and ExecutionReports, use 35,8</span></div>
+Example usage:<div class='option-example'>
+fixgrep -m D,8
+</div>
+<div class='description'>
+e.g. to display only NewOrderSingles and ExecutionReports, use 35,8
+</div>
+</div>
 <div class='option'>
 <h2 id='-n,--suppress-colors,--no-color'>-n,--suppress-colors,--no-color</h2>
 <div class='tagline'>
 Suppresses any colorization in lines.
 </div>
-<div class='option-example'>
-Example usage:<xmp>fixgrep -n true</xmp></div>
-<span class='description'>Note, see the 'suppress-bold-tags-and-values' parameter to also suppress usage of bold text effect on formatted lines</span></div>
+Example usage:<div class='option-example'>
+fixgrep -n true
+</div>
+<div class='description'>
+Note, see the 'suppress-bold-tags-and-values' parameter to also suppress usage of bold text effect on formatted lines
+</div>
+</div>
 <div class='option'>
 <h2 id='-q,--suppress-bold-tags-and-values'>-q,--suppress-bold-tags-and-values</h2>
 <div class='tagline'>
 Suppresses the bold formatting of tags and values.
 </div>
-<div class='option-example'>
-Example usage:<xmp>fixgrep -q true</xmp></div>
-<span class='description'>By default tags and values are displayed in bold. E.g.: '[MsgType]<span class='bold'>
+Example usage:<div class='option-example'>
+fixgrep -q true
+</div>
+<div class='description'>
+By default tags and values are displayed in bold. E.g.: '[MsgType]<span class='bold'>
 35=D
 </span>
 [NEWORDERSINGLE]|[ClOrdID]<span class='bold'>
@@ -1323,45 +1384,63 @@ Example usage:<xmp>fixgrep -q true</xmp></div>
 [Symbol]<span class='bold'>
 55=AUD/USD
 </span>
-.  In some shells highlighting and bold text don't work well together resulting in partially highlighted fields and lines.  On such shells the user may wish to suppress bold tags and values, so that highlighting is not broken.</span></div>
+.  In some shells highlighting and bold text don't work well together resulting in partially highlighted fields and lines.  On such shells the user may wish to suppress bold tags and values, so that highlighting is not broken.
+</div>
+</div>
 <div class='option'>
 <h2 id='-r,--input-line-format'>-r,--input-line-format</h2>
 <div class='tagline'>
 Defines the regex to use, when parsing input lines.
 </div>
-<div class='option-example'>
-Example usage:<xmp>fixgrep -r \d\d\d\d-\d\d-\d\d \[(\d)\] (\d+=.*)</xmp></div>
-<span class='description'>Although fix messages appear in some logs as 'pure' fix, they can also be displayed as part of an application's normal logging, and may have text appearing before/after the fix message (such as timestamps, thread identifiers, etc.)  This pattern can be customized for your application so that fixgrep knows where to find the actual fix message in each log line.<span class='bold'>
+Example usage:<div class='option-example'>
+fixgrep -r \d\d\d\d-\d\d-\d\d \[(\d)\] (\d+=.*)
+</div>
+<div class='description'>
+Although fix messages appear in some logs as 'pure' fix, they can also be displayed as part of an application's normal logging, and may have text appearing before/after the fix message (such as timestamps, thread identifiers, etc.)  This pattern can be customized for your application so that fixgrep knows where to find the actual fix message in each log line.<span class='bold'>
 ^(\d{4}-[01]\d-[0-3]\d[T\s][0-2]\d:[0-5]\d:[0-5]\d[\.,]\d+)?.*?(\d+=.*$)
 </span>
 , which looks for an optional ISO timestamp followed by any characters, followed by any number of tag=value pairs which make up the fix message.<br/>This option can be used in conjunction with the parameter 'line-regexgroup-for-fix' to tell fixgrep, which regex 'group' to use.  The default value for this is In the example above, the regex 'group' that contains the fix message is number 2, as the second set of capturing brackets (\d+=.*$) is where we'd expect to find the fix tag.  This default format should match against most variations of fix logging formats, however you might want to modify it if there is any additional information that you wish to 'capture' and print back out by modifying the line=format parameter, and specifying $n tokens.  Or if you wish to optimize the searching.  For example, if your logs contain just fix messages (no other text), input-line-format could be defined as '.*' and line-regexgroup-for-fix defined as zero 0.  (In regex group 0 is a 'special' group which returns the entire match.)<br/><span class='bold'>
 NOTE: Running this regex is the single biggest user of CPU in fixgrep 
 </span>
-because the regex is run against every line in the file/pipe being processed.  So it pays to experiment with different regexes to find one that is fastest.  The regex does not need to match the _whole_ line, just the part of the line that indicates it's a line of fix, and a regex group (brackets) which captures the fix message.</span></div>
+because the regex is run against every line in the file/pipe being processed.  So it pays to experiment with different regexes to find one that is fastest.  The regex does not need to match the _whole_ line, just the part of the line that indicates it's a line of fix, and a regex group (brackets) which captures the fix message.
+</div>
+</div>
 <div class='option'>
 <h2 id='-s,--sort-by-tags'>-s,--sort-by-tags</h2>
 <div class='tagline'>
 Defines the preferred order of the fix tags in the formatted output.
 </div>
-<div class='option-example'>
-Example usage:<xmp>fixgrep -s 35,11</xmp></div>
-<span class='description'>Let's face it, some tags are more interesting than others.  This parameter allows you to display the more 'interesting' tags at the front of the outputted message.</span></div>
+Example usage:<div class='option-example'>
+fixgrep -s 35,11
+</div>
+<div class='description'>
+Let's face it, some tags are more interesting than others.  This parameter allows you to display the more 'interesting' tags at the front of the outputted message.
+</div>
+</div>
 <div class='option'>
 <h2 id='-t,--only-include-tags'>-t,--only-include-tags</h2>
 <div class='tagline'>
 Tags to include in the formatted fix.
 </div>
-<div class='option-example'>
-Example usage:<xmp>fixgrep -t 35,55,11</xmp></div>
-<span class='description'>A comma separated list of tags numbers to include in the output fix.  Any other fields are discarded.</span></div>
+Example usage:<div class='option-example'>
+fixgrep -t 35,55,11
+</div>
+<div class='description'>
+A comma separated list of tags numbers to include in the output fix.  Any other fields are discarded.
+</div>
+</div>
 <div class='option'>
 <h2 id='-v,--exclude-messages-of-type'>-v,--exclude-messages-of-type</h2>
 <div class='tagline'>
 Comma separated list of msgType codes.  Can be used to hide messages of certain types from being displayed.
 </div>
-<div class='option-example'>
-Example usage:<xmp>fixgrep -v A,O</xmp></div>
-<span class='description'>e.g. To 'hide' Logon and Heartbeat messages, this parameter could be defined as 'A,0'</span></div>
+Example usage:<div class='option-example'>
+fixgrep -v A,O
+</div>
+<div class='description'>
+e.g. To 'hide' Logon and Heartbeat messages, this parameter could be defined as 'A,0'
+</div>
+</div>
 <div class='option'>
 <h2 id='-V,--vertical-format'>-V,--vertical-format</h2>
 <div class='tagline'>
@@ -1373,9 +1452,12 @@ View messages in vertical format.  Turned off by default.
 <div class='tagline'>
 Suppress indenting of group repeats in vertical format.
 </div>
-<span class='description'>Often when viewing messages which have a lot of repeating groups e.g. prices, it is useful to see the repeating groups indented.  By default,
+<div class='description'>
+Often when viewing messages which have a lot of repeating groups e.g. prices, it is useful to see the repeating groups indented.  By default,
 groups will be indented in vertical formatting. Use this option to suppress this behaviour.  Has no effect when viewing messages in the default horizontal format.
-Note, indentation will also be suppressed if the user is attempting to sort tags.</span></div>
+Note, indentation will also be suppressed if the user is attempting to sort tags.
+</div>
+</div>
 <div class='option'>
 <h2 id='-x,--debug'>-x,--debug</h2>
 <div class='tagline'>
@@ -1387,15 +1469,17 @@ Run in debug mode.  Stack traces are displayed.  Logging is written to fixgrep.l
 <div class='tagline'>
 Displays help text
 </div>
-<div class='option-example'>
-Example usage:<xmp>fixgrep -? </xmp></div>
+Example usage:<div class='option-example'>
+fixgrep -? 
+</div>
 </div>
 <div class='option'>
 <h2 id='--256-color-demo'>--256-color-demo</h2>
 <div class='tagline'>
 Displays a table of 256 colors using 8 bit Ansi Escape codes.
 </div>
-<span class='description'>Most modern consoles support 256 colors.  To use any of these colors in your highlights, prefix the msgType with 'Fg' or 'Bg' depending on whether you wish to highlight the foreground or background.'</br>If your console supports 256 colors, this demo should show a table like the one below:<br/><table class='color256-table'>
+<div class='description'>
+Most modern consoles support 256 colors.  To use any of these colors in your highlights, prefix the msgType with 'Fg' or 'Bg' depending on whether you wish to highlight the foreground or background.'</br>If your console supports 256 colors, this demo should show a table like the one below:<br/><table class='color256-table'>
 <tr><td class='Bg0 Fg15'>0</td><td class='Bg1 Fg15'>1</td><td class='Bg2 Fg15'>2</td><td class='Bg3 Fg0'>3</td><td class='Bg4 Fg15'>4</td><td class='Bg5 Fg15'>5</td><td class='Bg6 Fg0'>6</td><td class='Bg7 Fg0'>7</td><td class='Bg8 Fg0'>8</td><td class='Bg9 Fg0'>9</td><td class='Bg10 Fg0'>10</td><td class='Bg11 Fg0'>11</td><td class='Bg12 Fg0'>12</td><td class='Bg13 Fg0'>13</td><td class='Bg14 Fg0'>14</td><td class='Bg15 Fg0'>15</td></tr>
 <tr><td class='Bg16 Fg15'>16</td><td class='Bg17 Fg15'>17</td><td class='Bg18 Fg15'>18</td><td class='Bg19 Fg15'>19</td><td class='Bg20 Fg15'>20</td><td class='Bg21 Fg15'>21</td><td class='Bg22 Fg15'>22</td><td class='Bg23 Fg15'>23</td><td class='Bg24 Fg15'>24</td><td class='Bg25 Fg15'>25</td><td class='Bg26 Fg15'>26</td><td class='Bg27 Fg0'>27</td><td class='Bg28 Fg0'>28</td><td class='Bg29 Fg0'>29</td><td class='Bg30 Fg0'>30</td><td class='Bg31 Fg0'>31</td><td class='Bg32 Fg0'>32</td><td class='Bg33 Fg0'>33</td><td class='Bg34 Fg0'>34</td><td class='Bg35 Fg0'>35</td><td class='Bg36 Fg0'>36</td><td class='Bg37 Fg0'>37</td><td class='Bg38 Fg0'>38</td><td class='Bg39 Fg0'>39</td><td class='Bg40 Fg0'>40</td><td class='Bg41 Fg0'>41</td><td class='Bg42 Fg0'>42</td><td class='Bg43 Fg0'>43</td><td class='Bg44 Fg0'>44</td><td class='Bg45 Fg0'>45</td><td class='Bg46 Fg0'>46</td><td class='Bg47 Fg0'>47</td><td class='Bg48 Fg0'>48</td><td class='Bg49 Fg0'>49</td><td class='Bg50 Fg0'>50</td><td class='Bg51 Fg0'>51</td></tr>
 <tr><td class='Bg52 Fg15'>52</td><td class='Bg53 Fg15'>53</td><td class='Bg54 Fg15'>54</td><td class='Bg55 Fg15'>55</td><td class='Bg56 Fg15'>56</td><td class='Bg57 Fg15'>57</td><td class='Bg58 Fg15'>58</td><td class='Bg59 Fg15'>59</td><td class='Bg60 Fg15'>60</td><td class='Bg61 Fg15'>61</td><td class='Bg62 Fg15'>62</td><td class='Bg63 Fg0'>63</td><td class='Bg64 Fg0'>64</td><td class='Bg65 Fg0'>65</td><td class='Bg66 Fg0'>66</td><td class='Bg67 Fg0'>67</td><td class='Bg68 Fg0'>68</td><td class='Bg69 Fg0'>69</td><td class='Bg70 Fg0'>70</td><td class='Bg71 Fg0'>71</td><td class='Bg72 Fg0'>72</td><td class='Bg73 Fg0'>73</td><td class='Bg74 Fg0'>74</td><td class='Bg75 Fg0'>75</td><td class='Bg76 Fg0'>76</td><td class='Bg77 Fg0'>77</td><td class='Bg78 Fg0'>78</td><td class='Bg79 Fg0'>79</td><td class='Bg80 Fg0'>80</td><td class='Bg81 Fg0'>81</td><td class='Bg82 Fg0'>82</td><td class='Bg83 Fg0'>83</td><td class='Bg84 Fg0'>84</td><td class='Bg85 Fg0'>85</td><td class='Bg86 Fg0'>86</td><td class='Bg87 Fg0'>87</td></tr>
@@ -1405,13 +1489,16 @@ Displays a table of 256 colors using 8 bit Ansi Escape codes.
 <tr><td class='Bg196 Fg15'>196</td><td class='Bg197 Fg15'>197</td><td class='Bg198 Fg15'>198</td><td class='Bg199 Fg15'>199</td><td class='Bg200 Fg15'>200</td><td class='Bg201 Fg15'>201</td><td class='Bg202 Fg15'>202</td><td class='Bg203 Fg15'>203</td><td class='Bg204 Fg15'>204</td><td class='Bg205 Fg15'>205</td><td class='Bg206 Fg15'>206</td><td class='Bg207 Fg0'>207</td><td class='Bg208 Fg0'>208</td><td class='Bg209 Fg0'>209</td><td class='Bg210 Fg0'>210</td><td class='Bg211 Fg0'>211</td><td class='Bg212 Fg0'>212</td><td class='Bg213 Fg0'>213</td><td class='Bg214 Fg0'>214</td><td class='Bg215 Fg0'>215</td><td class='Bg216 Fg0'>216</td><td class='Bg217 Fg0'>217</td><td class='Bg218 Fg0'>218</td><td class='Bg219 Fg0'>219</td><td class='Bg220 Fg0'>220</td><td class='Bg221 Fg0'>221</td><td class='Bg222 Fg0'>222</td><td class='Bg223 Fg0'>223</td><td class='Bg224 Fg0'>224</td><td class='Bg225 Fg0'>225</td><td class='Bg226 Fg0'>226</td><td class='Bg227 Fg0'>227</td><td class='Bg228 Fg0'>228</td><td class='Bg229 Fg0'>229</td><td class='Bg230 Fg0'>230</td><td class='Bg231 Fg0'>231</td></tr>
 <tr><td class='Bg232 Fg15'>232</td><td class='Bg233 Fg15'>233</td><td class='Bg234 Fg15'>234</td><td class='Bg235 Fg15'>235</td><td class='Bg236 Fg15'>236</td><td class='Bg237 Fg15'>237</td><td class='Bg238 Fg15'>238</td><td class='Bg239 Fg15'>239</td><td class='Bg240 Fg15'>240</td><td class='Bg241 Fg15'>241</td><td class='Bg242 Fg15'>242</td><td class='Bg243 Fg0'>243</td><td class='Bg244 Fg0'>244</td><td class='Bg245 Fg0'>245</td><td class='Bg246 Fg0'>246</td><td class='Bg247 Fg0'>247</td><td class='Bg248 Fg0'>248</td><td class='Bg249 Fg0'>249</td><td class='Bg250 Fg0'>250</td><td class='Bg251 Fg0'>251</td><td class='Bg252 Fg0'>252</td><td class='Bg253 Fg0'>253</td><td class='Bg254 Fg0'>254</td><td class='Bg255 Fg0'>255</td></tr>
 </table>
-</span></div>
+
+</div>
+</div>
 <div class='option'>
 <h2 id='--16-color-demo'>--16-color-demo</h2>
 <div class='tagline'>
 Displays a list of 16 foreground colors and 16 background colors using 16 color Ansi Escape codes.
 </div>
-<span class='description'>Most consoles support 16 colors.  To use any of these colors in your highlights, prefix the htmlClass of the colors below with 'Fg' or 'Bg' depending on whether you wish to highlight the foreground or background.  E.g. FgWhite, BgRed.  To find out whether your console supports these colors, run this demo by specifying this option.</br>If your console supports 16 colors, this demo should show a table like the one below:<br/><h3 id='Foreground-colors'>Foreground colors</h3>
+<div class='description'>
+Most consoles support 16 colors.  To use any of these colors in your highlights, prefix the htmlClass of the colors below with 'Fg' or 'Bg' depending on whether you wish to highlight the foreground or background.  E.g. FgWhite, BgRed.  To find out whether your console supports these colors, run this demo by specifying this option.</br>If your console supports 16 colors, this demo should show a table like the one below:<br/><h3 id='Foreground-colors'>Foreground colors</h3>
 <div class='console color16-div'>
 <span class='color-demo'>
 <span class='FgBlack BgWhite'>FgBlack</span><span class='FgRed BgBlack'>FgRed</span><span class='FgGreen BgBlack'>FgGreen</span><span class='FgYellow BgBlack'>FgYellow</span><span class='FgBlue BgWhite'>FgBlue</span><span class='FgPurple BgBlack'>FgPurple</span><span class='FgCyan BgBlack'>FgCyan</span><span class='FgWhite BgBlack'>FgWhite</span><span class='FgGray BgWhite'>FgGray</span><span class='FgBrightRed BgBlack'>FgBrightRed</span><span class='FgBrightGreen BgBlack'>FgBrightGreen</span><span class='FgBrightYellow BgBlack'>FgBrightYellow</span><span class='FgBrightBlue BgWhite'>FgBrightBlue</span><span class='FgBrightMagenta BgBlack'>FgBrightMagenta</span><span class='FgBrightCyan BgBlack'>FgBrightCyan</span><span class='FgBrightWhite BgBlack'>FgBrightWhite</span></span><br/></div>
@@ -1419,25 +1506,36 @@ Displays a list of 16 foreground colors and 16 background colors using 16 color 
 <div class='console color16-div'>
 <span class='color-demo'>
 <span class='BgBlack FgWhite'>BgBlack</span><span class='BgRed FgBlack'>BgRed</span><span class='BgGreen FgBlack'>BgGreen</span><span class='BgYellow FgBlack'>BgYellow</span><span class='BgBlue FgWhite'>BgBlue</span><span class='BgPurple FgBlack'>BgPurple</span><span class='BgCyan FgBlack'>BgCyan</span><span class='BgWhite FgBlack'>BgWhite</span><span class='BgGray FgWhite'>BgGray</span><span class='BgBrightRed FgBlack'>BgBrightRed</span><span class='BgBrightGreen FgBlack'>BgBrightGreen</span><span class='BgBrightYellow FgBlack'>BgBrightYellow</span><span class='BgBrightBlue FgWhite'>BgBrightBlue</span><span class='BgBrightMagenta FgBlack'>BgBrightMagenta</span><span class='BgBrightCyan FgBlack'>BgBrightCyan</span><span class='BgBrightWhite FgBlack'>BgBrightWhite</span></span><br/></div>
-</span></div>
+
+</div>
+</div>
 <div class='option'>
 <h2 id='--man'>--man</h2>
 <div class='tagline'>
 Displays man page.
 </div>
-<span class='description'>Running with this command will print out the man page.  You can also use 'fixgrep man' (no dashes) which will run man and pipe it into less -R which preserves ansi colors.  Or 'fixgrep man online' which will launch the gixgrep online help into your default browser.</span></div>
+<div class='description'>
+Running with this command will print out the man page.  You can also use 'fixgrep man' (no dashes) which will run man and pipe it into less -R which preserves ansi colors.  Or 'fixgrep man online' which will launch the gixgrep online help into your default browser.
+</div>
+</div>
 <div class='option'>
 <h2 id='--html'>--html</h2>
 <div class='tagline'>
 Displays results in HTML format.
 </div>
-<span class='description'>Displays as raw html.  No css, header or footers will be output.</span></div>
+<div class='description'>
+Displays as raw html.  No css, header or footers will be output.
+</div>
+</div>
 <div class='option'>
 <h2 id='--html-page'>--html-page</h2>
 <div class='tagline'>
 Displays results in a fully formed HTML page.
 </div>
-<span class='description'>Outputs html ready to be displayed in a browser.  Will include headers and footers. Will also include inline css to format the fix appropriately.  You can also used the -l argument if running on a operating system with a browser, to launch the page into your default browser.</span></div>
+<div class='description'>
+Outputs html ready to be displayed in a browser.  Will include headers and footers. Will also include inline css to format the fix appropriately.  You can also used the -l argument if running on a operating system with a browser, to launch the page into your default browser.
+</div>
+</div>
 <div class='option'>
 <h2 id='--gimme-css'>--gimme-css</h2>
 <div class='tagline'>
@@ -1449,12 +1547,16 @@ Downloads a copy of the default fixgrep.css file to use with any fixgrep output 
 <div class='tagline'>
 Specifies an alternative fixspec definition to use.  Spec must be in the format used by quickfix.  Default spec is 5.0-SP2.
 </div>
-<div class='option-example'>
-Example usage:<xmp>fixgrep --fix-spec-path fix40_modified.xml</xmp></div>
-<span class='description'>FixGrep first looks for the file relative to the current working directory.  If it is not found there, then FixGrep will look on the classpath.  Examples:
+Example usage:<div class='option-example'>
+fixgrep --fix-spec-path fix40_modified.xml
+</div>
+<div class='description'>
+FixGrep first looks for the file relative to the current working directory.  If it is not found there, then FixGrep will look on the classpath.  Examples:
 my-fix-spec.xml
 path/to/my-fix-spec.xml
-/package/path/to/my-fix-spec.xml</span></div>
+/package/path/to/my-fix-spec.xml
+</div>
+</div>
 <h1 id='Output-formatting'>Output formatting</h1>
 fixgrep supports two basic styles of formatting:<br/><ul>
 <li>Horizontal format</li>
@@ -1494,7 +1596,7 @@ ${msgColor}${msgTypeName}${colorReset}<br/>
 ${msgFix}
 <br/>
 </xmp><h1 id='Examples'>Examples</h1>
-Examples are being applied to the following lines of fix.  I have purposefully over simplied these FIX messages and stripped them down so that they might fit horizontally on a console: <br/><div class='console'>
+Examples are being applied to the following lines of fix.  I have purposefully over simplied these fix messages and stripped them down so that they might fit horizontally on a console: <br/><div class='console'>
 <div class='line'>
 35=D|11=C28|55=AUD/USD|54=2|38=1464820|44=100.026</div>
 <div class='line'>
@@ -1721,6 +1823,30 @@ Another way of configuring NO annotations.
 <div class='fields'><span class='field'><span class='tag raw bold'>35</span><span class='equals'>=</span><span class='value raw bold'>G</span></span><span class='delim'>|</span><span class='field'><span class='tag raw bold'>11</span><span class='equals'>=</span><span class='value raw bold'>C32</span></span><span class='delim'>|</span><span class='field'><span class='tag raw bold'>38</span><span class='equals'>=</span><span class='value raw bold'>1465320</span></span><span class='delim'>|</span><span class='field'><span class='tag raw bold'>40</span><span class='equals'>=</span><span class='value raw bold'>2</span></span><span class='delim'>|</span><span class='field'><span class='tag raw bold'>44</span><span class='equals'>=</span><span class='value raw bold'>100.12</span></span></div>
 <div class='fields'><span class='field'><span class='tag raw bold'>35</span><span class='equals'>=</span><span class='value raw bold'>8</span></span><span class='delim'>|</span><span class='field'><span class='tag raw bold'>11</span><span class='equals'>=</span><span class='value raw bold'>C32</span></span><span class='delim'>|</span><span class='field'><span class='tag raw bold'>150</span><span class='equals'>=</span><span class='value raw bold'>5</span></span><span class='delim'>|</span><span class='field'><span class='tag raw bold'>151</span><span class='equals'>=</span><span class='value raw bold'>1465320</span></span><span class='delim'>|</span><span class='field'><span class='tag raw bold'>14</span><span class='equals'>=</span><span class='value raw bold'>0</span></span><span class='delim'>|</span><span class='field'><span class='tag raw bold'>44</span><span class='equals'>=</span><span class='value raw bold'>100.12</span></span></div>
 <div class='fields'><span class='field'><span class='tag raw bold'>35</span><span class='equals'>=</span><span class='value raw bold'>8</span></span><span class='delim'>|</span><span class='field'><span class='tag raw bold'>11</span><span class='equals'>=</span><span class='value raw bold'>C32</span></span><span class='delim'>|</span><span class='field'><span class='tag raw bold'>150</span><span class='equals'>=</span><span class='value raw bold'>F</span></span><span class='delim'>|</span><span class='field'><span class='tag raw bold'>151</span><span class='equals'>=</span><span class='value raw bold'>1072490</span></span><span class='delim'>|</span><span class='field'><span class='tag raw bold'>14</span><span class='equals'>=</span><span class='value raw bold'>392830</span></span><span class='delim'>|</span><span class='field'><span class='tag raw bold'>44</span><span class='equals'>=</span><span class='value raw bold'>100.00</span></span></div></div>
+<div class='example-description'>
+Replace tags and values with annotations (where available)
+</div>
+<div class='example-arguments'>
+-a rr
+</div>
+<div class='console'>
+<div class='fields'><span class='field annotatedField'><span class='tag annotation'>MsgType</span><span class='equals'>=</span><span class='value annotation'>NEWORDERSINGLE</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>ClOrdID</span><span class='equals'>=</span><span class='value raw'>C28</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>Symbol</span><span class='equals'>=</span><span class='value raw'>AUD/USD</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>Side</span><span class='equals'>=</span><span class='value annotation'>SELL</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>OrderQty</span><span class='equals'>=</span><span class='value raw'>1464820</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>Price</span><span class='equals'>=</span><span class='value raw'>100.026</span></span></div>
+<div class='fields'><span class='field annotatedField'><span class='tag annotation'>MsgType</span><span class='equals'>=</span><span class='value annotation'>EXECUTIONREPORT</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>ClOrdID</span><span class='equals'>=</span><span class='value raw'>C28</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>ExecType</span><span class='equals'>=</span><span class='value annotation'>NEW</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>LeavesQty</span><span class='equals'>=</span><span class='value raw'>1464820</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>CumQty</span><span class='equals'>=</span><span class='value raw'>0</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>Price</span><span class='equals'>=</span><span class='value raw'>100.02</span></span></div>
+<div class='fields'><span class='field annotatedField'><span class='tag annotation'>MsgType</span><span class='equals'>=</span><span class='value annotation'>ORDERCANCELREPLACEREQUEST</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>ClOrdID</span><span class='equals'>=</span><span class='value raw'>C32</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>OrderQty</span><span class='equals'>=</span><span class='value raw'>1465320</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>OrdType</span><span class='equals'>=</span><span class='value annotation'>LIMIT</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>Price</span><span class='equals'>=</span><span class='value raw'>100.12</span></span></div>
+<div class='fields'><span class='field annotatedField'><span class='tag annotation'>MsgType</span><span class='equals'>=</span><span class='value annotation'>EXECUTIONREPORT</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>ClOrdID</span><span class='equals'>=</span><span class='value raw'>C32</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>ExecType</span><span class='equals'>=</span><span class='value annotation'>REPLACED</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>LeavesQty</span><span class='equals'>=</span><span class='value raw'>1465320</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>CumQty</span><span class='equals'>=</span><span class='value raw'>0</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>Price</span><span class='equals'>=</span><span class='value raw'>100.12</span></span></div>
+<div class='fields'><span class='field annotatedField'><span class='tag annotation'>MsgType</span><span class='equals'>=</span><span class='value annotation'>EXECUTIONREPORT</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>ClOrdID</span><span class='equals'>=</span><span class='value raw'>C32</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>ExecType</span><span class='equals'>=</span><span class='value annotation'>FILL</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>LeavesQty</span><span class='equals'>=</span><span class='value raw'>1072490</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>CumQty</span><span class='equals'>=</span><span class='value raw'>392830</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>Price</span><span class='equals'>=</span><span class='value raw'>100.00</span></span></div></div>
+<div class='example-description'>
+Same effect (replace with annotations) but using abbreviated single character option.
+</div>
+<div class='example-arguments'>
+-a r
+</div>
+<div class='console'>
+<div class='fields'><span class='field annotatedField'><span class='tag annotation'>MsgType</span><span class='equals'>=</span><span class='value annotation'>NEWORDERSINGLE</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>ClOrdID</span><span class='equals'>=</span><span class='value raw'>C28</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>Symbol</span><span class='equals'>=</span><span class='value raw'>AUD/USD</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>Side</span><span class='equals'>=</span><span class='value annotation'>SELL</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>OrderQty</span><span class='equals'>=</span><span class='value raw'>1464820</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>Price</span><span class='equals'>=</span><span class='value raw'>100.026</span></span></div>
+<div class='fields'><span class='field annotatedField'><span class='tag annotation'>MsgType</span><span class='equals'>=</span><span class='value annotation'>EXECUTIONREPORT</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>ClOrdID</span><span class='equals'>=</span><span class='value raw'>C28</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>ExecType</span><span class='equals'>=</span><span class='value annotation'>NEW</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>LeavesQty</span><span class='equals'>=</span><span class='value raw'>1464820</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>CumQty</span><span class='equals'>=</span><span class='value raw'>0</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>Price</span><span class='equals'>=</span><span class='value raw'>100.02</span></span></div>
+<div class='fields'><span class='field annotatedField'><span class='tag annotation'>MsgType</span><span class='equals'>=</span><span class='value annotation'>ORDERCANCELREPLACEREQUEST</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>ClOrdID</span><span class='equals'>=</span><span class='value raw'>C32</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>OrderQty</span><span class='equals'>=</span><span class='value raw'>1465320</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>OrdType</span><span class='equals'>=</span><span class='value annotation'>LIMIT</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>Price</span><span class='equals'>=</span><span class='value raw'>100.12</span></span></div>
+<div class='fields'><span class='field annotatedField'><span class='tag annotation'>MsgType</span><span class='equals'>=</span><span class='value annotation'>EXECUTIONREPORT</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>ClOrdID</span><span class='equals'>=</span><span class='value raw'>C32</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>ExecType</span><span class='equals'>=</span><span class='value annotation'>REPLACED</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>LeavesQty</span><span class='equals'>=</span><span class='value raw'>1465320</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>CumQty</span><span class='equals'>=</span><span class='value raw'>0</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>Price</span><span class='equals'>=</span><span class='value raw'>100.12</span></span></div>
+<div class='fields'><span class='field annotatedField'><span class='tag annotation'>MsgType</span><span class='equals'>=</span><span class='value annotation'>EXECUTIONREPORT</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>ClOrdID</span><span class='equals'>=</span><span class='value raw'>C32</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>ExecType</span><span class='equals'>=</span><span class='value annotation'>FILL</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>LeavesQty</span><span class='equals'>=</span><span class='value raw'>1072490</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>CumQty</span><span class='equals'>=</span><span class='value raw'>392830</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>Price</span><span class='equals'>=</span><span class='value raw'>100.00</span></span></div></div>
 <div class='example-description'>
 Will only print messages of type D (NewOrderSingle).
 </div>
@@ -1953,7 +2079,7 @@ When a message has tag 35=D, highlight the whole line.  Also highlight tag 55.
 <div class='fields'><span class='field annotatedField'><span class='tag annotation'>[MsgType]</span><span class='tag raw bold'>35</span><span class='equals bold'>=</span><span class='value raw bold'>8</span><span class='value annotation'>[EXECUTIONREPORT]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[ClOrdID]</span><span class='tag raw bold'>11</span><span class='equals bold'>=</span><span class='value raw bold'>C32</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[ExecType]</span><span class='tag raw bold'>150</span><span class='equals bold'>=</span><span class='value raw bold'>5</span><span class='value annotation'>[REPLACED]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[LeavesQty]</span><span class='tag raw bold'>151</span><span class='equals bold'>=</span><span class='value raw bold'>1465320</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[CumQty]</span><span class='tag raw bold'>14</span><span class='equals bold'>=</span><span class='value raw bold'>0</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[Price]</span><span class='tag raw bold'>44</span><span class='equals bold'>=</span><span class='value raw bold'>100.12</span></span></div>
 <div class='fields'><span class='field annotatedField'><span class='tag annotation'>[MsgType]</span><span class='tag raw bold'>35</span><span class='equals bold'>=</span><span class='value raw bold'>8</span><span class='value annotation'>[EXECUTIONREPORT]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[ClOrdID]</span><span class='tag raw bold'>11</span><span class='equals bold'>=</span><span class='value raw bold'>C32</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[ExecType]</span><span class='tag raw bold'>150</span><span class='equals bold'>=</span><span class='value raw bold'>F</span><span class='value annotation'>[FILL]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[LeavesQty]</span><span class='tag raw bold'>151</span><span class='equals bold'>=</span><span class='value raw bold'>1072490</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[CumQty]</span><span class='tag raw bold'>14</span><span class='equals bold'>=</span><span class='value raw bold'>392830</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[Price]</span><span class='tag raw bold'>44</span><span class='equals bold'>=</span><span class='value raw bold'>100.00</span></span></div></div>
 <div class='example-description'>
-Don't use bold text effects in the output fix.
+Suppress bold text effects in the output fix.
 </div>
 <div class='example-arguments'>
 --suppress-bold-tags-and-values
@@ -1967,7 +2093,7 @@ Don't use bold text effects in the output fix.
 </div>
 <div class='example-list'>
 <h2 id='Parsing-log-lines'>Parsing log lines</h2>
-So far we have looked at examples of options which just change the way the FIX message is presented.  It is also worth considering how fixgrep parses log files, and how parts of that log line (not just the FIX) can be printed in the fixgrep output.<br/>It is common for FIX messages to be printed in the same file as application logs.  It is also common to have other things printed on the same line as the FIX message.  Such as timestamps, thread numbers, etc.<br/>Let's consider these log lines as input:<br/><div class='console'>
+So far we have looked at examples of options which just change the way the fix message is presented.  It is also worth considering how fixgrep parses log files, and how parts of that log line (not just the fix) can be printed in the fixgrep output.<br/>It is common for fix messages to be printed in the same file as application logs.  It is also common to have other things printed on the same line as the fix message.  Such as timestamps, thread numbers, etc.<br/>Let's consider these log lines as input:<br/><div class='console'>
 2018-05-30T07:12:34.456 Thread-11 gbfix001 35=D|11=C28|55=AUD/USD|54=2|38=1464820|44=100.026<br/>2018-05-30T07:12:35.101 Thread-11 gbfix001 Processing new order single, ClOrderId=11, mid price captured at time 07:12:34.011=100.3<br/>2018-05-30T07:12:35.101 Thread-11 gbfix001 Sending back PendingNew for OrderId=O26 ClOrderId=11<br/>2018-05-30T07:12:35.101 Thread-11 gbfix001 35=8|11=C28|150=0|151=1464820|14=0|44=100.02<br/>2018-05-30T07:22:12.350 Thread-06 gbfix001 35=G|11=C32|38=1465320|40=2|44=100.12<br/>2018-05-30T07:12:35.101 Thread-06 gbfix002 Amend request recieved for OrderId=O26<br/>2018-05-30T07:22:13.670 Thread-01 gbfix002 35=8|11=C32|150=5|151=1465320|14=0|44=100.12<br/>2018-05-30T07:34:34.060 Thread-13 gbfix002 35=8|11=C32|150=F|151=1072490|14=392830|44=100.00<br/></div>
 There is an options (-F --output-format-horizontal-console), which can be used to configure the regular expression that is run against every log line.  By default this is:<br/><div class='console'>
 ^(\d{4}-[01]\d-[0-3]\d[T\s][0-2]\d:[0-5]\d:[0-5]\d[\.,]\d+)?.*?(\d+=.*$)
@@ -1986,7 +2112,7 @@ Parsing new log lines with no arguments.
 <div class='fields'><span class='field annotatedField'><span class='tag annotation'>[MsgType]</span><span class='tag raw bold'>35</span><span class='equals bold'>=</span><span class='value raw bold'>8</span><span class='value annotation'>[EXECUTIONREPORT]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[ClOrdID]</span><span class='tag raw bold'>11</span><span class='equals bold'>=</span><span class='value raw bold'>C32</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[ExecType]</span><span class='tag raw bold'>150</span><span class='equals bold'>=</span><span class='value raw bold'>5</span><span class='value annotation'>[REPLACED]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[LeavesQty]</span><span class='tag raw bold'>151</span><span class='equals bold'>=</span><span class='value raw bold'>1465320</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[CumQty]</span><span class='tag raw bold'>14</span><span class='equals bold'>=</span><span class='value raw bold'>0</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[Price]</span><span class='tag raw bold'>44</span><span class='equals bold'>=</span><span class='value raw bold'>100.12</span></span></div>
 <div class='fields'><span class='field annotatedField'><span class='tag annotation'>[MsgType]</span><span class='tag raw bold'>35</span><span class='equals bold'>=</span><span class='value raw bold'>8</span><span class='value annotation'>[EXECUTIONREPORT]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[ClOrdID]</span><span class='tag raw bold'>11</span><span class='equals bold'>=</span><span class='value raw bold'>C32</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[ExecType]</span><span class='tag raw bold'>150</span><span class='equals bold'>=</span><span class='value raw bold'>F</span><span class='value annotation'>[FILL]</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[LeavesQty]</span><span class='tag raw bold'>151</span><span class='equals bold'>=</span><span class='value raw bold'>1072490</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[CumQty]</span><span class='tag raw bold'>14</span><span class='equals bold'>=</span><span class='value raw bold'>392830</span></span><span class='delim'>|</span><span class='field annotatedField'><span class='tag annotation'>[Price]</span><span class='tag raw bold'>44</span><span class='equals bold'>=</span><span class='value raw bold'>100.00</span></span></div></div>
 <div class='example-description'>
-Oh no! In the example above, fixgrep assumed the line containing '...mid price captured at time 07:12:34.011=100.3' contained a FIX message because of the '11=100.3' text, it then printed out: '[ClOrdID]11=100.3'.  To remedy this, we can use a more specific regex:
+In the example above, fixgrep assumed the line containing '...mid price captured at time 07:12:34.011=100.3' contained a fix message because of the '11=100.3' text, it then printed out: '[ClOrdID]11=100.3'.  To remedy this, we can use a more specific regex:
 </div>
 <div class='example-arguments'>
 --input-line-format ^(\d{4}-[01]\d-[0-3]\d[T\s][0-2]\d:[0-5]\d:[0-5]\d[\.,]\d+)?.*?(35=.*$)

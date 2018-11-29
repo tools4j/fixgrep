@@ -1,6 +1,7 @@
 package org.tools4j.fixgrep.orders
 
-class IdFilter(val expressions: Collection<String>?) {
+class IdFilter(val expressions: Set<Expression>) {
+    constructor(expressions: List<String>): this(expressions.map{ Expression(it) }.toSet())
     constructor(): this(emptySet())
 
     fun matchesFilter(messages: IdentifiableOrder): Boolean {
@@ -8,7 +9,7 @@ class IdFilter(val expressions: Collection<String>?) {
     }
 
     fun matchesFilter(messages: Collection<IdentifiableOrder>): Boolean {
-        if (expressions == null || expressions.isEmpty()) return true;
+        if (expressions.isEmpty()) return true;
         for (msg in messages) {
             if (msg.orderId != null && matchesFilter((msg.orderId as UniqueOrderId).id)) return true
             if (msg.clOrdId != null && matchesFilter((msg.clOrdId as UniqueClientOrderId).id)) return true
@@ -18,7 +19,17 @@ class IdFilter(val expressions: Collection<String>?) {
     }
 
     fun matchesFilter(str: String): Boolean {
-        if (expressions == null || expressions.isEmpty()) return true;
-        return expressions.filter { str.contains(it) }.isNotEmpty()
+        if (expressions.isEmpty()) return true;
+        return expressions.filter { it.matches(str) }.isNotEmpty()
+    }
+}
+
+class Expression(val expressionStr: String){
+    val regex: Regex by lazy {
+        Regex(expressionStr)
+    }
+
+    fun matches(str: String): Boolean {
+        return str.contains(expressionStr) || regex.containsMatchIn(str)
     }
 }

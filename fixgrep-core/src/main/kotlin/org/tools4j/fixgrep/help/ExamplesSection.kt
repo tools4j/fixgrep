@@ -22,7 +22,7 @@ class ExamplesSection(val docWriterFactory: DocWriterFactory) {
         val docWriter = docWriterFactory.createNew()
         docWriter
                 .writeHeading(1, "Examples")
-                .writeLn("Examples are being applied to the following lines of fix.  I have purposefully over simplied these FIX messages and stripped them down so that they might fit horizontally on a console: ")
+                .writeLn("Examples are being applied to the following lines of fix.  I have purposefully over simplied these fix messages and stripped them down so that they might fit horizontally on a console: ")
                 .startSection(MiscTextEffect.Console)
         lines.forEach { docWriter.startSection(HtmlOnlyTextEffect("line")).write(it).endSection() }
         docWriter.endSection()
@@ -49,6 +49,8 @@ class ExamplesSection(val docWriterFactory: DocWriterFactory) {
         examplesList.add("-a _a", "Annotations set to none-after, meaning only Tag annotations will be printed, after the raw tag value.")
         examplesList.add("-a __", "Configuring NO annotations.")
         examplesList.add("-a none", "Another way of configuring NO annotations.")
+        examplesList.add("-a rr", "Replace tags and values with annotations (where available)")
+        examplesList.add("-a r", "Same effect (replace with annotations) but using abbreviated single character option.")
         examplesList.add("--include-only-messages-of-type D", "Will only print messages of type D (NewOrderSingle).")
         examplesList.add("-m D", "Same inclusion of just NewOrderSingle messages, but option specified in short form 'm'")
         examplesList.add("-m D,8", "Only show NewOrderSingles and ExecutionReports")
@@ -69,7 +71,7 @@ class ExamplesSection(val docWriterFactory: DocWriterFactory) {
         examplesList.add("-h 35,55", "Highlight tags 35 and 55.")
         examplesList.add("-h 35:Bg176,55:Bg9", "Highlight tag 35 with a background color of 8.  Highlight tag 55 with a background color of 9.")
         examplesList.add("-h 35=D:Msg,55", "When a message has tag 35=D, highlight the whole line.  Also highlight tag 55.")
-        examplesList.add("--suppress-bold-tags-and-values", "Don't use bold text effects in the output fix.")
+        examplesList.add("--suppress-bold-tags-and-values", "Suppress bold text effects in the output fix.")
         examplesList.end()
 
         val lines2 = listOf(
@@ -85,8 +87,8 @@ class ExamplesSection(val docWriterFactory: DocWriterFactory) {
         examplesList = ExamplesList(lines2, docWriter)
 
         docWriter.writeHeading(2, "Parsing log lines")
-                .writeLn("So far we have looked at examples of options which just change the way the FIX message is presented.  It is also worth considering how fixgrep parses log files, and how parts of that log line (not just the FIX) can be printed in the fixgrep output.")
-                .writeLn("It is common for FIX messages to be printed in the same file as application logs.  It is also common to have other things printed on the same line as the FIX message.  Such as timestamps, thread numbers, etc.")
+                .writeLn("So far we have looked at examples of options which just change the way the fix message is presented.  It is also worth considering how fixgrep parses log files, and how parts of that log line (not just the fix) can be printed in the fixgrep output.")
+                .writeLn("It is common for fix messages to be printed in the same file as application logs.  It is also common to have other things printed on the same line as the fix message.  Such as timestamps, thread numbers, etc.")
                 .writeLn("Let's consider these log lines as input:")
 
         docWriter.startSection(MiscTextEffect.Console)
@@ -99,12 +101,28 @@ class ExamplesSection(val docWriterFactory: DocWriterFactory) {
                 .writeLn("Parsing our new input lines outputs this:")
 
         examplesList.add("<no arguments>", "Parsing new log lines with no arguments.")
-        examplesList.add("--input-line-format ^(\\d{4}-[01]\\d-[0-3]\\d[T\\s][0-2]\\d:[0-5]\\d:[0-5]\\d[\\.,]\\d+)?.*?(35=.*\$)", "Oh no! In the example above, fixgrep assumed the line containing '...mid price captured at time 07:12:34.011=100.3' contained a FIX message because of the '11=100.3' text, it then printed out: '[ClOrdID]11=100.3'.  To remedy this, we can use a more specific regex:")
-        examplesList.add("--output-format-horizontal-console ${'$'}1:${'$'}{msgFix} --input-line-format ^(\\d{4}-[01]\\d-[0-3]\\d[T\\s][0-2]\\d:[0-5]\\d:[0-5]\\d[\\.,]\\d+)?.*?(35=.*\$)", "That's better.  Now that log line is not picked up.  Let's assume we do wish to show the date at the start of each line.  We do this by specifying ${DOLLAR}1 at the start of the output-format-horizontal-console.")
-        examplesList.add("--output-format-horizontal-console ${'$'}1:${'$'}{msgFix} --input-line-format ^\\d{4}-[01]\\d-[0-3]\\d[T\\s]([0-2]\\d:[0-5]\\d:[0-5]\\d[\\.,]\\d+)?.*?(35=.*\$)", "Whilst we're at it, let's just print out the time by slightly modifying the position of the first set of capturing brackets, as the whole date becomes a bit redundant.")
-        examplesList.add("--output-format-horizontal-console ${DOLLAR}1:${DOLLAR}{msgTypeName}:${'$'}{msgFix} --input-line-format ^\\d{4}-[01]\\d-[0-3]\\d[T\\s]([0-2]\\d:[0-5]\\d:[0-5]\\d[\\.,]\\d+)?.*?(35=.*\$)", "We can use another pre-defined tag ${DOLLAR}{msgTypeName} to print out not just the messageType, but also the execType if it's an execution report.")
-        examplesList.add("--output-format-horizontal-console ${DOLLAR}1:${'$'}{msgColor}${DOLLAR}{msgTypeName}${'$'}{colorReset}:${'$'}{msgFix} --input-line-format ^\\d{4}-[01]\\d-[0-3]\\d[T\\s]([0-2]\\d:[0-5]\\d:[0-5]\\d[\\.,]\\d+)?.*?(35=.*\$)", "And add coloring per message type")
-        examplesList.add("--exclude-tags 35 --output-format-horizontal-console ${DOLLAR}1:${'$'}{msgColor}${DOLLAR}{msgTypeName}${'$'}{colorReset}:${'$'}{msgFix} --input-line-format ^\\d{4}-[01]\\d-[0-3]\\d[T\\s]([0-2]\\d:[0-5]\\d:[0-5]\\d[\\.,]\\d+)?.*?(35=.*\$)", "I'm going to exclude (hide) field 35 as I already have the MessageType printed at the start of the line.")
+        examplesList.add("--input-line-format ^(\\d{4}-[01]\\d-[0-3]\\d[T\\s][0-2]\\d:[0-5]\\d:[0-5]\\d[\\.,]\\d+)?.*?(35=.*\$)",
+                "In the example above, fixgrep assumed the line containing '...mid price captured at time 07:12:34.011=100.3' contained " +
+                        "a fix message because of the '11=100.3' text, it then printed out: '[ClOrdID]11=100.3'.  To remedy this, we can use a " +
+                        "more specific regex:")
+
+        examplesList.add("--output-format-horizontal-console ${'$'}1:${'$'}{msgFix} --input-line-format ^(\\d{4}-[01]\\d-[0-3]\\d[T\\s][0-2]\\d:[0-5]\\d:[0-5]\\d[\\.,]\\d+)?.*?(35=.*\$)",
+                "That's better.  Now that log line is not picked up.  Let's assume we do wish to show the date at the start of each line.  " +
+                        "We do this by specifying ${DOLLAR}1 at the start of the output-format-horizontal-console.")
+
+        examplesList.add("--output-format-horizontal-console ${'$'}1:${'$'}{msgFix} --input-line-format ^\\d{4}-[01]\\d-[0-3]\\d[T\\s]([0-2]\\d:[0-5]\\d:[0-5]\\d[\\.,]\\d+)?.*?(35=.*\$)",
+                "Whilst we're at it, let's just print out the time by slightly modifying the position of the first set of capturing brackets, " +
+                        "as the whole date becomes a bit redundant.")
+
+        examplesList.add("--output-format-horizontal-console ${DOLLAR}1:${DOLLAR}{msgTypeName}:${'$'}{msgFix} --input-line-format ^\\d{4}-[01]\\d-[0-3]\\d[T\\s]([0-2]\\d:[0-5]\\d:[0-5]\\d[\\.,]\\d+)?.*?(35=.*\$)",
+                "We can use another pre-defined tag ${DOLLAR}{msgTypeName} to print out not just the messageType, but also the execType " +
+                        "if it's an execution report.")
+
+        examplesList.add("--output-format-horizontal-console ${DOLLAR}1:${'$'}{msgColor}${DOLLAR}{msgTypeName}${'$'}{colorReset}:${'$'}{msgFix} --input-line-format ^\\d{4}-[01]\\d-[0-3]\\d[T\\s]([0-2]\\d:[0-5]\\d:[0-5]\\d[\\.,]\\d+)?.*?(35=.*\$)",
+                "And add coloring per message type")
+
+        examplesList.add("--exclude-tags 35 --output-format-horizontal-console ${DOLLAR}1:${'$'}{msgColor}${DOLLAR}{msgTypeName}${'$'}{colorReset}:${'$'}{msgFix} --input-line-format ^\\d{4}-[01]\\d-[0-3]\\d[T\\s]([0-2]\\d:[0-5]\\d:[0-5]\\d[\\.,]\\d+)?.*?(35=.*\$)",
+                "I'm going to exclude (hide) field 35 as I already have the MessageType printed at the start of the line.")
 
         docWriter.writeLn("This is now looking more presentable.  If I want to have these settings applied each time I run fixgrep, I just need to modify my ~/.fixgrep/application.properties file. Fixgrep can automatically create this file by running:")
         docWriter.writeLn("fixgrep --install", MiscTextEffect.Console)
@@ -117,7 +135,8 @@ class ExamplesSection(val docWriterFactory: DocWriterFactory) {
         examplesList.end()
 
         docWriter.writeHeading(2, "Vertical Formatting")
-                .writeLn("So far we've looked at examples using horizontal formatting.  Sometimes vertical formatting is preferable.  Especially when looking at messages containing repeating groups such as prices.")
+                .writeLn("So far we've looked at examples using horizontal formatting.  Sometimes vertical formatting is preferable.  " +
+                        "Especially when looking at messages containing repeating groups such as prices.")
                 .writeLn("Let's consider this single log lines as input.  It contains 3 repeating prices:")
 
         val lines3 = listOf(
@@ -129,9 +148,13 @@ class ExamplesSection(val docWriterFactory: DocWriterFactory) {
         docWriter.endSection()
 
         examplesList = ExamplesList(lines3, docWriter)
-        examplesList.add("-V", "The default vertical format is 'non-aligned', which has the benefit that repeating groups can be indented.")
+        examplesList.add("-V", "The default vertical format is 'non-aligned', which has the benefit that repeating groups can be " +
+                "indented.")
+
         examplesList.add("-V -G false", "To turn off repeating group indenting, set the -G parameter to 'false'.")
-        examplesList.add("-V -A", "And to use 'aligned' vertical formatting, use the -A flag.  Note that when using 'aligned' vertical formatting, you will not be able to use indented repeating groups.")
+        examplesList.add("-V -A", "And to use 'aligned' vertical formatting, use the -A flag.  Note that when using 'aligned' " +
+                "vertical formatting, you will not be able to use indented repeating groups.")
+
         examplesList.end()
 
         docWriter.writeHeading(2, "Order Grouping")
