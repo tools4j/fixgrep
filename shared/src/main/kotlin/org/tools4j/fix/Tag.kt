@@ -6,7 +6,6 @@ package org.tools4j.fix
  * Time: 5:26 PM
  */
 interface Tag {
-    val tag: Int
-    fun toHtml(): String
-    fun toConsoleText(): String
+    val number: Int
+    fun accept(tagVisitor: TagVisitor)
 }

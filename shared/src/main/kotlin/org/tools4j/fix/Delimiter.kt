@@ -7,6 +7,4 @@ package org.tools4j.fix
  */
 interface Delimiter {
     val delimiter: String
-    fun toConsoleText(): String
-    fun toHtml(): String
 }

@@ -26,8 +26,8 @@ class HardwiredFixSession (
     }
 
     override fun send(message: FixMessage){
-        logger.info("AnnotatedFix: Send [" + compId + "-> " + targetCompId + "]: " + message.toConsoleText())
-        logger.info("RawFix:" + message.toFix())
+        logger.info{"AnnotatedFix: Send [" + compId + "-> " + targetCompId + "]: " + message.toConsoleText()}
+        logger.info{"RawFix:" + message.toFix()}
         counterparty!!.receive(message.toFix())
     }
 

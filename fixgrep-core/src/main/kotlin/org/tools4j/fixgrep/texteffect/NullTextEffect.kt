@@ -8,6 +8,17 @@ package org.tools4j.fixgrep.texteffect
 class NullTextEffect(): TextEffect {
     override val consoleTextBefore: String = ""
     override val consoleTextAfter: String = ""
-    override val name: String = ""
     override val htmlClass: String = ""
+
+    override fun contains(textEffect: TextEffect): Boolean {
+        return this.equals(textEffect)
+    }
+
+    override fun equals(other: Any?): Boolean {
+        return TextEffect.equals(this, other)
+    }
+
+    override fun hashCode(): Int {
+        return TextEffect.hashCode(this)
+    }
 }

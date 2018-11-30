@@ -20,10 +20,10 @@ interface Fields: MutableList<Field>{
     val pipeDelimitedString: String
     val msgTypeCode: String
     val msgTypeAndExecTypeKey: String
-    val outputDelimiter: Delimiter
-    fun toHtml(): String
-    fun toConsoleText(): String;
+    val fieldsAsSet: Set<Field>
     fun hasRepeatingTags(): Boolean
+    fun accept(fieldsVisitor: FieldsVisitor)
+    fun filterFields(predicate: (Field) -> Boolean): Fields;
 
     fun toDelimitedString(delimiter: String): String {
         if(delimiter.length != 1) throw IllegalArgumentException("Delimiter must be one character long: [$delimiter]")

@@ -1,12 +1,10 @@
 package org.tools4j.fixgrep.help
 
-import org.tools4j.fix.Fix50SP2FixSpecFromClassPath
-import org.tools4j.fixgrep.ConfigBuilder
-import org.tools4j.fixgrep.FormatSpec
-import org.tools4j.fixgrep.Formatter
+import org.tools4j.fixgrep.texteffect.CompositeTextEffect
+import org.tools4j.fixgrep.texteffect.ConsoleOnlyTextEffect
 import org.tools4j.fixgrep.texteffect.HtmlOnlyTextEffect
 import org.tools4j.fixgrep.texteffect.MiscTextEffect
-import org.tools4j.properties.ConfigImpl
+import org.tools4j.fixgrep.utils.WrappedFixGrep
 
 /**
  * User: ben
@@ -14,8 +12,6 @@ import org.tools4j.properties.ConfigImpl
  * Time: 5:25 PM
  */
 class ExamplesList (val fixLines: List<String>, val docWriter: DocWriter) {
-    val fixSpec = Fix50SP2FixSpecFromClassPath().spec
-
     init {
         docWriter.startSection(HtmlOnlyTextEffect("example-list"))
     }
@@ -27,24 +23,20 @@ class ExamplesList (val fixLines: List<String>, val docWriter: DocWriter) {
 
     fun add(args: List<String>, description: String): ExamplesList {
         val example = Example(description, args)
-        docWriter.writeLn(example.description, HtmlOnlyTextEffect("example-description"))
-        if(args.isEmpty()) docWriter.writeLn("<no arguments>", HtmlOnlyTextEffect("example-arguments"))
-        else docWriter.writeLn(example.args.joinToString(" "), HtmlOnlyTextEffect("example-arguments"))
+        docWriter.writeLn(example.description, CompositeTextEffect(ConsoleOnlyTextEffect.BlankLineBefore, HtmlOnlyTextEffect("example-description")))
+        if(args.isEmpty()) docWriter.writeLn("<no arguments>", CompositeTextEffect(listOf(ConsoleOnlyTextEffect.BlankLineBefore, ConsoleOnlyTextEffect.BlankLineAfter, ConsoleOnlyTextEffect.Bold, HtmlOnlyTextEffect("example-arguments"))))
+        else docWriter.writeLn(example.args.joinToString(" "), CompositeTextEffect(listOf(ConsoleOnlyTextEffect.BlankLineBefore, ConsoleOnlyTextEffect.BlankLineAfter, ConsoleOnlyTextEffect.Bold, HtmlOnlyTextEffect("example-arguments"))))
 
-        val configOverrides: MutableMap<String, String> = LinkedHashMap()
-        configOverrides.put("html", ""+docWriter.isHtml())
-        configOverrides.put("input.delimiter", "|")
-        configOverrides.put("output.line.format", "${'$'}{msgFix}")
+        val allArgs: MutableList<String> = ArrayList()
+        if(docWriter.isHtml()) allArgs.add("--html");
+        allArgs.add("--input-delimiter"); allArgs.add("|")
+        allArgs.add("--output-format-horizontal-console"); allArgs.add("${'$'}{msgFix}")
+        allArgs.addAll(args)
 
-        val configAndArguments = ConfigBuilder(example.args, ConfigImpl(configOverrides)).configAndArguments
+        val result = WrappedFixGrep(allArgs, false, false).go(fixLines.joinToString("\n"))
 
-        val spec = FormatSpec(config = configAndArguments.config, fixSpec = fixSpec)
-        val formatter = Formatter(spec)
         docWriter.startSection(MiscTextEffect.Console)
-        for(line in fixLines){
-            val formattedLine = formatter.format(line)
-            if(formattedLine != null) docWriter.write(formattedLine + "\n")
-        }
+        docWriter.write(result)
         docWriter.endSection()
         return this
     }

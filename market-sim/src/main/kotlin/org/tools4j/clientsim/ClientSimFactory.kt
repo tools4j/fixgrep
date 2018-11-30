@@ -3,6 +3,7 @@ package org.tools4j.clientsim;
 import org.tools4j.fix.FixSpec
 import org.tools4j.fix.RegistryFixDecoder
 import org.tools4j.fix.session.HardwiredFixSession
+import org.tools4j.fix.spec.FixSpecDefinition
 import org.tools4j.messaging.PubSubMsgDispatcher
 import org.tools4j.model.ClientOrder
 import org.tools4j.model.DateTimeService
@@ -29,7 +30,7 @@ import java.io.Writer
 class ClientSimFactory(
         private val compId: String,
         private val targetCompId: String,
-        fixSpec: FixSpec,
+        fixSpec: FixSpecDefinition,
         evaluationTrigger: EvaluationTriggerImpl) {
 
     companion object {

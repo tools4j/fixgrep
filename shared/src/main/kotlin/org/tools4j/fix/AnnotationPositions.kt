@@ -1,6 +1,5 @@
 package org.tools4j.fix
 
-import java.util.stream.Collectors
 import org.tools4j.fix.AnnotationPosition.*
 
 class AnnotationPositions(val tagAnnotationPosition: AnnotationPosition, val valueAnnotationPosition: AnnotationPosition){
@@ -32,21 +31,24 @@ class AnnotationPositions(val tagAnnotationPosition: AnnotationPosition, val val
         val specs: MutableMap<String, AnnotationPositions> = HashMap()
         val OUTSIDE_ANNOTATED = AnnotationPositions(BEFORE, AFTER)
         val LEFT_ANNOTATED = AnnotationPositions(BEFORE, BEFORE)
+        val REPLACED = AnnotationPositions(REPLACE, REPLACE)
         val NO_ANNOTATION = AnnotationPositions(NONE, NONE)
+        val OUTSIDE_ANNOTATED_STR = "outsideAnnotated"
+        val INSIDE_ANNOTATED_STR = "insideAnnotated"
+        val REPLACED_STR = "replaced"
+        val NONE_STR = "none"
 
         init{
-            specs["outsideAnnotated"] = AnnotationPositions(BEFORE, AFTER)
-            specs["insideAnnotated"] = AnnotationPositions(AFTER, BEFORE)
-            specs["ab"] = AnnotationPositions(AFTER, BEFORE)
-            specs["ba"] = AnnotationPositions(BEFORE, AFTER)
-            specs["bb"] = AnnotationPositions(BEFORE, BEFORE)
-            specs["aa"] = AnnotationPositions(AFTER, AFTER)
-            specs["a_"] = AnnotationPositions(AFTER, NONE)
-            specs["b_"] = AnnotationPositions(BEFORE, NONE)
-            specs["_a"] = AnnotationPositions(NONE, AFTER)
-            specs["_b"] = AnnotationPositions(NONE, BEFORE)
-            specs["__"] = NO_ANNOTATION
-            specs["none"] = NO_ANNOTATION
+            specs[OUTSIDE_ANNOTATED_STR] = AnnotationPositions(BEFORE, AFTER)
+            specs[INSIDE_ANNOTATED_STR] = AnnotationPositions(AFTER, BEFORE)
+            specs[REPLACED_STR] = AnnotationPositions(REPLACE, REPLACE)
+            for(firstSymbol in AnnotationPosition.values()){
+                for(secondSymbol in AnnotationPosition.values()){
+                    specs["${firstSymbol.abbrev}${secondSymbol.abbrev}"] = AnnotationPositions(firstSymbol, secondSymbol)
+                }
+                specs["${firstSymbol.abbrev}"] = AnnotationPositions(firstSymbol, firstSymbol)
+            }
+            specs[NONE_STR] = NO_ANNOTATION
         }
 
         @JvmStatic

@@ -7,6 +7,7 @@ import org.tools4j.fix.LimitPrice
 import org.tools4j.fix.MarketPrice
 import org.tools4j.fix.Price
 import org.tools4j.fix.Side
+import org.tools4j.fix.spec.FixSpecParser
 import org.tools4j.model.*
 import org.tools4j.model.fix.messages.LoggingMessageHandler
 import org.tools4j.model.fix.messages.NewOrderSingle
@@ -141,7 +142,7 @@ class OrderImplBookTest extends Specification{
                         qty,
                         price,
                         side,
-                        new Fix50SP2FixSpecFromClassPath().spec
+                        new FixSpecParser().parseSpec()
                 ),
                 orderId,
                 dateTimeService,

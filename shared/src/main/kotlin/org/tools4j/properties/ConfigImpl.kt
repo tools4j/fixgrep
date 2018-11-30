@@ -10,9 +10,9 @@ import kotlin.collections.LinkedHashMap
  */
 class ConfigImpl : Config {
     private val ESCAPED_VARIABLE_PATTERN = java.util.regex.Pattern.compile("\\\\(\\$\\{)")
+
     private val properties: Map<String, String?>
     constructor(repo: Config) : this(repo.asMap()) {}
-
     constructor(): this(LinkedHashMap<String, String>())
 
     constructor(properties: Map<String, String?>) {
@@ -23,7 +23,7 @@ class ConfigImpl : Config {
     override fun toPrettyString(): String {
         val sb = StringBuilder()
         for(key in properties.keys){
-            sb.append(key).append("=").append(properties[key]).append("\n")
+            sb.append(key).append("=").append(properties[key]?.replace("\n", "\\n")).append("\n")
         }
         return sb.toString()
     }
@@ -167,6 +167,10 @@ class ConfigImpl : Config {
         return StringCoercer(get(key)).getAsString()
     }
 
+    override fun getAsStringOrNull(key: String): String? {
+        return if(get(key) == null) null else getAsString(key)
+    }
+
     override fun getAsDouble(key: String, default: Double): Double{
         return StringCoercer(get(key)).getAsDouble(default)
     }
@@ -208,19 +212,19 @@ class ConfigImpl : Config {
         return StringCoercer(get(key)).getAsStringList()
     }
 
-    override fun getAsDoubleList(key: String, default: List<Double>): List<Double>{
+    override fun getAsDoubleList(key: String, default: List<Double>?): List<Double>?{
         return StringCoercer(get(key)).getAsDoubleList(default)
     }
 
-    override fun getAsLongList(key: String, default: List<Long>): List<Long>{
+    override fun getAsLongList(key: String, default: List<Long>?): List<Long>?{
         return StringCoercer(get(key)).getAsLongList(default)
     }
 
-    override fun getAsIntList(key: String, default: List<Int>): List<Int>{
+    override fun getAsIntList(key: String, default: List<Int>?): List<Int>?{
         return StringCoercer(get(key)).getAsIntList(default)
     }
 
-    override fun getAsBooleanList(key: String, default: List<Boolean>): List<Boolean>{
+    override fun getAsBooleanList(key: String, default: List<Boolean>?): List<Boolean>?{
         return StringCoercer(get(key)).getAsBooleanList(default)
     }
 
@@ -232,7 +236,7 @@ class ConfigImpl : Config {
         return hasProperty(key) && (get(key) == null || getAsString(key).toLowerCase() != "false")
     }
 
-    override fun getAsStringList(key: String, default: List<String>): List<String>{
+    override fun getAsStringList(key: String, default: List<String>?): List<String>?{
         return StringCoercer(get(key)).getAsStringList(default)
     }
 }

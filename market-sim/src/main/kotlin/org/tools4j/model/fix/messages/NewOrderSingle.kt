@@ -1,17 +1,7 @@
 package org.tools4j.model.fix.messages
 
-import org.tools4j.fix.Ascii1Char
-import org.tools4j.fix.ExecType
-import org.tools4j.fix.Fields
-import org.tools4j.fix.FieldsFromDelimitedString
-import org.tools4j.fix.FixFieldTypes
-import org.tools4j.fix.FixMessageType
-import org.tools4j.fix.FixSpec
-import org.tools4j.fix.Id
-import org.tools4j.fix.OrdStatus
-import org.tools4j.fix.OrderType
-import org.tools4j.fix.Price
-import org.tools4j.fix.Side
+import org.tools4j.fix.*
+import org.tools4j.fix.spec.FixSpecDefinition
 import org.tools4j.model.FieldsBuilder
 import org.tools4j.utils.FormatUtils
 
@@ -31,7 +21,7 @@ class NewOrderSingle(
         val price: Price,
         override val side: Side,
         val orderType: OrderType,
-        fixSpec: FixSpec) : OrderRequestMessage, FixMessage(fixSpec) {
+        fixSpec: FixSpecDefinition) : OrderRequestMessage, FixMessage(fixSpec) {
 
 
     constructor(
@@ -44,7 +34,7 @@ class NewOrderSingle(
             orderQty: Long,
             price: Price,
             side: Side,
-            fixSpec: FixSpec
+            fixSpec: FixSpecDefinition
     ) : this(senderCompId, targetCompId, clOrdId, origClOrderId, instrument, transactTime, orderQty, price, side, price.orderType, fixSpec)
 
     override val orderId: Id?
@@ -69,7 +59,7 @@ class NewOrderSingle(
         messageHandler.handleNewOrderSingle(this)
     }
 
-    class Decoder(val fixSpec: FixSpec) : FixMessageDecoder<NewOrderSingle> {
+    class Decoder(val fixSpec: FixSpecDefinition) : FixMessageDecoder<NewOrderSingle> {
         override val msgType: String
             get() = MSG_TYPE
 

@@ -26,7 +26,7 @@ class DefaultHighlightTextEffects(val effects: List<TextEffect>){
             DEFAULT.effects.forEach {
                 if(sb.length > 0) sb.append(", ")
                 sb.append(it.consoleTextBefore)
-                sb.append(it.name)
+                sb.append(it.htmlClass)
                 sb.append(it.consoleTextAfter)
             }
             return sb.toString()
@@ -37,7 +37,7 @@ class DefaultHighlightTextEffects(val effects: List<TextEffect>){
             val sb = StringBuilder()
             DEFAULT.effects.forEach {
                 if(sb.length > 0) sb.append(", ")
-                sb.append("<span class='${it.htmlClass}'>${it.name}</span>")
+                sb.append("<span class='${it.htmlClass}'>${it.htmlClass}</span>")
             }
             return sb.toString()
         }

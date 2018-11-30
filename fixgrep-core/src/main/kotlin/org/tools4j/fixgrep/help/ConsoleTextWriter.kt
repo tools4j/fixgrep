@@ -1,15 +1,14 @@
 package org.tools4j.fixgrep.help
 
 import org.tools4j.fix.Ansi
+import org.tools4j.fixgrep.formatting.FormatSpec
 import org.tools4j.fixgrep.highlights.DefaultHighlightTextEffects
 import org.tools4j.fixgrep.highlights.HighlightExampleTable
 import org.tools4j.fixgrep.texteffect.Ansi16BackgroundColor
 import org.tools4j.fixgrep.texteffect.Ansi16ForegroundColor
-import org.tools4j.fixgrep.texteffect.HtmlOnlyTextEffect
 import org.tools4j.fixgrep.texteffect.MiscTextEffect
 import org.tools4j.fixgrep.texteffect.TextEffect
 import java.util.*
-import java.util.function.Function
 
 /**
  * User: ben
@@ -27,6 +26,11 @@ class ConsoleTextWriter(): DocWriter {
         startListItem()
         write(itemText)
         endListItem()
+        return this
+    }
+
+    override fun writeCode(str: String): ConsoleTextWriter {
+        write(str)
         return this
     }
 
@@ -109,7 +113,7 @@ class ConsoleTextWriter(): DocWriter {
     }
 
     override fun writeFormatExamplesTable(fix: String): HighlightExampleTable {
-        return HighlightExampleTable(fix, addTable(), Function {it.toConsoleText()})
+        return HighlightExampleTable(fix, ConsoleTextTableBuilder(this), FormatSpec().copyWithModifications(inputDelimiter = "|", outputDelimiter = "|", outputFormatHorizontalConsole = "${'$'}{msgFix}", formatInHtml = false))
     }
 
     override fun addTable(textEffect: TextEffect): TableBuilder {
@@ -145,10 +149,12 @@ class ConsoleTextWriter(): DocWriter {
 
     override fun writeHeading(level: Int, content: String): ConsoleTextWriter {
         if(level == 1){
+            writeLn("")
             writeBoldLn("========================================================================================================")
             writeBoldLn(content.toUpperCase())
             writeBoldLn("========================================================================================================")
         } else if(level == 2) {
+            writeBoldLn("")
             writeBoldLn(content)
         } else {
             writeBoldLn(content)

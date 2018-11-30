@@ -12,6 +12,7 @@ import org.tools4j.fix.Price
 import org.tools4j.model.RandomQtyGivenAverage
 import org.tools4j.model.RoundedUpQtyToNearestSliceQty
 import org.tools4j.fix.Side
+import org.tools4j.fix.spec.FixSpecDefinition
 import org.tools4j.model.fix.messages.NewOrderSingle
 import org.tools4j.oms.Oms
 import org.tools4j.strategy.Evaluatable
@@ -35,7 +36,7 @@ class ClientSimOrderCreator(
         private val config: Config,
         private val messageHandler: PubSubMsgDispatcher,
         private val oms: Oms<ClientOrder>,
-        private val fixSpec: FixSpec,
+        private val fixSpec: FixSpecDefinition,
         private val evaluationTrigger: EvaluationTriggerImpl,
         private val orderIdGenerator: IdGenerator): Evaluatable  {
 

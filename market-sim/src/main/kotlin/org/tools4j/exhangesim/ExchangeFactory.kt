@@ -5,6 +5,8 @@ import org.tools4j.fix.FixSpec
 import org.tools4j.fix.RegistryFixDecoder
 import org.tools4j.fix.session.FixSession
 import org.tools4j.fix.session.HardwiredFixSession
+import org.tools4j.fix.spec.FixSpecDefinition
+import org.tools4j.fix.spec.FixSpecParser
 import org.tools4j.messaging.PubSubMsgDispatcher
 import org.tools4j.model.MarketOrder
 import org.tools4j.model.Order
@@ -28,7 +30,7 @@ class ExchangeFactory(
         val compId: String,
         val targetCompId: String,
         val counterparty: FixSession,
-        fixSpec: FixSpec,
+        fixSpec: FixSpecDefinition,
         val evaluationTrigger: EvaluationTrigger) {
 
         val exchange: Exchange
@@ -43,7 +45,6 @@ class ExchangeFactory(
         decoderRegistry.register(CancelReplaceRequest.Decoder(fixSpec))
         decoderRegistry.register(CancelRequest.Decoder(fixSpec))
 
-        val fixSpec = Fix50SP2FixSpecFromClassPath().spec;
         exchange = Exchange()
 
         val oms = MarketOms(compId = "ACME_EXCHANGE", messageHandler = pubSubMsgDispatcher, evaluationTrigger = evaluationTrigger)

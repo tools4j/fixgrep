@@ -1,22 +1,22 @@
 body {
     background-color: #f5f5f5;
     text-rendering: optimizelegibility;
-    font-size: 16px;
+    font-size: 12px;
     color: #333;
     line-height: 1.5em;
     -moz-osx-font-smoothing: grayscale;
     font-weight: 400;
-    font-family: varela round,sans-serif;
+    font-family: 'Consolas', 'Menlo', 'Ubuntu Mono', 'source-code-pro', monospace;
     margin: 0;
+}
+
+body.console {
+    background-color: #333;
 }
 
 div.fixMsg {
     white-space: nowrap;
 }
-
-/*div.fixMsg span{*/
-    /*font-size: 16px;*/
-/*}*/
 
 span.divider {
     display: none;
@@ -25,7 +25,6 @@ span.divider {
 span.Fg123{
     color: lightskyblue;
 }
-
 
 div.top-strip {
     background-color: #6db63f;
@@ -36,40 +35,46 @@ div.top-strip {
 div.header {
     background-color: #34302d;
     padding: 1em 1em 1em 1em;
+    border-bottom: 1px solid gray;
 }
 
 div.header span {
-    font: 24px/normal 'Consolas', 'Menlo', 'Ubuntu Mono', 'source-code-pro', monospace;
+    font-size: 2em;
     margin: 0;
     color: white;
     padding: 0;
 }
 
 div.content {
-    margin: 12px;
+    margin: 1em;
 }
 
 body div.footer {
     background-color: #333;
     padding: 0.2em 1em 0.2em 1em;
-    font: 10px/normal 'Consolas', 'Menlo', 'Ubuntu Mono', 'source-code-pro', monospace;
+    font-size: 0.8em;
     color: white;
 }
 
-div.console {
+.console {
     white-space: nowrap;
-    font: 12px/normal 'Consolas', 'Menlo', 'Ubuntu Mono', 'source-code-pro', monospace;
-    #font: 11px 'andale mono','lucida console',monospace;
+    #unicode-bidi: embed;
     background-color: #333;
     color: white;
     padding: 0.5em;
-    overflow: auto;
     text-rendering: optimizelegibility;
 }
 
+div.console {
+    overflow: auto;
+}
+
+table {
+    font-size: 1em;
+    color: inherit;
+}
+
 table.doc-table td, table.doc-table th {
-    #white-space: nowrap;
-    font: 12px/normal 'Consolas', 'Menlo', 'Ubuntu Mono', 'source-code-pro', monospace;
     background-color: #333;
     color: white;
     padding: 0.5em;
@@ -81,16 +86,24 @@ table.doc-table td, table.doc-table th {
 table.doc-table th {
     font-weight: bold;
     font-family: varela round,sans-serif;
-    font-size: 15px;
+    font-size: 1.1em;
 }
 
 table.color256-table td {
-    font: 12px/normal 'Consolas', 'Menlo', 'Ubuntu Mono', 'source-code-pro', monospace;
     padding: 0.2em;
 }
 
-.bold { font-weight: bold; }
+table.fields {
+    border: 0;
+    border-spacing: 0;
+    border-collapse: separate;
+}
 
+table.fields td{
+    padding: 0.1em;
+}
+
+.bold { font-weight: bold; }
 
 div.console span.field span {
     opacity: 0.7;
@@ -110,68 +123,53 @@ div.fixMsg span {
     color: #34302d;
 }
 
-h1 {
-    border-top: 4px solid #6db63f;
-}
-
-h1 a {
+h1, h1 a {
     font-family: Montserrat,sans-serif;
     color: #34302d;
     text-rendering: optimizelegibility;
-    font-size: 36px;
     font-weight: 400;
     text-decoration: none;
     display: block;
+}
+
+h1 {
+    border-top: 4px solid #6db63f;
+    font-size: 2.5em;
     padding-top: 0.4em;
 }
 
-
-h2 {
+h2, h2 a {
     font-family: Montserrat,sans-serif;
     color: #34302d;
     font-weight: 700;
     line-height: 1.5em;
-    text-transform: uppercase;
-    font-size: 17.5px;
     text-rendering: optimizelegibility;
     text-decoration: none;
-    padding-bottom: 0;
-    margin-bottom: 0.2em;
+    margin: 0;
 }
 
-h2 a {
+h2 {
+    font-size: 1.75em;
+    padding-bottom: 0;
+    margin-bottom: 0.2em;
+    margin-top: 0.75em;
+}
+
+h3, h3 a {
     font-family: Montserrat,sans-serif;
     color: #34302d;
     font-weight: 700;
     line-height: 1.5em;
-    text-transform: uppercase;
-    font-size: 17.5px;
     text-rendering: optimizelegibility;
     text-decoration: none;
     margin: 0;
 }
 
 h3 {
-    font-family: Montserrat,sans-serif;
-    color: #34302d;
-    font-weight: 700;
-    line-height: 1.5em;
-    font-size: 15px;
-    text-rendering: optimizelegibility;
-    text-decoration: none;
+    font-size: 1.5em;
     padding-bottom: 0;
     margin-bottom: 0.2em;
-}
-
-h3 a {
-    font-family: Montserrat,sans-serif;
-    color: #34302d;
-    font-weight: 700;
-    line-height: 1.5em;
-    font-size: 17px;
-    text-rendering: optimizelegibility;
-    text-decoration: none;
-    margin: 0;
+    margin-top: 0.75em;
 }
 
 div.example-description {
@@ -180,8 +178,7 @@ div.example-description {
     padding-top: 0.5em;
 }
 
-div.example-arguments, div.option h2, div.option h2 a{
-    font-family: 'Consolas', 'Menlo', 'Ubuntu Mono', 'source-code-pro', monospace;
+div.example-arguments, div.option-example, div.option h2, div.option h2 a{
     font-size: 14px;
     text-transform: none;
     text-rendering: optimizelegibility;
@@ -189,19 +186,26 @@ div.example-arguments, div.option h2, div.option h2 a{
     line-height: 2em;
 }
 
+div.option-example {
+    display: inline;
+    font-size: 12px;
+    color: #6da64a;
+}
 
 div.example-list h2, div.example-list h2 a{
-    font-family: 'Consolas', 'Menlo', 'Ubuntu Mono', 'source-code-pro', monospace;
     font-size: 14px;
     text-transform: none;
     text-rendering: optimizelegibility;
     font-weight: bold;
     line-height: 2em;
 }
-
 
 div.option h2 a{
     margin-bottom: 1.0em;
+}
+
+div.option h3 {
+    font-size: 1.0em;
 }
 
 div.option {
@@ -218,10 +222,38 @@ ul {
 
 span.color-demo span {
     margin-right: 0.2em;
-    font-family: 'Consolas', 'Menlo', 'Ubuntu Mono', 'source-code-pro', monospace;
     font-size: 14px;
     text-rendering: optimizelegibility;
     padding: 0.1em 0.5em 0.1em 0.5em;
+}
+
+td.tag {
+    text-align: right;
+}
+
+div.group-repeat-number {
+    float: left;
+    margin-left: -2em;
+}
+
+div.group-repeats {
+    padding-left: 4em;
+}
+
+div.group-repeat {
+    min-height: 1.5em;
+}
+
+td xmp{
+    margin-bottom: 0;
+}
+
+div.msg div.fields {
+    display: inline;
+}
+
+div.order-response, div.orphan-message {
+    margin-left: 3em;
 }
 
 .FgBlack{ color: black; }

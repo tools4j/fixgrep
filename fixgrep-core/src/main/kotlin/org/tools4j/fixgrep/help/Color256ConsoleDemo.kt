@@ -1,5 +1,7 @@
 package org.tools4j.fixgrep.help
 
+import mu.KotlinLogging
+
 /**
  * User: ben
  * Date: 9/05/2018
@@ -27,7 +29,7 @@ class Color256ConsoleDemo {
         sb.toString()
     }
 
-    val demoForConsole = consoleIntro + demo
+    val demoForConsole: String by lazy { consoleIntro + demo }
 
     private fun getText(color: Int): String {
         return getText(color, (color == 3 || color in 6..15))
@@ -45,10 +47,11 @@ class Color256ConsoleDemo {
     }
 
     companion object {
+        val logger = KotlinLogging.logger {}
         @JvmStatic
         fun main(args: Array<String>) {
             val demo = Color256ConsoleDemo()
-            println(demo.consoleIntro + demo.demo)
+            logger.info(demo.consoleIntro + demo.demo)
         }
     }
 }

@@ -32,7 +32,7 @@ class TextEffectParser{
 
     public fun parseCompositeTextEffect(expression: String): TextEffect {
         val effects = parseToListOfTextEffects(expression, ":")
-        return CompositeTextEffect(effects)
+        return CompositeTextEffect(LinkedHashSet(effects))
     }
 
     public fun parseToListOfTextEffects(expression: String, delimiter: String): ArrayList<TextEffect> {

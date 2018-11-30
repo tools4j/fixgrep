@@ -1,39 +1,35 @@
 package org.tools4j.fix
 
+import org.tools4j.fix.spec.FixSpecDefinition
+
 /**
  * User: ben
  * Date: 11/7/17
  * Time: 5:19 PM
  */
-class FieldAnnotator(
-        val fixSpec: FixSpec,
-        val annotationSpec: AnnotationSpec = AnnotationSpec.OUTSIDE_ANNOTATED_BOLD_TAG_VALUES){
+class FieldAnnotator(val fixSpec: FixSpecDefinition, val fieldEnumAnnotationAugmenter: FieldEnumAnnotationAugmenter){
+    constructor(fixSpec: FixSpecDefinition): this(fixSpec, DefaultFieldEnumAugmentor())
 
     fun getField(field: Field): Field {
-        return getField(field.tag.tag, field.value.rawValue)
+        return FieldImpl(getTag(field.tag), getValue(field.tag, field.value))
     }
 
-    fun getField(tagInt: Int, valueStr: String): Field {
-        val tag = getTag(tagInt)
-        val value = getValue(tag, valueStr)
-        return AnnotatedField(tag, value, annotationSpec)
-    }
-
-    private fun getTag(tag: Int): Tag {
-        val tagDescription: String? = fixSpec.fieldsAndEnumValues[""+tag]
-        return if (tagDescription != null) {
-            AnnotatedTag(tag, tagDescription, annotationSpec.annotationPositions.tagAnnotationPosition, annotationSpec.boldTagAndValue)
+    private fun getTag(tag: Tag): Tag {
+        val fieldName: String? = fixSpec.fieldsByNumber[tag.number]?.name
+        return if (fieldName != null) {
+            AnnotatedTag(tag.number, fieldName)
         } else {
-            NonAnnotatedTag(tag, annotationSpec.boldTagAndValue)
+            tag
         }
     }
 
-    private fun getValue(tag: Tag, rawValue: String): Value {
-        val tagDescription = fixSpec.fieldsAndEnumValues["" + tag.tag + "." + rawValue]
-        return if (tagDescription != null) {
-            AnnotatedValue(rawValue, tagDescription, annotationSpec.annotationPositions.valueAnnotationPosition, annotationSpec.boldTagAndValue)
+    private fun getValue(tag: Tag, value: Value): Value {
+        val enumAnnotation = fieldEnumAnnotationAugmenter.lookupEnumOverride(tag.number, value.valueRaw)
+                                    ?: fixSpec.fieldsByNumber.get(tag.number)?.enumsByCode?.get(value.valueRaw)
+        return if (enumAnnotation != null) {
+            AnnotatedValue(value.valueRaw, fieldEnumAnnotationAugmenter.augmentEnum(enumAnnotation))
         } else {
-            NonAnnotatedValue(rawValue, annotationSpec.boldTagAndValue)
+            value
         }
     }
 }

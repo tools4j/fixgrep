@@ -20,13 +20,11 @@ public class CircularBufferedReaderWriter {
     private final BufferedReader reader;
 
     public CircularBufferedReaderWriter() throws IOException {
-        cs = new CircularReaderWriter();
-        writer = new BufferedWriter(cs.getWriter());
-        reader = new BufferedReader(cs.getReader());
+        this(10*1000*1024);
     }
 
-    public CircularBufferedReaderWriter(int bufferSize) throws IOException {
-        cs = new CircularReaderWriter();
+    private CircularBufferedReaderWriter(int bufferSize) throws IOException {
+        cs = new CircularReaderWriter(bufferSize);
         writer = new BufferedWriter(cs.getWriter(), bufferSize);
         reader = new BufferedReader(cs.getReader(), bufferSize);
     }

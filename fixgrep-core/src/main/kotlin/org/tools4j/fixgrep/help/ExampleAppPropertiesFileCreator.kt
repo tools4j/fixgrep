@@ -1,5 +1,6 @@
 package org.tools4j.fixgrep.help
 
+import mu.KotlinLogging
 import java.io.File
 
 /**
@@ -8,31 +9,34 @@ import java.io.File
  * Time: 5:58 PM
  */
 class ExampleAppPropertiesFileCreator {
-    val homeDir = File(System.getProperty("user.home"))
-    val fixgrepHomeDir = File(homeDir.absolutePath + File.separator + ".fixgrep")
-    val fixgrepAppProperties = File(fixgrepHomeDir.absolutePath + File.separator + "application.properties")
+    companion object {
+        val HOME_DIR = File(System.getProperty("user.home"))
+        val FIXGREP_HOME_DIR = File(HOME_DIR.absolutePath + File.separator + ".fixgrep")
+        val FIXGREP_APP_PROPERTIES_FILE = File(FIXGREP_HOME_DIR.absolutePath + File.separator + "application.properties")
+        val logger = KotlinLogging.logger {}
+    }
 
     fun createIfNecessary() {
-        if(fixgrepAppProperties.exists()){
-            println("Fixgrep properties file already exists at: " + fixgrepAppProperties.absolutePath)
+        if(FIXGREP_APP_PROPERTIES_FILE.exists()){
+            logger.info("Fixgrep properties file already exists at: " + FIXGREP_APP_PROPERTIES_FILE.absolutePath)
             return
         }
 
-        println("Attempting to create application.properties file at: " + fixgrepAppProperties.absolutePath + "\nPlease modify config in this file to change the behaviour of fixgrep for every time it is run.")
+        logger.info("Attempting to create application.properties file at: " + FIXGREP_APP_PROPERTIES_FILE.absolutePath + "\nPlease modify config in this file to change the behaviour of fixgrep for every time it is run.")
         try {
-            if (!fixgrepHomeDir.exists()) {
-                fixgrepHomeDir.mkdirs()
+            if (!FIXGREP_HOME_DIR.exists()) {
+                FIXGREP_HOME_DIR.mkdirs()
             } else {
-                if(!fixgrepHomeDir.isDirectory){
-                    throw RuntimeException(fixgrepHomeDir.absolutePath + " already exists, but it is a file, it must be a directory!")
+                if(!FIXGREP_HOME_DIR.isDirectory){
+                    throw RuntimeException(FIXGREP_HOME_DIR.absolutePath + " already exists, but it is a file, it must be a directory!")
                 }
             }
 
-            fixgrepAppProperties.writeText(ExampleAppPropertiesGenerator().content)
+            FIXGREP_APP_PROPERTIES_FILE.writeText(ExampleAppPropertiesGenerator().content)
             return
 
         } catch(e: Exception){
-            println("Could not create application.properties  reason:[" + e.message + "]")
+            logger.error("Could not create application.properties  reason:[" + e.message + "]")
             return
         }
     }

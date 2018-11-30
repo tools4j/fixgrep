@@ -1,5 +1,6 @@
 package org.tools4j.fixgrep.help
 
+import mu.KotlinLogging
 import org.tools4j.fixgrep.texteffect.Ansi
 import org.tools4j.fixgrep.texteffect.Ansi16BackgroundColor
 import org.tools4j.fixgrep.texteffect.Ansi16ForegroundColor
@@ -24,10 +25,11 @@ class Color16ConsoleDemo {
     val demoForConsole = consoleIntro + demo
 
     companion object {
+        val logger = KotlinLogging.logger {}
         @JvmStatic
         fun main(args: Array<String>) {
             val demo = Color16ConsoleDemo()
-            println(demo.consoleIntro + demo.demo)
+            logger.info(demo.consoleIntro + demo.demo)
         }
     }
 }

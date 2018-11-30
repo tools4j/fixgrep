@@ -34,21 +34,32 @@ interface Config {
     fun getAsIntList(key: String): List<Int>
     fun getAsBooleanList(key: String): List<Boolean>
     fun getAsStringList(key: String): List<String>
-    fun getAsDoubleList(key: String, default: List<Double>): List<Double>
-    fun getAsLongList(key: String, default: List<Long>): List<Long>
-    fun getAsIntList(key: String, default: List<Int>): List<Int>
-    fun getAsBooleanList(key: String, default: List<Boolean>): List<Boolean>
-    fun getAsStringList(key: String, default: List<String>): List<String>
+    fun getAsDoubleList(key: String, default: List<Double>?): List<Double>?
+    fun getAsLongList(key: String, default: List<Long>?): List<Long>?
+    fun getAsIntList(key: String, default: List<Int>?): List<Int>?
+    fun getAsBooleanList(key: String, default: List<Boolean>?): List<Boolean>?
+    fun getAsStringList(key: String, default: List<String>?): List<String>?
+    fun getAsStringOrNull(key: String): String?
     fun hasProperty(key: String): Boolean
     fun toPrettyString(): String
+    fun hasPropertyAndIsNotFalse(key: String): Boolean
+    fun hasPropertyAndIsTrueOrNull(key: String): Boolean {
+        return get(key) == null || get(key).toString().toLowerCase().equals("true")
+    }
+    fun validateAllPropertyKeysAreOneOf(allowedKeys: List<String>){
+        val keysPresentWhichAreNotInAllowedList = ArrayList<String>()
+        for(key in keySet()){
+            if(!allowedKeys.contains(key)){
+                keysPresentWhichAreNotInAllowedList.add(key)
+            }
+        }
+        if(!keysPresentWhichAreNotInAllowedList.isEmpty()) {
+            throw IllegalArgumentException("The following property keys were found, which were not present in the allowed list \nallowedKeys$allowedKeys\nillegalKeys:$keysPresentWhichAreNotInAllowedList")
+        }
+    }
 
     companion object {
         fun empty(): Config {return ConfigImpl(emptyMap())}
         val PRESENT = Object()
-    }
-
-    fun hasPropertyAndIsNotFalse(key: String): Boolean
-    fun hasPropertyAndIsTrueOrNull(key: String): Boolean {
-        return get(key) == null || get(key).toString().toLowerCase().equals("true")
     }
 }

@@ -1,6 +1,5 @@
 package org.tools4j.fixgrep.highlights
 
-import org.tools4j.fix.SplitableByCharString
 import org.tools4j.fixgrep.texteffect.TextEffectParser
 
 /**
@@ -24,7 +23,7 @@ class HighlightParser(_defaultHighlightTextEffects: DefaultHighlightTextEffects)
     fun parse(expressions: List<String>): Highlight{
         defaultHighlightTextEffects.reset()
         val highlights = ArrayList<Highlight>()
-        expressions.reversed().forEach {
+        expressions.forEach {
             highlights.add(parseExpression(it))
         }
         return Highlights(highlights)
@@ -59,6 +58,6 @@ class HighlightParser(_defaultHighlightTextEffects: DefaultHighlightTextEffects)
             TextEffectParser().parse(mutableParts.joinToString(":"))
         }
 
-        return HighlightImpl(criteria, HighlightAction(scope, textEffect))
+        return HighlightImpl(criteria, scope, textEffect)
     }
 }

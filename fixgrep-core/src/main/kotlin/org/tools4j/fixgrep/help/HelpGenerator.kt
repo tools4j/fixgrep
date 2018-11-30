@@ -2,7 +2,7 @@ package org.tools4j.fixgrep.help
 
 import joptsimple.HelpFormatter
 import joptsimple.OptionDescriptor
-import org.tools4j.fixgrep.OptionParserFactory
+import org.tools4j.fixgrep.config.OptionParserFactory
 import java.io.OutputStream
 
 /**
@@ -11,16 +11,16 @@ import java.io.OutputStream
  * Time: 5:25 PM
  */
 
-class HelpGenerator: HelpFormatter {
+class HelpGenerator(val outputStream: OutputStream): HelpFormatter {
 
     override fun format(options: MutableMap<String, out OptionDescriptor>): String {
         return help
     }
 
-    fun go(os: OutputStream){
+    fun go(){
         val optionParser = OptionParserFactory().optionParser
         optionParser.formatHelpWith(this)
-        optionParser.printHelpOn(os)
+        optionParser.printHelpOn(outputStream)
     }
 
     val help: String by lazy {
@@ -28,11 +28,11 @@ class HelpGenerator: HelpFormatter {
         sb.append("Usage: fixgrep [options] [files ...]\n")
         sb.append("Options:\n")
         val optionsHelp = OptionsHelp(DocWriterFactory.ConsoleText)
-        for (desc in optionsHelp.helpByOptions.values.distinct()) {
-            val optionVariations = desc.optionVariations
+        for (help in optionsHelp.optionsHelp) {
+            val optionVariations = help.option.optionVariationsWithDashPrefixesAsCommaDelimitedString
             sb.append(optionVariations.toString().padEnd(40))
                     .append(" ")
-                    .append(optionsHelp.helpByOptions.get(desc.optionVariations.get(0))!!.tagline)
+                    .append(help.tagline)
                     .append("\n")
         }
         sb.append("\n(type 'fixgrep --man' for more detailed help)\n")
@@ -44,7 +44,7 @@ class HelpGenerator: HelpFormatter {
 
         @JvmStatic
         fun main(args: Array<String>) {
-            val help = HelpGenerator()
+            val help = HelpGenerator(System.out)
             val optionParser = OptionParserFactory().optionParser
             optionParser.formatHelpWith(help)
             optionParser.printHelpOn(System.out)

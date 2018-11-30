@@ -1,12 +1,11 @@
 package org.tools4j.fixgrep.help
 
+import org.tools4j.fixgrep.formatting.FormatSpec
 import org.tools4j.fixgrep.highlights.DefaultHighlightTextEffects
 import org.tools4j.fixgrep.highlights.HighlightExampleTable
 import org.tools4j.fixgrep.texteffect.Ansi16BackgroundColor
 import org.tools4j.fixgrep.texteffect.Ansi16ForegroundColor
-import org.tools4j.fixgrep.texteffect.HtmlOnlyTextEffect
 import org.tools4j.fixgrep.texteffect.TextEffect
-import java.util.function.Function
 
 
 /**
@@ -16,6 +15,11 @@ import java.util.function.Function
  */
 open class HtmlWriter(): DocWriter {
     val sb = StringBuilder()
+
+    override fun writeCode(str: String): HtmlWriter {
+        write("<xmp>$str</xmp>")
+        return this
+    }
 
     override fun startList(): DocWriter {
         write("<ul>\n")
@@ -99,7 +103,7 @@ open class HtmlWriter(): DocWriter {
     }
 
     override fun writeFormatExamplesTable(fix: String): HighlightExampleTable {
-        return HighlightExampleTable(fix, HtmlTableBuilder(this), Function {it.toHtml()})
+        return HighlightExampleTable(fix, HtmlTableBuilder(this), FormatSpec().copyWithModifications(inputDelimiter = "|", outputDelimiter = "|", outputFormatHorizontalHtml = "${'$'}{msgFix}", formatInHtml = true))
     }
 
     override fun writeBoldLn(line: String): HtmlWriter {

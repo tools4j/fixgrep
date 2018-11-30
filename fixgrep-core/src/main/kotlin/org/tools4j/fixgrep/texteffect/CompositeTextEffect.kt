@@ -7,37 +7,36 @@ import java.util.stream.Collectors
  * Date: 5/04/2018
  * Time: 6:55 AM
  */
-class CompositeTextEffect(val textEffects: List<TextEffect>): TextEffect {
-    override val consoleTextAfter: String = Ansi.Reset
+class CompositeTextEffect(val textEffects: Set<TextEffect>) : TextEffect {
+    constructor(textEffect1: TextEffect, textEffect2: TextEffect) : this(linkedSetOf(textEffect1, textEffect2))
+    constructor(textEffects: List<TextEffect>) : this(LinkedHashSet(textEffects))
 
-    override val name: String by lazy {
-        val sb = StringBuilder()
-        for (textEffect in textEffects) {
-            if(sb.length > 0) sb.append(",")
-            sb.append(textEffect.name)
+    override fun contains(textEffect: TextEffect): Boolean {
+        textEffects.forEach {
+            if (it.contains(textEffect)) {
+                return true
+            }
         }
-        sb.toString()
+        return false
     }
 
+    override val consoleTextAfter: String by lazy {
+        textEffects.stream().map { it.consoleTextAfter }.filter{ !it.isEmpty() }.collect(Collectors.toSet()).joinToString("")
+    }
     override val consoleTextBefore: String by lazy {
-        textEffects.stream().map{it.consoleTextBefore}.collect(Collectors.toList()).joinToString("")
+        textEffects.stream().map { it.consoleTextBefore }.collect(Collectors.toList()).joinToString("")
     }
 
     override val htmlClass: String by lazy {
-        textEffects.stream().map{it.htmlClass}.collect(Collectors.toList()).joinToString(" ")
+        textEffects.stream().map { it.htmlClass }.filter { !it.isEmpty() }.collect(Collectors.toList()).joinToString(" ")
     }
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other !is CompositeTextEffect) return false
-
-        if (textEffects != other.textEffects) return false
-
-        return true
+        return TextEffect.equals(this, other)
     }
 
     override fun hashCode(): Int {
-        return textEffects.hashCode()
+        return TextEffect.hashCode(this)
     }
 
     override fun toString(): String {

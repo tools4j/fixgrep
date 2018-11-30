@@ -18,11 +18,11 @@ class Ansi256Color(val color: Int, val backgroundForeground: AnsiForegroundBackg
         "\u001b[" + backgroundForegroundCode + ";5;" + color + "m"
     }
 
-    override val htmlClass: String by lazy {
-        backgroundForeground.abbreviation + color
+    override fun contains(textEffect: TextEffect): Boolean {
+        return this.equals(textEffect)
     }
 
-    override val name: String by lazy {
+    override val htmlClass: String by lazy {
         backgroundForeground.abbreviation + color
     }
 
@@ -67,8 +67,6 @@ class Ansi256Color(val color: Int, val backgroundForeground: AnsiForegroundBackg
             return Ansi256Color(intValue, foregroundBackground)
         }
     }
-
-
 
     override fun toString(): String {
         return "Ansi256Color(color=$color, backgroundForeground=$backgroundForeground)"

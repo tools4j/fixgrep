@@ -1,6 +1,7 @@
 package org.tools4j.fixgrep.help
 
-import org.tools4j.fixgrep.OptionParserFactory
+import mu.KotlinLogging
+import org.tools4j.fixgrep.config.Option
 
 /**
  * User: ben
@@ -14,11 +15,11 @@ class ExampleAppPropertiesGenerator {
         sb.append("################################################\n")
         sb.append("# Add properties overrides into this file\n")
         sb.append("################################################\n\n")
-        for(entry in options.helpByPropertyValues){
-            if(!OptionParserFactory.propertiesThatShouldNotBeConfigurable.contains(entry.key)){
-                sb.append("# ").append(entry.value.tagline).append("\n")
-                sb.append("# ").append(entry.key)
-                if(entry.value.exampleValue != null) sb.append("=").append(entry.value.exampleValue)
+        for(help in options.optionsHelp){
+            if(Option.optionsThatCanBeConfigurableInPropertiesFile.map{it.key}.contains(help.option.key)){
+                sb.append("# ").append(help.tagline).append("\n")
+                sb.append("# ").append(help.option.key)
+                if(help.exampleValue != null) sb.append("=").append(help.exampleValue)
                 sb.append("\n\n")
             }
         }
@@ -26,9 +27,10 @@ class ExampleAppPropertiesGenerator {
     }
 
     companion object {
+        val logger = KotlinLogging.logger {}
         @JvmStatic
         fun main(args: Array<String>) {
-            println(ExampleAppPropertiesGenerator().content)
+            logger.info(ExampleAppPropertiesGenerator().content)
         }
     }
 }
