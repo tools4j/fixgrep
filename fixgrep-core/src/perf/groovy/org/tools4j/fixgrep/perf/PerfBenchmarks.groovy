@@ -72,16 +72,16 @@ public class PerfBenchmarks extends Specification {
         []                                     | 373               | 10000 //warmup
         []                                     | 373               | 10000 //warmup
         []                                     | 373               | 10000 //warmup
-        []                                     | 373               | 300
-        ["--suppress-bold-tags-and-values"]    | 373               | 200
-        ["--suppress-colors"]                  | 373               | 200
-        ["--highlights","35"]                  | 373               | 200
-        ["--sort-by-tags","35,55"]             | 373               | 200
-        ["--only-include-tags","35,55"]        | 373               | 200
-        ["--exclude-tags","35"]                | 373               | 200
-        ["--tag-annotations","__"]             | 373               | 200
-        ["--tag-annotations","ab"]             | 373               | 200
-        ["--include-only-messages-of-type","8"]| 258               | 200
-        ["--exclude-messages-of-type","8"]     | 115               | 200
+        []                                     | 373               | 400
+        ["--suppress-bold-tags-and-values"]    | 373               | 400
+        ["--suppress-colors"]                  | 373               | 400
+        ["--highlights","35"]                  | 373               | 400
+        ["--sort-by-tags","35,55"]             | 373               | 400
+        ["--only-include-tags","35,55"]        | 373               | 400
+        ["--exclude-tags","35"]                | 373               | 400
+        ["--tag-annotations","__"]             | 373               | 400
+        ["--tag-annotations","ab"]             | 373               | 400
+        ["--include-only-messages-of-type","8"]| 258               | 400
+        ["--exclude-messages-of-type","8"]     | 115               | 400
     }
 }
