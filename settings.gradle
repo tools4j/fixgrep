@@ -2,4 +2,5 @@ rootProject.name = 'market-simulator'
 include 'fixgrep-core'
 include 'shared'
 include 'market-sim'
+include 'fixgrep-web'
 
