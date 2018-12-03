@@ -244,7 +244,7 @@ class ManGenerator(val docWriterFactory: DocWriterFactory, val config: FixGrepCo
             writeHeading(3, "Why do I lose color formatting when piping fixgrep results to 'less'?")
             writeLn("Indeed, some commands will not retain color formatting.  For less, use the -R option")
             writeHeading(2, "Performance")
-            writeHeading(3, "Can gixgrep be used as an alternative to grep when filtering large files.")
+            writeHeading(3, "Can fixgrep be used as an alternative to grep when filtering large files.")
             writeLn("It depends.  Fixgrep will be much slower than grep, and will consume more CPU.  For example running on my mac laptop, grep is roughly 5 times faster than fixgrep for searching for messages. If you don't want to wait too long and/or you are concerned about impact on CPU, best to use conventional grep commands to filter first and then pipe into fixgrep.")
             writeHeading(3, "Can fixgrep be used as an alternative to 'more' or 'less' to view large FIX log files.")
             writeLn("It depends.  Applications such as 'more' or 'less' don't need to read an entire file during viewing.  Whereas fixgrep does.")

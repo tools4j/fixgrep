@@ -257,7 +257,7 @@ the less 'interesting' fix fields, such as BeginString, BodyLength or Checksum. 
                 "Most consoles support 16 colors.  To use any of these colors in your highlights, prefix the htmlClass of the colors below with 'Fg' or 'Bg' depending on whether you wish to highlight the foreground or background.  E.g. FgWhite, BgRed.  To find out whether your console supports these colors, run this demo by specifying this option." +
                             Color16HtmlDemo(docWriterFactory).toFormattedText()))
 
-        optionsHelp.add(OptionHelp(Option.man, "Displays man page.", null,"Running with this command will print out the man page.  You can also use 'fixgrep man' (no dashes) which will run man and pipe it into less -R which preserves ansi colors.  Or 'fixgrep man online' which will launch the gixgrep online help into your default browser."))
+        optionsHelp.add(OptionHelp(Option.man, "Displays man page.", null,"Running with this command will print out the man page.  You can also use 'fixgrep man' (no dashes) which will run man and pipe it into less -R which preserves ansi colors.  Or 'fixgrep man online' which will launch the fixgrep online help into your default browser."))
 
         optionsHelp.add(OptionHelp(Option.html, "Displays results in HTML format.", null,"Displays as raw html.  No css, header or footers will be output."))
 
