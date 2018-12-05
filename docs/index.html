@@ -123,6 +123,10 @@ div.fixMsg span {
     margin: 0;
 }
 
+#toc {
+    margin-top: 1em;
+}
+
 #toc a {
     color: #34302d;
 }
@@ -1515,7 +1519,7 @@ Most consoles support 16 colors.  To use any of these colors in your highlights,
 Displays man page.
 </div>
 <div class='description'>
-Running with this command will print out the man page.  You can also use 'fixgrep man' (no dashes) which will run man and pipe it into less -R which preserves ansi colors.  Or 'fixgrep man online' which will launch the gixgrep online help into your default browser.
+Running with this command will print out the man page.  You can also use 'fixgrep man' (no dashes) which will run man and pipe it into less -R which preserves ansi colors.  Or 'fixgrep man online' which will launch the fixgrep online help into your default browser.
 </div>
 </div>
 <div class='option'>
@@ -2368,7 +2372,7 @@ Yes.  Fixgrep is released under the MIT licence which allows usage free-of-charg
 Yes.  Fixgrep will run under any OS that has a JVM greater than or equal to Java 1.8.  The most convenient way to run fixgrep is by using the fixgrep bash command.  To run this under windows you will need to be running a bash prompt, e.g. cygwin.  Currently there is no fixgrep.bat script written.  At the moment I have no immediate intention to create one, but please feel free to submit a proposal.<br/><h2 id='Formatting'>Formatting</h2>
 <h3 id='Why-do-I-lose-color-formatting-when-piping-fixgrep-results-to-'less'?'>Why do I lose color formatting when piping fixgrep results to 'less'?</h3>
 Indeed, some commands will not retain color formatting.  For less, use the -R option<br/><h2 id='Performance'>Performance</h2>
-<h3 id='Can-gixgrep-be-used-as-an-alternative-to-grep-when-filtering-large-files.'>Can gixgrep be used as an alternative to grep when filtering large files.</h3>
+<h3 id='Can-fixgrep-be-used-as-an-alternative-to-grep-when-filtering-large-files.'>Can fixgrep be used as an alternative to grep when filtering large files.</h3>
 It depends.  Fixgrep will be much slower than grep, and will consume more CPU.  For example running on my mac laptop, grep is roughly 5 times faster than fixgrep for searching for messages. If you don't want to wait too long and/or you are concerned about impact on CPU, best to use conventional grep commands to filter first and then pipe into fixgrep.<br/><h3 id='Can-fixgrep-be-used-as-an-alternative-to-'more'-or-'less'-to-view-large-FIX-log-files.'>Can fixgrep be used as an alternative to 'more' or 'less' to view large FIX log files.</h3>
 It depends.  Applications such as 'more' or 'less' don't need to read an entire file during viewing.  Whereas fixgrep does.<br/>For large files (>100MB) it would be prudent to first extract the lines you wish to view (using grep or whatever), and pipe those lines into fixgrep.<br/><h3 id='How-much-memory-does-fixgrep-use?'>How much memory does fixgrep use?</h3>
 With one exception, fixgrep should not use much more than 64MB.  Memory usage over time when parsing a large log file should not increase.  The exception to this is when grouping by order.  When grouping by order fixgrep will need to cache order messages before printing the out.  This option is not enabled by default.<br/><h3 id='How-much-CPU-does-fixgrep-use?'>How much CPU does fixgrep use?</h3>

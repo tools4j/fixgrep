@@ -119,6 +119,10 @@ div.fixMsg span {
     margin: 0;
 }
 
+#toc {
+    margin-top: 1em;
+}
+
 #toc a {
     color: #34302d;
 }
